@@ -7,7 +7,6 @@ namespace UU_GameProject
 {
     public class TestMenu : GameState
     {
-        private SpriteFont font;
         private Text text;
         private Button button;
 
@@ -15,7 +14,7 @@ namespace UU_GameProject
 
         public override void Load(SpriteBatch batch)
         {
-            font = AssetManager.GetResource<SpriteFont>("mainFont");
+            SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
             text = new Text(this, "Gekste game!", new Vector2(0f, 2f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "exampleTag";
@@ -29,8 +28,6 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            Text text = ui.FindWithTag("exampleTag") as Text;
-            text.text = "Gekste game! " + time;
             base.Update(time);
         }
 
