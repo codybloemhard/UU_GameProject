@@ -28,5 +28,14 @@ namespace UU_GameProject
             //speed is in Units/Second
             GameObject.Pos += velocity * time;
         }
+
+        public override void OnCollision(GameObject other)
+        {
+            if (other.tag == "stone")
+            {
+                GameObject.Pos = Vector2.Zero;
+                Console.WriteLine("ouch!");
+            }
+        }
     }
 }
