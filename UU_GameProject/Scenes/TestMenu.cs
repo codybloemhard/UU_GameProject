@@ -11,7 +11,7 @@ namespace UU_GameProject
         private Button button;
 
         public TestMenu() : base() { }
-
+        
         public override void Load(SpriteBatch batch)
         {
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
