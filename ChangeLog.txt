@@ -1,0 +1,7 @@
+In this file you will se what is changed.
+Report bugs: https://goo.gl/forms/sWeyLWBEcR1BIlaW2
+
+-CRender now only takes in a string for the texture, no SpriteBatch anymore;
+-Raycasting is now available in GameObject;
+-you access the master GameObject in Component now using GO. This is because GO is shorter and will be use a lot;
+-Init works again;
