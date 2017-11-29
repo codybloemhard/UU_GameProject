@@ -47,6 +47,12 @@ namespace UU_GameProject
             player.AddComponent("shoot", new CShoot());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
+            GameObject enemy = new GameObject("enemy", this, 2);
+            enemy.AddComponent("render", new CRender("block"));
+            enemy.AddComponent("move", new EnemyMovement(3f));
+            enemy.AddComponent("collider", new CAABB());
+            enemy.Pos = new Vector2(3, 1);
+            enemy.Size = new Vector2(0.5f, 0.5f);
         }
 
         public override void Unload()

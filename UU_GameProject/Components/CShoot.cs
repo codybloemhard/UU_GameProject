@@ -7,6 +7,7 @@ namespace UU_GameProject
 {
     public class CShoot : Component
     {
+        
         public CShoot() : base() { }
 
         public override void Update(float time)

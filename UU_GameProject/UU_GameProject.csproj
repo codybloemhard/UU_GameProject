@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\CBulletMovement.cs" />
+    <Compile Include="Components\EnemyMovement.cs" />
     <Compile Include="Components\CPlayerMovement.cs" />
     <Compile Include="Components\CShoot.cs" />
     <Compile Include="Program.cs" />

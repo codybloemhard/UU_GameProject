@@ -45,10 +45,9 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance) hit = hitRight;
             else hit = hitLeft;
-            if (hit.hit)
+            if (hit.hit && hit.distance < 0.05f)
             {
-                if (hit.distance < 0.05f) grounded = true;
-                else grounded = false;
+                grounded = true;
             }
             else grounded = false;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W))
