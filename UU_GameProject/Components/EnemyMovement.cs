@@ -15,7 +15,12 @@ namespace UU_GameProject
         {
             this.speed = speed;
         }
-
+        public override void Init()
+        {
+            CRender render = GO.Renderer;
+            if (render != null) render.colour = Color.Red;
+        }
+        
         public override void Update(float time)
         {
             base.Update(time);
