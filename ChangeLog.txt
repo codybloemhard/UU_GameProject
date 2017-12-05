@@ -5,3 +5,6 @@ Report bugs: https://goo.gl/forms/sWeyLWBEcR1BIlaW2
 -Raycasting is now available in GameObject;
 -you access the master GameObject in Component now using GO. This is because GO is shorter and will be use a lot;
 -Init works again;
+-Debug class for extra info
+-changed: GameObject.AddComponent(Component c, string tag = "");
+-Load sprites in program: TextureManager.LoadTexture("name", "filename", animation);

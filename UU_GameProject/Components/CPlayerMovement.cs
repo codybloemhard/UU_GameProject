@@ -16,6 +16,7 @@ namespace UU_GameProject
         public CPlayerMovement(float speed) : base()
         {
             this.speed = speed;
+            dir = new Vector2(1, 0);
         }
 
         public override void Init()
