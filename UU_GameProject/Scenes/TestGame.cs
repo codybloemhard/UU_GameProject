@@ -54,21 +54,10 @@ namespace UU_GameProject
             player.AddComponent(new CShoot());
             player.AddComponent(new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
-<<<<<<< HEAD
             player.Size = new Vector2(0.5f, 0.5f);
-            for (int i = 0; i < 10; i++)
-            {
-                GameObject enemy = new GameObject("enemy", this, 2);
-                enemy.AddComponent("render", new CRender("block"));
-                enemy.AddComponent("move", new CEnemyMovement(0.3f * i));
-                enemy.AddComponent("collider", new CAABB());
-                enemy.Pos = new Vector2(3 + 0.5f * i, 1);
-                enemy.Size = new Vector2(0.5f, 0.5f);
-=======
-            player.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy = new GameObject("enemy", this, 2);
             enemy.AddComponent(new CRender("suprise"));
-            enemy.AddComponent(new EnemyMovement(3f));
+            enemy.AddComponent(new CEnemyMovement(3f));
             enemy.AddComponent(new CAABB());
             enemy.Pos = new Vector2(8, 2.2f);
             enemy.Size = new Vector2(0.5f, 0.5f);
@@ -82,7 +71,6 @@ namespace UU_GameProject
                 stone.Size = new Vector2(0.1f, 0.1f);
                 stone.AddComponent(new CRender("block"));
                 stone.AddComponent(new CAABB());
->>>>>>> master
             }
         }
 

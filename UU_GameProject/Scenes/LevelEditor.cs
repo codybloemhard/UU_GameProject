@@ -49,9 +49,9 @@ namespace UU_GameProject
                 string components = Console.ReadLine();
 
                 GameObject newObject = new GameObject("new", this, 0, true);
-                newObject.AddComponent("render", new CRender(texture));
-                newObject.AddComponent("collider", new CAABB());                
-                newObject.AddComponent("movable", new CMovable());
+                newObject.AddComponent(new CRender(texture));
+                newObject.AddComponent(new CAABB());                
+                newObject.AddComponent(new CMovable());
 
                 newObject.Pos = Input.GetMousePosition() - new Vector2(0.5f, 0.5f);
                 newObject.Size = new Vector2(width, height);

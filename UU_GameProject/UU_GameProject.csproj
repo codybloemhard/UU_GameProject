@@ -40,13 +40,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\CBulletMovement.cs" />
-<<<<<<< HEAD
     <Compile Include="Components\CEnemyMovement.cs" />
     <Compile Include="Components\CMovable.cs" />
-=======
     <Compile Include="Components\CHealthBar.cs" />
-    <Compile Include="Components\EnemyMovement.cs" />
->>>>>>> master
     <Compile Include="Components\CPlayerMovement.cs" />
     <Compile Include="Components\CShoot.cs" />
     <Compile Include="Program.cs" />
