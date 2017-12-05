@@ -16,12 +16,13 @@ namespace UU_GameProject
         public CPlayerMovement(float speed) : base()
         {
             this.speed = speed;
+            dir = new Vector2(1, 0);
         }
 
         public override void Init()
         {
             CRender render = GO.Renderer;
-            if (render != null) render.colour = Color.Blue;
+            if (render != null) render.colour = Color.White;
         }
 
         public override void Update(float time)
@@ -59,6 +60,12 @@ namespace UU_GameProject
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f));
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            if (other.tag == "killer")
+                GO.Pos = new Vector2(1, 1);
         }
     }
 }
