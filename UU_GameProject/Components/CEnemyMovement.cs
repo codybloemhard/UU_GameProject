@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class EnemyMovement : Component
+    class CEnemyMovement : Component
     {
         private float speed;
         private bool grounded;
-        private float gravity = 0.8f, vertVelo = 0f;
+        private float gravity = 1, vertVelo = 0f;
 
-        public EnemyMovement(float speed)
+        public CEnemyMovement(float speed)
         {
             this.speed = speed;
         }

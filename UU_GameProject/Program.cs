@@ -17,7 +17,7 @@ namespace UU_GameProject
 
         public Run()
         {
-            game = new GameWindow(1200);
+            game = new GameWindow(1000);
             game.SetLoad(Load);
             game.Run();
         }
@@ -26,9 +26,11 @@ namespace UU_GameProject
         {
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            LevelEditor levelEditor = new LevelEditor();
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
-            game.states.SetStartingState("menu");
+            game.states.AddState("editor", levelEditor);
+            game.states.SetStartingState("editor");
         }
     }
 }
