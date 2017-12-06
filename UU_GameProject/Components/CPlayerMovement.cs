@@ -12,6 +12,7 @@ namespace UU_GameProject
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
         private bool grounded = false;
+        Vector2 velocity = Vector2.Zero;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -27,12 +28,17 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
+            //slowly accelerates the player
+            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X <= 3)
+                velocity += new Vector2(0.1f, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X >= -3)
+                velocity += new Vector2(-0.1f, 0);
+            //stops the player if no buttons are pressed
+            if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0)
+                velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
+            if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0)
+                velocity -= new Vector2(Math.Max(-0.2f, velocity.X), 0);
             if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
-            Vector2 velocity = Vector2.Zero;
-            if (Input.GetKey(PressAction.DOWN, Keys.A))
-                velocity = new Vector2(-1, 0);
-            else if (Input.GetKey(PressAction.DOWN, Keys.D))
-                velocity = new Vector2(1, 0);       
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -51,14 +57,14 @@ namespace UU_GameProject
                 grounded = true;
             }
             else grounded = false;
-            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W))
+            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
                 vertVelo = -jumpPower;
             if (!grounded) vertVelo += acceleration;
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
             //shoot
-            if (Input.GetKey(PressAction.PRESSED, Keys.Space))
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f));
         }
 
