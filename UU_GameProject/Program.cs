@@ -29,6 +29,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("dude", "player", false);
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            TestGameOver testGameOver = new TestGameOver();
+            game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.SetStartingState("menu");

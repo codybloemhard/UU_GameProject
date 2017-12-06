@@ -20,7 +20,13 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
+            if (other.tag != "killer")
+                return;
             HP -= 1;
+            healthBar.text = "Health: " + HP;
+            if (HP <= 0)
+                GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
         }
+        
     }
 }
