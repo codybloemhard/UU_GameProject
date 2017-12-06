@@ -71,7 +71,14 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "killer")
-                GO.Pos = new Vector2(1, 1);
+                Reset();
+        }
+
+        public void Reset()
+        {
+            GO.Pos = new Vector2(1, 1);
+            velocity = new Vector2(0, 0);
+            vertVelo = 0;
         }
     }
 }
