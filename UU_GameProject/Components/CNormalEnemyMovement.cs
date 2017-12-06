@@ -5,13 +5,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class EnemyMovement : Component
+    class CNormalEnemyMovement : Component
     {
         private float speed;
         private bool grounded;
         private float gravity = 0.8f, vertVelo = 0f;
 
-        public EnemyMovement(float speed)
+        public CNormalEnemyMovement(float speed)
         {
             this.speed = speed;
         }
@@ -46,6 +46,9 @@ namespace UU_GameProject
 
             if (!grounded) vertVelo += gravity * time;
             GO.Pos += new Vector2(speed * time, Math.Min(hit.distance, vertVelo * time));
+
+            CHealthBar health = GO.FindWithTag("enemy").GetComponent<CHealthBar>();
+            
         }
 
         public override void OnCollision(GameObject other)
@@ -57,8 +60,18 @@ namespace UU_GameProject
 
             else if (other.tag == "bullet")
             {
-                GO.active = false;
+                CHealthBar health = GO.FindWithTag("enemy").GetComponent<CHealthBar>();
+                health.hit(1);
+                if (health.hp <= 0)
+                    GO.active = false;
             }
         }
+
+        //public void isdead(string id)
+        //{
+        //    gameobject dude = go.findwithtag("id");
+        //    if (dude.getcomponent<chealthbar>)
+        //        dude.active = false;
+        //}
     }
 }

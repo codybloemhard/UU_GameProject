@@ -17,10 +17,19 @@ namespace UU_GameProject
             healthBar.AddGameObject(GO);
         }
 
-        public override void OnCollision(GameObject other)
+        public override void Update(float time)
         {
-            base.OnCollision(other);
-            HP -= 1;
+            base.Update(time);
+
+            healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
         }
+
+        public void hit(int i)
+        {
+            HP = HP - i;
+        }
+
+        public int hp
+        { get { return this.HP; } }
     }
 }

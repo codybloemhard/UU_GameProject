@@ -56,11 +56,12 @@ namespace UU_GameProject
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy = new GameObject("enemy", this, 2);
-            enemy.AddComponent(new CRender("suprise"));
-            enemy.AddComponent(new EnemyMovement(3f));
+            enemy.AddComponent(new CRender("dude"));
+            enemy.AddComponent(new CNormalEnemyMovement(3f));
+            enemy.AddComponent(new CHealthBar(3, enemy));
             enemy.AddComponent(new CAABB());
             enemy.Pos = new Vector2(8, 2.2f);
-            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Size = new Vector2(0.5f, 1.0f);
             uint max = 1000;
             for (int i = 0; i < max; i++)
             {
