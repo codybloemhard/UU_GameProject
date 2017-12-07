@@ -8,6 +8,7 @@ namespace UU_GameProject
     class CNormalEnemyAI : Component
     {
         private float speed;
+        private Vector2 dir = new Vector2 (1, 0);
         private bool grounded;
         private float gravity = 0.8f, vertVelo = 0f;
 
@@ -43,6 +44,7 @@ namespace UU_GameProject
 
             if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
             {
+                dir *= -1;
                 speed *= -1;
             }
 

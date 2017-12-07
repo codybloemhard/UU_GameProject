@@ -18,9 +18,9 @@ namespace UU_GameProject.Components
 
         public override void Init()
         {
-            CRender render = GO.Renderer;
+            CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Blue;
-            FSM fsm = new FSM;
+            FSM fsm = new FSM();
         }
 
         public override void Update(float time)

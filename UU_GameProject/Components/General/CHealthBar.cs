@@ -21,18 +21,12 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-
-
         }
 
-        public void update()
-        {
-            Text text = ui.FindWithTag("positionText") as Text;
-        }
 
         public void hit(int i)
         {
-            HP = HP - i;
+            HP = Math.Max(0, HP - i);
         }
 
         public int hp
