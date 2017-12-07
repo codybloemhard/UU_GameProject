@@ -6,15 +6,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class CHealthBar : Component
+    class CHealthPool : Component
     {
         private int HP;
-        Text healthBar;
-        public CHealthBar(int HP, GameObject GO)
+        Text healthPool;
+        public CHealthPool(int HP, GameObject GO)
         {
             this.HP = HP;
-            healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
-            healthBar.AddGameObject(GO);
+            healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
+            healthPool.AddGameObject(GO);
         }
 
         public override void OnCollision(GameObject other)
@@ -23,10 +23,9 @@ namespace UU_GameProject
             if (other.tag != "killer")
                 return;
             HP -= 1;
-            healthBar.text = "Health: " + HP;
+            healthPool.text = "Health: " + HP;
             if (HP <= 0)
                 GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
         }
-        
     }
 }
