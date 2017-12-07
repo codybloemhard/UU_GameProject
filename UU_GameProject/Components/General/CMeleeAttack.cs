@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Core;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace UU_GameProject.Components
 {
-    class CMeleeAttack
+    class CMeleeAttack : Component
     {
+        public CMeleeAttack() : base() { }
+
+        public void melee(int dmagae, float reach)
+        {
+            GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y), );
+        }
     }
 }

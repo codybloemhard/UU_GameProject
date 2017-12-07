@@ -39,11 +39,14 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components\CBulletMovement.cs" />
-    <Compile Include="Components\CHealthBar.cs" />
-    <Compile Include="Components\CNormalEnemyMovement.cs" />
-    <Compile Include="Components\CPlayerMovement.cs" />
-    <Compile Include="Components\CShoot.cs" />
+    <Compile Include="Components\Enemy\CArmouredEnemyAI.cs" />
+    <Compile Include="Components\General\CBulletMovement.cs" />
+    <Compile Include="Components\General\CHealthBar.cs" />
+    <Compile Include="Components\Enemy\CRangedEnemyAI.cs" />
+    <Compile Include="Components\General\CMeleeAttack.cs" />
+    <Compile Include="Components\Enemy\CNormalEnemyAI.cs" />
+    <Compile Include="Components\Player\CPlayerMovement.cs" />
+    <Compile Include="Components\General\CShoot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\TestGame.cs" />
