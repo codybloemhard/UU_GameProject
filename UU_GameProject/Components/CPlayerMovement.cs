@@ -30,7 +30,7 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            //slowly accelerates the player
+            //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X <= maxPlayerSpeed)
                 velocity += new Vector2(0.1f, 0);
             if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X >= -maxPlayerSpeed)
@@ -52,6 +52,7 @@ namespace UU_GameProject
             {
                 maxPlayerSpeed = 0.5f;
                 isCrouching = true;
+                //add animation
             }
             if (Input.GetKey(PressAction.RELEASED, Keys.LeftShift))
             {
@@ -63,10 +64,12 @@ namespace UU_GameProject
             if (isCrouching && velocity.X > 0 && velocity.X > maxPlayerSpeed)
             {
                 velocity -= new Vector2(Math.Min(0.03f, velocity.X), 0);
+                //add animation
             }
             if (isCrouching && velocity.X < 0 && velocity.X < -maxPlayerSpeed)
             {
                 velocity -= new Vector2(Math.Max(-0.03f, velocity.X), 0);
+                //add animation
             }
 
             //gravity and jump
@@ -88,9 +91,19 @@ namespace UU_GameProject
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
+            
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
-                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
+            {
+                //double if, for adding sounds or animations showing the player that no mana remains later
+                if (GO.GetComponent<CManaPool>().ReturnMana() > 0)
+                {
+                    GO.GetComponent<CManaPool>().ConsumeMana(1);
+                    GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
+                }
+
+            }
+
         }
 
         public override void OnCollision(GameObject other)

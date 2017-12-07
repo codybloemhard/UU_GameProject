@@ -16,5 +16,16 @@ namespace UU_GameProject
             manaPool = new Text(GO.Context, "Mana: " + MP, new Vector2(0, 0), new Vector2(4, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
             manaPool.AddGameObject(GO);
         }
+
+        public void ConsumeMana(int amount)
+        {
+            MP -= amount;
+            manaPool.text = "Mana: " + MP;
+        }
+
+        public int ReturnMana()
+        {
+            return MP;
+        }
     }
 }
