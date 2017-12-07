@@ -9,6 +9,7 @@ namespace UU_GameProject
     class CManaPool : Component
     {
         private int MP;
+        private int maxMana = 100;
         Text manaPool;
         public CManaPool(int MP, GameObject GO)
         {
@@ -17,9 +18,23 @@ namespace UU_GameProject
             manaPool.AddGameObject(GO);
         }
 
+        public override void Update(float time)
+        {
+            base.Update(time);
+            RegenerateMana();
+        }
+
+        //method to be called for abilities using mana
         public void ConsumeMana(int amount)
         {
             MP -= amount;
+            manaPool.text = "Mana: " + MP;
+        }
+
+        public void RegenerateMana()
+        {
+            if (MP < maxMana)
+                MP += 1;
             manaPool.text = "Mana: " + MP;
         }
 

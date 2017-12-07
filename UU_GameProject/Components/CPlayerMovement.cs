@@ -87,6 +87,14 @@ namespace UU_GameProject
             else grounded = false;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
                 vertVelo = -jumpPower;
+            if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            {
+                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75)
+                {
+                    GO.GetComponent<CManaPool>().ConsumeMana(75);
+                    vertVelo = -jumpPower;
+                }
+            }
             if (!grounded) vertVelo += acceleration;
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
@@ -96,9 +104,9 @@ namespace UU_GameProject
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
             {
                 //double if, for adding sounds or animations showing the player that no mana remains later
-                if (GO.GetComponent<CManaPool>().ReturnMana() > 0)
+                if (GO.GetComponent<CManaPool>().ReturnMana() > 20)
                 {
-                    GO.GetComponent<CManaPool>().ConsumeMana(1);
+                    GO.GetComponent<CManaPool>().ConsumeMana(20);
                     GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
                 }
 
