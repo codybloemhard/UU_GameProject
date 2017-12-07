@@ -46,7 +46,7 @@ namespace UU_GameProject
             killer.AddComponent(new CAABB());
             killer.Pos = new Vector2(3, 5);
             killer.Size = new Vector2(1, 1);
-            killer.Renderer.colour = Color.Red;
+            (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
             player.AddComponent(new CRender("dude"));
             player.AddComponent(new CPlayerMovement(3.0f));
@@ -87,7 +87,11 @@ namespace UU_GameProject
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
-                Debug.SwitchMode();
+            {
+                if (Debug.Mode == DEBUGMODE.PROFILING)
+                    Debug.FullDebugMode();
+                else Debug.ProfilingMode();
+            }
             base.Update(time);
         }
 

@@ -24,9 +24,9 @@ namespace UU_GameProject
 
         private void Load()
         {
-            TextureManager.LoadTexture("block", "block", false);
-            TextureManager.LoadTexture("suprise", "suprise", false);
-            TextureManager.LoadTexture("dude", "player", false);
+            TextureManager.LoadTexture("block", "block");
+            TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("dude", "player");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             game.states.AddState("menu", testMenu);
