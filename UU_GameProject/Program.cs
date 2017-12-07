@@ -11,19 +11,22 @@ namespace UU_GameProject
             Run run = new Run();
         }
     }
+
     public class Run
     {
         private GameWindow game;
 
         public Run()
         {
-            game = new GameWindow(1200);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
 
         private void Load()
         {
+            PrerunGenerationCycle generator = new PrerunGenerationCycle();
+            generator.GenTest();
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
             TextureManager.LoadTexture("dude", "player");

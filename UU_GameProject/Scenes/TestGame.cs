@@ -61,6 +61,12 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.Pos = new Vector2(8, 2.2f);
             enemy.Size = new Vector2(0.5f, 0.5f);
+
+            GameObject tester = new GameObject("tester", this, 0);
+            tester.AddComponent(new CRender("test"));
+            tester.Pos = new Vector2(0, 0);
+            tester.Size = new Vector2(4, 4);
+
             uint max = 1000;
             for (int i = 0; i < max; i++)
             {
