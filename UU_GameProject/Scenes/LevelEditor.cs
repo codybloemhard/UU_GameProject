@@ -15,12 +15,6 @@ namespace UU_GameProject
             Button button = new Button(this, "Finish", "block", () => Finish(),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
             Console.WriteLine(AssetManager.content.RootDirectory);
-
-            using (StreamWriter fileWriter = new StreamWriter(AssetManager.content.RootDirectory + "/level.txt", true))
-            { 
-                fileWriter.WriteLine("test");
-                fileWriter.Close();
-            }
         }
 
         public override void Unload()
@@ -39,19 +33,10 @@ namespace UU_GameProject
                 Console.Write("Height: ");
                 float height = float.Parse(Console.ReadLine());
 
-                /*These are all the addable components. If you have added components, 
-                add them here too so you can use them in the level editor
-                This will be used later to actually add the components, 
-                not now because then objects would start moving in the editor
-                 */
-                Console.WriteLine("1 is true, 0 is false, fill in like this: '10010010'");
-                Console.Write("Components to add: CBulletMovement | CEnemyMovement | CPlayerMovement | CShoot");
-                string components = Console.ReadLine();
-
                 GameObject newObject = new GameObject("new", this, 0, true);
                 newObject.AddComponent(new CRender(texture));
                 newObject.AddComponent(new CAABB());                
-                newObject.AddComponent(new CMovable());
+                newObject.AddComponent(new CLevelEditorObject());
 
                 newObject.Pos = Input.GetMousePosition() - new Vector2(0.5f, 0.5f);
                 newObject.Size = new Vector2(width, height);
@@ -66,13 +51,13 @@ namespace UU_GameProject
 
         public void Finish()
         {
-            using (StreamWriter fileWriter = new StreamWriter(AssetManager.content.RootDirectory + "/level.txt", false))
+            using (StreamWriter fileWriter = new StreamWriter("../../../../Content/level.txt", false))
             {
                 fileWriter.AutoFlush = true;
-                fileWriter.WriteLine();
+                fileWriter.WriteLine("blegh");
             }
 
-            using (StreamReader fileReader = new StreamReader(AssetManager.content.RootDirectory + "/level.txt"))
+            using (StreamReader fileReader = new StreamReader("../../../../Content/level.txt"))
             {
                 Console.WriteLine(fileReader.ReadLine());
             }

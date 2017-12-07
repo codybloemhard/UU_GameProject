@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Components\CBulletMovement.cs" />
     <Compile Include="Components\CEnemyMovement.cs" />
-    <Compile Include="Components\CMovable.cs" />
+    <Compile Include="Components\CLevelEditorObject.cs" />
     <Compile Include="Components\CHealthBar.cs" />
     <Compile Include="Components\CPlayerMovement.cs" />
     <Compile Include="Components\CShoot.cs" />
@@ -63,9 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\level.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Icon.ico" />
     <Content Include="Style.txt" />
   </ItemGroup>
