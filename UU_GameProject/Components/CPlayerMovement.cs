@@ -106,7 +106,8 @@ namespace UU_GameProject
                 grounded = true;
             }
             else grounded = false;
-            if (grounded) vertVelo = 0;
+            if (grounded && vertVelo > 0) vertVelo = 0;
+            Console.WriteLine(vertVelo);
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
