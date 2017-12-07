@@ -12,9 +12,12 @@ namespace UU_GameProject
         private Vector2 dir;
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
+        private float playerAccel = .1f;
         private bool grounded = false;
+        private bool isCrawling = false;
         private bool isCrouching = false;
         private bool isSliding = false;
+        private bool isDown = false;
         Vector2 velocity = Vector2.Zero;
 
         public CPlayerMovement(float speed) : base()
@@ -32,10 +35,10 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             //basic movement: slowly accelerates the player
-            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X <= maxPlayerSpeed)
-                velocity += new Vector2(0.1f, 0);
-            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X >= -maxPlayerSpeed)
-                velocity += new Vector2(-0.1f, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
+                velocity += new Vector2(playerAccel, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - playerAccel >= -maxPlayerSpeed)
+                velocity += new Vector2(-playerAccel, 0);
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
                 velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
@@ -48,31 +51,41 @@ namespace UU_GameProject
                 dir.Normalize();
             }
 
-            //crouching
+            //down
             if (Input.GetKey(PressAction.DOWN, Keys.LeftShift) && grounded)
             {
                 maxPlayerSpeed = 0.5f;
-                isCrouching = true;
+                isDown = true;
             }
             if (Input.GetKey(PressAction.RELEASED, Keys.LeftShift))
             {
                 maxPlayerSpeed = 2.0f;
-                isCrouching = false;
+                isDown = false;
             }
 
-            //sliding
-            if (isCrouching && velocity.X > maxPlayerSpeed)
+            //crouching
+            if (isDown && velocity.X == 0)
+                isCrouching = true;
+            else isCrouching = false;
+
+            //crawling
+            if (isDown && ((velocity.X > 0 && velocity.X <= maxPlayerSpeed) || (velocity.X < 0 && velocity.X >= -maxPlayerSpeed)))
+                isCrawling = true;
+            else isCrawling = false;
+
+            //sliding forward
+            if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity -= new Vector2(Math.Min(0.03f, velocity.X), 0);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - .03f);
                 isSliding = true;
-            }
-            else isSliding = false;
-            if (isCrouching && velocity.X < -maxPlayerSpeed)
+            } //sliding backward
+            else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity -= new Vector2(Math.Max(-0.03f, velocity.X), 0);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + .03f);
                 isSliding = true;
-            }
+            } //not sliding
             else isSliding = false;
+
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -117,6 +130,8 @@ namespace UU_GameProject
                 Console.WriteLine("Player is sliding");
             if (isCrouching)
                 Console.WriteLine("Player is crouching");
+            if (isCrawling)
+                Console.WriteLine("Player is crawling");
         }
 
         public override void OnCollision(GameObject other)
