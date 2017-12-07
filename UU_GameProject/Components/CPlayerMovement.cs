@@ -13,6 +13,8 @@ namespace UU_GameProject
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
         private float playerAccel = .1f;
+        private float jumpDelayTime = 0;
+        private bool fallPanic = false;
         private bool grounded = false;
         private bool isCrawling = false;
         private bool isCrouching = false;
@@ -34,6 +36,7 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
+
             //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
                 velocity += new Vector2(playerAccel, 0);
@@ -86,7 +89,10 @@ namespace UU_GameProject
             } //not sliding
             else isSliding = false;
 
-
+            //fall panic
+            if (vertVelo > 25)
+                fallPanic = true;
+            else fallPanic = false;
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
@@ -100,17 +106,26 @@ namespace UU_GameProject
                 grounded = true;
             }
             else grounded = false;
+            if (grounded) vertVelo = 0;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            {
                 vertVelo = -jumpPower;
+                jumpDelayTime = 0;
+            }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75)
+                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 10 * .016666666666f)
                 {
                     GO.GetComponent<CManaPool>().ConsumeMana(75);
                     vertVelo = -jumpPower;
+                    jumpDelayTime = 0;
                 }
             }
-            if (!grounded) vertVelo += acceleration;
+            if (!grounded)
+            {
+                vertVelo += acceleration;
+                jumpDelayTime += .016666666666f;
+            }
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
