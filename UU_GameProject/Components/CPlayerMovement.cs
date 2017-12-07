@@ -13,6 +13,7 @@ namespace UU_GameProject
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
         private bool grounded = false;
+        private bool isCrouching = false;
         Vector2 velocity = Vector2.Zero;
 
         public CPlayerMovement(float speed) : base()
@@ -36,9 +37,9 @@ namespace UU_GameProject
                 velocity += new Vector2(-0.1f, 0);
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
-                velocity -= new Vector2(Math.Min(maxPlayerSpeed, velocity.X), 0);
+                velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
-                velocity -= new Vector2(Math.Max(-maxPlayerSpeed, velocity.X), 0);
+                velocity -= new Vector2(Math.Max(-0.2f, velocity.X), 0);
             if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
             if (velocity != Vector2.Zero)
             {
@@ -47,10 +48,26 @@ namespace UU_GameProject
             }
 
             //crouching
-            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
+            if (Input.GetKey(PressAction.DOWN, Keys.LeftShift) && grounded)
+            {
                 maxPlayerSpeed = 0.5f;
-            if (Input.GetKey(PressAction.RELEASED, Keys.S))
+                isCrouching = true;
+            }
+            if (Input.GetKey(PressAction.RELEASED, Keys.LeftShift))
+            {
                 maxPlayerSpeed = 2.0f;
+                isCrouching = false;
+            }
+
+            //sliding
+            if (isCrouching && velocity.X > 0 && velocity.X > maxPlayerSpeed)
+            {
+                velocity -= new Vector2(Math.Min(0.03f, velocity.X), 0);
+            }
+            if (isCrouching && velocity.X < 0 && velocity.X < -maxPlayerSpeed)
+            {
+                velocity -= new Vector2(Math.Max(-0.03f, velocity.X), 0);
+            }
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);

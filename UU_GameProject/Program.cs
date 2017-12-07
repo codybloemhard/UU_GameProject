@@ -27,7 +27,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("block", "block", false);
             TextureManager.LoadTexture("suprise", "suprise", false);
             TextureManager.LoadTexture("dude", "player", false);
-            TextureManager.LoadTexture("PlayerAnimatedSimple", "PlayerWalkingAnimation", true);
+            //TextureManager.LoadTexture("PlayerAnimatedSimple", "PlayerWalkingAnimation", true);
             TextureManager.LoadTexture("playerCrouched", "playerCrouched", false);
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
