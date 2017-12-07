@@ -109,9 +109,7 @@ namespace UU_GameProject
                     GO.GetComponent<CManaPool>().ConsumeMana(20);
                     GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
                 }
-
             }
-
         }
 
         public override void OnCollision(GameObject other)
