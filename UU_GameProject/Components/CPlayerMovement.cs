@@ -14,6 +14,7 @@ namespace UU_GameProject
         private float acceleration = 0.8f, vertVelo = 0f;
         private bool grounded = false;
         private bool isCrouching = false;
+        private bool isSliding = false;
         Vector2 velocity = Vector2.Zero;
 
         public CPlayerMovement(float speed) : base()
@@ -52,7 +53,6 @@ namespace UU_GameProject
             {
                 maxPlayerSpeed = 0.5f;
                 isCrouching = true;
-                //add animation
             }
             if (Input.GetKey(PressAction.RELEASED, Keys.LeftShift))
             {
@@ -61,16 +61,18 @@ namespace UU_GameProject
             }
 
             //sliding
-            if (isCrouching && velocity.X > 0 && velocity.X > maxPlayerSpeed)
+            if (isCrouching && velocity.X > maxPlayerSpeed)
             {
                 velocity -= new Vector2(Math.Min(0.03f, velocity.X), 0);
-                //add animation
+                isSliding = true;
             }
-            if (isCrouching && velocity.X < 0 && velocity.X < -maxPlayerSpeed)
+            else isSliding = false;
+            if (isCrouching && velocity.X < -maxPlayerSpeed)
             {
                 velocity -= new Vector2(Math.Max(-0.03f, velocity.X), 0);
-                //add animation
+                isSliding = true;
             }
+            else isSliding = false;
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -110,6 +112,11 @@ namespace UU_GameProject
                     GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
                 }
             }
+
+            if (isSliding)
+                Console.WriteLine("Player is sliding");
+            if (isCrouching)
+                Console.WriteLine("Player is crouching");
         }
 
         public override void OnCollision(GameObject other)
