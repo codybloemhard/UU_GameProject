@@ -8,6 +8,7 @@ namespace UU_GameProject
     public class CPlayerMovement : Component
     {
         private float speed;
+        private float maxPlayerSpeed = 2.0f;
         private Vector2 dir;
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
@@ -29,21 +30,28 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             //slowly accelerates the player
-            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X <= 2)
+            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X <= maxPlayerSpeed)
                 velocity += new Vector2(0.1f, 0);
-            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X >= -2)
+            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X >= -maxPlayerSpeed)
                 velocity += new Vector2(-0.1f, 0);
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
-                velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
+                velocity -= new Vector2(Math.Min(maxPlayerSpeed, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
-                velocity -= new Vector2(Math.Max(-0.2f, velocity.X), 0);
+                velocity -= new Vector2(Math.Max(-maxPlayerSpeed, velocity.X), 0);
             if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
                 dir.Normalize();
             }
+
+            //crouching
+            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
+                maxPlayerSpeed = 0.5f;
+            if (Input.GetKey(PressAction.RELEASED, Keys.S))
+                maxPlayerSpeed = 2.0f;
+
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
