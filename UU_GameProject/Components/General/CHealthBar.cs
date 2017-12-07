@@ -27,7 +27,7 @@ namespace UU_GameProject
 
         public void update()
         {
-            Text text = ui.FindWithTag("positionText") as Text;
+            Text text = GO.Context.ui.FindWithTag("positionText") as Text;
         }
 
         public void hit(int i)
