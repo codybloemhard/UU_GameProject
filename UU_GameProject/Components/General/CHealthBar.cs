@@ -27,6 +27,8 @@ namespace UU_GameProject
         public void hit(int i)
         {
             HP = Math.Max(0, HP - i);
+            if (HP == 0)
+                GO.active = false;
         }
 
         public int hp

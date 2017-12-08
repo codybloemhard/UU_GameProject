@@ -32,12 +32,12 @@ namespace UU_GameProject
             stone1.AddComponent(new CRender("block"));
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
-            stone2.Pos = new Vector2(12, 5);
+            stone2.Pos = new Vector2(8, 5);
             stone2.Size = new Vector2(3, 0.2f);
             stone2.AddComponent(new CRender("block"));
             stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
-            stone3.Pos = new Vector2(8, 3);
+            stone3.Pos = new Vector2(12, 3);
             stone3.Size = new Vector2(3, 0.2f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
@@ -61,7 +61,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CNormalEnemyAI(3f));
             enemy.AddComponent(new CHealthBar(3, enemy));
             enemy.AddComponent(new CAABB());
-            enemy.Pos = new Vector2(8, 2.2f);
+            enemy.Pos = new Vector2(8.5f, 4.0f);
             enemy.Size = new Vector2(0.5f, 1.0f);
             uint max = 1000;
             for (int i = 0; i < max; i++)

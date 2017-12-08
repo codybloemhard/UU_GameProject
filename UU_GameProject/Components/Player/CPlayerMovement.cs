@@ -9,7 +9,7 @@ namespace UU_GameProject
     {
         private float speed;
         private Vector2 dir;
-        private float jumpPower = 15f;
+        private float jumpPower = 300f;
         private float acceleration = 0.8f, vertVelo = 0f;
         private bool grounded = false;
 
@@ -59,7 +59,9 @@ namespace UU_GameProject
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-            { GO.GetComponent<CMeleeAttack>().melee(dir, 3, 10f); }
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 3, 0.5f); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+            { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f)); }
         }
 
         public override void OnCollision(GameObject other)

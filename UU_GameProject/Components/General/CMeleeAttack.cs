@@ -24,11 +24,9 @@ namespace UU_GameProject
             else if (dir.X < 0)
                 x = -GO.Size.X/2;
 
-            Console.WriteLine(x);
-
-            ray1 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir, RAYCASTTYPE.DYNAMIC);
-            ray2 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.DYNAMIC);
-            ray3 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.DYNAMIC);
+            ray1 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 1), RAYCASTTYPE.DYNAMIC);
+            ray2 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir, RAYCASTTYPE.DYNAMIC);
+            ray3 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, -1), RAYCASTTYPE.DYNAMIC);
 
             if (ray1.distance <= reach)
                 hp = ray1.obj.GetComponent<CHealthBar>();
@@ -38,9 +36,9 @@ namespace UU_GameProject
                 hp = ray3.obj.GetComponent<CHealthBar>();
 
             if (hp != null)
+            {
                 hp.hit(damage);
-
-            Console.WriteLine(ray1.obj.tag);
+            }
         }
     }
 }

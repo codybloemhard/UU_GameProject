@@ -57,10 +57,9 @@ namespace UU_GameProject
         {
             if (other.tag == "bullet")
             {
-                CHealthBar health = GO.FindWithTag("enemy").GetComponent<CHealthBar>();
+                CHealthBar health = GO.GetComponent<CHealthBar>();
                 health.hit(1);
-                if (health.hp <= 0)
-                    GO.active = false;
+                other.active = false;
             }
         }
     }
