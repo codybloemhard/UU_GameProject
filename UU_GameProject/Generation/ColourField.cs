@@ -95,6 +95,17 @@ namespace UU_GameProject
             texture = AssetManager.GetNewTexture(w, h);
         }
 
+        public void FloatsToColours(FloatField ff, Colour a, Colour b, bool deleteZero = true)
+        {
+            for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                {
+                    float t = ff.array[ff.To1D(x % ff.Width, y % ff.Height)];
+                    if (t > 0) array[To1D(x, y, h)] = Image.Lerp(a, b, t);
+                    else array[To1D(x, y, h)] = new Colour(0, 0, 0, 0);
+                }
+        }
+
         public void Save()
         {
             Color[] c = new Color[w * h];
@@ -146,6 +157,69 @@ namespace UU_GameProject
             for (int i = 0; i < w * h; i++)
             {
                 float s = array[i].Strength();
+                if (s > res) res = s;
+            }
+            return res;
+        }
+    }
+
+    public class FloatField
+    {
+        public float[] array;
+        private int w, h;
+        public int Width { get { return w; } }
+        public int Height { get { return h; } }
+
+        public FloatField(uint w, uint h)
+        {
+            this.w = (int)w;
+            this.h = (int)h;
+            array = new float[w * h];
+        }
+
+        public void ColoursToFloats(ColourField cf)
+        {
+            for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                    array[To1D(x, y)] = cf.Get(x % cf.Width, y % cf.Height).Strength();
+        }
+
+        public int To1D(int x, int y)
+        {
+            return y * h + x;
+        }
+
+        public int To1D(int x, int y, int h)
+        {
+            return y * h + x;
+        }
+
+        public float Average()
+        {
+            float res = 0.0f;
+            for (int i = 0; i < w * h; i++)
+                res += array[i];
+            res /= w * h;
+            return res;
+        }
+
+        public float Min()
+        {
+            float res = 10000000.0f;
+            for (int i = 0; i < w * h; i++)
+            {
+                float s = array[i];
+                if (s < res) res = s;
+            }
+            return res;
+        }
+
+        public float Max()
+        {
+            float res = 0.0f;
+            for (int i = 0; i < w * h; i++)
+            {
+                float s = array[i];
                 if (s > res) res = s;
             }
             return res;

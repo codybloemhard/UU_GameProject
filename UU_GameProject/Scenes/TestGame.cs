@@ -61,22 +61,13 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.Pos = new Vector2(8, 2.2f);
             enemy.Size = new Vector2(0.5f, 0.5f);
-
-            GameObject tester = new GameObject("tester", this, 0);
-            tester.AddComponent(new CRender("test"));
-            tester.Pos = new Vector2(0, 0);
-            tester.Size = new Vector2(4, 4);
-
-            uint max = 1000;
-            for (int i = 0; i < max; i++)
+            
+            for(int i = 0; i < 4; i++)
             {
-                float t = (float)i / (float)max * 2 * MathH.PI;
-                float rad = 2;
-                GameObject stone = new GameObject("stone", this, 2, true);
-                stone.Pos = new Vector2(5, 3) + new Vector2((float)Math.Sin(t) * rad, (float)Math.Cos(t) * rad);
-                stone.Size = new Vector2(0.1f, 0.1f);
-                stone.AddComponent(new CRender("block"));
-                stone.AddComponent(new CAABB());
+                GameObject tester = new GameObject("tester", this, 0);
+                tester.AddComponent(new CRender("test" + i));
+                tester.Pos = new Vector2(i * 4, 0);
+                tester.Size = new Vector2(1, 1);
             }
         }
 
