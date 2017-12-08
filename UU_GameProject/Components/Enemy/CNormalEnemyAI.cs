@@ -7,10 +7,11 @@ namespace UU_GameProject
 {
     class CNormalEnemyAI : Component
     {
-        private float speed;
+        private float speed, ctime;
         private Vector2 dir = new Vector2 (1, 0);
         private bool grounded;
         private float gravity = 0.8f, vertVelo = 0f;
+        private FSM fsm = new FSM();
 
         public CNormalEnemyAI(float speed)
         {
@@ -21,35 +22,28 @@ namespace UU_GameProject
         {
             CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Red;
+            fsm.Add("idle", IdleBehaviour);
+            fsm.Add("active", ActiveBehaviour);
+            fsm.SetCurrentState("idle");
         }
         
         public override void Update(float time)
         {
             base.Update(time);
+            ctime = time;
 
-            //Movement behaviour
-            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
-            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
-
-            if (hit.hit && hit.distance < 0.05f)
-            { 
-                grounded = true;
-            }
-            else grounded = false;
-
-            if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
+            if (GO.FindWithTag("player").GetAABB().Inside(new Vector2(8, 4)) && fsm.CurrentState == "idle")
             {
-                dir *= -1;
-                speed *= -1;
+                fsm.SetCurrentState("active");
+                Console.WriteLine("OI!");
+            }
+            else if (GO.FindWithTag("player").GetAABB().Inside(new Vector2(8, 4)) && fsm.CurrentState != "idle")
+            {
+                fsm.SetCurrentState("idle");
+                Console.WriteLine("It msut've been the wind...");
             }
 
-            if (!grounded) vertVelo += gravity * time;
-            GO.Pos += new Vector2(speed * time, Math.Min(hit.distance, vertVelo * time));
+            fsm.Update();
         }
 
         //Damage handling
@@ -61,6 +55,41 @@ namespace UU_GameProject
                 health.hit(1);
                 other.active = false;
             }
+        }
+
+        private void IdleBehaviour()
+        {
+            //Movement behaviour
+            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
+            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hit;
+            if (hitLeft.distance > hitRight.distance) hit = hitRight;
+            else hit = hitLeft;
+
+            if (hit.hit && hit.distance < 0.05f)
+            {
+                grounded = true;
+            }
+            else grounded = false;
+
+            if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
+            {
+                dir *= -1;
+                speed *= -1;
+            }
+
+            if (!grounded) vertVelo += gravity * ctime;
+            GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+        }
+
+        private void ActiveBehaviour()
+        {
+            //When the player comes within a certain range, 
+            //start running at the player to get within melee range and then making a melee attack.
+            //Melee attack needs a timer to prevent instadeath.
+            //Perhaps some kind of dodging behaviour (projectiles).
         }
     }
 }
