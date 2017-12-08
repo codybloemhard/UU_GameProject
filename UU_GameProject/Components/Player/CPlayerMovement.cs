@@ -59,7 +59,7 @@ namespace UU_GameProject
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f));
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 3, 10f); }
         }
 
         public override void OnCollision(GameObject other)
