@@ -17,10 +17,18 @@ namespace UU_GameProject
             RaycastResult ray2;
             RaycastResult ray3;
             CHealthBar hp = null;
+            float x = 0;
 
-            ray1 = GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y / 2), dir, RAYCASTTYPE.STATIC);
-            ray2 = GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.STATIC);
-            ray3 = GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.STATIC);
+            if (dir.X > 0)
+                x = GO.Size.X/2;
+            else if (dir.X < 0)
+                x = -GO.Size.X/2;
+
+            Console.WriteLine(x);
+
+            ray1 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir, RAYCASTTYPE.DYNAMIC);
+            ray2 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.DYNAMIC);
+            ray3 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 0), RAYCASTTYPE.DYNAMIC);
 
             if (ray1.distance <= reach)
                 hp = ray1.obj.GetComponent<CHealthBar>();
@@ -32,7 +40,7 @@ namespace UU_GameProject
             if (hp != null)
                 hp.hit(damage);
 
-            Console.WriteLine(ray1.obj.tag + ", " + ray2.obj.tag + ", " + ray2.obj.tag);
+            Console.WriteLine(ray1.obj.tag);
         }
     }
 }
