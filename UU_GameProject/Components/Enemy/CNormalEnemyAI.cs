@@ -7,7 +7,7 @@ namespace UU_GameProject
 {
     class CNormalEnemyAI : Component
     {
-        private float speed, ctime;
+        private float speed, ctime, wait, length;
         private Vector2 dir = new Vector2 (1, 0);
         private bool grounded;
         private float gravity = 0.8f, vertVelo = 0f;
@@ -31,13 +31,15 @@ namespace UU_GameProject
         {
             base.Update(time);
             ctime = time;
+            Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
+            length = difference.Length();
 
-            if (GO.FindWithTag("player").GetAABB().Inside(new Vector2(8, 4)) && fsm.CurrentState == "idle")
+            if (length <= 4.0f && fsm.CurrentState == "idle")
             {
                 fsm.SetCurrentState("active");
                 Console.WriteLine("OI!");
             }
-            else if (GO.FindWithTag("player").GetAABB().Inside(new Vector2(8, 4)) && fsm.CurrentState != "idle")
+            else if (length > 4.0f && fsm.CurrentState != "idle")
             {
                 fsm.SetCurrentState("idle");
                 Console.WriteLine("It msut've been the wind...");
@@ -59,14 +61,16 @@ namespace UU_GameProject
 
         private void IdleBehaviour()
         {
-            //Movement behaviour
+            //Passive movement behaviour, patrolling a platform.
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
+            if (hitLeft.distance > hitRight.distance)
+                hit = hitRight;
+            else
+                hit = hitLeft;
 
             if (hit.hit && hit.distance < 0.05f)
             {
@@ -80,8 +84,10 @@ namespace UU_GameProject
                 speed *= -1;
             }
 
-            if (!grounded) vertVelo += gravity * ctime;
-            GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            if (grounded)
+                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            else
+                vertVelo += gravity * ctime;
         }
 
         private void ActiveBehaviour()
@@ -90,6 +96,55 @@ namespace UU_GameProject
             //start running at the player to get within melee range and then making a melee attack.
             //Melee attack needs a timer to prevent instadeath.
             //Perhaps some kind of dodging behaviour (projectiles).
+
+            float reach = 1.0f;
+            wait = Math.Max(0, wait - ctime);
+
+            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
+            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hit;
+            if (hitLeft.distance > hitRight.distance)
+                hit = hitRight;
+            else
+                hit = hitLeft;
+
+            if (hit.hit && hit.distance < 0.05f)
+            {
+                grounded = true;
+            }
+            else grounded = false;
+
+            //Moving left or right, depending on where the player is in relation to the enemy.
+            if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
+            {
+                if (dir.X > 0)
+                { dir *= -1; speed *= -1; }
+
+                if (length < reach - (0.1f * reach) && wait <= 0)
+                {
+                    GO.GetComponent<CMeleeAttack>().melee(dir, 2, reach);
+                    wait = 1.0f;
+                    Console.WriteLine("OUCH!");
+                }
+            } else
+            {
+                if (dir.X < 0)
+                { dir *= -1; speed *= -1; }
+
+                if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
+                {
+                    GO.GetComponent<CMeleeAttack>().melee(dir, 2, reach);
+                    wait = 1.0f;
+                    Console.WriteLine("OUCH!");
+                }
+            }
+            if (grounded)
+                if (length > 2 * reach / 3 && hitLeft.distance < 0.05f && hitRight.distance < 0.05f)
+                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            else if (!grounded)
+                    vertVelo += gravity * ctime;
         }
     }
 }

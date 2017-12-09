@@ -58,9 +58,10 @@ namespace UU_GameProject
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy = new GameObject("enemy", this, 2);
             enemy.AddComponent(new CRender("dude"));
-            enemy.AddComponent(new CNormalEnemyAI(3f));
+            enemy.AddComponent(new CNormalEnemyAI(2f));
             enemy.AddComponent(new CHealthBar(3, enemy));
             enemy.AddComponent(new CAABB());
+            enemy.AddComponent(new CMeleeAttack());
             enemy.Pos = new Vector2(8.5f, 4.0f);
             enemy.Size = new Vector2(0.5f, 1.0f);
             uint max = 1000;
