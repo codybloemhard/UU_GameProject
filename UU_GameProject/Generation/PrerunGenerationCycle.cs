@@ -12,23 +12,19 @@ namespace UU_GameProject
 
         public void GenTest()
         {
-            const int size = 32;
-            for(int i = 0; i < 4; i++)
-            {
-                FloatField fPerlin = Image.Perlin(size, size, 4, 5, 0.5, 2.0);
-                Image.ToRange(fPerlin, 0.01f, 1.0f);
-                FloatField fMask = Image.VoronoiCell(size, size, 10, 0.8f, 0.1f);
-                FloatField fCircle = Image.Circle(size, size, 0.9f, 1, 0.01f, 0.6f);
-                FloatField fResult = Image.Intersection(fPerlin, fMask);
-                Image.Multiply(fResult, fCircle);
-
-                ColourField cf = new ColourField(size, size);
-                Colour cDark = new Colour(0.2f, 0.1f, 0.1f) / 4;
-                Colour clight = new Colour(0.5f, 0.2f, 0.1f);
-                cf.FloatsToColours(fResult, cDark, clight);
-                cf.Save();
-                TextureManager.LoadTexture("test" + i, cf.Texture);
-            }
+            for(int i = 0; i < 8; i++)
+                TextureManager.LoadTexture("_berry" + i, TextureGen.GenBerry());
+            for (int i = 0; i < 8; i++)
+                TextureManager.LoadTexture("_bushleaf" + i, TextureGen.GenBushLeaf());
+            for (int i = 0; i < 4; i++)
+                TextureManager.LoadTexture("_boulder" + i, TextureGen.GenBoulder());
+            for (int i = 0; i < 16; i++)
+                TextureManager.LoadTexture("_stone" + i, TextureGen.GenStone());
+            for (int i = 0; i < 16; i++)
+                TextureManager.LoadTexture("_stoneshard" + i, TextureGen.GenStoneShard());
+            for (int i = 0; i < 4; i++)
+                TextureManager.LoadTexture("_cloud" + i, TextureGen.GenCloud());
+            GC.Collect();
         }
     }
 }

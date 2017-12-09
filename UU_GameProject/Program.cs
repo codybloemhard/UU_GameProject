@@ -32,9 +32,11 @@ namespace UU_GameProject
             TextureManager.LoadTexture("dude", "player");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            ShowCaseScene showcase = new ShowCaseScene();
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
-            game.states.SetStartingState("menu");
+            game.states.AddState("show", showcase);
+            game.states.SetStartingState("show");
         }
     }
 }

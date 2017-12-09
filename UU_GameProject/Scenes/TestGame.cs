@@ -61,14 +61,6 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.Pos = new Vector2(8, 2.2f);
             enemy.Size = new Vector2(0.5f, 0.5f);
-            
-            for(int i = 0; i < 4; i++)
-            {
-                GameObject tester = new GameObject("tester", this, 0);
-                tester.AddComponent(new CRender("test" + i));
-                tester.Pos = new Vector2(i * 4, 0);
-                tester.Size = new Vector2(1, 1);
-            }
         }
 
         public override void Unload()

@@ -37,6 +37,18 @@ namespace UU_GameProject
             return (r + g + b) / 3;
         }
 
+        public bool ZeroAlpha()
+        {
+            return a == 0f;
+        }
+
+        public static Colour Blend(Colour a, Colour b)
+        {
+            if (a.a == 0f) return b;
+            if (b.b == 0f) return a;
+            return Image.Lerp(a, b, b.a * 0.5f);
+        }
+
         public static Colour operator* (Colour c, float m)
         {
             return new Colour(c.r * m, c.g * m, c.b * m);
@@ -103,6 +115,40 @@ namespace UU_GameProject
                     float t = ff.array[ff.To1D(x % ff.Width, y % ff.Height)];
                     if (t > 0) array[To1D(x, y, h)] = Image.Lerp(a, b, t);
                     else array[To1D(x, y, h)] = new Colour(0, 0, 0, 0);
+                }
+        }
+
+        public void Blend(ColourField over)
+        {
+            for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                {
+                    Colour t = over.Get(x % over.Width, y % over.Height);
+                    Colour s = array[To1D(x, y, h)];
+                    array[To1D(x, y, h)] = Colour.Blend(s, t);
+                }
+        }
+
+        public void SetAlpha(float alpha, bool zeroStayZero = true)
+        {
+            for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                {
+                    float sa = array[To1D(x, y, h)].a;
+                    if (sa == 0 && zeroStayZero) continue;
+                    array[To1D(x, y, h)].a = alpha;
+                }
+        }
+
+        public void SetAlpha(FloatField f)
+        {
+            for (int x = 0; x < w; x++)
+                for (int y = 0; y < h; y++)
+                {
+                    float a = f.array[f.To1D(x % f.Width, y % f.Height)];
+                    Colour s = array[To1D(x, y, h)];
+                    s.a = a;
+                    array[To1D(x, y, h)] = s;
                 }
         }
 
@@ -223,6 +269,13 @@ namespace UU_GameProject
                 if (s > res) res = s;
             }
             return res;
+        }
+
+        public void Copy(FloatField f)
+        {
+            for(int x = 0; x < w; x++)
+                for(int y = 0; y < h; y++)
+                    array[To1D(x, y)] = f.array[f.To1D(x % f.w, y % f.h)];
         }
     }
 }

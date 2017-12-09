@@ -74,7 +74,7 @@ namespace UU_GameProject
             return f;
         }
 
-        public static FloatField Circle(uint w, uint h, float r, float alphaA, float alphaB, float inner = 0.0f)
+        public static FloatField Circle(uint w, uint h, float r, float alphaA, float alphaB, float inner = 0.0f, float xx = 0.5f, float yy = 0.5f)
         {
             if (r < 0) r = 0;
             if (r > 1) r = 1;
@@ -82,7 +82,7 @@ namespace UU_GameProject
             if (inner < 0) inner = 0;
             if (inner > 1) inner = 1;
             inner *= Math.Min(w / 2, h / 2);
-            Vector2 mid = new Vector2(w / 2, h / 2);
+            Vector2 mid = new Vector2(w * xx, h * yy);
             FloatField f = new FloatField(w, h);
             for (int x = 0; x < f.Width; x++)
                 for (int y = 0; y < f.Height; y++)
@@ -96,6 +96,56 @@ namespace UU_GameProject
                     }
                     f.array[f.To1D(x, y)] = res;
                 }
+            return f;
+        }
+
+        public static FloatField Edge(FloatField ff)
+        {
+            FloatField f = new FloatField((uint)ff.Width, (uint)ff.Height);
+            for(int x = 0; x < f.Width; x++)
+                for(int y = 0; y < f.Height; y++)
+                {
+                    float original = ff.array[ff.To1D(x, y)];
+                    if (original == 0f) continue;
+                    bool up = ff.array[ff.To1D(x, Math.Max(y - 1, 0))] == 0f;
+                    bool down = ff.array[ff.To1D(x, Math.Min(y + 1, ff.Height - 1))] == 0f;
+                    bool left = ff.array[ff.To1D(Math.Max(x - 1, 0), y)] == 0f;
+                    bool right = ff.array[ff.To1D(Math.Min(x + 1, ff.Width - 1), y)] == 0f;
+                    if (y - 1 <= 0) up = true;
+                    if (y + 1 >= ff.Height) down = true;
+                    if (x - 1 <= 0) left = true;
+                    if (x + 1 >= ff.Width) right = true;
+                    if (up || down || left || right)
+                        f.array[f.To1D(x, y)] = 1f;
+                }
+            return f;
+        }
+
+        public static FloatField EdgeToBlendBody(FloatField edge, FloatField body, float power, float from = 0f, float to = 1f)
+        {
+            FloatField f = new FloatField((uint)edge.Width, (uint)edge.Height);
+            f.Copy(body);
+            List<Vector2> edges = new List<Vector2>();
+            for (int x = 0; x < edge.Width; x++)
+                for (int y = 0; y < edge.Height; y++)
+                {
+                    float init = edge.array[body.To1D(x, y)];
+                    if (init == 0f) continue;
+                    edges.Add(new Vector2(x, y));
+                }
+            for (int x = 0; x < edge.Width; x++)
+                for (int y = 0; y < edge.Height; y++)
+                {
+                    float original = body.array[body.To1D(x, y)];
+                    if (original == 0f) continue;
+                    float min = 1000f;
+                    for (int i = 0; i < edges.Count; i++) {
+                        float dist = (new Vector2(x, y) - edges[i]).Length();
+                        if (dist < min) min = dist;
+                    }
+                    f.array[f.To1D(x, y)] = Lerp(from, to, (float)MathH.Clamp(min / f.Width / power, 0, 1));
+                }
+
             return f;
         }
 
@@ -216,9 +266,10 @@ namespace UU_GameProject
                 }
         }
 
-        public static void Normalize(FloatField f)
+        public static void Normalize(FloatField f, bool nozero = false)
         {
-            ToRange(f, 0, 1);
+            float min = nozero ? 0.01f : 0f;
+            ToRange(f, min, 1);
         }
 
         public static void Normalize(ColourField f)
