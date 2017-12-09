@@ -10,7 +10,7 @@ namespace UU_GameProject
         private float speed, ctime, wait, length;
         private Vector2 dir = new Vector2 (1, 0);
         private bool grounded;
-        private float gravity = 0.8f, vertVelo = 0f;
+        private float gravity = 1.8f, vertVelo = 0f;
         private FSM fsm = new FSM();
 
         public CNormalEnemyAI(float speed)
@@ -34,12 +34,12 @@ namespace UU_GameProject
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
 
-            if (length <= 4.0f && fsm.CurrentState == "idle")
+            if (length <= 4.5f && fsm.CurrentState == "idle")
             {
                 fsm.SetCurrentState("active");
                 Console.WriteLine("OI!");
             }
-            else if (length > 4.0f && fsm.CurrentState != "idle")
+            else if (length > 4.5f && fsm.CurrentState != "idle")
             {
                 fsm.SetCurrentState("idle");
                 Console.WriteLine("It msut've been the wind...");
@@ -87,7 +87,9 @@ namespace UU_GameProject
             if (grounded)
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
-                vertVelo += gravity * ctime;
+            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                
+
         }
 
         private void ActiveBehaviour()
@@ -95,7 +97,6 @@ namespace UU_GameProject
             //When the player comes within a certain range, 
             //start running at the player to get within melee range and then making a melee attack.
             //Melee attack needs a timer to prevent instadeath.
-            //Perhaps some kind of dodging behaviour (projectiles).
 
             float reach = 1.0f;
             wait = Math.Max(0, wait - ctime);
@@ -111,10 +112,9 @@ namespace UU_GameProject
                 hit = hitLeft;
 
             if (hit.hit && hit.distance < 0.05f)
-            {
                 grounded = true;
-            }
-            else grounded = false;
+            else
+                grounded = false;
 
             //Moving left or right, depending on where the player is in relation to the enemy.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
@@ -140,11 +140,11 @@ namespace UU_GameProject
                     Console.WriteLine("OUCH!");
                 }
             }
-            if (grounded)
-                if (length > 2 * reach / 3 && hitLeft.distance < 0.05f && hitRight.distance < 0.05f)
-                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+
+            if (grounded && length > 2 * reach / 3 && hitLeft.distance < 0.05f && hitRight.distance < 0.05f)
+                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else if (!grounded)
-                    vertVelo += gravity * ctime;
+            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace UU_GameProject
             else if (ray3.distance <= reach)
                 hp = ray3.obj.GetComponent<CHealthBar>();
 
-            if (hp != null)
+            if (hp != null && (ray1.obj.tag != "enemy" || ray2.obj.tag != "enemy" || ray3.obj.tag != "enemy"))
             {
                 hp.hit(damage);
             }

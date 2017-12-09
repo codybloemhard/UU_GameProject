@@ -64,6 +64,14 @@ namespace UU_GameProject
             enemy.AddComponent(new CMeleeAttack());
             enemy.Pos = new Vector2(8.5f, 4.0f);
             enemy.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy1 = new GameObject("enemy1", this, 2);
+            enemy1.AddComponent(new CRender("dude"));
+            enemy1.AddComponent(new CNormalEnemyAI(2.5f));
+            enemy1.AddComponent(new CHealthBar(4, enemy1));
+            enemy1.AddComponent(new CAABB());
+            enemy1.AddComponent(new CShoot());
+            enemy1.Pos = new Vector2(9.5f, 4.0f);
+            enemy1.Size = new Vector2(0.5f, 1.0f);
             uint max = 1000;
             for (int i = 0; i < max; i++)
             {
