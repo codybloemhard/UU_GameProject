@@ -10,7 +10,7 @@ namespace UU_GameProject
         private float speed, ctime, wait, length;
         private Vector2 dir = new Vector2(1, 0);
         private bool grounded;
-        private float gravity = 0.8f, vertVelo = 0f;
+        private float gravity = 1.8f, vertVelo = 0f;
         private FSM fsm = new FSM();
 
         public CRangedEnemyAI(float speed)
@@ -21,12 +21,13 @@ namespace UU_GameProject
         public override void Init()
         {
             CRender render = GO.Renderer as CRender;
-            if (render != null) render.colour = Color.Green;
+            if (render != null) render.colour = Color.DarkSeaGreen;
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);
             fsm.SetCurrentState("idle");
         }
 
+        //Selecting behaviour
         public override void Update(float time)
         {
             base.Update(time);
@@ -34,12 +35,12 @@ namespace UU_GameProject
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
 
-            if (length <= 5.0f && fsm.CurrentState == "idle")
+            if (length <= 5.25f && fsm.CurrentState == "idle")
             {
                 fsm.SetCurrentState("active");
                 Console.WriteLine("OI!");
             }
-            else if (length > 5.0f && fsm.CurrentState != "idle")
+            else if (length > 5.25f && fsm.CurrentState != "idle")
             {
                 fsm.SetCurrentState("idle");
                 Console.WriteLine("It msut've been the wind...");
@@ -48,7 +49,7 @@ namespace UU_GameProject
             fsm.Update();
         }
 
-        //Damage handling
+        //Damage handling when being hit by a bullet
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "bullet")
@@ -87,7 +88,7 @@ namespace UU_GameProject
             if (grounded)
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
-                vertVelo += gravity * ctime;
+            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
         }
 
         private void ActiveBehaviour()
@@ -114,7 +115,7 @@ namespace UU_GameProject
             else
                 grounded = false;
 
-            //Moving left or right, depending on where the player is in relation to the enemy.
+            //Moving left or right, depending on where the player is in relation to the enemy and keeping distance.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
             {
                 if (dir.X > 0)
@@ -125,11 +126,40 @@ namespace UU_GameProject
                 if (dir.X < 0)
                 { dir *= -1; speed *= -1; }
             }
-            if (grounded)
-                if (length > 2 * range / 3 && hitLeft.distance < 0.05f && hitRight.distance < 0.05f)
+
+            if (length < range && wait == 0)
+            {
+                Vector2 thing = shootdir(GO.Pos.X - GO.FindWithTag("player").Pos.X);
+                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f));
+                wait = 1.75f;
+            }
+
+            if (grounded && length > range - 0.4f && wait < 1.3f)
                     GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-                else if (!grounded)
-                    vertVelo += gravity * ctime;
+            else if (grounded && length < range - 0.5f && wait < 1.3f)
+            { dir *= -1; speed *= -1; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+            else if (!grounded)
+                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+        }
+
+        private Vector2 shootdir(float x)
+        {
+            if(x < 0)
+                x *= -1;
+
+            double angle =  Math.Acos(x / length) / Math.PI * 180;
+            Console.WriteLine(angle);
+
+            if (angle < 22.5)
+                return new Vector2(dir.X, 0);
+            else if (GO.Pos.Y < GO.FindWithTag("player").Pos.Y && angle < 67.5)
+                return new Vector2(dir.X, 1);
+            else if (angle < 67.5)
+                return new Vector2(dir.X, -1);
+            else if (GO.Pos.Y < GO.FindWithTag("player").Pos.Y)
+                return new Vector2(0, 1);
+            else
+                return new Vector2(0, -1);
         }
     }
 }
