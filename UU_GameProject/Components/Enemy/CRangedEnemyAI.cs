@@ -134,9 +134,9 @@ namespace UU_GameProject
                 wait = 1.75f;
             }
 
-            if (grounded && length > range - 0.4f && wait < 1.3f)
+            if (grounded && length > range - 0.4f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
                     GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-            else if (grounded && length < range - 0.5f && wait < 1.3f)
+            else if (grounded && length < range - 0.5f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
             { dir *= -1; speed *= -1; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
             else if (!grounded)
                 { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
@@ -148,7 +148,7 @@ namespace UU_GameProject
                 x *= -1;
 
             double angle =  Math.Acos(x / length) / Math.PI * 180;
-            Console.WriteLine(angle);
+            //Console.WriteLine(angle);
 
             if (angle < 22.5)
                 return new Vector2(dir.X, 0);

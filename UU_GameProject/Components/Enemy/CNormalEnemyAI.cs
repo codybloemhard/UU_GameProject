@@ -142,7 +142,7 @@ namespace UU_GameProject
                 }
             }
 
-            if (grounded && length > 2 * reach / 3)
+            if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else if (!grounded)
             { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }

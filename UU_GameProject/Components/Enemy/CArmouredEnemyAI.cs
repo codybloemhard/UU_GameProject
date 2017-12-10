@@ -35,16 +35,16 @@ namespace UU_GameProject
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
 
-            //if (length <= 4.5f && fsm.CurrentState == "idle")
-            //{
-            //    fsm.SetCurrentState("active");
-            //    Console.WriteLine("OI!");
-            //}
-            //else if (length > 4.5f && fsm.CurrentState != "idle")
-            //{
-            //    fsm.SetCurrentState("idle");
-            //    Console.WriteLine("It msut've been the wind...");
-            //}
+            if (length <= 4.5f && fsm.CurrentState == "idle")
+            {
+                fsm.SetCurrentState("active");
+                Console.WriteLine("OI!");
+            }
+            else if (length > 4.5f && fsm.CurrentState != "idle")
+            {
+                fsm.SetCurrentState("idle");
+                Console.WriteLine("It msut've been the wind...");
+            }
 
             fsm.Update();
         }
@@ -128,30 +128,35 @@ namespace UU_GameProject
                 if (dir.X > 0)
                 { dir *= -1; speed *= -1; }
 
-                if (length < reach - (0.1f * reach) && wait <= 0)
-                {
-                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
-                    wait = 1.3f;
-                    Console.WriteLine("OUCH!");
-                }
+                //if (length < reach - (0.1f * reach) && wait <= 0)
+                //{
+                //    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                //    wait = 1.3f;
+                //    Console.WriteLine("OUCH!");
+                //}
             }
             else
             {
                 if (dir.X < 0)
                 { dir *= -1; speed *= -1; }
 
-                if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
-                {
-                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
-                    wait = 1.3f;
-                    Console.WriteLine("OUCH!");
-                }
+                //if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
+                //{
+                //    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                //    wait = 1.3f;
+                //    Console.WriteLine("OUCH!");
+                //}
             }
 
-            if (grounded && length > 2 * reach / 3)
+            if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else if (!grounded)
             { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+        }
+
+        public Vector2 direction()
+        {
+            return dir;
         }
     }
 }

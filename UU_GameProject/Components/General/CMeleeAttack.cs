@@ -13,6 +13,7 @@ namespace UU_GameProject
 
         public void melee(Vector2 dir, int damage, float reach)
         {
+            RaycastResult ray = null;
             RaycastResult ray1;
             RaycastResult ray2;
             RaycastResult ray3;
@@ -29,13 +30,19 @@ namespace UU_GameProject
             ray3 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, -1), RAYCASTTYPE.DYNAMIC);
 
             if (ray1.distance <= reach)
-                hp = ray1.obj.GetComponent<CHealthBar>();
+                ray = ray1;
             else if (ray2.distance <= reach)
-                hp = ray2.obj.GetComponent<CHealthBar>();
+                ray = ray2;
             else if (ray3.distance <= reach)
-                hp = ray3.obj.GetComponent<CHealthBar>();
+                ray = ray3;
 
-            if (hp != null && (ray1.obj.tag != "enemy" || ray2.obj.tag != "enemy" || ray3.obj.tag != "enemy"))
+            if (ray != null)
+                hp = ray.obj.GetComponent<CHealthBar>();
+
+            if (hp != null && (ray1.obj.tag != GO.tag || ray2.obj.tag != GO.tag || ray3.obj.tag != GO.tag) && ray.obj.tag != "Aenemy")
+            {
+                hp.hit(damage);
+            } else if (-ray.obj.GetComponent<CArmouredEnemyAI>().direction() != dir)
             {
                 hp.hit(damage);
             }
