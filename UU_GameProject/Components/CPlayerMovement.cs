@@ -14,7 +14,11 @@ namespace UU_GameProject
         private float acceleration = 0.8f, vertVelo = 0f;
         private float playerAccel = .1f;
         private float jumpDelayTime = 0;
+        private float dashToggleDelayTime = 0;
+        private float dashSlowdownDelayTime = 0;
         private float lastVertVelo;
+        private float maxDashSpeed = 4;
+        private bool isDashing = false;
         private bool fallPanic = false;
         private bool grounded = false;
         private bool isCrawling = false;
@@ -56,12 +60,12 @@ namespace UU_GameProject
             }
 
             //down
-            if (Input.GetKey(PressAction.DOWN, Keys.LeftShift) && grounded)
+            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
                 maxPlayerSpeed = 0.5f;
                 isDown = true;
             }
-            if (Input.GetKey(PressAction.RELEASED, Keys.LeftShift))
+            if (Input.GetKey(PressAction.RELEASED, Keys.S))
             {
                 maxPlayerSpeed = 2.0f;
                 isDown = false;
@@ -93,7 +97,6 @@ namespace UU_GameProject
             //fall panic
             if (vertVelo > 25 || lastVertVelo > 25)
             {
-                Console.WriteLine("PANIC MODE ENGAGED");
                 fallPanic = true;
                 //fall damage
                 if (grounded)
@@ -104,11 +107,51 @@ namespace UU_GameProject
             }
             else fallPanic = false;
 
-            
+            //Dashing
+            //turning dashing state on
+            if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
+            {
+                isDashing = true;
+                dashToggleDelayTime = 0;
+            }
+            Console.WriteLine(isDashing);
+            dashToggleDelayTime += .01666666666666f;
 
-        
-        //gravity and jump
-        Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+            //turning dashing state off
+            if (isDashing && ((Math.Abs(velocity.X) > maxDashSpeed) || (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && dashToggleDelayTime > .01666666666666f) || isDown))
+                isDashing = false;
+
+            if (!isDashing)
+                dashSlowdownDelayTime = 0;
+
+            //Slowdown after dashing
+            if (isDashing && velocity.X >= maxPlayerSpeed)
+            {
+                dashSlowdownDelayTime += .01666666666666f;
+                if (dashSlowdownDelayTime >= 15 * .01666666666666f)
+                {
+                    velocity.X -= .1f;
+                }
+            }
+
+            //the dashing itself
+            if (isDashing && velocity.X != 0 && GO.GetComponent<CManaPool>().ReturnMana() >= 50 && Math.Abs(velocity.X) >= maxDashSpeed * (7/8))
+            {
+                Console.WriteLine("Dashing!");
+                GO.GetComponent<CManaPool>().ConsumeMana(25);
+                velocity.X += 2.0f * dir.X;
+                if (velocity.X > maxDashSpeed)
+                    velocity.X = maxDashSpeed;
+                if (velocity.X < -maxDashSpeed)
+                    velocity.X = -maxDashSpeed;
+            }
+
+
+
+
+
+            //gravity and jump
+            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
