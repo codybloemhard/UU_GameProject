@@ -114,7 +114,6 @@ namespace UU_GameProject
                 isDashing = true;
                 dashToggleDelayTime = 0;
             }
-            Console.WriteLine(isDashing);
             dashToggleDelayTime += .01666666666666f;
 
             //turning dashing state off
@@ -137,7 +136,6 @@ namespace UU_GameProject
             //the dashing itself
             if (isDashing && velocity.X != 0 && GO.GetComponent<CManaPool>().ReturnMana() >= 50 && Math.Abs(velocity.X) >= maxDashSpeed * (7/8))
             {
-                Console.WriteLine("Dashing!");
                 GO.GetComponent<CManaPool>().ConsumeMana(25);
                 velocity.X += 2.0f * dir.X;
                 if (velocity.X > maxDashSpeed)
