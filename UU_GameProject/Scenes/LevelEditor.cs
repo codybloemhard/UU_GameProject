@@ -10,6 +10,8 @@ namespace UU_GameProject
 {
     class LevelEditor : GameState
     {
+        List<GameObject> allObjects = new List<GameObject>();
+
         public override void Load(SpriteBatch batch)
         {
             Button button = new Button(this, "Finish", "block", () => Finish(),
@@ -26,20 +28,13 @@ namespace UU_GameProject
             Camera.SetCameraTopLeft(new Vector2(0, 0));
             if (Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
-                Console.Write("Texture: ");
-                string texture = Console.ReadLine();
-                Console.Write("Width: ");
-                float width = float.Parse(Console.ReadLine());
-                Console.Write("Height: ");
-                float height = float.Parse(Console.ReadLine());
-
                 GameObject newObject = new GameObject("new", this, 0, true);
-                newObject.AddComponent(new CRender(texture));
+                allObjects.Add(newObject);
+                newObject.AddComponent(new CRender("block"));
                 newObject.AddComponent(new CAABB());                
                 newObject.AddComponent(new CLevelEditorObject());
-
-                newObject.Pos = Input.GetMousePosition() - new Vector2(0.5f, 0.5f);
-                newObject.Size = new Vector2(width, height);
+                newObject.Pos = Input.GetMousePosition();
+                newObject.Size = new Vector2(1, 1);
             }
             base.Update(time);
         }
@@ -51,17 +46,18 @@ namespace UU_GameProject
 
         public void Finish()
         {
+
             using (StreamWriter fileWriter = new StreamWriter("../../../../Content/level.txt", false))
             {
                 fileWriter.AutoFlush = true;
-                fileWriter.WriteLine("blegh");
-            }
 
-            using (StreamReader fileReader = new StreamReader("../../../../Content/level.txt"))
-            {
-                Console.WriteLine(fileReader.ReadLine());
+                for(int i = 0; i < allObjects.Count; i++)
+                {
+                    fileWriter.Write(allObjects[i].tag + "|");
+                    fileWriter.Write(allObjects[i].Pos.X + "/" +allObjects[i].Pos.Y + "|");
+                    fileWriter.WriteLine(allObjects[i].Size.X + "/" + allObjects[i].Size.Y);
+                }
             }
-
             GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
         }
     }

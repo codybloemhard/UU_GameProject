@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -93,6 +94,23 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
+        }
+
+        public void LoadFromFile(string path)
+        {
+            using (StreamReader fileReader = new StreamReader(path))
+            {
+                string line = fileReader.ReadLine();
+                while (line != null)
+                {
+                    string[] properties = line.Split('|');
+                    for(int i = 0; i < properties.Length; i++)
+                    {
+                        
+                    }
+                }
+            }
+
         }
     }
 }

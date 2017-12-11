@@ -30,7 +30,12 @@ namespace UU_GameProject
                         grabbed = true;
                         grabPoint = Input.GetMousePosition() - GO.Pos;
                     }
+                }
 
+                else
+                {
+                    if (selected == GO)
+                        selected = null;
                 }
             }
             else if (Input.GetMouseButton(PressAction.RELEASED, MouseButton.LEFT))
@@ -40,13 +45,17 @@ namespace UU_GameProject
             }
 
             if (selected == GO)
-                GO.Renderer.colour = Color.Red;
+            {
+                GO.Renderer.colour = new Color(180, 180, 180);
+                if (Input.GetKey(PressAction.PRESSED, Keys.P))
+                {
+                    Console.WriteLine("New Size x y");
+                    GO.Size = new Vector2(Int32.Parse(Console.ReadLine()), Int32.Parse(Console.ReadLine()));
+                }
+            }
             else
                 GO.Renderer.colour = Color.White;
             
-
-            
-
             if (Input.GetKey(PressAction.DOWN, Keys.LeftShift))
                 axisAligned = true;
             else
