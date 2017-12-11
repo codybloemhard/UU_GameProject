@@ -127,7 +127,6 @@ namespace UU_GameProject
                 isDashing = false;
             if (!isDashing)
                 dashSlowdownDelayTime = 0;
-            Console.WriteLine(isDashing);
             //Slowdown after dashing
             if (isDashing && Math.Abs(velocity.X) >= maxPlayerSpeed)
             {
@@ -139,7 +138,6 @@ namespace UU_GameProject
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
             {
-                Console.WriteLine("DASHING");
                 GO.GetComponent<CManaPool>().ConsumeMana(25);
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
             }
