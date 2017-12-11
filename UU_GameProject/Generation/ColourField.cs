@@ -49,6 +49,13 @@ namespace UU_GameProject
             return Image.Lerp(a, b, b.a * 0.5f);
         }
 
+        public static Colour BlendOver(Colour a, Colour over)
+        {
+            if (a.a == 0f) return over;
+            if (over.b == 0f) return a;
+            return Image.Lerp(a, over, over.a);
+        }
+
         public static Colour operator* (Colour c, float m)
         {
             return new Colour(c.r * m, c.g * m, c.b * m);
@@ -129,6 +136,32 @@ namespace UU_GameProject
                 }
         }
 
+        public void DrawOver(ColourField over, uint xx, uint yy)
+        {
+            int lx = 0, ly = 0;
+            for (int x = (int)xx; x < Math.Min(w, xx + over.w); x++, lx++, ly = 0)
+                for (int y = (int)yy; y < Math.Min(h, yy + over.h); y++, ly++)
+                {
+                    Colour t = over.Get(lx, ly);
+                    Colour s = array[To1D(x, y, h)];
+                    Colour res = t.ZeroAlpha() ? s : t;
+                    array[To1D(x, y, h)] = res;
+                }
+        }
+
+        public void BlendOver(ColourField over, uint xx, uint yy)
+        {
+            int lx = 0, ly = 0;
+            for (int x = (int)xx; x < Math.Min(w, xx + over.w); x++, lx++, ly = 0)
+                for (int y = (int)yy; y < Math.Min(h, yy + over.h); y++, ly++)
+                {
+                    Colour t = over.Get(lx, ly);
+                    Colour s = array[To1D(x, y, h)];
+                    Colour res = Colour.BlendOver(s, t);
+                    array[To1D(x, y, h)] = res;
+                }
+        }
+
         public void SetAlpha(float alpha, bool zeroStayZero = true)
         {
             for (int x = 0; x < w; x++)
@@ -174,7 +207,7 @@ namespace UU_GameProject
 
         public int To1D(int x, int y, int h)
         {
-            return y * h + x;
+            return y * w + x;
         }
 
         public float Average()
@@ -230,9 +263,36 @@ namespace UU_GameProject
                     array[To1D(x, y)] = cf.Get(x % cf.Width, y % cf.Height).Strength();
         }
 
+        public void CopyStretch(FloatField ff)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                int sx = (int)Math.Round(((float)x / w) * ff.w);
+                for (int y = 0; y < h; y++)
+                {
+                    int sy = (int)Math.Round(((float)y / h) * ff.h);
+                    array[To1D(x, y)] = ff.array[ff.To1D(sx, sy)];
+                }
+            }
+        }
+
+        public FloatField CopyCut(uint x0, uint y0, uint x1, uint y1)
+        {
+            if (x0 < 0 || y0 < 0 || x0 >= w || y0 >= h) return null;
+            if (x1 < 1 || y1 < 1 || x1 >= w || y1 >= h) return null;
+            uint ww = x1 - x0 + 1, hh = y1 - y0 + 1;
+            FloatField ff = new FloatField(ww, hh);
+            for (int x = 0; x < ww; x++)
+                for(int y = 0; y < hh; y++)
+                {
+                    ff.array[ff.To1D(x, y)] = array[To1D((int)x0 + x, (int)y0 + y)];
+                }
+            return ff;
+        }
+
         public int To1D(int x, int y)
         {
-            return y * h + x;
+            return y * w + x;
         }
 
         public int To1D(int x, int y, int h)

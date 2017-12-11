@@ -21,6 +21,15 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField Noise(uint w, uint h, float a = 0f, float b = 1f)
+        {
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                    f.array[f.To1D(x, y)] = RandomRange(a, b);
+            return f;
+        }
+
         public static FloatField Cut(uint w, uint h, bool left, Vector2 p, Vector2 q)
         {
             float init = left ? 0 : 1;
@@ -77,7 +86,6 @@ namespace UU_GameProject
         public static FloatField Circle(uint w, uint h, float r, float alphaA, float alphaB, float inner = 0.0f, float xx = 0.5f, float yy = 0.5f)
         {
             if (r < 0) r = 0;
-            if (r > 1) r = 1;
             r *= Math.Min(w / 2, h / 2);
             if (inner < 0) inner = 0;
             if (inner > 1) inner = 1;
@@ -96,6 +104,20 @@ namespace UU_GameProject
                     }
                     f.array[f.To1D(x, y)] = res;
                 }
+            return f;
+        }
+
+        public static FloatField Rectangle(uint w, uint h, float xx, float yy, float ww, float hh)
+        {
+            xx *= w;
+            ww *= w;
+            yy *= h;
+            hh *= h;
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                    if(x >= xx && x <= xx + ww && y >= yy && y <= yy + hh)
+                        f.array[f.To1D(x, y)] = 1.0f;
             return f;
         }
 
@@ -149,6 +171,40 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField RandomWalk(uint w, uint h, float xx, float yy, uint steps, Vector2 dir = new Vector2())
+        {
+            if (xx < 0 || xx >= w) xx = 0;
+            if (yy < 0 || yy >= h) yy = 0;
+            Vector2 pos = new Vector2(xx * w, yy * h);
+            FloatField f = new FloatField(w, h);
+            for(int i = 0; i < steps; i++)
+            {
+                Vector2 step = new Vector2((float)MathH.random.NextDouble()*2f - 1f, (float)MathH.random.NextDouble()*2f - 1f);
+                step += dir;
+                step.Normalize();
+                pos += step;
+                pos.X = (float)MathH.Clamp(pos.X, 0, w - 1);
+                pos.Y = (float)MathH.Clamp(pos.Y, 0, h - 1);
+                f.array[f.To1D((int)pos.X, (int)pos.Y)] = 1f;
+            }
+            return f;
+        }
+
+        public static FloatField Fade(uint w, uint h, bool xas, bool fromzero)
+        {
+            uint start = fromzero ? 0 : (xas ? w : h);
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                {
+                    float res = 0f;
+                    if (xas) res = (float)Math.Abs(x - start) / w;
+                    else res = (float)Math.Abs(y - start) / h;
+                    f.array[f.To1D(x, y)] = res;
+                }
+            return f;
+        }
+
         public static FloatField Intersection(FloatField a, FloatField b)
         {
             FloatField res = new FloatField((uint)a.Width, (uint)a.Height);
@@ -180,6 +236,38 @@ namespace UU_GameProject
             return res;
         }
 
+        public static FloatField Difference(FloatField a, FloatField b)
+        {
+            FloatField res = new FloatField((uint)a.Width, (uint)a.Height);
+            for (int x = 0; x < res.Width; x++)
+                for (int y = 0; y < res.Height; y++)
+                {
+                    float aa = a.array[a.To1D(x, y)];
+                    float bb = b.array[b.To1D(x % b.Width, y % b.Height)];
+                    float r = aa;
+                    if (bb > 0f) r = 0f;
+                    res.array[res.To1D(x, y)] = r;
+                }
+            return res;
+        }
+
+        public static void NormalizeSize(FloatField ff)
+        {
+            uint minx = (uint)ff.Width, maxx = 0, miny = (uint)ff.Height, maxy = 0;
+            for (uint x = 0; x < ff.Width; x++)
+                for (uint y = 0; y < ff.Height; y++)
+                {
+                    if (ff.array[ff.To1D((int)x, (int)y)] == 0.0f) continue;
+                    if (minx > x) minx = x;
+                    if (maxx < x) maxx = x;
+                    if (miny > y) miny = y;
+                    if (maxy < y) maxy = y;
+                }
+            if (minx >= maxx || miny >= maxy) return;
+            FloatField cut = ff.CopyCut(minx, miny, maxx, maxy);
+            ff.CopyStretch(cut);
+        }
+
         public static void Multiply(FloatField fa, FloatField fb)
         {
             for(int x = 0; x < fa.Width; x++)
@@ -190,6 +278,19 @@ namespace UU_GameProject
                 float r = aa * bb;
                 fa.array[fa.To1D(x, y)] = r;
             }
+        }
+
+        public static void Multiply(ColourField ca, FloatField fb)
+        {
+            for (int x = 0; x < ca.Width; x++)
+                for (int y = 0; y < ca.Height; y++)
+                {
+                    Colour aa = ca.Get(x, y);
+                    if (aa.a == 0f) continue;
+                    float bb = fb.array[fb.To1D(x % fb.Width, y % fb.Height)];
+                    Colour r = aa * bb;
+                    ca.Set(r, x, y);
+                }
         }
 
         public static void ThresholdCut(FloatField f, float min, float max)
@@ -285,6 +386,16 @@ namespace UU_GameProject
         public static float Lerp(float a, float b, float t)
         {
             return a + ((b - a) * t);
+        }
+
+        public static float RandomRange(float a, float b)
+        {
+            return Lerp(a, b, (float)MathH.random.NextDouble());
+        }
+
+        public static float RandomDeviation(float x, float t)
+        {
+            return Lerp(x - t, x + t, (float)MathH.random.NextDouble());
         }
     }
 }

@@ -22,7 +22,7 @@ namespace UU_GameProject
             game.SetLoad(Load);
             game.Run();
         }
-
+        
         private void Load()
         {
             PrerunGenerationCycle generator = new PrerunGenerationCycle();

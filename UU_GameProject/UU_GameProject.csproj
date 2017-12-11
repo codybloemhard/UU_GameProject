@@ -45,7 +45,8 @@
     <Compile Include="Components\CPlayerMovement.cs" />
     <Compile Include="Components\CShoot.cs" />
     <Compile Include="Generation\ColourField.cs" />
-    <Compile Include="Generation\ObjectGen.cs" />
+    <Compile Include="Generation\Catalog.cs" />
+    <Compile Include="Generation\ShowCase.cs" />
     <Compile Include="Generation\TextureGen.cs" />
     <Compile Include="Generation\Image.cs" />
     <Compile Include="Generation\PerlinNoise.cs" />
