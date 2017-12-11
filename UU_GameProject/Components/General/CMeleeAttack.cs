@@ -37,14 +37,15 @@ namespace UU_GameProject
                 ray = ray3;
 
             if (ray != null)
-                hp = ray.obj.GetComponent<CHealthBar>();
-
-            if (hp != null && (ray1.obj.tag != GO.tag || ray2.obj.tag != GO.tag || ray3.obj.tag != GO.tag) && ray.obj.tag != "Aenemy")
             {
-                hp.hit(damage);
-            } else if (-ray.obj.GetComponent<CArmouredEnemyAI>().direction() != dir)
-            {
-                hp.hit(damage);
+                if (hp != null && ray.obj.tag != GO.tag && ray.obj.tag != "Aenemy")
+                {
+                    ray.obj.GetComponent<CHealthBar>().hit(damage);
+                }
+                else if (ray.obj.tag == "Aenemy" && ray.obj.tag != GO.tag && -ray.obj.GetComponent<CArmouredEnemyAI>().direction() != dir)
+                {
+                    ray.obj.GetComponent<CHealthBar>().hit(damage);
+                }
             }
         }
     }

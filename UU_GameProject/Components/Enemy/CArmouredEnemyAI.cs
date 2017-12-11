@@ -125,33 +125,38 @@ namespace UU_GameProject
             //Moving left or right, depending on where the player is in relation to the enemy.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
             {
-                if (dir.X > 0)
+                if (dir.X > 0 && turntime == 0)
                 { dir *= -1; speed *= -1; }
 
-                //if (length < reach - (0.1f * reach) && wait <= 0)
-                //{
-                //    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
-                //    wait = 1.3f;
-                //    Console.WriteLine("OUCH!");
-                //}
+                if (length < reach - (0.1f * reach) && wait <= 0 && dir.X < 0)
+                {
+                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                    wait = 1.3f;
+                    Console.WriteLine("OUCH!");
+                }
+
+                if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f) && dir.X < 0)
+                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+                else if (!grounded)
+                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
             }
-            else
+            else if (turntime == 0)
             {
-                if (dir.X < 0)
+                if (dir.X < 0 && turntime == 0)
                 { dir *= -1; speed *= -1; }
 
-                //if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
-                //{
-                //    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
-                //    wait = 1.3f;
-                //    Console.WriteLine("OUCH!");
-                //}
-            }
+                if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0 && dir.X > 0)
+                {
+                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                    wait = 1.3f;
+                    Console.WriteLine("OUCH!");
+                }
 
-            if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
-                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-            else if (!grounded)
-            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f) && dir.X > 0)
+                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+                else if (!grounded)
+                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+            }
         }
 
         public Vector2 direction()
