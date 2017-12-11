@@ -14,6 +14,7 @@ namespace UU_GameProject
         private float acceleration = 0.8f, vertVelo = 0f;
         private float playerAccel = .1f;
         private float jumpDelayTime = 0;
+        private float lastVertVelo;
         private bool fallPanic = false;
         private bool grounded = false;
         private bool isCrawling = false;
@@ -90,11 +91,24 @@ namespace UU_GameProject
             else isSliding = false;
 
             //fall panic
-            if (vertVelo > 25)
+            if (vertVelo > 25 || lastVertVelo > 25)
+            {
+                Console.WriteLine("PANIC MODE ENGAGED");
                 fallPanic = true;
+                //fall damage
+                if (grounded)
+                {
+                    GO.GetComponent<CHealthPool>().ChangeHealth((int)lastVertVelo - 25);
+                }
+                lastVertVelo = vertVelo;
+            }
             else fallPanic = false;
-            //gravity and jump
-            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+
+            
+
+        
+        //gravity and jump
+        Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);

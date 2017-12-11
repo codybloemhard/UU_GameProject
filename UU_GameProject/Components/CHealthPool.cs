@@ -27,5 +27,14 @@ namespace UU_GameProject
             if (HP <= 0)
                 GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
         }
+
+        //method to be called for instances that change HP
+        public void ChangeHealth(int amount)
+        {
+            HP -= amount;
+            healthPool.text = "Health: " + HP;
+            if (HP <= 0)
+                GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+        }
     }
 }
