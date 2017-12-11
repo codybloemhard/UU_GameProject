@@ -10,6 +10,7 @@ namespace UU_GameProject
         private float speed;
         private float maxPlayerSpeed = 2.0f;
         private Vector2 dir;
+        private float intendedDir;
         private float jumpPower = 15f;
         private float acceleration = 0.8f, vertVelo = 0f;
         private float playerAccel = .1f;
@@ -58,9 +59,14 @@ namespace UU_GameProject
                 dir = velocity;
                 dir.Normalize();
             }
+            if (Input.GetKey(PressAction.DOWN, Keys.D))
+                intendedDir = 1;
+            if (Input.GetKey(PressAction.DOWN, Keys.A))
+                intendedDir = -1;
+
 
             //down
-            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
+                if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
                 maxPlayerSpeed = 0.5f;
                 isDown = true;
@@ -114,37 +120,30 @@ namespace UU_GameProject
                 isDashing = true;
                 dashToggleDelayTime = 0;
             }
-            dashToggleDelayTime += .01666666666666f;
+            dashToggleDelayTime += time;
 
             //turning dashing state off
-            if (isDashing && ((Math.Abs(velocity.X) > maxDashSpeed) || (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && dashToggleDelayTime > .01666666666666f) || isDown))
+            if ((Math.Abs(velocity.X) > maxDashSpeed) || (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && dashToggleDelayTime > time) || isDown || dir.X != intendedDir)
                 isDashing = false;
-
             if (!isDashing)
                 dashSlowdownDelayTime = 0;
-
+            Console.WriteLine(isDashing);
             //Slowdown after dashing
-            if (isDashing && velocity.X >= maxPlayerSpeed)
+            if (isDashing && Math.Abs(velocity.X) >= maxPlayerSpeed)
             {
-                dashSlowdownDelayTime += .01666666666666f;
-                if (dashSlowdownDelayTime >= 15 * .01666666666666f)
-                {
-                    velocity.X -= .1f;
-                }
+                dashSlowdownDelayTime += time;
+                if (dashSlowdownDelayTime >= 15 * time)
+                    velocity.X -= .1f * dir.X;
             }
 
             //the dashing itself
-            if (isDashing && velocity.X != 0 && GO.GetComponent<CManaPool>().ReturnMana() >= 50 && Math.Abs(velocity.X) >= maxDashSpeed * (7/8))
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
             {
+                Console.WriteLine("DASHING");
                 GO.GetComponent<CManaPool>().ConsumeMana(25);
-                velocity.X += 2.0f * dir.X;
-                if (velocity.X > maxDashSpeed)
-                    velocity.X = maxDashSpeed;
-                if (velocity.X < -maxDashSpeed)
-                    velocity.X = -maxDashSpeed;
+                velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
             }
-
-
+            
 
 
 
@@ -169,7 +168,7 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 10 * .016666666666f)
+                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 10 * time)
                 {
                     GO.GetComponent<CManaPool>().ConsumeMana(75);
                     vertVelo = -jumpPower;
@@ -179,7 +178,7 @@ namespace UU_GameProject
             if (!grounded)
             {
                 vertVelo += acceleration;
-                jumpDelayTime += .016666666666f;
+                jumpDelayTime += time;
             }
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
@@ -195,13 +194,6 @@ namespace UU_GameProject
                     GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
                 }
             }
-
-            if (isSliding)
-                Console.WriteLine("Player is sliding");
-            if (isCrouching)
-                Console.WriteLine("Player is crouching");
-            if (isCrawling)
-                Console.WriteLine("Player is crawling");
         }
 
         public override void OnCollision(GameObject other)
