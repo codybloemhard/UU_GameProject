@@ -40,12 +40,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\CBulletMovement.cs" />
-    <Compile Include="Components\CHealthBar.cs" />
+    <Compile Include="Components\CHealthPool.cs" />
+    <Compile Include="Components\CManaPool.cs" />
     <Compile Include="Components\EnemyMovement.cs" />
     <Compile Include="Components\CPlayerMovement.cs" />
     <Compile Include="Components\CShoot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes\TestGameOver.cs" />
     <Compile Include="Scenes\TestGame.cs" />
     <Compile Include="Scenes\TestMenu.cs" />
   </ItemGroup>
