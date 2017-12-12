@@ -26,6 +26,7 @@ namespace UU_GameProject
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);
             fsm.SetCurrentState("idle");
+            Console.WriteLine(fsm.CurrentState);
         }
 
         //Selecting behaviour
@@ -53,9 +54,9 @@ namespace UU_GameProject
         {
             if (other.tag == "bullet")
             {
-                CHealthBar health = GO.GetComponent<CHealthBar>();
+                CHealthPool health = GO.GetComponent<CHealthPool>();
                 if (-dir.X != other.GetComponent<CBulletMovement>().direction().X)
-                health.hit(1);
+                health.ChangeHealth(1);
                 other.active = false;
             }
         }
@@ -73,6 +74,8 @@ namespace UU_GameProject
             else
                 hit = hitLeft;
 
+            Console.WriteLine(speed);
+
             if (hit.hit && hit.distance < 0.05f)
             {
                 grounded = true;
@@ -89,8 +92,6 @@ namespace UU_GameProject
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
             { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
-
-
         }
 
         private void ActiveBehaviour()
@@ -102,7 +103,7 @@ namespace UU_GameProject
             //but die in 2 to 3 hits from the back.
             //Thus he needs to wait for a timer before turning around to make it fair.
 
-            float reach = 1.25f;
+            float reach = 2.25f;
             wait = Math.Max(0, wait - ctime);
             turntime = Math.Max(0, wait - ctime);
 

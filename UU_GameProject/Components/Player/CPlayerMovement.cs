@@ -11,8 +11,8 @@ namespace UU_GameProject
         private float maxPlayerSpeed = 2.0f;
         private Vector2 dir;
         private float intendedDir;
-        private float jumpPower = 15f;
-        private float acceleration = 0.8f, vertVelo = 0f;
+        private float jumpPower = 13f;
+        private float acceleration = 50f, vertVelo = 0f;
         private float playerAccel = .1f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
@@ -149,7 +149,7 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance) hit = hitRight;
             else hit = hitLeft;
-            if (hit.hit && hit.distance < 0.05f)
+            if (hit.hit && hit.distance < 0.001f)
             {
                 grounded = true;
             }
@@ -171,7 +171,7 @@ namespace UU_GameProject
             }
             if (!grounded)
             {
-                vertVelo += acceleration;
+                vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
             //speed is in Units/Second
@@ -183,6 +183,8 @@ namespace UU_GameProject
             { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
             { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), Vector2.Zero); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.E))
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 1, 2f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
             {
                 //double if, for adding sounds or animations showing the player that no mana remains later

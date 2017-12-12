@@ -16,7 +16,6 @@ namespace UU_GameProject
             RaycastResult ray1;
             RaycastResult ray2;
             RaycastResult ray3;
-            CHealthBar hp = null;
             float x = 0;
 
             if (dir.X > 0)
@@ -24,9 +23,9 @@ namespace UU_GameProject
             else if (dir.X < 0)
                 x = -GO.Size.X/2;
 
-            ray1 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, 1), RAYCASTTYPE.DYNAMIC);
-            ray2 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir, RAYCASTTYPE.DYNAMIC);
-            ray3 = GO.Raycast(GO.Pos + new Vector2(x, GO.Size.Y / 2), dir + new Vector2(0, -1), RAYCASTTYPE.DYNAMIC);
+            ray1 = GO.Raycast(GO.Pos + GO.Size / 2f, dir + new Vector2(0, 1), RAYCASTTYPE.DYNAMIC);
+            ray2 = GO.Raycast(GO.Pos + GO.Size / 2f, dir, RAYCASTTYPE.DYNAMIC);
+            ray3 = GO.Raycast(GO.Pos + GO.Size / 2f, dir + new Vector2(0, -1), RAYCASTTYPE.DYNAMIC);
 
             if (ray1.distance <= reach)
                 ray = ray1;
@@ -37,13 +36,15 @@ namespace UU_GameProject
 
             if (ray != null)
             {
-                if (hp != null && ray.obj.tag != GO.tag && ray.obj.tag != "Aenemy")
+                if (ray.obj.tag != GO.tag && ray.obj.tag != "Aenemy")
                 {
-                    ray.obj.GetComponent<CHealthBar>().hit(damage);
+                    ray.obj.GetComponent<CHealthPool>().ChangeHealth(damage);
+                    Console.WriteLine(damage + " " + dir.X);
                 }
                 else if (ray.obj.tag == "Aenemy" && ray.obj.tag != GO.tag && -ray.obj.GetComponent<CArmouredEnemyAI>().direction() != dir)
                 {
-                    ray.obj.GetComponent<CHealthBar>().hit(damage);
+                    ray.obj.GetComponent<CHealthPool>().ChangeHealth(damage);
+                    Console.WriteLine(damage + dir.X);
                 }
             }
         }

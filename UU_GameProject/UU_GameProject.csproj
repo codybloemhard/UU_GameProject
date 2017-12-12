@@ -51,7 +51,6 @@
     <Compile Include="Components\CManaPool.cs" />
     <Compile Include="Components\Enemy\CArmouredEnemyAI.cs" />
     <Compile Include="Components\General\CBulletMovement.cs" />
-    <Compile Include="Components\General\CHealthBar.cs" />
     <Compile Include="Components\Enemy\CRangedEnemyAI.cs" />
     <Compile Include="Components\General\CMeleeAttack.cs" />
     <Compile Include="Components\Enemy\CNormalEnemyAI.cs" />

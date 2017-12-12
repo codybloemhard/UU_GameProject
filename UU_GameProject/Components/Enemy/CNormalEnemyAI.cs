@@ -52,8 +52,8 @@ namespace UU_GameProject
         {
             if (other.tag == "bullet")
             {
-                CHealthBar health = GO.GetComponent<CHealthBar>();
-                health.hit(1);
+                CHealthPool health = GO.GetComponent<CHealthPool>();
+                 health.ChangeHealth(1);
                 other.active = false;
             }
         }
