@@ -32,15 +32,20 @@ namespace UU_GameProject
             stone1.AddComponent(new CRender("block"));
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
-            stone2.Pos = new Vector2(12, 5);
+            stone2.Pos = new Vector2(8, 5);
             stone2.Size = new Vector2(3, 0.2f);
             stone2.AddComponent(new CRender("block"));
             stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
-            stone3.Pos = new Vector2(8, 3);
+            stone3.Pos = new Vector2(12, 3);
             stone3.Size = new Vector2(3, 0.2f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
+            GameObject stone4 = new GameObject("stone", this, 2, true);
+            stone4.Pos = new Vector2(2, 4);
+            stone4.Size = new Vector2(3, 0.2f);
+            stone4.AddComponent(new CRender("block"));
+            stone4.AddComponent(new CAABB());
             GameObject killer = new GameObject("killer", this, 2);
             killer.AddComponent(new CRender("suprise"));
             killer.AddComponent(new CAABB());
@@ -52,27 +57,35 @@ namespace UU_GameProject
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
+            player.AddComponent(new CMeleeAttack());
             player.AddComponent(new CHealthPool(100, player));
             player.AddComponent(new CManaPool(100, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy = new GameObject("enemy", this, 2);
-            enemy.AddComponent(new CRender("suprise"));
-            enemy.AddComponent(new EnemyMovement(3f));
+            GameObject enemy = new GameObject("Nenemy", this, 2);
+            enemy.AddComponent(new CRender("player"));
+            enemy.AddComponent(new CNormalEnemyAI(2f));
+            enemy.AddComponent(new CHealthPool(4, enemy));
             enemy.AddComponent(new CAABB());
-            enemy.Pos = new Vector2(8, 2.2f);
-            enemy.Size = new Vector2(0.5f, 0.5f);
-            uint max = 1000;
-            for (int i = 0; i < max; i++)
-            {
-                float t = (float)i / (float)max * 2 * MathH.PI;
-                float rad = 2;
-                GameObject stone = new GameObject("stone", this, 2, true);
-                stone.Pos = new Vector2(5, 3) + new Vector2((float)Math.Sin(t) * rad, (float)Math.Cos(t) * rad);
-                stone.Size = new Vector2(0.1f, 0.1f);
-                stone.AddComponent(new CRender("block"));
-                stone.AddComponent(new CAABB());
-            }
+            enemy.AddComponent(new CMeleeAttack());
+            enemy.Pos = new Vector2(12.5f, 1.99f);
+            enemy.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy1 = new GameObject("Renemy", this, 2);
+            enemy1.AddComponent(new CRender("player"));
+            enemy1.AddComponent(new CRangedEnemyAI(2.5f));
+            enemy1.AddComponent(new CHealthPool(4, enemy1));
+            enemy1.AddComponent(new CAABB());
+            enemy1.AddComponent(new CShoot());
+            enemy1.Pos = new Vector2(9.5f, 4.0f);
+            enemy1.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy2 = new GameObject("Aenemy", this, 2);
+            enemy2.AddComponent(new CRender("player"));
+            enemy2.AddComponent(new CArmouredEnemyAI(1.75f));
+            enemy2.AddComponent(new CHealthPool(4, enemy2));
+            enemy2.AddComponent(new CAABB());
+            enemy2.AddComponent(new CMeleeAttack());
+            enemy2.Pos = new Vector2(2.5f, 3.0f);
+            enemy2.Size = new Vector2(0.5f, 1.0f);
         }
 
         public override void Unload()
@@ -86,6 +99,12 @@ namespace UU_GameProject
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            if (Input.GetKey(PressAction.PRESSED, Keys.P))
+            {
+                if (Debug.Mode == DEBUGMODE.PROFILING)
+                    Debug.FullDebugMode();
+                else Debug.ProfilingMode();
+            }
             base.Update(time);
         }
 

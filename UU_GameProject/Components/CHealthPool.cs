@@ -29,12 +29,16 @@ namespace UU_GameProject
         }
 
         //method to be called for instances that change HP
+        /// <summary>
+        /// Reduces the health of a character by the amount specified, use -NUMBER for healsies
+        /// </summary>
+        /// <param name="amount">Positive: Take damage, Negative: Recieve heals</param>
         public void ChangeHealth(int amount)
         {
-            HP -= amount;
+            HP = Math.Max(0, HP - amount);
             healthPool.text = "Health: " + HP;
-            if (HP <= 0)
-                GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+            if (HP == 0)
+            { GO.active = false; if (GO.tag == "player") { GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD); } }
         }
     }
 }

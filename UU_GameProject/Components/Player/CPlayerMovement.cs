@@ -11,8 +11,8 @@ namespace UU_GameProject
         private float maxPlayerSpeed = 2.0f;
         private Vector2 dir;
         private float intendedDir;
-        private float jumpPower = 15f;
-        private float acceleration = 0.8f, vertVelo = 0f;
+        private float jumpPower = 13f;
+        private float acceleration = 50f, vertVelo = 0f;
         private float playerAccel = .1f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
@@ -63,7 +63,6 @@ namespace UU_GameProject
                 intendedDir = 1;
             if (Input.GetKey(PressAction.DOWN, Keys.A))
                 intendedDir = -1;
-
 
             //down
                 if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
@@ -134,16 +133,13 @@ namespace UU_GameProject
                 if (dashSlowdownDelayTime >= 15 * time)
                     velocity.X -= .1f * dir.X;
             }
-
+            
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
             {
                 GO.GetComponent<CManaPool>().ConsumeMana(25);
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
             }
-            
-
-
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -153,7 +149,7 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance) hit = hitRight;
             else hit = hitLeft;
-            if (hit.hit && hit.distance < 0.05f)
+            if (hit.hit && hit.distance < 0.001f)
             {
                 grounded = true;
             }
@@ -166,7 +162,7 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 10 * time)
+                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
                     GO.GetComponent<CManaPool>().ConsumeMana(75);
                     vertVelo = -jumpPower;
@@ -175,7 +171,7 @@ namespace UU_GameProject
             }
             if (!grounded)
             {
-                vertVelo += acceleration;
+                vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
             //speed is in Units/Second
@@ -183,6 +179,12 @@ namespace UU_GameProject
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
             
             //shoot
+            if (Input.GetKey(PressAction.PRESSED, Keys.Space))
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+            { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), Vector2.Zero); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.E))
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 1, 2f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
             {
                 //double if, for adding sounds or animations showing the player that no mana remains later
