@@ -5,16 +5,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class EnemyMovement : Component
+    class CNormalEnemyAI : Component
     {
         private float speed;
         private bool grounded;
         private float gravity = 0.8f, vertVelo = 0f;
 
-        public EnemyMovement(float speed)
+        public CNormalEnemyAI(float speed)
         {
             this.speed = speed;
         }
+
         public override void Init()
         {
             CRender render = GO.Renderer as CRender;
@@ -25,6 +26,7 @@ namespace UU_GameProject
         {
             base.Update(time);
 
+            //Movement behaviour
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
@@ -48,16 +50,15 @@ namespace UU_GameProject
             GO.Pos += new Vector2(speed * time, Math.Min(hit.distance, vertVelo * time));
         }
 
+        //Damage handling
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "player")
+            if (other.tag == "bullet")
             {
-                other.Pos = new Vector2(1, 1);
-            }
-
-            else if (other.tag == "bullet")
-            {
-                GO.active = false;
+                CHealthBar health = GO.FindWithTag("enemy").GetComponent<CHealthBar>();
+                health.hit(1);
+                if (health.hp <= 0)
+                    GO.active = false;
             }
         }
     }
