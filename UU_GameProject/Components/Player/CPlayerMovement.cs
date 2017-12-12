@@ -64,7 +64,6 @@ namespace UU_GameProject
             if (Input.GetKey(PressAction.DOWN, Keys.A))
                 intendedDir = -1;
 
-
             //down
                 if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
@@ -134,16 +133,13 @@ namespace UU_GameProject
                 if (dashSlowdownDelayTime >= 15 * time)
                     velocity.X -= .1f * dir.X;
             }
-
+            
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
             {
                 GO.GetComponent<CManaPool>().ConsumeMana(25);
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
             }
-            
-
-
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
