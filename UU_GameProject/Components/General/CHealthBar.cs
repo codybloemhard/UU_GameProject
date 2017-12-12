@@ -14,13 +14,31 @@ namespace UU_GameProject
         {
             this.HP = HP;
             healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
+<<<<<<< HEAD:UU_GameProject/Components/CHealthBar.cs
+=======
+            healthBar.tag = "HP";
+>>>>>>> master:UU_GameProject/Components/General/CHealthBar.cs
             healthBar.AddGameObject(GO, Vector2.Zero);
         }
 
-        public override void OnCollision(GameObject other)
+        public override void Update(float time)
         {
-            base.OnCollision(other);
-            HP -= 1;
+            base.Update(time);
+
+
         }
+
+        public void update()
+        {
+            Text text = GO.Context.ui.FindWithTag("positionText") as Text;
+        }
+
+        public void hit(int i)
+        {
+            HP = HP - i;
+        }
+
+        public int hp
+        { get { return this.HP; } }
     }
 }

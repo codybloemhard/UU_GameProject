@@ -29,10 +29,14 @@ namespace UU_GameProject
             generator.GenTest();
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
-            TextureManager.LoadTexture("dude", "player");
+            TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             ShowCaseScene showcase = new ShowCaseScene();
+            TestGameOver testGameOver = new TestGameOver();
+			
+            game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
