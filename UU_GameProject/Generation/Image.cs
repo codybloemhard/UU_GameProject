@@ -190,16 +190,21 @@ namespace UU_GameProject
             return f;
         }
 
-        public static FloatField Fade(uint w, uint h, bool xas, bool fromzero)
+        public static FloatField Fade(uint w, uint h, bool xas, float from, float to)
         {
-            uint start = fromzero ? 0 : (xas ? w : h);
+            uint size = xas ? w : h;
+            uint start = (uint)(from * size);
+            uint end = (uint)(to * size);
+            float stretch = Math.Abs(from - to);
             FloatField f = new FloatField(w, h);
             for (int x = 0; x < f.Width; x++)
                 for (int y = 0; y < f.Height; y++)
                 {
                     float res = 0f;
-                    if (xas) res = (float)Math.Abs(x - start) / w;
-                    else res = (float)Math.Abs(y - start) / h;
+                    float v = xas ? x : y;
+                    if (v < start) res = 1f;
+                    else if (v > end) res = 0f;
+                    else res = Lerp(1f, 0f, (v - start) / stretch / size);
                     f.array[f.To1D(x, y)] = res;
                 }
             return f;
@@ -251,6 +256,30 @@ namespace UU_GameProject
             return res;
         }
 
+        public static FloatField Sum(FloatField a, FloatField b)
+        {
+            FloatField res = new FloatField((uint)a.Width, (uint)a.Height);
+            for(int i = 0; i < res.array.Length; i++)
+            {
+                float x = a.array[i % a.array.Length] + b.array[i % b.array.Length];
+                x = Math.Min(x, 1f);
+                res.array[i] = x;
+            }
+            return res;
+        }
+
+        public static void ScaleClamp(FloatField ff, float x)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = (float)MathH.Clamp(ff.array[i] * x, 0f, 1f);
+        }
+        
+        public static void CopyMin(FloatField fa, FloatField fb)
+        {
+            for (int i = 0; i < fa.array.Length; i++)
+                fa.array[i] = (float)Math.Min(fa.array[i], fb.array[i % fb.array.Length]);
+        }
+
         public static void NormalizeSize(FloatField ff)
         {
             uint minx = (uint)ff.Width, maxx = 0, miny = (uint)ff.Height, maxy = 0;
@@ -293,14 +322,14 @@ namespace UU_GameProject
                 }
         }
 
-        public static void ThresholdCut(FloatField f, float min, float max)
+        public static void ThresholdCut(FloatField f, float min, float max, float minval, float maxval)
         {
             for(int x = 0; x < f.Width; x++)
                 for(int y = 0; y < f.Height; y++)
                 {
-                    float r = f.array[f.To1D(x, y)] = 0;
-                    if (r < min) r = 0;
-                    if (r > max) r = 0;
+                    float r = f.array[f.To1D(x, y)];
+                    if (r < min) r = minval;
+                    if (r > max) r = maxval;
                     f.array[f.To1D(x, y)] = r;
                 }
         }

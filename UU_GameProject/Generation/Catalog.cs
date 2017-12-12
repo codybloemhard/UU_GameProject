@@ -40,7 +40,25 @@ namespace UU_GameProject
             go.AddComponent(new CRender(RandomTexture(tex)));
             return go;
         }
-        
+
+        public static GameObject CreateDirtGrassBlock(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_dirtgrassblock";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
+        public static GameObject CreateFrostyDirt(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_frostydirt";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)
         {
             const string tex = "_boulder";
@@ -48,7 +66,34 @@ namespace UU_GameProject
             go.Pos = new Vector2(x, y);
             const float sizeMin = 2f, sizeMax = 4f;
             float size = Image.RandomRange(sizeMin, sizeMax);
-            go.Size = new Vector2(size, size);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
+        public static GameObject CreateStone(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_stone";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
+        public static GameObject CreateSnowyStone(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_snowystone";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
+        public static GameObject CreateStoneShard(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_stoneshard";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
             return go;
         }
 
@@ -57,7 +102,7 @@ namespace UU_GameProject
             const string texLeaf = "_bush";
             GameObject go = CreateObject(context, layer, tag, texLeaf);
             go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1.0f, 1.0f);
+            go.Size = new Vector2(1f, 1f); 
             return go;
         }
 

@@ -18,7 +18,7 @@ namespace UU_GameProject
 
         public Run()
         {
-            game = new GameWindow(1000);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
@@ -34,7 +34,6 @@ namespace UU_GameProject
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             LevelEditor levelEditor = new LevelEditor();
-            
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
             
@@ -43,7 +42,7 @@ namespace UU_GameProject
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("editor");
+            game.states.SetStartingState("show");
         }
     }
 }
