@@ -11,6 +11,7 @@ namespace UU_GameProject
             Run run = new Run();
         }
     }
+
     public class Run
     {
         private GameWindow game;
@@ -21,19 +22,29 @@ namespace UU_GameProject
             game.SetLoad(Load);
             game.Run();
         }
-
+        
         private void Load()
         {
-            TextureManager.LoadTexture("block", "block", false);
-            TextureManager.LoadTexture("suprise", "suprise", false);
-            TextureManager.LoadTexture("dude", "player", false);
+            PrerunGenerationCycle generator = new PrerunGenerationCycle();
+            generator.GenTest();
+            TextureManager.LoadTexture("block", "block");
+            TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             LevelEditor levelEditor = new LevelEditor();
+            game.states.SetStartingState("editor");
+            
+            ShowCaseScene showcase = new ShowCaseScene();
+            TestGameOver testGameOver = new TestGameOver();
+          
+			      game.states.AddState("editor", levelEditor);
+            game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
-            game.states.AddState("editor", levelEditor);
-            game.states.SetStartingState("editor");
+            game.states.AddState("show", showcase);
+            game.states.SetStartingState("show");
         }
     }
 }

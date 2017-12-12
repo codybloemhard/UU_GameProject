@@ -18,7 +18,7 @@ namespace UU_GameProject
 
         public override void Init()
         {
-            CRender render = GO.Renderer;
+            CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Red;
         }
 
@@ -35,6 +35,11 @@ namespace UU_GameProject
         {
             if (other.tag == "stone")
                 GO.Destroy();
+        }
+
+        public Vector2 direction()
+        {
+            return dir;
         }
     }
 }
