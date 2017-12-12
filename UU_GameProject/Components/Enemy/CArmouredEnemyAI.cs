@@ -21,6 +21,7 @@ namespace UU_GameProject
         public override void Init()
         {
             CRender render = GO.Renderer as CRender;
+            FSM fsm = new FSM();
             if (render != null) render.colour = Color.Yellow;
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);

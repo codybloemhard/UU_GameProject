@@ -11,26 +11,35 @@ namespace UU_GameProject
             Run run = new Run();
         }
     }
+
     public class Run
     {
         private GameWindow game;
 
         public Run()
         {
-            game = new GameWindow(1200);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
-
+        
         private void Load()
         {
+            PrerunGenerationCycle generator = new PrerunGenerationCycle();
+            generator.GenTest();
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
-            TextureManager.LoadTexture("dude", "player");
+            TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            ShowCaseScene showcase = new ShowCaseScene();
+            TestGameOver testGameOver = new TestGameOver();
+			
+            game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
+            game.states.AddState("show", showcase);
             game.states.SetStartingState("menu");
         }
     }
