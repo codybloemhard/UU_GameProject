@@ -15,7 +15,7 @@ namespace UU_GameProject
         {
             this.MP = MP;
             manaPool = new Text(GO.Context, "Mana: " + MP, new Vector2(0, 0), new Vector2(4, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
-            manaPool.AddGameObject(GO);
+            manaPool.AddGameObject(GO, Vector2.Zero);
         }
 
         public override void Update(float time)

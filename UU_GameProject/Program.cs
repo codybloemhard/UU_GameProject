@@ -24,10 +24,10 @@ namespace UU_GameProject
 
         private void Load()
         {
-            TextureManager.LoadTexture("block", "block", false);
-            TextureManager.LoadTexture("suprise", "suprise", false);
-            TextureManager.LoadTexture("player", "playerConcept", false);
-            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept", false);
+            TextureManager.LoadTexture("block", "block");
+            TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             TestGameOver testGameOver = new TestGameOver();

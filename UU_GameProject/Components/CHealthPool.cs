@@ -14,7 +14,7 @@ namespace UU_GameProject
         {
             this.HP = HP;
             healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
-            healthPool.AddGameObject(GO);
+            healthPool.AddGameObject(GO, Vector2.Zero);
         }
 
         public override void OnCollision(GameObject other)
