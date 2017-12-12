@@ -39,6 +39,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\CHealthPool.cs" />
+    <Compile Include="Components\CManaPool.cs" />
     <Compile Include="Components\Enemy\CArmouredEnemyAI.cs" />
     <Compile Include="Components\General\CBulletMovement.cs" />
     <Compile Include="Components\General\CHealthBar.cs" />
