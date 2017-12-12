@@ -17,7 +17,7 @@ namespace UU_GameProject
         {
             this.speed = speed;
         }
-
+    
         public override void Init()
         {
             CRender render = GO.Renderer as CRender;
@@ -39,12 +39,10 @@ namespace UU_GameProject
             if (length <= 4.5f && fsm.CurrentState == "idle")
             {
                 fsm.SetCurrentState("active");
-                Console.WriteLine("OI!");
             }
             else if (length > 4.5f && fsm.CurrentState != "idle")
             {
                 fsm.SetCurrentState("idle");
-                Console.WriteLine("It msut've been the wind...");
             }
 
             fsm.Update();

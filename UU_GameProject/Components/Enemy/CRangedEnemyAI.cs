@@ -38,12 +38,10 @@ namespace UU_GameProject
             if (length <= 5.25f && fsm.CurrentState == "idle")
             {
                 fsm.SetCurrentState("active");
-                Console.WriteLine("OI!");
             }
             else if (length > 5.25f && fsm.CurrentState != "idle")
             {
                 fsm.SetCurrentState("idle");
-                Console.WriteLine("It msut've been the wind...");
             }
 
             fsm.Update();
@@ -130,7 +128,7 @@ namespace UU_GameProject
             if (length < range && wait == 0)
             {
                 Vector2 thing = shootdir(GO.Pos.X - GO.FindWithTag("player").Pos.X);
-                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f));
+                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero);
                 wait = 1.75f;
             }
 
