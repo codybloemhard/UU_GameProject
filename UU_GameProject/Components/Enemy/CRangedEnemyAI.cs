@@ -142,6 +142,7 @@ namespace UU_GameProject
                 { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
         }
 
+        //Choosing one out of 8 directions to shoot.
         private Vector2 shootdir(float x)
         {
             if(x < 0)
