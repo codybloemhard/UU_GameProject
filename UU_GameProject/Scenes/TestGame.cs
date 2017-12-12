@@ -48,11 +48,12 @@ namespace UU_GameProject
             killer.Size = new Vector2(1, 1);
             (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            player.AddComponent(new CRender("dude"));
+            player.AddComponent(new CRender("player"));
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
-            player.AddComponent(new CHealthBar(5, player));
+            player.AddComponent(new CHealthPool(100, player));
+            player.AddComponent(new CManaPool(100, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy = new GameObject("enemy", this, 2);

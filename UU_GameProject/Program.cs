@@ -26,9 +26,12 @@ namespace UU_GameProject
         {
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
-            TextureManager.LoadTexture("dude", "player");
+            TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            TestGameOver testGameOver = new TestGameOver();
+            game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.SetStartingState("menu");
