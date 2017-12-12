@@ -39,6 +39,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\CLevelEditorObject.cs" />
+    <Compile Include="Scenes\LevelEditor.cs" />
     <Compile Include="Generation\ColourField.cs" />
     <Compile Include="Generation\Catalog.cs" />
     <Compile Include="Generation\ShowCase.cs" />

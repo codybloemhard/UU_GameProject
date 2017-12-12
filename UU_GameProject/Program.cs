@@ -33,9 +33,13 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            LevelEditor levelEditor = new LevelEditor();
+            game.states.SetStartingState("editor");
+            
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
-			
+          
+			      game.states.AddState("editor", levelEditor);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
