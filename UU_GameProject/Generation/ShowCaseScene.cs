@@ -34,9 +34,9 @@ namespace UU_GameProject
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
-                if(old != null) foreach (GameObject o in old) o.Destroy(); 
-                Catalog.CreateBush(this, 0, 0, 0, "_test");
-                Catalog.CreateSnowman(this, 1, 1, 0, "_test");
+                if(old != null) foreach (GameObject o in old) o.Destroy();
+                Catalog.CreateBush(this, 4, 4, 0, "_test").Size = new Vector2(2, 2);
+                Catalog.CreateSnowman(this, 1, 4, 0, "_test", 2f);
             }
         }
 
