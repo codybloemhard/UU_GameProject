@@ -179,6 +179,10 @@ namespace UU_GameProject
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
             
             //shoot
+            if (Input.GetKey(PressAction.PRESSED, Keys.Space))
+            { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+            { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f)); }
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
             {
                 //double if, for adding sounds or animations showing the player that no mana remains later
