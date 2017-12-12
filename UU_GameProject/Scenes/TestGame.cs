@@ -86,6 +86,12 @@ namespace UU_GameProject
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            if (Input.GetKey(PressAction.PRESSED, Keys.P))
+            {
+                if (Debug.Mode == DEBUGMODE.PROFILING)
+                    Debug.FullDebugMode();
+                else Debug.ProfilingMode();
+            }
             base.Update(time);
         }
 
