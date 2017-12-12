@@ -46,7 +46,7 @@ namespace UU_GameProject
 
             if (selected == GO)
             {
-                GO.Renderer.colour = new Color(180, 180, 180);
+                (GO.Renderer as CRender).colour = new Color(180, 180, 180);
                 if (Input.GetKey(PressAction.PRESSED, Keys.P))
                 {
                     Console.WriteLine("New Size x y");
@@ -54,7 +54,7 @@ namespace UU_GameProject
                 }
             }
             else
-                GO.Renderer.colour = Color.White;
+                (GO.Renderer as CRender).colour = Color.White;
             
             if (Input.GetKey(PressAction.DOWN, Keys.LeftShift))
                 axisAligned = true;

@@ -34,17 +34,16 @@ namespace UU_GameProject
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             LevelEditor levelEditor = new LevelEditor();
-            game.states.SetStartingState("editor");
             
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
-          
-			      game.states.AddState("editor", levelEditor);
+            
+			game.states.AddState("editor", levelEditor);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("show");
+            game.states.SetStartingState("editor");
         }
     }
 }
