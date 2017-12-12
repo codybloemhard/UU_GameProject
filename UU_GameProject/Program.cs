@@ -40,7 +40,7 @@ namespace UU_GameProject
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("menu");
+            game.states.SetStartingState("show");
         }
     }
 }

@@ -61,14 +61,14 @@ namespace UU_GameProject
             return go;
         }
 
-        public static GameObject CreateSnowman(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject CreateSnowman(GameState context, float x, float y, uint layer, string tag, float scale = 1.0f)
         {
             const string texBody = "_snowmanbody", texEye = "_snowmaneye",
                 texHat = "_snowmanhat", texMouth = "_snowmanmouth",
                 texNose = "_snowmannose", texArmL = "_snowmanarmleft", texArmR = "_snowmanarmright";
             GameObject go = CreateObject(context, layer + 1, tag, texBody);
             go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1.0f, 2.0f);
+            go.Size = new Vector2(1.0f, 2.0f) * scale;
             GameObject eye0 = CreateObject(context, layer, "__child", texEye);
             GameObject eye1 = CreateObject(context, layer, "__child", texEye);
             eye0.SetParent(go);
