@@ -15,7 +15,7 @@ namespace UU_GameProject
             this.HP = HP;
             healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
             healthBar.tag = "HP";
-            healthBar.AddGameObject(GO);
+            healthBar.AddGameObject(GO, Vector2.Zero);
         }
 
         public override void Update(float time)
