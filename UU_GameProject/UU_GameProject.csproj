@@ -39,6 +39,14 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Generation\ColourField.cs" />
+    <Compile Include="Generation\Catalog.cs" />
+    <Compile Include="Generation\ShowCase.cs" />
+    <Compile Include="Generation\TextureGen.cs" />
+    <Compile Include="Generation\Image.cs" />
+    <Compile Include="Generation\PerlinNoise.cs" />
+    <Compile Include="Generation\PrerunGenerationCycle.cs" />
+    <Compile Include="Generation\ShowCaseScene.cs" />
     <Compile Include="Components\CHealthPool.cs" />
     <Compile Include="Components\CManaPool.cs" />
     <Compile Include="Components\Enemy\CArmouredEnemyAI.cs" />
