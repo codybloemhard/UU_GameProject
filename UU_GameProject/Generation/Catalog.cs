@@ -59,6 +59,15 @@ namespace UU_GameProject
             return go;
         }
 
+        public static GameObject CreateSnowyDirt(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_snowydirt";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)
         {
             const string tex = "_boulder";
@@ -66,7 +75,7 @@ namespace UU_GameProject
             go.Pos = new Vector2(x, y);
             const float sizeMin = 2f, sizeMax = 4f;
             float size = Image.RandomRange(sizeMin, sizeMax);
-            go.Size = new Vector2(1f, 1f);
+            go.Size = new Vector2(2f, 2f);
             return go;
         }
 
@@ -88,12 +97,30 @@ namespace UU_GameProject
             return go;
         }
 
+        public static GameObject CreateFrostyStone(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_frostystone";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
         public static GameObject CreateStoneShard(GameState context, float x, float y, uint layer, string tag)
         {
             const string texLeaf = "_stoneshard";
             GameObject go = CreateObject(context, layer, tag, texLeaf);
             go.Pos = new Vector2(x, y);
             go.Size = new Vector2(1f, 1f);
+            return go;
+        }
+
+        public static GameObject CreateCloud(GameState context, float x, float y, uint layer, string tag)
+        {
+            const string texLeaf = "_cloud";
+            GameObject go = CreateObject(context, layer, tag, texLeaf);
+            go.Pos = new Vector2(x, y);
+            go.Size = new Vector2(2f, 2f);
             return go;
         }
 

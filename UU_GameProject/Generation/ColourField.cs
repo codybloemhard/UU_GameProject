@@ -99,7 +99,7 @@ namespace UU_GameProject
 
     public class ColourField
     {
-        private Colour[] array;
+        public Colour[] array;
         private int w, h;
         private Texture2D texture;
         public int Width { get { return w; } }
@@ -164,25 +164,26 @@ namespace UU_GameProject
 
         public void SetAlpha(float alpha, bool zeroStayZero = true)
         {
-            for (int x = 0; x < w; x++)
-                for (int y = 0; y < h; y++)
-                {
-                    float sa = array[To1D(x, y, h)].a;
-                    if (sa == 0 && zeroStayZero) continue;
-                    array[To1D(x, y, h)].a = alpha;
-                }
+            int tot = w * h;
+            for(int i = 0; i < tot; i++)
+            {
+                float sa = array[i].a;
+                if (sa == 0 && zeroStayZero) continue;
+                array[i].a = alpha;
+            }
         }
 
         public void SetAlpha(FloatField f)
         {
-            for (int x = 0; x < w; x++)
-                for (int y = 0; y < h; y++)
-                {
-                    float a = f.array[f.To1D(x % f.Width, y % f.Height)];
-                    Colour s = array[To1D(x, y, h)];
-                    s.a = a;
-                    array[To1D(x, y, h)] = s;
-                }
+            if (f.Width != w || f.Height != h) return;
+            int tot = w * h;
+            for(int i = 0; i < tot; i++)
+            {
+                float a = f.array[i];
+                Colour s = array[i];
+                s.a = a;
+                array[i] = s;
+            }
         }
 
         public void Save()
@@ -258,9 +259,10 @@ namespace UU_GameProject
 
         public void ColoursToFloats(ColourField cf)
         {
-            for (int x = 0; x < w; x++)
-                for (int y = 0; y < h; y++)
-                    array[To1D(x, y)] = cf.Get(x % cf.Width, y % cf.Height).Strength();
+            if (w > cf.Width || h > cf.Height) return;
+            int tot = w * h;
+            for (int i = 0; i < tot; i++)
+                array[i] = cf.array[i].Strength();
         }
 
         public void CopyStretch(FloatField ff)
@@ -333,9 +335,10 @@ namespace UU_GameProject
 
         public void Copy(FloatField f)
         {
-            for(int x = 0; x < w; x++)
-                for(int y = 0; y < h; y++)
-                    array[To1D(x, y)] = f.array[f.To1D(x % f.w, y % f.h)];
+            if (w != f.w || h != f.h) return;
+            int tot = w * h;
+            for (int i = 0; i < tot; i++)
+                array[i] = f.array[i];
         }
     }
 }

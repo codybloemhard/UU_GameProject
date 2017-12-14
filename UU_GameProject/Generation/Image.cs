@@ -145,6 +145,7 @@ namespace UU_GameProject
 
         public static FloatField EdgeToBlendBody(FloatField edge, FloatField body, float power, float from = 0f, float to = 1f)
         {
+            //return body;
             FloatField f = new FloatField((uint)edge.Width, (uint)edge.Height);
             f.Copy(body);
             List<Vector2> edges = new List<Vector2>();
@@ -162,9 +163,10 @@ namespace UU_GameProject
                     if (original == 0f) continue;
                     float min = 1000f;
                     for (int i = 0; i < edges.Count; i++) {
-                        float dist = (new Vector2(x, y) - edges[i]).Length();
+                        float dist = (new Vector2(x, y) - edges[i]).LengthSquared();
                         if (dist < min) min = dist;
                     }
+                    min = (float)Math.Sqrt(min);
                     f.array[f.To1D(x, y)] = Lerp(from, to, (float)MathH.Clamp(min / f.Width / power, 0, 1));
                 }
 
@@ -255,7 +257,7 @@ namespace UU_GameProject
                 }
             return res;
         }
-
+        
         public static FloatField Sum(FloatField a, FloatField b)
         {
             FloatField res = new FloatField((uint)a.Width, (uint)a.Height);
@@ -266,6 +268,16 @@ namespace UU_GameProject
                 res.array[i] = x;
             }
             return res;
+        }
+
+        public static void CutAlpha(ColourField cf, FloatField ff)
+        {
+            for(int x = 0; x < cf.Width; x++)
+                for(int y = 0; y < cf.Height; y++)
+                {
+                    float cut = ff.array[ff.To1D(x % ff.Width, y % ff.Height)];
+                    if (cut == 0f) cf.Set(new Colour(0,0,0,0), x, y);
+                }
         }
 
         public static void ScaleClamp(FloatField ff, float x)
