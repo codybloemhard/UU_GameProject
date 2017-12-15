@@ -15,7 +15,7 @@ namespace UU_GameProject
             for (int x = 0; x < f.Width; x++)
                 for (int y = 0; y < f.Height; y++)
                 {
-                    float p = (float)PerlinNoise.Perlin((double)x / f.Width, (double)y / f.Height, z, octaves, scale, persistence, lacunarity);
+                    float p = (float)PerlinNoise.Perlin((double)x / f.Width, (double)y / f.Width, z, octaves, scale, persistence, lacunarity);
                     f.array[f.To1D(x, y)] = p;
                 }
             return f;
@@ -83,6 +83,39 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField VoronoiBlock(uint w, uint h, uint p, float diff, bool flat)
+        {
+            uint stepw = w / 3, steph = h / 3;
+            Vector2[] points = new Vector2[p + 12];
+            for(int i = 0; i < 4; i++)
+                points[i] = new Vector2(i * stepw, 0);
+            for (int i = 0; i < 4; i++)
+                points[i + 4] = new Vector2(i * stepw, h);
+            points[8] = new Vector2(0, steph);
+            points[9] = new Vector2(0, steph * 2);
+            points[10] = new Vector2(w, steph);
+            points[11] = new Vector2(w, steph * 2);
+            for(int i = 0; i < p; i++)
+                points[12 + i] = new Vector2(RandomDeviation(0.5f, diff) *w, RandomDeviation(0.5f, diff)*h);
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                {
+                    Vector2 point = new Vector2(x, y);
+                    float min = 1000000f;
+                    int ppp = 0;
+                    for(int i = 0; i < points.Length; i++)
+                    {
+                        Vector2 diffr = point - points[i];
+                        float dist = diffr.LengthSquared();
+                        if (dist < min) { min = dist; ppp = i; }
+                    }
+                    if (flat) f.array[f.To1D(x, y)] = (float)ppp / points.Length;
+                    else f.array[f.To1D(x, y)] = (float)Math.Sqrt(min) / w;
+                }
+            return f;
+        }
+
         public static FloatField Circle(uint w, uint h, float r, float alphaA, float alphaB, float inner = 0.0f, float xx = 0.5f, float yy = 0.5f)
         {
             if (r < 0) r = 0;
@@ -139,6 +172,21 @@ namespace UU_GameProject
                     if (x + 1 >= ff.Width) right = true;
                     if (up || down || left || right)
                         f.array[f.To1D(x, y)] = 1f;
+                }
+            return f;
+        }
+
+        public static FloatField EdgeFromFlats(FloatField ff)
+        {
+            FloatField f = new FloatField((uint)ff.Width, (uint)ff.Height);
+
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                {
+                    float current = ff.array[ff.To1D(x, y)];
+                    bool left = ff.array[ff.To1D(Math.Min(x + 1, f.Width - 1), y)] != current;
+                    bool down = ff.array[ff.To1D(x, Math.Min(y + 1, f.Height - 1))] != current;
+                    if (left || down) f.array[f.To1D(x, y)] = 1f;
                 }
             return f;
         }
@@ -285,7 +333,13 @@ namespace UU_GameProject
             for (int i = 0; i < ff.array.Length; i++)
                 ff.array[i] = (float)MathH.Clamp(ff.array[i] * x, 0f, 1f);
         }
-        
+
+        public static void AddClamp(FloatField ff, float x)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = (float)MathH.Clamp(ff.array[i] + x, 0f, 1f);
+        }
+
         public static void CopyMin(FloatField fa, FloatField fb)
         {
             for (int i = 0; i < fa.array.Length; i++)
@@ -307,6 +361,12 @@ namespace UU_GameProject
             if (minx >= maxx || miny >= maxy) return;
             FloatField cut = ff.CopyCut(minx, miny, maxx, maxy);
             ff.CopyStretch(cut);
+        }
+
+        public static void Invert(FloatField ff)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = 1.0f - ff.array[i];
         }
 
         public static void Multiply(FloatField fa, FloatField fb)

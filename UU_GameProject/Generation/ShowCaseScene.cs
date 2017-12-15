@@ -19,7 +19,7 @@ namespace UU_GameProject
             backg.AddComponent(new CRender("block"));
             backg.Pos = Vector2.Zero;
             backg.Size = new Vector2(16, 9);
-            //ShowCase.CreateRow(this, "_stonesnowy", 16, 2, 1f);
+            //ShowCase.CreateRow(this, "_crackedlayer", 8, 2, 1f);
             //ShowCase.CreateRow(this, "_stone", 16, 2, 1f);
             //ShowCase.CreateRow(this, "_frostydirt", 16, 2, 1f);
         }
@@ -35,9 +35,15 @@ namespace UU_GameProject
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
                 if(old != null) foreach (GameObject o in old) o.Destroy();
-                Catalog.CreateDirtGrassBlock(this, 0, 0, 0, "_test");
-                Catalog.CreateFrostyDirt(this, 1, 0, 0, "_test");
-                Catalog.CreateSnowyDirt(this, 2, 0, 0, "_test");
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x1, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.GRASS);
+                Catalog.CreateBlock(this, 0x2, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x3, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x4, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0x5, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.ICE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.NONE, TOPTILES.NONE);
 
                 Catalog.CreateSnowman(this, 0, 1, 0, "_test", 1f);
                 Catalog.CreateStoneShard(this, 2, 1, 0, "_test");

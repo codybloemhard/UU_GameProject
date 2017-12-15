@@ -42,6 +42,9 @@ namespace UU_GameProject
             return a == 0f;
         }
 
+        public static Colour Black { get { return new Colour(0, 0, 0); } }
+        public static Colour White { get { return new Colour(1, 1, 1); } }
+
         public static Colour Blend(Colour a, Colour b)
         {
             if (a.a == 0f) return b;
@@ -192,6 +195,12 @@ namespace UU_GameProject
             for (int i = 0; i < w * h; i++)
                 c[i] = new Color(array[i].r, array[i].g, array[i].b, array[i].a);
             texture.SetData<Color>(c);
+        }
+
+        public void Fill(Colour c)
+        {
+            for (int i = 0; i < array.Length; i++)
+                array[i] = c;
         }
 
         public void Set(Colour c, int x, int y)
