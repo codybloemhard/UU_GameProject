@@ -19,7 +19,7 @@ namespace UU_GameProject
             text = new Text(this, "Options", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             buttonMainmenu = new Button(this, "Main menu", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
-                font, new Vector2(12, 7.5f), new Vector2(4, 1.5f));
+                font, new Vector2(12, 7.8f), new Vector2(4, 1.2f));
             buttonMainmenu.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
 
 
