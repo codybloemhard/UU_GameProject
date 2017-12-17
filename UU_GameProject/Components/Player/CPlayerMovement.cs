@@ -141,17 +141,31 @@ namespace UU_GameProject
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
-            if (hit.hit && hit.distance < 0.001f)
-            {
+            Vector2 HeadLeft = GO.Pos + new Vector2(0, -0.01f);
+            Vector2 HeadRight = GO.Pos + new Vector2(GO.Size.X, -0.01f);
+            RaycastResult hitBottomLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitBottomRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopLeft = GO.Raycast(HeadLeft, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopRight = GO.Raycast(HeadRight, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            RaycastResult hitBottom;
+            RaycastResult hitTop;
+            if (hitBottomLeft.distance > hitBottomRight.distance)
+                hitBottom = hitBottomRight;
+            else hitBottom = hitBottomLeft;
+
+            if (hitTopLeft.distance > hitTopRight.distance)
+                hitTop = hitTopRight;
+            else hitTop = hitTopLeft;
+
+            if (hitBottom.hit && hitBottom.distance < 0.001f)
                 grounded = true;
-            }
             else grounded = false;
-            if (grounded && vertVelo > 0) vertVelo = 0;
+
+            if (hitTop.hit && hitTop.distance < 0.01f)
+                vertVelo = 0;
+
+            if (grounded && vertVelo > 0)
+                vertVelo = 0;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
@@ -172,7 +186,7 @@ namespace UU_GameProject
             }
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
-            GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
+            GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
             
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))

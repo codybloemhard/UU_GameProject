@@ -49,7 +49,7 @@ namespace UU_GameProject
 
         }
 
-        //method to be called by 
+        //method to be called by the regen timer
         public void manaRegenerateTimer()
         {
             shouldManaRegen = true;
