@@ -191,6 +191,11 @@ namespace UU_GameProject
                 Reset();
         }
 
+        public Vector2 Velocity()
+        {
+            return velocity;
+        }
+
         public void Reset()
         {
             GO.Pos = new Vector2(1, 1);

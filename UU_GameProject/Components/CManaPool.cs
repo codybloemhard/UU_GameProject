@@ -10,6 +10,7 @@ namespace UU_GameProject
     {
         private int MP;
         private int maxMana = 100;
+        private float manaRegenMultiplier;
         private bool shouldManaRegen = true;
         Text manaPool;
         public CManaPool(int MP, GameObject GO)
@@ -26,12 +27,13 @@ namespace UU_GameProject
             manaPool.text = "Mana: " + MP;
         }
 
-        public int sufficientMana()
-        {
-            return MP;
-        }
-
-        //method to be called for abilities using mana
+        /// <summary>
+        /// Method that will attempt to consume the amount of mana specified,
+        /// and will return true if the requested amount is succesfully subtracted.
+        /// Otherwise will return false, and not subtract any.
+        /// </summary>
+        /// <param name="amount">Mana cost of an ability</param>
+        /// <returns></returns>
         public bool ConsumeMana(int amount)
         {
             if (MP >= amount)
@@ -41,12 +43,13 @@ namespace UU_GameProject
             }
             else
             {
-                Console.WriteLine("Not enough mana!");
+                Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
                 return false;
             }
 
         }
 
+        //method to be called by 
         public void manaRegenerateTimer()
         {
             shouldManaRegen = true;
@@ -56,7 +59,8 @@ namespace UU_GameProject
         {
             if (MP < maxMana && shouldManaRegen)
             {
-                Timers.Add("manaRegen", 0.03f, manaRegenerateTimer);
+                manaRegenMultiplier = 3.0f - Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X);
+                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
                 MP += 1;
                 shouldManaRegen = false;
                 Timers.FindWithTag("manaRegen").Reset();
