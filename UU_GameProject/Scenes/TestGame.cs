@@ -106,6 +106,10 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+            if(Input.GetKey(PressAction.PRESSED, Keys.X))
+            {
+                //freeze game
+            }
             base.Update(time);
         }
 
