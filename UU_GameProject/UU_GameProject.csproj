@@ -39,6 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Generation\ColourField.cs" />
     <Compile Include="Generation\Catalog.cs" />
     <Compile Include="Generation\ShowCase.cs" />
