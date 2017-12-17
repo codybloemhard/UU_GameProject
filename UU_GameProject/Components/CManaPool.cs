@@ -10,6 +10,7 @@ namespace UU_GameProject
     {
         private int MP;
         private int maxMana = 100;
+        private bool shouldManaRegen = true;
         Text manaPool;
         public CManaPool(int MP, GameObject GO)
         {
@@ -21,26 +22,45 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            RegenerateMana();
+            RegenerateMana(time);
+            manaPool.text = "Mana: " + MP;
+        }
+
+        public int sufficientMana()
+        {
+            return MP;
         }
 
         //method to be called for abilities using mana
-        public void ConsumeMana(int amount)
+        public bool ConsumeMana(int amount)
         {
-            MP -= amount;
-            manaPool.text = "Mana: " + MP;
+            if (MP >= amount)
+            {
+                MP -= amount;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return false;
+            }
+
         }
 
-        public void RegenerateMana()
+        public void manaRegenerateTimer()
         {
-            if (MP < maxMana)
+            shouldManaRegen = true;
+        }
+
+        public void RegenerateMana(float time)
+        {
+            if (MP < maxMana && shouldManaRegen)
+            {
+                Timers.Add("manaRegen", 0.03f, manaRegenerateTimer);
                 MP += 1;
-            manaPool.text = "Mana: " + MP;
-        }
-
-        public int ReturnMana()
-        {
-            return MP;
+                shouldManaRegen = false;
+                Timers.FindWithTag("manaRegen").Reset();
+            }
         }
     }
 }

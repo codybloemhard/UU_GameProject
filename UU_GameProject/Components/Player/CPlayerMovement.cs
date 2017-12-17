@@ -135,11 +135,8 @@ namespace UU_GameProject
             }
             
             //the dashing itself
-            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
-            {
-                GO.GetComponent<CManaPool>().ConsumeMana(25);
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
-            }
 
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -162,9 +159,8 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 0.166666f)
+                if (GO.GetComponent<CManaPool>().ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
-                    GO.GetComponent<CManaPool>().ConsumeMana(75);
                     vertVelo = -jumpPower;
                     jumpDelayTime = 0;
                 }
@@ -181,18 +177,11 @@ namespace UU_GameProject
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
-            if (Input.GetKey(PressAction.PRESSED, Keys.F))
-            { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), Vector2.Zero); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
             { GO.GetComponent<CMeleeAttack>().melee(dir, 1, 2f); }
-            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+            if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
             {
-                //double if, for adding sounds or animations showing the player that no mana remains later
-                if (GO.GetComponent<CManaPool>().ReturnMana() > 20)
-                {
-                    GO.GetComponent<CManaPool>().ConsumeMana(20);
-                    GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
-                }
+                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
             }
         }
 
