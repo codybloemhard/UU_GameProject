@@ -22,6 +22,8 @@ namespace UU_GameProject
         private bool isDashing = false;
         private bool fallPanic = false;
         private bool grounded = false;
+        private bool leftSideAgainstWall = false;
+        private bool rightSideAgainstWall = false;
         private bool isCrawling = false;
         private bool isCrouching = false;
         private bool isSliding = false;
@@ -48,6 +50,13 @@ namespace UU_GameProject
                 velocity += new Vector2(playerAccel, 0);
             if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - playerAccel >= -maxPlayerSpeed)
                 velocity += new Vector2(-playerAccel, 0);
+
+            //stops the player when they hit a wall
+            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
+                velocity.X = 0;
+            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
+                velocity.X = 0;
+
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
                 velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
@@ -138,15 +147,15 @@ namespace UU_GameProject
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
 
-            //gravity and jump
-            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
-            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            Vector2 HeadLeft = GO.Pos + new Vector2(0, -0.01f);
-            Vector2 HeadRight = GO.Pos + new Vector2(GO.Size.X, -0.01f);
-            RaycastResult hitBottomLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitBottomRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitTopLeft = GO.Raycast(HeadLeft, new Vector2(0, -1), RAYCASTTYPE.STATIC);
-            RaycastResult hitTopRight = GO.Raycast(HeadRight, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            //gravity, jump and player head and bottom collision
+            Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+            Vector2 BottomRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
+            Vector2 TopLeft = GO.Pos + new Vector2(0, -0.01f);
+            Vector2 TopRight = GO.Pos + new Vector2(GO.Size.X, -0.01f);
+            RaycastResult hitBottomLeft = GO.Raycast(BottomLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitBottomRight = GO.Raycast(BottomRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopLeft = GO.Raycast(TopLeft, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopRight = GO.Raycast(TopRight, new Vector2(0, -1), RAYCASTTYPE.STATIC);
             RaycastResult hitBottom;
             RaycastResult hitTop;
             if (hitBottomLeft.distance > hitBottomRight.distance)
@@ -187,7 +196,42 @@ namespace UU_GameProject
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
-            
+
+            //player side collision
+            Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
+            Vector2 leftMiddle = GO.Pos + new Vector2(-0.01f, 0.5f * GO.Size.Y);
+            Vector2 leftBottom = GO.Pos + new Vector2(-0.01f, GO.Size.Y);
+            Vector2 rightTop = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0);
+            Vector2 rightMiddle = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0.5f * GO.Size.Y);
+            Vector2 rightBottom = GO.Pos + new Vector2(GO.Size.X + 0.01f, GO.Size.Y);
+            RaycastResult hitLeftTop = GO.Raycast(leftTop, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeftMiddle = GO.Raycast(leftMiddle, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeftBottom = GO.Raycast(leftBottom, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightTop = GO.Raycast(rightTop, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightMiddle = GO.Raycast(rightMiddle, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightBottom = GO.Raycast(rightBottom, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeft;
+            RaycastResult hitRight;
+            if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftTop.distance)
+                hitLeft = hitLeftTop;
+            else if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftMiddle.distance)
+                hitLeft = hitLeftMiddle;
+            else hitLeft = hitLeftBottom;
+
+            if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightTop.distance)
+                hitRight = hitRightTop;
+            else if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightMiddle.distance)
+                hitRight = hitRightMiddle;
+            else hitRight = hitRightBottom;
+
+            if (hitLeft.hit && hitLeft.distance < 0.02f)
+                leftSideAgainstWall = true;
+            else leftSideAgainstWall = false;
+
+            if (hitRight.hit && hitRight.distance < 0.02f)
+                rightSideAgainstWall = true;
+            else rightSideAgainstWall = false;
+
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
@@ -197,6 +241,11 @@ namespace UU_GameProject
             {
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
             }
+            bool testHit = hitLeft.distance < 1f;
+            //Console.WriteLine("hitleft: " + hitLeft.distance + " || hitRight: " + hitRight.distance);
+            //Console.WriteLine("hitleft < 0.01f: " + testHit);
+            Console.WriteLine("leftSideAgainstWall: " + leftSideAgainstWall);
+            Console.WriteLine("rightSideAgainstWall: " + rightSideAgainstWall);
         }
 
         public override void OnCollision(GameObject other)
