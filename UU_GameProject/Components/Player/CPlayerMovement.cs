@@ -24,6 +24,8 @@ namespace UU_GameProject
         private bool grounded = false;
         private bool leftSideAgainstWall = false;
         private bool rightSideAgainstWall = false;
+        private bool leftIsSlidingOnWall = false;
+        private bool rightIsSlidingOnWall = false;
         private bool isCrawling = false;
         private bool isCrouching = false;
         private bool isSliding = false;
@@ -98,12 +100,12 @@ namespace UU_GameProject
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - .03f);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - 0.03f);
                 isSliding = true;
             } //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + .03f);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + 0.03f);
                 isSliding = true;
             } //not sliding
             else isSliding = false;
@@ -175,7 +177,7 @@ namespace UU_GameProject
 
             if (grounded && vertVelo > 0)
                 vertVelo = 0;
-            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            if ((grounded || !grounded && (leftSideAgainstWall || rightSideAgainstWall)) && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
                 jumpDelayTime = 0;
@@ -188,14 +190,29 @@ namespace UU_GameProject
                     jumpDelayTime = 0;
                 }
             }
-            if (!grounded)
+            if (!grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
             {
                 vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
+
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
+
+            //Wall sliding
+            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
+                leftIsSlidingOnWall = true;
+            else leftIsSlidingOnWall = false;
+
+            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D) && vertVelo > 0)
+                rightIsSlidingOnWall = true;
+            else rightIsSlidingOnWall = false;
+
+            if (leftIsSlidingOnWall || rightIsSlidingOnWall)
+            {
+                vertVelo = 1;
+            }
 
             //player side collision
             Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
@@ -241,11 +258,6 @@ namespace UU_GameProject
             {
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
             }
-            bool testHit = hitLeft.distance < 1f;
-            //Console.WriteLine("hitleft: " + hitLeft.distance + " || hitRight: " + hitRight.distance);
-            //Console.WriteLine("hitleft < 0.01f: " + testHit);
-            Console.WriteLine("leftSideAgainstWall: " + leftSideAgainstWall);
-            Console.WriteLine("rightSideAgainstWall: " + rightSideAgainstWall);
         }
 
         public override void OnCollision(GameObject other)
