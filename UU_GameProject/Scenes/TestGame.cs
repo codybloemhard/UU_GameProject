@@ -108,7 +108,7 @@ namespace UU_GameProject
             }
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
             {
-                //freeze game
+                
             }
             base.Update(time);
         }

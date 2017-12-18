@@ -87,8 +87,6 @@ namespace UU_GameProject
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
             { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
-                
-
         }
 
         private void ActiveBehaviour()

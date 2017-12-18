@@ -5,16 +5,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    public class TestOptions : GameState
+    public class TestInGameOptions : GameState
     {
         private Text text, text2;
         private Button buttonMainmenu, fullscreen;
         private SliderBar audioslider;
         private bool Fullscreen;
         private uint width, height;
-        
 
-        public TestOptions() : base() { }
+
+        public TestInGameOptions() : base() { }
 
         public override void Load(SpriteBatch batch)
         {
@@ -46,7 +46,8 @@ namespace UU_GameProject
             {
                 Camera.SetupResolution((uint)Camera.ScreenSize.X, (uint)Camera.ScreenSize.Y, true);
                 Fullscreen = true;
-            } else
+            }
+            else
             {
                 Camera.SetupResolution(width, height, false);
                 Fullscreen = false;
