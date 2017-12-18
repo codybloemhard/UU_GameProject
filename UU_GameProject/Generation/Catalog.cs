@@ -62,21 +62,28 @@ namespace UU_GameProject
             return go;
         }
 
-        public static GameObject CreateBlock(GameState context, float x, float y, uint layer, string tag, BASETILES baset, LAYERTILES layert, TOPTILES topt)
+        public static GameObject CreateBlock(GameState context, float x, float y, uint layer, string tag, BASETILES baset, LAYERTILES layert0, LAYERTILES layert1, TOPTILES topt)
         {
-            string basetex, layertex, toptex;
+            string basetex, layer0tex, layer1tex, toptex;
             switch (baset)
             {
                 case BASETILES.DIRT: basetex = "_dirt"; break;
                 case BASETILES.STONE: basetex = "_coursestone"; break;
                 default: basetex = "_dirt"; break;
             }
-            switch (layert)
+            switch (layert0)
             {
-                case LAYERTILES.CRACKS: layertex = "_crackedlayer"; break;
-                case LAYERTILES.ICE: layertex = "_frostylayer"; break;
-                case LAYERTILES.ICETOP: layertex = "_frostytop"; break;
-                default: layertex = ""; break;
+                case LAYERTILES.CRACKS: layer0tex = "_crackedlayer"; break;
+                case LAYERTILES.ICE: layer0tex = "_frostylayer"; break;
+                case LAYERTILES.ICETOP: layer0tex = "_frostytop"; break;
+                default: layer0tex = ""; break;
+            }
+            switch (layert1)
+            {
+                case LAYERTILES.CRACKS: layer1tex = "_crackedlayer"; break;
+                case LAYERTILES.ICE: layer1tex = "_frostylayer"; break;
+                case LAYERTILES.ICETOP: layer1tex = "_frostytop"; break;
+                default: layer1tex = ""; break;
             }
             switch (topt)
             {
@@ -84,12 +91,18 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-            GameObject basego = CreateObject(context, layer + 2, tag, basetex);
+            GameObject basego = CreateObject(context, layer + 3, tag, basetex);
             basego.Pos = new Vector2(x, y);
             basego.Size = new Vector2(1f, 1f);
-            if(layertex != "")
+            if (layer0tex != "")
             {
-                GameObject layergo = CreateObject(context, layer + 1, tag, layertex);
+                GameObject layergo = CreateObject(context, layer + 2, tag, layer0tex);
+                layergo.Pos = new Vector2(x, y);
+                layergo.Size = new Vector2(1f, 1f);
+            }
+            if (layer1tex != "")
+            {
+                GameObject layergo = CreateObject(context, layer + 1, tag, layer1tex);
                 layergo.Pos = new Vector2(x, y);
                 layergo.Size = new Vector2(1f, 1f);
             }
@@ -100,174 +113,6 @@ namespace UU_GameProject
                 layergo.Size = new Vector2(1f, 0.5f);
             }
             return basego;
-        }
-
-        public static GameObject CreateDirtBlock(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_dirt";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            return go;
-        }
-
-        public static GameObject CreateIceBlock(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_ice";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            return go;
-        }
-
-        public static GameObject CreateStoneBlock(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_coursestone";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            return go;
-        }
-
-        public static GameObject CreateDirtGrassBlock(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_grasstop";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 0.5f);
-            CreateDirtBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateFrostyDirtTop(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_frostytop";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            CreateDirtBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateFrostyDirt(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_frostylayer";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            CreateDirtBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateSnowyDirt(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_snowytop";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 0.5f);
-            CreateDirtBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateSnowyFrostyDirt(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_snowytop", tex1 = "_frostytop";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 0.5f);
-            GameObject go1 = CreateObject(context, layer + 1, tag, tex1);
-            go1.Pos = new Vector2(x, y);
-            go1.Size = new Vector2(1f, 1f);
-            CreateDirtBlock(context, x, y, layer + 2, tag);
-            return go;
-        }
-        
-        public static GameObject CreateSnowyIce(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_snowytop";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 0.5f);
-            CreateIceBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateCrackedStone(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            CreateStoneBlock(context, x, y, layer + 1, tag);
-            return go;
-        }
-
-        public static GameObject CreateSnowyCrackedStone(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer", toptex = "_snowytop";
-            GameObject go = CreateObject(context, layer + 1, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            GameObject top = CreateObject(context, layer, tag, toptex);
-            top.Pos = new Vector2(x, y);
-            top.Size = new Vector2(1f, 0.5f);
-            CreateStoneBlock(context, x, y, layer + 2, tag);
-            return go;
-        }
-
-        public static GameObject CreateFrostyCrackedStone(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer", toptex = "_frostylayer";
-            GameObject go = CreateObject(context, layer + 1, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            GameObject top = CreateObject(context, layer, tag, toptex);
-            top.Pos = new Vector2(x, y);
-            top.Size = new Vector2(1f, 1f);
-            CreateStoneBlock(context, x, y, layer + 2, tag);
-            return go;
-        }
-
-        public static GameObject CreateFrostyCrackedStoneTop(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer", toptex = "_frostytop";
-            GameObject go = CreateObject(context, layer + 1, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            GameObject top = CreateObject(context, layer, tag, toptex);
-            top.Pos = new Vector2(x, y);
-            top.Size = new Vector2(1f, 1f);
-            CreateStoneBlock(context, x, y, layer + 2, tag);
-            return go;
-        }
-
-        public static GameObject CreateSnowyFrostyCrackedStone(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer", toptex = "_frostytop", top0tex = "_snowytop";
-            GameObject go = CreateObject(context, layer + 1, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            GameObject top0 = CreateObject(context, layer, tag, top0tex);
-            top0.Pos = new Vector2(x, y);
-            top0.Size = new Vector2(1f, 0.5f);
-            GameObject top = CreateObject(context, layer + 2, tag, toptex);
-            top.Pos = new Vector2(x, y);
-            top.Size = new Vector2(1f, 1f);
-            CreateStoneBlock(context, x, y, layer + 3, tag);
-            return go;
-        }
-
-        public static GameObject CreateGrassCrackedStone(GameState context, float x, float y, uint layer, string tag)
-        {
-            const string tex = "_crackedlayer", toptex = "_grasstop";
-            GameObject go = CreateObject(context, layer + 1, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f);
-            GameObject top = CreateObject(context, layer, tag, toptex);
-            top.Pos = new Vector2(x, y);
-            top.Size = new Vector2(1f, 0.5f);
-            CreateStoneBlock(context, x, y, layer + 2, tag);
-            return go;
         }
 
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)

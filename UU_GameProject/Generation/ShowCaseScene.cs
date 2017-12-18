@@ -35,26 +35,36 @@ namespace UU_GameProject
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
                 if(old != null) foreach (GameObject o in old) o.Destroy();
-                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.NONE);
-                Catalog.CreateBlock(this, 0x1, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.GRASS);
-                Catalog.CreateBlock(this, 0x2, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICE, TOPTILES.NONE);
-                Catalog.CreateBlock(this, 0x3, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, TOPTILES.NONE);
-                Catalog.CreateBlock(this, 0x4, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0x5, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.NONE, TOPTILES.NONE);
-                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.ICE, TOPTILES.NONE);
-                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.STONE, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x1, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.GRASS);
+                Catalog.CreateBlock(this, 0x2, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICE, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x3, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x4, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, LAYERTILES.NONE, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0x5, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0x6, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x7, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x8, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICETOP, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0x9, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICETOP, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0xA, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0xB, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.SNOW);
+                Catalog.CreateBlock(this, 0xC, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.CRACKS, TOPTILES.NONE);
+                Catalog.CreateBlock(this, 0xD, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.GRASS);
 
-                Catalog.CreateSnowman(this, 0, 1, 0, "_test", 1f);
-                Catalog.CreateStoneShard(this, 2, 1, 0, "_test");
-                Catalog.CreateStone(this, 3, 1, 0, "_test");
-                Catalog.CreateSnowyStone(this, 4, 1, 0, "_test");
-                Catalog.CreateFrostyStone(this, 5, 1, 0, "_test");
+                /*Catalog.CreateSnowman(this, 1, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 3, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 5, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 7, 1, 0, "_test", 1f);*/
 
-                Catalog.CreateBush(this, 1, 2, 0, "_test");
+                /*Catalog.CreateStoneShard(this, 3, 1, 0, "_test");
+                Catalog.CreateStone(this, 4, 1, 0, "_test");
+                Catalog.CreateSnowyStone(this, 5, 1, 0, "_test");
+                Catalog.CreateFrostyStone(this, 6, 1, 0, "_test");*/
 
-                Catalog.CreateBoulder(this, 0, 4, 0, "_test");
-                Catalog.CreateCloud(this, 2, 4, 0, "_test");
+                Catalog.CreateCloud(this, 1, 3, 0, "_test");
+                Catalog.CreateCloud(this, 3, 3, 0, "_test");
+                Catalog.CreateCloud(this, 5, 3, 0, "_test");
+                Catalog.CreateCloud(this, 7, 3, 0, "_test");
+                //Catalog.CreateCloud(this, 2, 4, 0, "_test");
             }
         }
 
