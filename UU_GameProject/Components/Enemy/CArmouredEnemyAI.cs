@@ -36,23 +36,22 @@ namespace UU_GameProject
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
 
-            //if (length <= 4.5f && fsm.CurrentState == "idle")
-            //{
-            //    fsm.SetCurrentState("active");
-            //    Console.WriteLine(2);
-            //}
-            //else if (length > 4.5f && fsm.CurrentState != "idle")
-            //{
-            //    fsm.SetCurrentState("idle");
-            //    Console.WriteLine(1);
-            //}
+            /*if (length <= 4.5f && fsm.CurrentState == "idle")
+            {
+                fsm.SetCurrentState("active");
+                Console.WriteLine(2);
+            }
+            else if (length > 4.5f && fsm.CurrentState != "idle")
+            {
+                fsm.SetCurrentState("idle");
+                Console.WriteLine(1);
+            }*/
 
             fsm.SetCurrentState("idle");
-
             fsm.Update();
 
-            Console.WriteLine(fsm.CurrentState);
-            Console.WriteLine(1);
+            /*Console.WriteLine(fsm.CurrentState);
+            Console.WriteLine(1);*/
         }
 
         //Damage handling when being hit by a bullet

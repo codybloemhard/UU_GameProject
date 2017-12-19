@@ -50,7 +50,7 @@ namespace UU_GameProject
                 Fullscreen = false;
             }
         }
-
+        
         public void setWidth(uint x)
         {
             width = x;

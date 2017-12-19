@@ -16,7 +16,7 @@ namespace UU_GameProject
         public override void Load(SpriteBatch batch)
         {
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text(this, "Title of ze Game!", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
+            text = new Text(this, "Title of the Game!", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "exampleTag";
             testTimer = new Text(this, "time: ", new Vector2(0, 8), new Vector2(16f, 1f), font);
