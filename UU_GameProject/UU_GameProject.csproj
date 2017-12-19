@@ -40,6 +40,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\General\CDamageArea.cs" />
+    <Compile Include="Components\CLevelEditorObject.cs" />
+    <Compile Include="Scenes\Select.cs" />
+    <Compile Include="Scenes\LevelEditor.cs" />
     <Compile Include="Generation\ColourField.cs" />
     <Compile Include="Generation\Catalog.cs" />
     <Compile Include="Generation\ShowCase.cs" />
@@ -61,7 +64,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\TestGameOver.cs" />
     <Compile Include="Scenes\TestGame.cs" />
+    <Compile Include="Scenes\TestInGameOptions.cs" />
     <Compile Include="Scenes\TestMenu.cs" />
+    <Compile Include="Scenes\TestOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
