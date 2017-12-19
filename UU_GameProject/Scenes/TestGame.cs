@@ -54,7 +54,11 @@ namespace UU_GameProject
             killer.Size = new Vector2(1, 1);
             (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            //player.AddComponent(new CRender("player"));
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("fallPanic", "playerFallPanic");
+            anim.AddAnimation("walking", "playerWalking");
+            anim.PlayAnimation("walking", 5);
+            player.AddComponent(anim);
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
@@ -63,6 +67,7 @@ namespace UU_GameProject
             player.AddComponent(new CManaPool(100, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
+
             GameObject enemy = new GameObject("Nenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CNormalEnemyAI(2f));
@@ -87,22 +92,6 @@ namespace UU_GameProject
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.Pos = new Vector2(2.5f, 3.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
-            GameObject fallPanicAnim = new GameObject(this, 0);
-            CAnimatedSprite anim = new CAnimatedSprite();
-            fallPanicAnim.SetParent(player);
-            anim.AddAnimation("fallPanic", "playerFallPanic");
-            //anim.PlayAnimation("fallPanic", 5);
-            fallPanicAnim.AddComponent(anim);
-            fallPanicAnim.LocalPos = new Vector2(0, 0);
-            fallPanicAnim.LocalSize = new Vector2(1, 1);
-            GameObject walkingAnim = new GameObject(this, 0);
-            CAnimatedSprite anim1 = new CAnimatedSprite();
-            walkingAnim.SetParent(player);
-            anim1.AddAnimation("walking", "playerWalking");
-            anim1.PlayAnimation("walking", 5);
-            walkingAnim.AddComponent(anim1);
-            walkingAnim.LocalPos = new Vector2(0, 0);
-            walkingAnim.LocalSize = new Vector2(1, 1);
         }
 
         public override void Unload()
