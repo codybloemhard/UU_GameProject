@@ -20,7 +20,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag != "killer" && other.tag != "meleeDamageArea")
+            if (other.tag.Contains(GO.tag))
                 return;
             HP -= 1;
             healthPool.text = "Health: " + HP;

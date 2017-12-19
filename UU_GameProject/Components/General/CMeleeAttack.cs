@@ -17,7 +17,7 @@ namespace UU_GameProject
 
         public void Melee(Vector2 dir, Vector2 dimensions, float duration)
         {
-            GameObject meleeDamageArea = new GameObject("meleeDamageArea", GO.Context, 0);
+            GameObject meleeDamageArea = new GameObject("meleeDamageArea_" + GO.tag, GO.Context, 0);
             meleeDamageArea.AddComponent(new CRender("block"));
             meleeDamageArea.AddComponent(new CDamageArea(duration));
             meleeDamageArea.AddComponent(new CAABB());

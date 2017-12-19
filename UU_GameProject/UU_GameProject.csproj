@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\General\CDamageArea.cs" />
-    <Compile Include="Components\CLevelEditorObject.cs" />
+    <Compile Include="Components\General\CLevelEditorObject.cs" />
     <Compile Include="Scenes\Select.cs" />
     <Compile Include="Scenes\LevelEditor.cs" />
     <Compile Include="Generation\ColourField.cs" />
@@ -51,8 +51,8 @@
     <Compile Include="Generation\PerlinNoise.cs" />
     <Compile Include="Generation\PrerunGenerationCycle.cs" />
     <Compile Include="Generation\ShowCaseScene.cs" />
-    <Compile Include="Components\CHealthPool.cs" />
-    <Compile Include="Components\CManaPool.cs" />
+    <Compile Include="Components\General\CHealthPool.cs" />
+    <Compile Include="Components\General\CManaPool.cs" />
     <Compile Include="Components\Enemy\CArmouredEnemyAI.cs" />
     <Compile Include="Components\General\CBulletMovement.cs" />
     <Compile Include="Components\Enemy\CRangedEnemyAI.cs" />

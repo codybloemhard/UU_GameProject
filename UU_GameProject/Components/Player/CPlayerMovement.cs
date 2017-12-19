@@ -172,7 +172,7 @@ namespace UU_GameProject
                 grounded = true;
             else grounded = false;
 
-            if (hitTop.hit && hitTop.distance < 0.1f)
+            if (hitTop.hit && hitTop.distance < 0.03f)
                 vertVelo = 0;
 
             if (grounded && vertVelo > 0)
