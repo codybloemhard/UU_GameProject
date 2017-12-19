@@ -87,6 +87,14 @@ namespace UU_GameProject
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.Pos = new Vector2(2.5f, 3.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
+            GameObject test = new GameObject(this, 0);
+            CAnimatedSprite anim = new CAnimatedSprite();
+            test.SetParent(player);
+            anim.AddAnimation("tester", "playerFallPanic");
+            anim.PlayAnimation("tester", 5);
+            test.AddComponent(anim);
+            test.LocalPos = new Vector2(0, 0);
+            test.LocalSize = new Vector2(1, 1);
         }
 
         public override void Unload()
