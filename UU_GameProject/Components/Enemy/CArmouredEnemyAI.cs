@@ -36,23 +36,22 @@ namespace UU_GameProject
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
 
-            //if (length <= 4.5f && fsm.CurrentState == "idle")
-            //{
-            //    fsm.SetCurrentState("active");
-            //    Console.WriteLine(2);
-            //}
-            //else if (length > 4.5f && fsm.CurrentState != "idle")
-            //{
-            //    fsm.SetCurrentState("idle");
-            //    Console.WriteLine(1);
-            //}
+            /*if (length <= 4.5f && fsm.CurrentState == "idle")
+            {
+                fsm.SetCurrentState("active");
+                Console.WriteLine(2);
+            }
+            else if (length > 4.5f && fsm.CurrentState != "idle")
+            {
+                fsm.SetCurrentState("idle");
+                Console.WriteLine(1);
+            }*/
 
             fsm.SetCurrentState("idle");
-
             fsm.Update();
 
-            Console.WriteLine(fsm.CurrentState);
-            Console.WriteLine(1);
+            /*Console.WriteLine(fsm.CurrentState);
+            Console.WriteLine(1);*/
         }
 
         //Damage handling when being hit by a bullet
@@ -134,7 +133,7 @@ namespace UU_GameProject
 
                 if (length < reach - (0.1f * reach) && wait <= 0 && dir.X < 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.5f);
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }
@@ -151,7 +150,7 @@ namespace UU_GameProject
 
                 if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0 && dir.X > 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().melee(dir, 3, reach);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.0f);
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }
