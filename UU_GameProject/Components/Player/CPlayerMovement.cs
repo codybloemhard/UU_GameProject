@@ -177,7 +177,7 @@ namespace UU_GameProject
 
             if (grounded && vertVelo > 0)
                 vertVelo = 0;
-            if ((grounded || !grounded && (leftSideAgainstWall || rightSideAgainstWall)) && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
                 jumpDelayTime = 0;
@@ -250,10 +250,10 @@ namespace UU_GameProject
             else rightSideAgainstWall = false;
 
             //shoot
-            if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-            { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
+            //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
+            //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            { GO.GetComponent<CMeleeAttack>().melee(dir, 1, 2f); }
+            { GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
             {
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);

@@ -1,23 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace UU_GameProject.Components.General
+namespace UU_GameProject
 {
-    class CDamageArea : Component
+    public class CDamageArea : Component
     {
-        public CDamageArea() : base() { }
+        private float duration;
+
+        public CDamageArea(float duration) : base()
+        {
+            this.duration = duration;
+        }
+
+        public override void Init()
+        {
+            CRender render = GO.Renderer as CRender;
+            if (render != null) render.colour = Color.Red;
+        }
 
         public override void Update(float time)
         {
             base.Update(time);
+            Timers.Add("DamageAreaLifespan", duration, Destroy);
         }
 
-        public void CreateDamageArea(Vector2 origin, Vector2 dimensions, int damage = 1, int interval = 5)
+        public override void OnCollision(GameObject other)
         {
+            //add damage receiving here
+        }
 
+        public void Destroy()
+        {
+            GO.Destroy();
         }
     }
 }
