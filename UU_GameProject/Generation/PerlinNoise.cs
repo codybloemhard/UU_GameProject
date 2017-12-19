@@ -66,6 +66,32 @@ namespace UU_GameProject
             return (Lerp(y1, y2, w) + 1) / 2;
         }
 
+        public static double Perlin(double x, double y)
+        {
+            int xi = (int)x & 255;
+            int yi = (int)y & 255;
+            double xf = x - (int)x;
+            double yf = y - (int)y;
+            double u = Smooth(xf);
+            double v = Smooth(yf);
+
+            int a = p[xi] + yi;
+            int aa = p[a];
+            int ab = p[a + 1];
+            int b = p[xi + 1] + yi;
+            int ba = p[b];
+            int bb = p[b + 1];
+
+            double x1, x2, y1, y2;
+            x1 = Lerp(grad(p[aa], xf, yf), grad(p[ba], xf - 1, yf), u);
+            x2 = Lerp(grad(p[ab], xf, yf - 1), grad(p[bb], xf - 1, yf - 1), u);
+            y1 = Lerp(x1, x2, v);
+            x1 = Lerp(grad(p[aa + 1], xf, yf), grad(p[ba + 1], xf - 1, yf), u);
+            x2 = Lerp(grad(p[ab + 1], xf, yf - 1), grad(p[bb + 1], xf - 1, yf - 1), u);
+            y2 = Lerp(x1, x2, v);
+            return (y1 + 1) * 0.5f;
+        }
+
         public static double grad(int hash, double x, double y, double z)
         {
             int h = hash & 15;
@@ -74,6 +100,17 @@ namespace UU_GameProject
             if (h < 4) v = y;
             else if (h == 12 || h == 14) v = x;
             else v = z;
+            return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+        }
+
+        public static double grad(int hash, double x, double y)
+        {
+            int h = hash & 15;
+            double u = h < 8 ? x : y;
+            double v;
+            if (h < 4) v = y;
+            else if (h == 12 || h == 14) v = x;
+            else v = 0;
             return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
         }
 

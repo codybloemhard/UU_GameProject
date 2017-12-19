@@ -18,7 +18,7 @@ namespace UU_GameProject
 
         public Run()
         {
-            game = new GameWindow(1000);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
@@ -36,8 +36,8 @@ namespace UU_GameProject
             LevelEditor levelEditor = new LevelEditor();
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
-          
-	        game.states.AddState("editor", levelEditor);
+			      
+            game.states.AddState("editor", levelEditor);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);

@@ -15,7 +15,7 @@ namespace UU_GameProject
             for (int x = 0; x < f.Width; x++)
                 for (int y = 0; y < f.Height; y++)
                 {
-                    float p = (float)PerlinNoise.Perlin((double)x / f.Width, (double)y / f.Height, z, octaves, scale, persistence, lacunarity);
+                    float p = (float)PerlinNoise.Perlin((double)x / f.Width, (double)y / f.Width, z, octaves, scale, persistence, lacunarity);
                     f.array[f.To1D(x, y)] = p;
                 }
             return f;
@@ -83,6 +83,39 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField VoronoiBlock(uint w, uint h, uint p, float diff, bool flat)
+        {
+            uint stepw = w / 3, steph = h / 3;
+            Vector2[] points = new Vector2[p + 12];
+            for(int i = 0; i < 4; i++)
+                points[i] = new Vector2(i * stepw, 0);
+            for (int i = 0; i < 4; i++)
+                points[i + 4] = new Vector2(i * stepw, h);
+            points[8] = new Vector2(0, steph);
+            points[9] = new Vector2(0, steph * 2);
+            points[10] = new Vector2(w, steph);
+            points[11] = new Vector2(w, steph * 2);
+            for(int i = 0; i < p; i++)
+                points[12 + i] = new Vector2(RandomDeviation(0.5f, diff) *w, RandomDeviation(0.5f, diff)*h);
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                {
+                    Vector2 point = new Vector2(x, y);
+                    float min = 1000000f;
+                    int ppp = 0;
+                    for(int i = 0; i < points.Length; i++)
+                    {
+                        Vector2 diffr = point - points[i];
+                        float dist = diffr.LengthSquared();
+                        if (dist < min) { min = dist; ppp = i; }
+                    }
+                    if (flat) f.array[f.To1D(x, y)] = (float)ppp / points.Length;
+                    else f.array[f.To1D(x, y)] = (float)Math.Sqrt(min) / w;
+                }
+            return f;
+        }
+
         public static FloatField Circle(uint w, uint h, float r, float alphaA, float alphaB, float inner = 0.0f, float xx = 0.5f, float yy = 0.5f)
         {
             if (r < 0) r = 0;
@@ -143,8 +176,24 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField EdgeFromFlats(FloatField ff)
+        {
+            FloatField f = new FloatField((uint)ff.Width, (uint)ff.Height);
+
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                {
+                    float current = ff.array[ff.To1D(x, y)];
+                    bool left = ff.array[ff.To1D(Math.Min(x + 1, f.Width - 1), y)] != current;
+                    bool down = ff.array[ff.To1D(x, Math.Min(y + 1, f.Height - 1))] != current;
+                    if (left || down) f.array[f.To1D(x, y)] = 1f;
+                }
+            return f;
+        }
+
         public static FloatField EdgeToBlendBody(FloatField edge, FloatField body, float power, float from = 0f, float to = 1f)
         {
+            //return body;
             FloatField f = new FloatField((uint)edge.Width, (uint)edge.Height);
             f.Copy(body);
             List<Vector2> edges = new List<Vector2>();
@@ -162,9 +211,10 @@ namespace UU_GameProject
                     if (original == 0f) continue;
                     float min = 1000f;
                     for (int i = 0; i < edges.Count; i++) {
-                        float dist = (new Vector2(x, y) - edges[i]).Length();
+                        float dist = (new Vector2(x, y) - edges[i]).LengthSquared();
                         if (dist < min) min = dist;
                     }
+                    min = (float)Math.Sqrt(min);
                     f.array[f.To1D(x, y)] = Lerp(from, to, (float)MathH.Clamp(min / f.Width / power, 0, 1));
                 }
 
@@ -190,16 +240,21 @@ namespace UU_GameProject
             return f;
         }
 
-        public static FloatField Fade(uint w, uint h, bool xas, bool fromzero)
+        public static FloatField Fade(uint w, uint h, bool xas, float from, float to)
         {
-            uint start = fromzero ? 0 : (xas ? w : h);
+            uint size = xas ? w : h;
+            uint start = (uint)(from * size);
+            uint end = (uint)(to * size);
+            float stretch = Math.Abs(from - to);
             FloatField f = new FloatField(w, h);
             for (int x = 0; x < f.Width; x++)
                 for (int y = 0; y < f.Height; y++)
                 {
                     float res = 0f;
-                    if (xas) res = (float)Math.Abs(x - start) / w;
-                    else res = (float)Math.Abs(y - start) / h;
+                    float v = xas ? x : y;
+                    if (v < start) res = 1f;
+                    else if (v > end) res = 0f;
+                    else res = Lerp(1f, 0f, (v - start) / stretch / size);
                     f.array[f.To1D(x, y)] = res;
                 }
             return f;
@@ -250,6 +305,46 @@ namespace UU_GameProject
                 }
             return res;
         }
+        
+        public static FloatField Sum(FloatField a, FloatField b)
+        {
+            FloatField res = new FloatField((uint)a.Width, (uint)a.Height);
+            for(int i = 0; i < res.array.Length; i++)
+            {
+                float x = a.array[i % a.array.Length] + b.array[i % b.array.Length];
+                x = Math.Min(x, 1f);
+                res.array[i] = x;
+            }
+            return res;
+        }
+
+        public static void CutAlpha(ColourField cf, FloatField ff)
+        {
+            for(int x = 0; x < cf.Width; x++)
+                for(int y = 0; y < cf.Height; y++)
+                {
+                    float cut = ff.array[ff.To1D(x % ff.Width, y % ff.Height)];
+                    if (cut == 0f) cf.Set(new Colour(0,0,0,0), x, y);
+                }
+        }
+
+        public static void ScaleClamp(FloatField ff, float x)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = (float)MathH.Clamp(ff.array[i] * x, 0f, 1f);
+        }
+
+        public static void AddClamp(FloatField ff, float x)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = (float)MathH.Clamp(ff.array[i] + x, 0f, 1f);
+        }
+
+        public static void CopyMin(FloatField fa, FloatField fb)
+        {
+            for (int i = 0; i < fa.array.Length; i++)
+                fa.array[i] = (float)Math.Min(fa.array[i], fb.array[i % fb.array.Length]);
+        }
 
         public static void NormalizeSize(FloatField ff)
         {
@@ -266,6 +361,12 @@ namespace UU_GameProject
             if (minx >= maxx || miny >= maxy) return;
             FloatField cut = ff.CopyCut(minx, miny, maxx, maxy);
             ff.CopyStretch(cut);
+        }
+
+        public static void Invert(FloatField ff)
+        {
+            for (int i = 0; i < ff.array.Length; i++)
+                ff.array[i] = 1.0f - ff.array[i];
         }
 
         public static void Multiply(FloatField fa, FloatField fb)
@@ -293,14 +394,14 @@ namespace UU_GameProject
                 }
         }
 
-        public static void ThresholdCut(FloatField f, float min, float max)
+        public static void ThresholdCut(FloatField f, float min, float max, float minval, float maxval)
         {
             for(int x = 0; x < f.Width; x++)
                 for(int y = 0; y < f.Height; y++)
                 {
-                    float r = f.array[f.To1D(x, y)] = 0;
-                    if (r < min) r = 0;
-                    if (r > max) r = 0;
+                    float r = f.array[f.To1D(x, y)];
+                    if (r < min) r = minval;
+                    if (r > max) r = maxval;
                     f.array[f.To1D(x, y)] = r;
                 }
         }

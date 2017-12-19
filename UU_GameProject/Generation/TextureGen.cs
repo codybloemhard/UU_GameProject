@@ -21,15 +21,22 @@ namespace UU_GameProject
             switch (name)
             {
                 //blocks
-                case "_dirtgrassblock": return GenDirtGrassBlock();
+                case "_grasstop": return GenGrassTop();
+                case "_frostytop": return GenFrostyTop();
+                case "_snowytop": return GenSnowyTop();
+                case "_frostylayer": return GenFrostyLayer();
+                case "_crackedlayer": return GenCrackedLayer();
                 //objects
                 case "_boulder": return GenBoulder();
                 case "_stone": return GenStone();
+                case "_snowystone": return GenSnowyStone();
+                case "_frostystone": return GenFrostyStone();
                 case "_stoneshard": return GenStoneShard();
+                case "_cloud": return GenCloud();
+                //plants
                 case "_bushleaf": return GenBushLeaf();
                 case "_berry": return GenBerry();
                 case "_bush": return GenBush();
-                case "_cloud": return GenCloud();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -38,16 +45,85 @@ namespace UU_GameProject
                 case "_snowmannose": return GenSnowManNose();
                 case "_snowmanarmleft": return GenSnowManArm(true);
                 case "_snowmanarmright": return GenSnowManArm(false);
-                case "_stonesnowy": return GenStoneSnowy();
                 //basics
                 case "_greystone": return GenGrayStone();
                 case "_snow": return GenSnow();
                 case "_grass": return GenGrass();
                 case "_dirt": return GenDirt();
+                case "_ice": return GenIce();
+                case "_coursestone": return GenGenCourseStone();
                 default: return null;
             }
         }
+        //start Blocks
+        public static ColourField GenGrassTop()
+        {
+            const uint size = SMedium;
+            ColourField cGrass = GenGrass(size, size/2);
+            FloatField fMask = Image.Perlin(size, size/2, 4, 4, 0.5f, 3f);
+            FloatField fFade = Image.Fade(size, size/2, false, 0.2f, 1f);
+            Image.Multiply(fMask, fFade);
+            Image.ToRange(fMask, 0.3f, 1f);
+            Image.ThresholdCut(fMask, 0.5f, 0.7f, 0f, 1f);
+            cGrass.SetAlpha(fMask);
+            return cGrass;
+        }
 
+        public static ColourField GenFrostyTop()
+        {
+            const uint size = SMedium;
+            ColourField cIce = GenIce();
+            FloatField fMask = Image.Perlin(size, size, 2, 5, 0.5f, 2f);
+            Image.ThresholdCut(fMask, 0.0f, 0.4f, 0f, 0f);
+            FloatField fSpots = Image.Noise(size, size);
+            Image.ThresholdCut(fSpots, 0.65f, 0.7f, 0f, 0f);
+            FloatField fTop = Image.Fade(size, size, false, 0.1f, 0.7f);
+            Image.ToRange(fTop, 0f, 0.9f);
+            fMask = Image.Union(fMask, fSpots);
+            fMask = Image.Sum(fMask, fTop);
+            cIce.SetAlpha(fMask);
+            return cIce;
+        }
+
+        public static ColourField GenFrostyLayer()
+        {
+            const uint size = SMedium;
+            ColourField cIce = GenIce();
+            FloatField fMask = Image.Perlin(size, size, 2, 5, 0.5f, 2f);
+            Image.ThresholdCut(fMask, 0.0f, 0.4f, 0f, 0f);
+            FloatField fSpots = Image.Noise(size, size);
+            Image.ThresholdCut(fSpots, 0.65f, 0.7f, 0f, 0f);
+            fMask = Image.Union(fMask, fSpots);
+            cIce.SetAlpha(fMask);
+            return cIce;
+        }
+
+        public static ColourField GenSnowyTop()
+        {
+            const uint size = SMedium;
+            ColourField cSnow = GenSnow(size, size/2);
+            FloatField fMask = Image.Perlin(size, size/2, 4, 4, 0.5f, 3f);
+            FloatField fFade = Image.Fade(size, size/2, false, 0.2f, 1f);
+            Image.Multiply(fMask, fFade);
+            Image.ToRange(fMask, 0.3f, 1f);
+            Image.ThresholdCut(fMask, 0.5f, 0.7f, 0f, 1f);
+            cSnow.SetAlpha(fMask);
+            return cSnow;
+        }
+
+        public static ColourField GenCrackedLayer(uint w = SMedium, uint h = SMedium)
+        {
+            FloatField fMask = Image.VoronoiBlock(w, h, 6, 0.4f, true);
+            FloatField fEdge = Image.EdgeFromFlats(fMask);
+            ColourField cFinal = new ColourField(w, h);
+            Image.ScaleClamp(fEdge, 0.5f);
+            cFinal.Fill(Colour.Black);
+            cFinal.SetAlpha(fEdge);
+            return cFinal;
+        }
+
+        //end Blocks
+        //start Objects
         public static ColourField GenBoulder()
         {
             const uint size = SLarge;
@@ -62,7 +138,6 @@ namespace UU_GameProject
             Colour cDark = new Colour(0.2f, 0.1f, 0.1f) / 2;
             Colour clight = new Colour(0.5f, 0.2f, 0.1f) * 2f;
             cf.FloatsToColours(fResult, cDark, clight);
-            cf.Save();
             return cf;
         }
 
@@ -81,11 +156,10 @@ namespace UU_GameProject
             ColourField cf = GenGrayStone();
             cf.SetAlpha(fMask);
             Image.Multiply(cf, fGlow);
-            cf.Save();
             return cf;
         }
 
-        public static ColourField GenStoneSnowy()
+        public static ColourField GenSnowyStone()
         {
             const uint size = SMedium;
             FloatField fMask = GenStoneMask();
@@ -94,12 +168,31 @@ namespace UU_GameProject
             FloatField fSnow = Image.Circle(size, size, Image.RandomRange(2.5f, 3f), 1f, 0f, 0.8f, 0.5f, -0.5f);
             fSnow = Image.Intersection(fSnow, fMask);
             ColourField cSnow = GenSnow(size);
+            Image.ToRange(fGlow, 0.7f, 1f);
+            Image.Multiply(cSnow, fGlow);
             cSnow.SetAlpha(fSnow);
             ColourField cStone = GenGrayStone(size);
             cStone.SetAlpha(fMask);
+            Image.Normalize(fGlow, true);
             Image.Multiply(cStone, fGlow);
             cStone.BlendOver(cSnow, 0, 0);
-            cStone.Save();
+            return cStone;
+        }
+
+        public static ColourField GenFrostyStone()
+        {
+            const uint size = SMedium;
+            FloatField fMask = GenStoneMask();
+            FloatField fEdge = Image.Edge(fMask);
+            FloatField fGlow = Image.EdgeToBlendBody(fEdge, fMask, 0.1f, 0.5f, 1.0f);
+            FloatField fPerlin = Image.Perlin(size, size, 1, 4, 0f, 0f);
+            ColourField cIce = GenIce();
+            ColourField cStone = GenGrayStone();
+            cStone.SetAlpha(fMask);
+            cIce.SetAlpha(fPerlin);
+            Image.CutAlpha(cIce, fMask);
+            cStone.BlendOver(cIce, 0, 0);
+            Image.Multiply(cStone, fGlow);
             return cStone;
         }
 
@@ -121,24 +214,7 @@ namespace UU_GameProject
             cEdge.FloatsToColours(fEdge, cLight*2, cLight*2);
             cEdge.SetAlpha(0.25f);
             cBody.Blend(cEdge);
-            cBody.Save();
             return cBody;
-        }
-
-        public static ColourField GenDirtGrassBlock()
-        {
-            const uint size = SMedium;
-            ColourField cGrass = GenGrass(size, size);
-            ColourField cDirt = GenDirt(size, size);
-            FloatField fMask = Image.Perlin(size, size, 2, 4, 0.5f, 2f);
-            FloatField fFade = Image.Fade(size, size, false, false);
-            Image.Power(fFade, 2);
-            Image.Normalize(fFade);
-            Image.Multiply(fMask, fFade);
-            cGrass.SetAlpha(fMask);
-            cDirt.BlendOver(cGrass, 0, 0);
-            cDirt.Save();
-            return cDirt;
         }
 
         public static ColourField GenCloud()
@@ -165,10 +241,10 @@ namespace UU_GameProject
             Colour cLight = new Colour(0.2f, 0.5f, 0.9f);
             cBody.FloatsToColours(fResult, cDark, cLight);
             cBody.SetAlpha(fShine);
-            cBody.Save();
             return cBody;
         }
-
+        //end Objects
+        //start Plants
         public static ColourField GenBushLeaf()
         {
             const uint size = SMedium;
@@ -193,7 +269,6 @@ namespace UU_GameProject
             Colour cLight = new Colour(0.1f, 0.6f, 0.2f);
             cBody.FloatsToColours(fResult, cDark, cLight);
             cBody.SetAlpha(fAlpha);
-            cBody.Save();
             return cBody;
         }
 
@@ -216,7 +291,6 @@ namespace UU_GameProject
             if(cDark.a == 0f) cDark = new Colour(0.3f, 0.1f, 0.1f);
             if(cLight.a == 0f) cLight = new Colour(0.6f, 0.1f, 0.2f);
             cBody.FloatsToColours(fResult, cDark, cLight);
-            cBody.Save();
             return cBody;
         }
 
@@ -240,10 +314,9 @@ namespace UU_GameProject
                 ColourField smallBerry = GenBerry(4);
                 bush.DrawOver(smallBerry, x, y);
             }
-            bush.Save();
             return bush;
         }
-
+        //end Plants
         //start Snowman
         public static ColourField GenSnowManEye()
         {
@@ -265,7 +338,6 @@ namespace UU_GameProject
             ColourField cFinal = new ColourField(size, size);
             Colour cDark = new Colour(0.2f, 0.1f, 0.1f);
             cFinal.FloatsToColours(fMask, cDark, cDark);
-            cFinal.Save();
             return cFinal;
         }
 
@@ -279,7 +351,6 @@ namespace UU_GameProject
             Colour cLight = new Colour(0.1f);
             ColourField cFinal = new ColourField(size, size/2);
             cFinal.FloatsToColours(fMask, cDark, cLight);
-            cFinal.Save();
             return cFinal;
         }
 
@@ -298,7 +369,6 @@ namespace UU_GameProject
             cFinal.FloatsToColours(fGrain, cDark, cLight);
             Image.Multiply(cFinal, fGlow);
             cFinal.SetAlpha(fMask);
-            cFinal.Save();
             return cFinal;
         }
 
@@ -322,7 +392,6 @@ namespace UU_GameProject
             }
             cSnow.SetAlpha(fMask);
             Image.Multiply(cSnow, fGlow);
-            cSnow.Save();
             return cSnow;
         }
         //end Snowman
@@ -331,14 +400,13 @@ namespace UU_GameProject
         {
             FloatField fGrain = Image.Noise(w, h);
             ColourField cFinal = new ColourField(w, h);
-            Colour cDark = new Colour(0.6f, 0.6f, 0.7f);
-            Colour cLight = new Colour(0.9f, 0.9f, 0.9f);
+            Colour cDark = new Colour(0.65f, 0.65f, 0.7f);
+            Colour cLight = new Colour(0.95f, 0.95f, 0.95f);
             cFinal.FloatsToColours(fGrain, cDark, cLight);
             fGrain = Image.Perlin(w, h, 2, 2, 0.5f, 2f);
             ColourField cPerlin = new ColourField(w, h);
             cPerlin.FloatsToColours(fGrain, cDark, cLight);
             cFinal.Blend(cPerlin);
-            cFinal.Save();
             return cFinal;
         }
 
@@ -350,7 +418,17 @@ namespace UU_GameProject
             Colour cDark = new Colour(0.2f, 0.15f, 0.15f) * 0.5f;
             Colour clight = new Colour(0.5f, 0.4f, 0.4f);
             cf.FloatsToColours(fPerlin, cDark, clight);
-            cf.Save();
+            return cf;
+        }
+
+        public static ColourField GenGenCourseStone(uint w = SMedium, uint h = SMedium)
+        {
+            FloatField fPerlin = Image.Perlin(w, h, 2, 10, 0.5, 3f);
+            Image.ToRange(fPerlin, 0.3f, 1.0f);
+            ColourField cf = new ColourField(w, h);
+            Colour cDark = new Colour(0.2f, 0.15f, 0.15f) * 0.5f;
+            Colour clight = new Colour(0.5f, 0.4f, 0.4f);
+            cf.FloatsToColours(fPerlin, cDark, clight);
             return cf;
         }
 
@@ -366,7 +444,6 @@ namespace UU_GameProject
             ColourField cPerlin = new ColourField(w, h);
             cPerlin.FloatsToColours(fGrain, cDark, cLight);
             cFinal.Blend(cPerlin);
-            cFinal.Save();
             return cFinal;
         }
 
@@ -383,7 +460,17 @@ namespace UU_GameProject
             ColourField cPerlin = new ColourField(w, h);
             cPerlin.FloatsToColours(fGrain, cDark, cLight);
             cFinal.Blend(cPerlin);
-            cFinal.Save();
+            return cFinal;
+        }
+
+        public static ColourField GenIce(uint w = SMedium, uint h = SMedium)
+        {
+            FloatField fGrain = Image.Noise(w, h);
+            Image.ThresholdCut(fGrain, 0.9f, 1f, 1f, 0f);
+            Colour cDark = new Colour(0.8f, 0.9f, 0.9f);
+            Colour cLight = new Colour(0.3f, 0.4f, 0.5f);
+            ColourField cFinal = new ColourField(w, h);
+            cFinal.FloatsToColours(fGrain, cDark, cLight);
             return cFinal;
         }
     }
