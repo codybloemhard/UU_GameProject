@@ -32,6 +32,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("player", "playerConcept");
             TextureManager.LoadTexture("playerCrouched", "playerCrouchedConcept");
             TestMenu testMenu = new TestMenu();
+            TestOptions testOptions = new TestOptions();
+            Select select = new Select();
             TestGame testGame = new TestGame();
             LevelEditor levelEditor = new LevelEditor();
             ShowCaseScene showcase = new ShowCaseScene();
@@ -40,9 +42,11 @@ namespace UU_GameProject
             game.states.AddState("editor", levelEditor);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
+            game.states.AddState("options", testOptions);
+            game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("show");
+            game.states.SetStartingState("menu");
         }
     }
 }

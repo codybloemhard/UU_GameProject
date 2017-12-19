@@ -8,22 +8,38 @@ namespace UU_GameProject
     public class TestMenu : GameState
     {
         private Text text, testTimer;
-        private Button button;
+        private Button buttonStart, buttonOptions, buttonContinue, buttonQuit;
+
 
         public TestMenu() : base() { }
         
         public override void Load(SpriteBatch batch)
         {
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text(this, "Gekste game!", new Vector2(0f, 2f), new Vector2(16f, 1f), font);
+            text = new Text(this, "Title of ze Game!", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "exampleTag";
             testTimer = new Text(this, "time: ", new Vector2(0, 8), new Vector2(16f, 1f), font);
             testTimer.colour = new Color(0, 255, 0);
             testTimer.tag = "timerText";
-            button = new Button(this, "Play here!", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
-                font, new Vector2(6, 4), new Vector2(4, 3));
-            button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+
+            //buttons
+            buttonStart = new Button(this, "New game", "block", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
+                font, new Vector2(6, 3), new Vector2(4, 1f));
+            buttonStart.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+
+            buttonContinue = new Button(this, "Continue. Not implemented", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                font, new Vector2(6, 4.2f), new Vector2(4, 1f));
+            buttonContinue.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+
+            buttonOptions = new Button(this, "Options", "block", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
+                font, new Vector2(6, 5.4f), new Vector2(4, 1f));
+            buttonOptions.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+
+            buttonQuit = new Button(this, "Exit. Not implemented", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                font, new Vector2(6, 6.6f), new Vector2(4, 1f));
+            buttonQuit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+
             //others
             Timers.Add("timer", 10, changeTextColour);
             Camera.SetCameraTopLeft(new Vector2(0, 0));
