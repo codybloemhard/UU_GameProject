@@ -36,14 +36,9 @@ namespace UU_GameProject
             length = difference.Length();
 
             if (length <= 5.25f && fsm.CurrentState == "idle")
-            {
                 fsm.SetCurrentState("active");
-            }
             else if (length > 5.25f && fsm.CurrentState != "idle")
-            {
                 fsm.SetCurrentState("idle");
-            }
-
             fsm.Update();
         }
 
@@ -86,7 +81,7 @@ namespace UU_GameProject
             if (grounded)
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
-            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
 
         private void ActiveBehaviour()
@@ -117,12 +112,12 @@ namespace UU_GameProject
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
             {
                 if (dir.X > 0)
-                { dir *= -1; speed *= -1; }
+                    dir *= -1; speed *= -1;
             }
             else
             {
                 if (dir.X < 0)
-                { dir *= -1; speed *= -1; }
+                    dir *= -1; speed *= -1;
             }
 
             if (length < range && wait == 0)
@@ -135,9 +130,13 @@ namespace UU_GameProject
             if (grounded && length > range - 0.4f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
                     GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else if (grounded && length < range - 0.5f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
-            { dir *= -1; speed *= -1; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+            {
+                dir *= -1;
+                speed *= -1;
+                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            }
             else if (!grounded)
-                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
 
         //Choosing one out of 8 directions to shoot.
@@ -145,10 +144,7 @@ namespace UU_GameProject
         {
             if(x < 0)
                 x *= -1;
-
             double angle =  Math.Acos(x / length) / Math.PI * 180;
-            //Console.WriteLine(angle);
-
             if (angle < 22.5)
                 return new Vector2(dir.X, 0);
             else if (GO.Pos.Y < GO.FindWithTag("player").Pos.Y && angle < 67.5)

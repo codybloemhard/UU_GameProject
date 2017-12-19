@@ -54,7 +54,11 @@ namespace UU_GameProject
             killer.Size = new Vector2(1, 1);
             (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            player.AddComponent(new CRender("player"));
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("fallPanic", "playerFallPanic");
+            anim.AddAnimation("walking", "playerWalking");
+            anim.PlayAnimation("walking", 5);
+            player.AddComponent(anim);
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
@@ -63,6 +67,7 @@ namespace UU_GameProject
             player.AddComponent(new CManaPool(100, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
+
             GameObject enemy = new GameObject("Nenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CNormalEnemyAI(2f));

@@ -20,7 +20,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag != "killer" && other.tag != "meleeDamageArea")
+            if (other.tag.Contains(GO.tag))
                 return;
             HP -= 1;
             healthPool.text = "Health: " + HP;
@@ -38,7 +38,11 @@ namespace UU_GameProject
             HP = Math.Max(0, HP - amount);
             healthPool.text = "Health: " + HP;
             if (HP == 0)
-            { GO.active = false; if (GO.tag == "player") { GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD); } }
+            {
+                GO.active = false;
+                if (GO.tag == "player")
+                    GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+            }
         }
     }
 }
