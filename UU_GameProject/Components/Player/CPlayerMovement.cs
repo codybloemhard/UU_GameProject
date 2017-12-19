@@ -76,7 +76,7 @@ namespace UU_GameProject
                 intendedDir = -1;
 
             //down
-                if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
+            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
                 maxPlayerSpeed = 0.5f;
                 isDown = true;
@@ -214,9 +214,7 @@ namespace UU_GameProject
             else rightIsSlidingOnWall = false;
 
             if (leftIsSlidingOnWall || rightIsSlidingOnWall)
-            {
                 vertVelo = 1;
-            }
 
             //player side collision
             Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
@@ -257,11 +255,9 @@ namespace UU_GameProject
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            { GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
+            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f);
             if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
-            {
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
-            }
         }
 
         public override void OnCollision(GameObject other)

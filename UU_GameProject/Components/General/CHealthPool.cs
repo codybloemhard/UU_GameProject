@@ -38,7 +38,11 @@ namespace UU_GameProject
             HP = Math.Max(0, HP - amount);
             healthPool.text = "Health: " + HP;
             if (HP == 0)
-            { GO.active = false; if (GO.tag == "player") { GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD); } }
+            {
+                GO.active = false;
+                if (GO.tag == "player")
+                    GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+            }
         }
     }
 }

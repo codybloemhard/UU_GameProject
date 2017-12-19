@@ -34,16 +34,10 @@ namespace UU_GameProject
             ctime = time;
             Vector2 difference = GO.FindWithTag("player").Pos - GO.Pos;
             length = difference.Length();
-
             if (length <= 4.5f && fsm.CurrentState == "idle")
-            {
                 fsm.SetCurrentState("active");
-            }
             else if (length > 4.5f && fsm.CurrentState != "idle")
-            {
                 fsm.SetCurrentState("idle");
-            }
-
             fsm.Update();
         }
 
@@ -53,7 +47,7 @@ namespace UU_GameProject
             if (other.tag == "bullet")
             {
                 CHealthPool health = GO.GetComponent<CHealthPool>();
-                 health.ChangeHealth(1);
+                health.ChangeHealth(1);
                 other.active = false;
             }
         }
@@ -86,7 +80,7 @@ namespace UU_GameProject
             if (grounded)
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
-            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
 
         private void ActiveBehaviour()
@@ -125,7 +119,8 @@ namespace UU_GameProject
                     wait = 1.0f;
                     Console.WriteLine("OUCH!");
                 }
-            } else
+            }
+            else
             {
                 if (dir.X < 0)
                 { dir *= -1; speed *= -1; }
@@ -141,7 +136,7 @@ namespace UU_GameProject
             if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else if (!grounded)
-            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
+                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
     }
 }
