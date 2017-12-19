@@ -169,7 +169,11 @@ namespace UU_GameProject
             else hitTop = hitTopLeft;
 
             if (hitBottom.hit && hitBottom.distance < 0.001f)
+            {
                 grounded = true;
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("fallPanic", 2);
+            }
+
             else grounded = false;
 
             if (hitTop.hit && hitTop.distance < 0.03f)
