@@ -12,8 +12,7 @@ namespace UU_GameProject
         private SliderBar audioslider;
         private bool Fullscreen;
         private uint width, height;
-
-
+        
         public TestInGameOptions() : base() { }
 
         public override void Load(SpriteBatch batch)
@@ -36,8 +35,6 @@ namespace UU_GameProject
             buttonMainmenu = new Button(this, "Main menu", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(12, 7.8f), new Vector2(4, 1.2f));
             buttonMainmenu.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-
-
         }
 
         private void setFullscreen()
