@@ -10,43 +10,22 @@ namespace UU_GameProject
     {
         public CMeleeAttack() : base() { }
 
-        public void melee(Vector2 dir, int damage, float reach)
+        public override void Update(float time)
         {
-            RaycastResult ray = null;
-            RaycastResult ray1;
-            RaycastResult ray2;
-            RaycastResult ray3;
-            float x = 0;
+            base.Update(time);
+        }
 
+        public void Melee(Vector2 dir, Vector2 dimensions, float duration)
+        {
+            GameObject meleeDamageArea = new GameObject("meleeDamageArea", GO.Context, 0);
+            meleeDamageArea.AddComponent(new CRender("block"));
+            meleeDamageArea.AddComponent(new CDamageArea(duration));
+            meleeDamageArea.AddComponent(new CAABB());
             if (dir.X > 0)
-                x = GO.Size.X/2;
-            else if (dir.X < 0)
-                x = -GO.Size.X/2;
-
-            ray1 = GO.Raycast(GO.Pos + GO.Size / 2f, dir + new Vector2(0, 1), RAYCASTTYPE.DYNAMIC);
-            ray2 = GO.Raycast(GO.Pos + GO.Size / 2f, dir, RAYCASTTYPE.DYNAMIC);
-            ray3 = GO.Raycast(GO.Pos + GO.Size / 2f, dir + new Vector2(0, -1), RAYCASTTYPE.DYNAMIC);
-
-            if (ray1.distance <= reach)
-                ray = ray1;
-            else if (ray2.distance <= reach)
-                ray = ray2;
-            else if (ray3.distance <= reach)
-                ray = ray3;
-
-            if (ray != null)
-            {
-                if (ray.obj.tag != GO.tag && ray.obj.tag != "Aenemy")
-                {
-                    ray.obj.GetComponent<CHealthPool>().ChangeHealth(damage);
-                    Console.WriteLine(damage + " " + dir.X);
-                }
-                else if (ray.obj.tag == "Aenemy" && ray.obj.tag != GO.tag && -ray.obj.GetComponent<CArmouredEnemyAI>().direction() != dir)
-                {
-                    ray.obj.GetComponent<CHealthPool>().ChangeHealth(damage);
-                    Console.WriteLine(damage + dir.X);
-                }
-            }
+                meleeDamageArea.Pos = GO.Pos + GO.Size / 2f - dimensions / 2f + new Vector2(GO.Size.X / 2f + dimensions.X, 0);
+            else
+                meleeDamageArea.Pos = GO.Pos + GO.Size / 2f - dimensions / 2f - new Vector2(GO.Size.X / 2f + dimensions.X, 0);
+            meleeDamageArea.Size = dimensions;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace UU_GameProject
     {
         private int MP;
         private int maxMana = 100;
+        private float manaRegenMultiplier;
+        private bool shouldManaRegen = true;
         Text manaPool;
         public CManaPool(int MP, GameObject GO)
         {
@@ -21,26 +23,48 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            RegenerateMana();
-        }
-
-        //method to be called for abilities using mana
-        public void ConsumeMana(int amount)
-        {
-            MP -= amount;
+            RegenerateMana(time);
             manaPool.text = "Mana: " + MP;
         }
 
-        public void RegenerateMana()
+        /// <summary>
+        /// Method that will attempt to consume the amount of mana specified,
+        /// and will return true if the requested amount is succesfully subtracted.
+        /// Otherwise will return false, and not subtract any.
+        /// </summary>
+        /// <param name="amount">Mana cost of an ability</param>
+        /// <returns></returns>
+        public bool ConsumeMana(int amount)
         {
-            if (MP < maxMana)
+            if (MP >= amount)
+            {
+                MP -= amount;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
+                return false;
+            }
+
+        }
+
+        //method to be called by the regen timer
+        public void manaRegenerateTimer()
+        {
+            shouldManaRegen = true;
+        }
+
+        public void RegenerateMana(float time)
+        {
+            if (MP < maxMana && shouldManaRegen)
+            {
+                manaRegenMultiplier = 3.0f - Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X);
+                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
                 MP += 1;
-            manaPool.text = "Mana: " + MP;
-        }
-
-        public int ReturnMana()
-        {
-            return MP;
+                shouldManaRegen = false;
+                Timers.FindWithTag("manaRegen").Reset();
+            }
         }
     }
 }

@@ -22,6 +22,10 @@ namespace UU_GameProject
         private bool isDashing = false;
         private bool fallPanic = false;
         private bool grounded = false;
+        private bool leftSideAgainstWall = false;
+        private bool rightSideAgainstWall = false;
+        private bool leftIsSlidingOnWall = false;
+        private bool rightIsSlidingOnWall = false;
         private bool isCrawling = false;
         private bool isCrouching = false;
         private bool isSliding = false;
@@ -48,6 +52,13 @@ namespace UU_GameProject
                 velocity += new Vector2(playerAccel, 0);
             if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - playerAccel >= -maxPlayerSpeed)
                 velocity += new Vector2(-playerAccel, 0);
+
+            //stops the player when they hit a wall
+            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
+                velocity.X = 0;
+            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
+                velocity.X = 0;
+
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
                 velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
@@ -89,12 +100,12 @@ namespace UU_GameProject
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - .03f);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - 0.03f);
                 isSliding = true;
             } //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + .03f);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + 0.03f);
                 isSliding = true;
             } //not sliding
             else isSliding = false;
@@ -135,26 +146,37 @@ namespace UU_GameProject
             }
             
             //the dashing itself
-            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ReturnMana() >= 25 && Math.Abs(velocity.X) <= maxDashSpeed * .75)
-            {
-                GO.GetComponent<CManaPool>().ConsumeMana(25);
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
-            }
 
-            //gravity and jump
-            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
-            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
-            if (hit.hit && hit.distance < 0.001f)
-            {
+            //gravity, jump and player head and bottom collision
+            Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
+            Vector2 BottomRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
+            Vector2 TopLeft = GO.Pos + new Vector2(0, -0.01f);
+            Vector2 TopRight = GO.Pos + new Vector2(GO.Size.X, -0.01f);
+            RaycastResult hitBottomLeft = GO.Raycast(BottomLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitBottomRight = GO.Raycast(BottomRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopLeft = GO.Raycast(TopLeft, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            RaycastResult hitTopRight = GO.Raycast(TopRight, new Vector2(0, -1), RAYCASTTYPE.STATIC);
+            RaycastResult hitBottom;
+            RaycastResult hitTop;
+            if (hitBottomLeft.distance > hitBottomRight.distance)
+                hitBottom = hitBottomRight;
+            else hitBottom = hitBottomLeft;
+
+            if (hitTopLeft.distance > hitTopRight.distance)
+                hitTop = hitTopRight;
+            else hitTop = hitTopLeft;
+
+            if (hitBottom.hit && hitBottom.distance < 0.001f)
                 grounded = true;
-            }
             else grounded = false;
-            if (grounded && vertVelo > 0) vertVelo = 0;
+
+            if (hitTop.hit && hitTop.distance < 0.01f)
+                vertVelo = 0;
+
+            if (grounded && vertVelo > 0)
+                vertVelo = 0;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
@@ -162,37 +184,79 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ReturnMana() >= 75 && fallPanic == false && jumpDelayTime >= 0.166666f)
+                if (GO.GetComponent<CManaPool>().ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
-                    GO.GetComponent<CManaPool>().ConsumeMana(75);
                     vertVelo = -jumpPower;
                     jumpDelayTime = 0;
                 }
             }
-            if (!grounded)
+            if (!grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
             {
                 vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
+
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
-            GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
-            
-            //shoot
-            if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-            { GO.GetComponent<CMeleeAttack>().melee(dir, 2, 1.0f); }
-            if (Input.GetKey(PressAction.PRESSED, Keys.F))
-            { GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), Vector2.Zero); }
-            if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            { GO.GetComponent<CMeleeAttack>().melee(dir, 1, 2f); }
-            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+            GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
+
+            //Wall sliding
+            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
+                leftIsSlidingOnWall = true;
+            else leftIsSlidingOnWall = false;
+
+            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D) && vertVelo > 0)
+                rightIsSlidingOnWall = true;
+            else rightIsSlidingOnWall = false;
+
+            if (leftIsSlidingOnWall || rightIsSlidingOnWall)
             {
-                //double if, for adding sounds or animations showing the player that no mana remains later
-                if (GO.GetComponent<CManaPool>().ReturnMana() > 20)
-                {
-                    GO.GetComponent<CManaPool>().ConsumeMana(20);
-                    GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
-                }
+                vertVelo = 1;
+            }
+
+            //player side collision
+            Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
+            Vector2 leftMiddle = GO.Pos + new Vector2(-0.01f, 0.5f * GO.Size.Y);
+            Vector2 leftBottom = GO.Pos + new Vector2(-0.01f, GO.Size.Y);
+            Vector2 rightTop = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0);
+            Vector2 rightMiddle = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0.5f * GO.Size.Y);
+            Vector2 rightBottom = GO.Pos + new Vector2(GO.Size.X + 0.01f, GO.Size.Y);
+            RaycastResult hitLeftTop = GO.Raycast(leftTop, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeftMiddle = GO.Raycast(leftMiddle, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeftBottom = GO.Raycast(leftBottom, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightTop = GO.Raycast(rightTop, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightMiddle = GO.Raycast(rightMiddle, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitRightBottom = GO.Raycast(rightBottom, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult hitLeft;
+            RaycastResult hitRight;
+            if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftTop.distance)
+                hitLeft = hitLeftTop;
+            else if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftMiddle.distance)
+                hitLeft = hitLeftMiddle;
+            else hitLeft = hitLeftBottom;
+
+            if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightTop.distance)
+                hitRight = hitRightTop;
+            else if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightMiddle.distance)
+                hitRight = hitRightMiddle;
+            else hitRight = hitRightBottom;
+
+            if (hitLeft.hit && hitLeft.distance < 0.02f)
+                leftSideAgainstWall = true;
+            else leftSideAgainstWall = false;
+
+            if (hitRight.hit && hitRight.distance < 0.02f)
+                rightSideAgainstWall = true;
+            else rightSideAgainstWall = false;
+
+            //shoot
+            //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
+            //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.E))
+            { GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
+            if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
+            {
+                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
             }
         }
 
@@ -200,6 +264,11 @@ namespace UU_GameProject
         {
             if (other.tag == "killer")
                 Reset();
+        }
+
+        public Vector2 Velocity()
+        {
+            return velocity;
         }
 
         public void Reset()
