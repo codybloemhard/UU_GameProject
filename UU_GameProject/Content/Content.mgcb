@@ -97,18 +97,6 @@
 /processorParam:TextureFormat=Color
 /build:playerCrawlingSimple.png
 
-#begin playerCrouchingSimple.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:playerCrouchingSimple.png
-
 #begin playerWalkingSimple.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -120,18 +108,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:playerWalkingSimple.png
-
-#begin playerSlidingSimple.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:playerSlidingSimple.png
 
 #begin playerMeleeSimple.png
 /importer:TextureImporter
@@ -168,4 +144,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:playerFallPanicSimple.png
+
+#begin playerCrouchingSimple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playerCrouchingSimple.png
+
+#begin playerSlidingSimple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:playerSlidingSimple.png
 
