@@ -40,11 +40,13 @@ namespace UU_GameProject
             GenerateTexture(4, "_dirt");
             GenerateTexture(4, "_ice");
             GenerateTexture(4, "_coursestone");
+            GenerateTexture(4, "_sand");
+            GenerateTexture(4, "_sandstone");
             GenerateTexture(8, "_snowytop");
             GenerateTexture(8, "_frostylayer");
             GenerateTexture(8, "_frostytop");
             GenerateTexture(8, "_grasstop");
-            GenerateTexture(8, "_crackedlayer");
+            GenerateTexture(16, "_crackedlayer");
             Console.WriteLine("A: " + timer.GetElapsedTime() + " Seconds.");
         }
 

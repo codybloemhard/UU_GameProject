@@ -11,7 +11,9 @@ namespace UU_GameProject
     public enum BASETILES
     {
         DIRT,
-        STONE
+        STONE,
+        SAND,
+        SANDSTONE
     }
 
     public enum LAYERTILES
@@ -62,13 +64,16 @@ namespace UU_GameProject
             return go;
         }
 
-        public static GameObject CreateBlock(GameState context, float x, float y, uint layer, string tag, BASETILES baset, LAYERTILES layert0, LAYERTILES layert1, TOPTILES topt)
+        public static GameObject CreateBlock(GameState context, float x, float y, uint layer, string tag, 
+            BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
             switch (baset)
             {
                 case BASETILES.DIRT: basetex = "_dirt"; break;
                 case BASETILES.STONE: basetex = "_coursestone"; break;
+                case BASETILES.SAND: basetex = "_sand"; break;
+                case BASETILES.SANDSTONE: basetex = "_sandstone"; break;
                 default: basetex = "_dirt"; break;
             }
             switch (layert0)
