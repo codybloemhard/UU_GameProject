@@ -19,7 +19,7 @@ namespace UU_GameProject
         {
             GameObject meleeDamageArea = new GameObject("meleeDamageArea" + GO.tag, GO.Context, 0);
             meleeDamageArea.AddComponent(new CRender("block"));
-            meleeDamageArea.AddComponent(new CDamageArea(dir, dimensions, duration, caller));
+            meleeDamageArea.AddComponent(new CDamageArea(dir, duration, caller));
             meleeDamageArea.AddComponent(new CAABB());
             if (dir.X > 0)
                 meleeDamageArea.Pos = GO.Pos + new Vector2(dimensions.X / 2f, 0);

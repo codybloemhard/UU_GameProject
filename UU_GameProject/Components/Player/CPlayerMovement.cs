@@ -273,7 +273,7 @@ namespace UU_GameProject
 
         public void Reset()
         {
-            GO.Pos = new Vector2(1, 1);
+            GO.Pos = new Vector2(1, 7);
             velocity = new Vector2(0, 0);
             vertVelo = 0;
         }

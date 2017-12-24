@@ -54,18 +54,6 @@ namespace UU_GameProject
             Console.WriteLine(1);*/
         }
 
-        //Damage handling when being hit by a bullet
-        public override void OnCollision(GameObject other)
-        {
-            /*if (other.tag == "bullet")
-            {
-                CHealthPool health = GO.GetComponent<CHealthPool>();
-                if (-dir.X != other.GetComponent<CBulletMovement>().direction().X)
-                health.ChangeHealth(1);
-                other.active = false;
-            }*/
-        }
-
         private void IdleBehaviour()
         {
             //Passive movement behaviour, patrolling a platform.

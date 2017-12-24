@@ -12,11 +12,10 @@ namespace UU_GameProject
         private Vector2 dimensions;
         private Vector2 dir;
 
-        public CDamageArea(Vector2 dir, Vector2 dimensions, float duration, string caller) : base()
+        public CDamageArea(Vector2 dir, float duration, string caller) : base()
         {
             this.duration = duration;
             this.caller = caller;
-            this.dimensions = dimensions;
             this.dir = dir;
         }
 
