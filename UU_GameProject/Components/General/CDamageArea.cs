@@ -28,7 +28,7 @@ namespace UU_GameProject
 
         public override void OnCollision(GameObject other)
         {
-            //add damage receiving here
+            
         }
 
         public void Destroy()
