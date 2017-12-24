@@ -115,7 +115,7 @@ namespace UU_GameProject
 
                 if (length < reach - (0.1f * reach) && wait <= 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
                     wait = 1.0f;
                     Console.WriteLine("OUCH!");
                 }
@@ -127,7 +127,7 @@ namespace UU_GameProject
 
                 if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
                     wait = 1.0f;
                     Console.WriteLine("OUCH!");
                 }

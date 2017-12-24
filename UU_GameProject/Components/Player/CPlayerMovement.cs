@@ -255,7 +255,7 @@ namespace UU_GameProject
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f);
+            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
             if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
         }

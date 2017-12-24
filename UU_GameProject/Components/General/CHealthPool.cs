@@ -26,7 +26,10 @@ namespace UU_GameProject
             if (other.tag.Contains(GO.tag))
                 return;
             if (other.tag.Contains("bullet"))
+            {
                 ChangeHealth(bulletHitDamage);
+                other.Destroy();
+            }
             if (other.tag.Contains("meleeDamageArea"))
                 ChangeHealth(meleeHitDamage);
         }
