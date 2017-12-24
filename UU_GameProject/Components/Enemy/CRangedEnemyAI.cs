@@ -45,12 +45,12 @@ namespace UU_GameProject
         //Damage handling when being hit by a bullet
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "bullet")
+            /*if (other.tag == "bullet")
             {
                 CHealthPool health = GO.GetComponent<CHealthPool>();
                 health.ChangeHealth(1);
                 other.active = false;
-            }
+            }*/
         }
 
         private void IdleBehaviour()
