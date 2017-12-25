@@ -30,7 +30,7 @@ namespace UU_GameProject
         GRASS,
         SNOW
     }
-
+    
     public static class Catalog
     {
         private static Dictionary<string, uint> textures;

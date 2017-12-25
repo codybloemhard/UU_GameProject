@@ -11,6 +11,8 @@ namespace UU_GameProject
     {
         public ShowCaseScene() : base() { }
 
+        LSystem lsys;
+
         public override void Load(SpriteBatch batch)
         {
             GameStateManager.SetRenderingMode(BlendState.NonPremultiplied, SamplerState.PointWrap);
@@ -22,6 +24,23 @@ namespace UU_GameProject
             //ShowCase.CreateRow(this, "_crackedlayer", 8, 2, 1f);
             //ShowCase.CreateRow(this, "_stone", 16, 2, 1f);
             //ShowCase.CreateRow(this, "_frostydirt", 16, 2, 1f);
+            lsys = new LSystem("A");
+            lsys.AddRule('A', "AB");
+            lsys.AddRule('B', "A");
+            GameObject p = new GameObject("p", this, 0);
+            p.AddComponent(new CRender("block"));
+            p.Pos = new Vector2(1,1);
+            p.Size = new Vector2(0.2f, 0.2f);
+            p.Renderer.colour = Color.Red;
+            GameObject q = new GameObject("q", this, 0);
+            q.AddComponent(new CRender("block"));
+            q.Pos = new Vector2(3, 4);
+            q.Size = new Vector2(0.2f, 0.2f);
+            q.Renderer.colour = Color.Red;
+            GameObject r = new GameObject("r", this, 1);
+            r.AddComponent(new CRender("block"));
+            r.Renderer.colour = Color.Blue;
+            lsys.FromToTranslation(r, p.Pos, q.Pos);
         }
         
         public override void Unload() { }
@@ -31,6 +50,11 @@ namespace UU_GameProject
             base.Update(time);
             if (Input.GetKey(PressAction.DOWN, Keys.P)) Debug.showAtlas = true;
             else Debug.showAtlas = false;
+            GameObject p = objects.FindWithTag("p");
+            GameObject q = objects.FindWithTag("q");
+            q.Pos = Input.GetMousePosition();
+            GameObject r = objects.FindWithTag("r");
+            lsys.FromToTranslation(r, p.Pos, q.Pos);
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
