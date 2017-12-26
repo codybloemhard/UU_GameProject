@@ -75,13 +75,13 @@ namespace UU_GameProject
         {
             PTimer timer = new PTimer();
             timer.GetElapsedTime();
-            GenerateTexture(32, "_snowmanbody");
-            GenerateTexture(32, "_snowmaneye");
-            GenerateTexture(32, "_snowmanhat");
-            GenerateTexture(32, "_snowmanmouth");
-            GenerateTexture(32, "_snowmannose");
-            GenerateTexture(32, "_snowmanarmleft");
-            GenerateTexture(32, "_snowmanarmright");
+            GenerateTexture(16, "_snowmanbody");
+            GenerateTexture(16, "_snowmaneye");
+            GenerateTexture(16, "_snowmanhat");
+            GenerateTexture(16, "_snowmanmouth");
+            GenerateTexture(16, "_snowmannose");
+            GenerateTexture(16, "_snowmanarmleft");
+            GenerateTexture(16, "_snowmanarmright");
             Console.WriteLine("D: " + timer.GetElapsedTime() + " Seconds.");
         }
 

@@ -18,13 +18,18 @@ namespace UU_GameProject
             GameObject backg = new GameObject(this, 10, true);
             backg.AddComponent(new CRender("block"));
             backg.Pos = Vector2.Zero;
-            backg.Size = new Vector2(16, 9);
+            //backg.Size = new Vector2(16, 9);
             //ShowCase.CreateRow(this, "_crackedlayer", 8, 2, 1f);
             //ShowCase.CreateRow(this, "_stone", 16, 2, 1f);
             //ShowCase.CreateRow(this, "_frostydirt", 16, 2, 1f);
-            LSystem lsys = new LSystem("F");
-            lsys.AddRule('F', "F+F−F−F+F");
-            string lstring = lsys.Generate(3);
+            LSystem lsys = new LSystem("A");
+            lsys.AddRule('A', "B-A-B");
+            lsys.AddRule('B', "A+B+A");
+            lsys.AddTexture('A', "block");
+            lsys.AddTexture('B', "block");
+            string lstring = lsys.Generate(6);
+            Vector2 lsize = new Vector2(0.5f, 0.05f) * 0.3f;
+            lsys.CreateObject(this, new Vector2(1, 8.5f), lstring, 90, 60, lsize);
         }
         
         public override void Unload() { }
@@ -38,7 +43,7 @@ namespace UU_GameProject
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
                 if(old != null) foreach (GameObject o in old) o.Destroy();
-                /*Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE);
+                Catalog.CreateBlock(this, 0x0, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE);
                 Catalog.CreateBlock(this, 0x1, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.GRASS);
                 Catalog.CreateBlock(this, 0x2, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICE, LAYERTILES.NONE);
                 Catalog.CreateBlock(this, 0x3, 0, 0, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, LAYERTILES.NONE);
@@ -54,22 +59,7 @@ namespace UU_GameProject
                 Catalog.CreateBlock(this, 0xD, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.GRASS);
                 Catalog.CreateBlock(this, 0xE, 0, 0, "_test", BASETILES.SAND);
                 Catalog.CreateBlock(this, 0xF, 0, 0, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);
-                */
-                Catalog.CreateSnowman(this, 3, 2, 0, "_test", 3f);
-                /*Catalog.CreateSnowman(this, 3, 1, 0, "_test", 1f);
-                Catalog.CreateSnowman(this, 5, 1, 0, "_test", 1f);
-                Catalog.CreateSnowman(this, 7, 1, 0, "_test", 1f);*/
-
-                /*Catalog.CreateStoneShard(this, 3, 1, 0, "_test");
-                Catalog.CreateStone(this, 4, 1, 0, "_test");
-                Catalog.CreateSnowyStone(this, 5, 1, 0, "_test");
-                Catalog.CreateFrostyStone(this, 6, 1, 0, "_test");*/
-
-                /*Catalog.CreateCloud(this, 1, 3, 0, "_test");
-                Catalog.CreateCloud(this, 3, 3, 0, "_test");
-                Catalog.CreateCloud(this, 5, 3, 0, "_test");
-                Catalog.CreateCloud(this, 7, 3, 0, "_test");*/
-                //Catalog.CreateCloud(this, 2, 4, 0, "_test");
+                
             }
         }
 
