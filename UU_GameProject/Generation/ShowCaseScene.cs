@@ -20,16 +20,19 @@ namespace UU_GameProject
             backg.Pos = Vector2.Zero;
             //backg.Size = new Vector2(16, 9);
             //ShowCase.CreateRow(this, "_crackedlayer", 8, 2, 1f);
-            //ShowCase.CreateRow(this, "_stone", 16, 2, 1f);
-            //ShowCase.CreateRow(this, "_frostydirt", 16, 2, 1f);
-            LSystem lsys = new LSystem("A");
-            lsys.AddRule('A', "B-A-B");
-            lsys.AddRule('B', "A+B+A");
-            lsys.AddTexture('A', "block");
-            lsys.AddTexture('B', "block");
-            string lstring = lsys.Generate(6);
+            LSystem lsys = new LSystem("X");
+            lsys.AddRule('X', "F[-X][X]F[-X]+FX");
+            lsys.AddRule('F', "FF");
             Vector2 lsize = new Vector2(0.5f, 0.05f) * 0.3f;
-            lsys.CreateObject(this, new Vector2(1, 8.5f), lstring, 90, 60, lsize);
+            TurtleGraphics turtle = new TurtleGraphics(this);
+            turtle.Init(new Vector2(4f, 9f), 180, lsize);
+            turtle.AddDrawToken('F', "block");
+            turtle.AddRotationToken('-', -25f);
+            turtle.AddRotationToken('+', +25f);
+            turtle.AddPushPopToken('[', true);
+            turtle.AddPushPopToken(']', false);
+            string lstring = lsys.Generate(4);
+            turtle.CreateObject(lstring);
         }
         
         public override void Unload() { }
@@ -58,8 +61,7 @@ namespace UU_GameProject
                 Catalog.CreateBlock(this, 0xC, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.CRACKS);
                 Catalog.CreateBlock(this, 0xD, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.GRASS);
                 Catalog.CreateBlock(this, 0xE, 0, 0, "_test", BASETILES.SAND);
-                Catalog.CreateBlock(this, 0xF, 0, 0, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);
-                
+                Catalog.CreateBlock(this, 0xF, 0, 0, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);              
             }
         }
 
