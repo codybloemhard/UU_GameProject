@@ -57,6 +57,11 @@ namespace UU_GameProject
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
             anim.AddAnimation("walking", "playerWalking");
+            anim.AddAnimation("crouching", "playerCrouching");
+            anim.AddAnimation("crawling", "playerCrawling");
+            anim.AddAnimation("sliding", "playerSliding");
+            anim.AddAnimation("airborn", "playerAirborn");
+            anim.AddAnimation("melee", "playerMelee");
             anim.PlayAnimation("walking", 5);
             player.AddComponent(anim);
             player.AddComponent(new CPlayerMovement(3.0f));

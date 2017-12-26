@@ -13,7 +13,7 @@ namespace UU_GameProject
         private float intendedDir;
         private float jumpPower = 13f;
         private float acceleration = 50f, vertVelo = 0f;
-        private float playerAccel = .1f;
+        private float playerAccel = 0.02f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
         private float dashSlowdownDelayTime = 0;
@@ -46,6 +46,18 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
+            //animations
+            if (isCrawling)
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("crawling", 2);
+            else if (isSliding)
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("sliding", 2);
+            else if (isCrouching)
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("crouching", 2);
+            else if (!grounded)
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("airborn", 2);
+            else if (fallPanic)
+                (GO.Renderer as CAnimatedSprite).PlayAnimation("fallPanic", 2);
+            else (GO.Renderer as CAnimatedSprite).PlayAnimation("walking", 2);
 
             //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
@@ -61,9 +73,9 @@ namespace UU_GameProject
 
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
-                velocity -= new Vector2(Math.Min(0.2f, velocity.X), 0);
+                velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
-                velocity -= new Vector2(Math.Max(-0.2f, velocity.X), 0);
+                velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
             if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
             if (velocity != Vector2.Zero)
             {
@@ -100,12 +112,12 @@ namespace UU_GameProject
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - 0.03f);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - playerAccel * 0.2f);
                 isSliding = true;
             } //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + 0.03f);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + playerAccel * 0.2f);
                 isSliding = true;
             } //not sliding
             else isSliding = false;
@@ -169,10 +181,7 @@ namespace UU_GameProject
             else hitTop = hitTopLeft;
 
             if (hitBottom.hit && hitBottom.distance < 0.001f)
-            {
                 grounded = true;
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("fallPanic", 2);
-            }
 
             else grounded = false;
 
