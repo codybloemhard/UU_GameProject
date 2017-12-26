@@ -264,7 +264,7 @@ namespace UU_GameProject
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f);
+            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
             if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
         }
@@ -272,7 +272,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "killer")
-                Reset();
+                GO.GetComponent<CHealthPool>().ChangeHealth(20);
         }
 
         public Vector2 Velocity()
@@ -282,7 +282,7 @@ namespace UU_GameProject
 
         public void Reset()
         {
-            GO.Pos = new Vector2(1, 1);
+            GO.Pos = new Vector2(1, 7);
             velocity = new Vector2(0, 0);
             vertVelo = 0;
         }

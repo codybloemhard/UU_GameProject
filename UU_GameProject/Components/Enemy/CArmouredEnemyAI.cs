@@ -54,18 +54,6 @@ namespace UU_GameProject
             Console.WriteLine(1);*/
         }
 
-        //Damage handling when being hit by a bullet
-        public override void OnCollision(GameObject other)
-        {
-            if (other.tag == "bullet")
-            {
-                CHealthPool health = GO.GetComponent<CHealthPool>();
-                if (-dir.X != other.GetComponent<CBulletMovement>().direction().X)
-                health.ChangeHealth(1);
-                other.active = false;
-            }
-        }
-
         private void IdleBehaviour()
         {
             //Passive movement behaviour, patrolling a platform.
@@ -133,7 +121,7 @@ namespace UU_GameProject
 
                 if (length < reach - (0.1f * reach) && wait <= 0 && dir.X < 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.5f);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.5f, GO.tag);
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }
@@ -150,7 +138,7 @@ namespace UU_GameProject
 
                 if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0 && dir.X > 0)
                 {
-                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.0f);
+                    GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.0f, GO.tag);
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }

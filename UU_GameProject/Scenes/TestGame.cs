@@ -76,7 +76,7 @@ namespace UU_GameProject
             GameObject enemy = new GameObject("Nenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CNormalEnemyAI(2f));
-            enemy.AddComponent(new CHealthPool(4, enemy));
+            enemy.AddComponent(new CHealthPool(50, enemy));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.Pos = new Vector2(12.5f, 1.99f);
@@ -84,7 +84,7 @@ namespace UU_GameProject
             GameObject enemy1 = new GameObject("Renemy", this, 2);
             enemy1.AddComponent(new CRender("player"));
             enemy1.AddComponent(new CRangedEnemyAI(2.5f));
-            enemy1.AddComponent(new CHealthPool(4, enemy1));
+            enemy1.AddComponent(new CHealthPool(25, enemy1));
             enemy1.AddComponent(new CAABB());
             enemy1.AddComponent(new CShoot());
             enemy1.Pos = new Vector2(9.5f, 4.0f);
@@ -92,7 +92,7 @@ namespace UU_GameProject
             GameObject enemy2 = new GameObject("Aenemy", this, 2);
             enemy2.AddComponent(new CRender("player"));
             enemy2.AddComponent(new CArmouredEnemyAI(1.75f));
-            enemy2.AddComponent(new CHealthPool(4, enemy2));
+            enemy2.AddComponent(new CHealthPool(100, enemy2));
             enemy2.AddComponent(new CAABB());
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.Pos = new Vector2(2.5f, 3.0f);
