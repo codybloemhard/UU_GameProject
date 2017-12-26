@@ -47,21 +47,34 @@ namespace UU_GameProject
             return builder.ToString();
         }
 
-        /*public GameObject CreateObject(Vector2 feetPos, string lstring)
+        /*public GameObject CreateObject(GameState context, Vector2 feetPos, string lstring)
         {
+            GameObject root = _obj("lsys", context, 0, "block");
+            root.Pos = feetPos;
+            root.Size = new Vector2();
+            for (int i = 0; i < lstring.Length; i++)
+            {
 
+            }
         }*/
 
-        public void FromToTranslation(GameObject go, Vector2 p, Vector2 q)
+        private GameObject _obj(string t, GameState c, uint l, string tex)
+        {
+            GameObject go = new GameObject(t, c, l);
+            go.AddComponent(new CRender(tex));
+            return go;
+        }
+
+        public void FromToTranslation(GameObject go, Vector2 p, Vector2 q, float width)
         {
             if (go.Renderer == null) return;
             Vector2 diff = p - q;
             float len = diff.Length();
             float rot = (float)Math.Atan2(diff.Y, diff.X) * MathH.RAD_TO_DEG;
             go.Renderer.SetRotation(rot);
-            go.Size = new Vector2(len, 0.2f);
+            go.Size = new Vector2(len, width);
             Vector2 orig = go.Size / 2f;
-            go.Pos = p + ((q - p) / 2) - orig;
+            go.Pos = p + ((q - p) / 2f) - orig;
         }
     }
 }
