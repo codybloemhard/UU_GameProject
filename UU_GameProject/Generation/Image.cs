@@ -30,6 +30,15 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField FiniteNoise(uint w, uint h, uint steps, float a = 0f, float b = 1f)
+        {
+            FloatField f = new FloatField(w, h);
+            for (int x = 0; x < f.Width; x++)
+                for (int y = 0; y < f.Height; y++)
+                    f.array[f.To1D(x, y)] = (float)((int)(RandomRange(a, b) * steps)) / steps;
+            return f;
+        }
+
         public static FloatField Cut(uint w, uint h, bool left, Vector2 p, Vector2 q)
         {
             float init = left ? 0 : 1;

@@ -52,6 +52,8 @@ namespace UU_GameProject
                 case "_dirt": return GenDirt();
                 case "_ice": return GenIce();
                 case "_coursestone": return GenGenCourseStone();
+                case "_sand": return GenSand();
+                case "_sandstone": return GenSandStone();
                 default: return null;
             }
         }
@@ -469,6 +471,29 @@ namespace UU_GameProject
             Image.ThresholdCut(fGrain, 0.9f, 1f, 1f, 0f);
             Colour cDark = new Colour(0.8f, 0.9f, 0.9f);
             Colour cLight = new Colour(0.3f, 0.4f, 0.5f);
+            ColourField cFinal = new ColourField(w, h);
+            cFinal.FloatsToColours(fGrain, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenSand(uint w = SMedium, uint h = SMedium)
+        {
+            FloatField fGrain = Image.FiniteNoise(w, h, 5, 0.3f, 1f);
+            FloatField fDetail = Image.Noise(w, h, 0f, 1f);
+            Image.ThresholdCut(fDetail, 0f, 0.02f, 1f, 0f);
+            FloatField fResult = Image.Union(fDetail, fGrain);
+            Colour cDark = new Colour(0.4f, 0.3f, 0.1f);
+            Colour cLight = new Colour(0.7f, 0.6f, 0.1f);
+            ColourField cFinal = new ColourField(w, h);
+            cFinal.FloatsToColours(fResult, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenSandStone(uint w = SMedium, uint h = SMedium)
+        {
+            FloatField fGrain = Image.FiniteNoise(w, h, 10, 0.6f, 1f);
+            Colour cDark = new Colour(0.4f, 0.3f, 0.1f);
+            Colour cLight = new Colour(0.7f, 0.6f, 0.1f);
             ColourField cFinal = new ColourField(w, h);
             cFinal.FloatsToColours(fGrain, cDark, cLight);
             return cFinal;
