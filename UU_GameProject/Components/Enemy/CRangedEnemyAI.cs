@@ -42,17 +42,6 @@ namespace UU_GameProject
             fsm.Update();
         }
 
-        //Damage handling when being hit by a bullet
-        public override void OnCollision(GameObject other)
-        {
-            if (other.tag == "bullet")
-            {
-                CHealthPool health = GO.GetComponent<CHealthPool>();
-                health.ChangeHealth(1);
-                other.active = false;
-            }
-        }
-
         private void IdleBehaviour()
         {
             //Passive movement behaviour, patrolling a platform.

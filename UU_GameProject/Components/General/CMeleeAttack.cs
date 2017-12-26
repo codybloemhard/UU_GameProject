@@ -15,16 +15,16 @@ namespace UU_GameProject
             base.Update(time);
         }
 
-        public void Melee(Vector2 dir, Vector2 dimensions, float duration)
+        public void Melee(Vector2 dir, Vector2 dimensions, float duration, string caller)
         {
-            GameObject meleeDamageArea = new GameObject("meleeDamageArea_" + GO.tag, GO.Context, 0);
+            GameObject meleeDamageArea = new GameObject("meleeDamageArea" + GO.tag, GO.Context, 0);
             meleeDamageArea.AddComponent(new CRender("block"));
-            meleeDamageArea.AddComponent(new CDamageArea(duration));
+            meleeDamageArea.AddComponent(new CDamageArea(dir, duration, caller));
             meleeDamageArea.AddComponent(new CAABB());
             if (dir.X > 0)
-                meleeDamageArea.Pos = GO.Pos + GO.Size / 2f - dimensions / 2f + new Vector2(GO.Size.X / 2f + dimensions.X, 0);
+                meleeDamageArea.Pos = GO.Pos + new Vector2(dimensions.X / 2f, 0);
             else
-                meleeDamageArea.Pos = GO.Pos + GO.Size / 2f - dimensions / 2f - new Vector2(GO.Size.X / 2f + dimensions.X, 0);
+                meleeDamageArea.Pos = GO.Pos + new Vector2(-dimensions.X / 2f, 0);
             meleeDamageArea.Size = dimensions;
         }
     }
