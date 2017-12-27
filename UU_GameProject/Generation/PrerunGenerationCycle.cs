@@ -64,6 +64,7 @@ namespace UU_GameProject
             PTimer timer = new PTimer();
             timer.GetElapsedTime();
             GenerateTexture(16, "_bush");
+            GenerateTexture(32, "_branch");
             GenerateTexture(16, "_stone");
             GenerateTexture(16, "_stoneshard");
             GenerateTexture(8, "_frostystone");

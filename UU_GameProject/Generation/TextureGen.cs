@@ -37,6 +37,7 @@ namespace UU_GameProject
                 case "_bushleaf": return GenBushLeaf();
                 case "_berry": return GenBerry();
                 case "_bush": return GenBush();
+                case "_branch": return GenBranch();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -317,6 +318,20 @@ namespace UU_GameProject
                 bush.DrawOver(smallBerry, x, y);
             }
             return bush;
+        }
+
+        public static ColourField GenBranch()
+        {
+            const uint size = 32;
+            FloatField fMask = Image.Rectangle(size, size, 0.25f, 0f, 0.5f, 1f);
+            FloatField fStart = Image.Circle(size, size, 1f, 1f, 1f, 0f, 0.25f, 0.5f);
+            FloatField fEnd = Image.Circle(size, size, 1f, 1f, 1f, 0f, 0.75f, 0.5f);
+            fMask = Image.Union(fMask, fStart);
+            fMask = Image.Union(fMask, fEnd);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.2f, 0.1f, 0.1f);
+            cFinal.FloatsToColours(fMask, cDark, cDark);
+            return cFinal;
         }
         //end Plants
         //start Snowman
