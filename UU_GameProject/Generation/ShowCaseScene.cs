@@ -20,7 +20,9 @@ namespace UU_GameProject
             backg.Pos = Vector2.Zero;
             //backg.Size = new Vector2(16, 9);
             //ShowCase.CreateRow(this, "_branch", 8, 2, 1f);
-            Catalog.CreateTree(this, new Vector2(4, 9), new Vector2(0.1f), 0, "tree");
+            Catalog.CreateTree0(this, new Vector2(4, 9), new Vector2(0.2f), 0, "tree");
+            Catalog.CreateTree1(this, new Vector2(8, 9), new Vector2(0.4f), 0, "tree");
+            Catalog.CreateTree2(this, new Vector2(13, 9), new Vector2(0.4f), 0, "tree");
         }
         
         public override void Unload() { }
@@ -28,8 +30,16 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            if (Input.GetKey(PressAction.DOWN, Keys.P)) Debug.showAtlas = true;
-            else Debug.showAtlas = false;
+            if (Input.GetKey(PressAction.DOWN, Keys.P))
+            {
+                Debug.showAtlas = true;
+                Debug.printData = true;
+            }
+            else
+            {
+                Debug.showAtlas = false;
+                Debug.printData = false;
+            }
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 GameObject[] old = objects.FindAllWithTag("_test");

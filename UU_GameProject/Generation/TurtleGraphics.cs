@@ -114,6 +114,7 @@ namespace UU_GameProject
         public GameObject CreateObject(string lstring, uint layer, string tag)
         {
             GameObject root = null;
+            bool rootDone = false;
             for (int i = 0; i < lstring.Length; i++)
             {
                 char token = lstring[i];
@@ -155,7 +156,11 @@ namespace UU_GameProject
                     Vector2 next = state.pos + (dir * state.sizes[token].X * 1f * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     state.pos = next;
-                    if (i == 0) root = go;
+                    if (!rootDone)
+                    {
+                        root = go;
+                        rootDone = true;
+                    }
                 }
             }
             return root;
