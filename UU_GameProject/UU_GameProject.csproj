@@ -42,6 +42,7 @@
     <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Components\General\CLevelEditorObject.cs" />
     <Compile Include="Generation\LSystem.cs" />
+    <Compile Include="Generation\Misc.cs" />
     <Compile Include="Generation\TurtleGraphics.cs" />
     <Compile Include="Scenes\Select.cs" />
     <Compile Include="Scenes\LevelEditor.cs" />

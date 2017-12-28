@@ -21,10 +21,23 @@ namespace UU_GameProject
         }
     }
 
+    public struct ResizeEvent
+    {
+        public Vector2 resize;
+        public string sensitives;
+
+        public ResizeEvent(Vector2 resize, string sensitives)
+        {
+            this.resize = resize;
+            this.sensitives = sensitives;
+        }
+    }
+
     public struct TurtleState
     {
-        public Vector2 pos, size;
+        public Vector2 pos;
         public float angle;
+        public Dictionary<char, Vector2> sizes;
     }
 
     public class TurtleGraphics
@@ -35,9 +48,10 @@ namespace UU_GameProject
         private Dictionary<char, string> draw;
         private Dictionary<char, RotationEvent> rotations;
         private Dictionary<char, bool> pushpop;
-        private Dictionary<char, Vector2> resize;
+        private Dictionary<char, ResizeEvent> resize;
+        private Dictionary<char, Vector2> sizes;
         private Stack<TurtleState> states;
-
+        
         public TurtleGraphics(GameState context)
         {
             state = new TurtleState();
@@ -45,14 +59,16 @@ namespace UU_GameProject
             draw = new Dictionary<char, string>();
             rotations = new Dictionary<char, RotationEvent>();
             pushpop = new Dictionary<char, bool>();
-            resize = new Dictionary<char, Vector2>();
+            resize = new Dictionary<char, ResizeEvent>();
+            sizes = new Dictionary<char, Vector2>();
             states = new Stack<TurtleState>();
         }
 
-        public void AddDrawToken(char token, string texture)
+        public void AddDrawToken(char token, string texture, Vector2 size)
         {
             if (draw.ContainsKey(token)) return;
             draw.Add(token, texture);
+            sizes.Add(token, size);
         }
 
         public void AddRotationToken(char token, float min, float max)
@@ -67,18 +83,18 @@ namespace UU_GameProject
             pushpop.Add(token, pushOrPop);
         }
 
-        public void AddResizeToken(char token, Vector2 change)
+        public void AddResizeToken(char token, Vector2 change, string sensitives)
         {
             if (resize.ContainsKey(token)) return;
-            resize.Add(token, change);
+            resize.Add(token, new ResizeEvent(change, sensitives));
         }
 
-        public void Init(Vector2 startpos, float startangle, Vector2 lineSize)
+        public void Init(Vector2 startpos, float startangle)
         {
             state.pos = startpos;
             state.angle = startangle;
             SetDir();
-            state.size = lineSize;
+            state.sizes = Misc.Copy(sizes);
         }
         
         public GameObject CreateObject(string lstring)
@@ -89,7 +105,12 @@ namespace UU_GameProject
                 char token = lstring[i];
                 if (pushpop.ContainsKey(token))
                 {
-                    if (pushpop[token]) states.Push(state);
+                    if (pushpop[token])
+                    {
+                        TurtleState s = state;
+                        s.sizes = Misc.Copy(state.sizes);
+                        states.Push(s);
+                    }
                     else
                     {
                         if (states.Count == 0) continue;
@@ -106,21 +127,25 @@ namespace UU_GameProject
                 }
                 if (resize.ContainsKey(token))
                 {
-                    state.size *= resize[token];
-                    continue;
+                    for(int j = 0; j < resize[token].sensitives.Length; j++)
+                    {
+                        char elem = resize[token].sensitives[j];
+                        if (!draw.ContainsKey(elem)) continue;
+                        state.sizes[elem] *= resize[token].resize;
+                    }
                 }
                 if (draw.ContainsKey(token))
                 {
                     GameObject go = _obj("_child", context, 0, draw[token]);
-                    Vector2 next = state.pos + (dir * state.size.X * 0.8f);
-                    FromToTranslation(go, state.pos, next, state.size.Y);
+                    Vector2 next = state.pos + (dir * state.sizes[token].X * 0.8f);
+                    FromToTranslation(go, state.pos, next, state.sizes[token].Y);
                     state.pos = next;
                     if (i == 0) root = go;
-                }              
+                }         
             }
             return root;
         }
-
+        
         private void SetDir()
         {
             dir = new Vector2((float)Math.Sin(state.angle * MathH.DEG_TO_RAD), (float)Math.Cos(state.angle * MathH.DEG_TO_RAD));
