@@ -5,11 +5,11 @@ using Core;
 
 namespace UU_GameProject
 {
-    public struct RotationEvent
+    public struct RotationAct
     {
         public float min, max;
 
-        public RotationEvent(float min, float max)
+        public RotationAct(float min, float max)
         {
             this.min = min;
             this.max = max;
@@ -21,15 +21,27 @@ namespace UU_GameProject
         }
     }
 
-    public struct ResizeEvent
+    public struct ResizeAct
     {
         public Vector2 resize;
         public string sensitives;
 
-        public ResizeEvent(Vector2 resize, string sensitives)
+        public ResizeAct(Vector2 resize, string sensitives)
         {
             this.resize = resize;
             this.sensitives = sensitives;
+        }
+    }
+
+    public struct DrawAct
+    {
+        public string texture;
+        public uint layerAdd;
+
+        public DrawAct(string texture, uint layerAdd)
+        {
+            this.texture = texture;
+            this.layerAdd = layerAdd;
         }
     }
 
@@ -45,10 +57,11 @@ namespace UU_GameProject
         private Vector2 dir;
         private TurtleState state;
         private GameState context;
-        private Dictionary<char, string> draw;
-        private Dictionary<char, RotationEvent> rotations;
+        private Vector2 size;
+        private Dictionary<char, DrawAct> draw;
+        private Dictionary<char, RotationAct> rotations;
         private Dictionary<char, bool> pushpop;
-        private Dictionary<char, ResizeEvent> resize;
+        private Dictionary<char, ResizeAct> resize;
         private Dictionary<char, Vector2> sizes;
         private Stack<TurtleState> states;
         
@@ -56,25 +69,25 @@ namespace UU_GameProject
         {
             state = new TurtleState();
             this.context = context;
-            draw = new Dictionary<char, string>();
-            rotations = new Dictionary<char, RotationEvent>();
+            draw = new Dictionary<char, DrawAct>();
+            rotations = new Dictionary<char, RotationAct>();
             pushpop = new Dictionary<char, bool>();
-            resize = new Dictionary<char, ResizeEvent>();
+            resize = new Dictionary<char, ResizeAct>();
             sizes = new Dictionary<char, Vector2>();
             states = new Stack<TurtleState>();
         }
 
-        public void AddDrawToken(char token, string texture, Vector2 size)
+        public void AddDrawToken(char token, string texture, uint layerAdd, Vector2 size)
         {
             if (draw.ContainsKey(token)) return;
-            draw.Add(token, texture);
+            draw.Add(token, new DrawAct(texture, layerAdd));
             sizes.Add(token, size);
         }
 
         public void AddRotationToken(char token, float min, float max)
         {
             if (rotations.ContainsKey(token)) return;
-            rotations.Add(token, new RotationEvent(min, max));
+            rotations.Add(token, new RotationAct(min, max));
         }
 
         public void AddPushPopToken(char token, bool pushOrPop)
@@ -86,18 +99,19 @@ namespace UU_GameProject
         public void AddResizeToken(char token, Vector2 change, string sensitives)
         {
             if (resize.ContainsKey(token)) return;
-            resize.Add(token, new ResizeEvent(change, sensitives));
+            resize.Add(token, new ResizeAct(change, sensitives));
         }
 
-        public void Init(Vector2 startpos, float startangle)
+        public void Init(Vector2 startpos, float startangle, Vector2 size)
         {
             state.pos = startpos;
             state.angle = startangle;
             SetDir();
             state.sizes = Misc.Copy(sizes);
+            this.size = size;
         }
         
-        public GameObject CreateObject(string lstring)
+        public GameObject CreateObject(string lstring, uint layer, string tag)
         {
             GameObject root = null;
             for (int i = 0; i < lstring.Length; i++)
@@ -136,12 +150,13 @@ namespace UU_GameProject
                 }
                 if (draw.ContainsKey(token))
                 {
-                    GameObject go = _obj("_child", context, 0, draw[token]);
-                    Vector2 next = state.pos + (dir * state.sizes[token].X * 0.8f);
-                    FromToTranslation(go, state.pos, next, state.sizes[token].Y);
+                    DrawAct da = draw[token];
+                    GameObject go = _obj("tag", context, layer + da.layerAdd, da.texture);
+                    Vector2 next = state.pos + (dir * state.sizes[token].X * 1f * size.X);
+                    FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     state.pos = next;
                     if (i == 0) root = go;
-                }         
+                }
             }
             return root;
         }

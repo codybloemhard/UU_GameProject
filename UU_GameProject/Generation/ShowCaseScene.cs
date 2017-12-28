@@ -18,23 +18,9 @@ namespace UU_GameProject
             GameObject backg = new GameObject(this, 10, true);
             backg.AddComponent(new CRender("block"));
             backg.Pos = Vector2.Zero;
-            backg.Size = new Vector2(16, 9);
+            //backg.Size = new Vector2(16, 9);
             //ShowCase.CreateRow(this, "_branch", 8, 2, 1f);
-            LSystem lsys = new LSystem("X");
-            lsys.AddRule('X', "F[***-X][***X]F[***-X]+F*X");
-            lsys.AddRule('F', "FF", 2);
-            lsys.AddRule('F', "F", 1);
-            Vector2 branchSize = new Vector2(0.5f, 0.4f) * 0.5f;
-            TurtleGraphics turtle = new TurtleGraphics(this);
-            turtle.AddDrawToken('F', "_branch0", branchSize);
-            turtle.AddRotationToken('-', -25f, -35f);
-            turtle.AddRotationToken('+', +25f, 35f);
-            turtle.AddPushPopToken('[', true);
-            turtle.AddPushPopToken(']', false);
-            turtle.AddResizeToken('*', new Vector2(0.999f, 0.8f), "F");
-            turtle.Init(new Vector2(4f, 9f), 180);
-            string lstring = lsys.Generate(4);
-            turtle.CreateObject(lstring);
+            Catalog.CreateTree(this, new Vector2(4, 9), new Vector2(0.1f), 0, "tree");
         }
         
         public override void Unload() { }
