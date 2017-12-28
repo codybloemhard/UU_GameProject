@@ -260,6 +260,14 @@ namespace UU_GameProject
                 rightSideAgainstWall = true;
             else rightSideAgainstWall = false;
 
+            //fireball
+            //fires toward the cursor
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
+            {
+                GO.GetComponent<Components.General.CMagicness>().Fireball(new Vector2(.2f, .2f), velocity);
+            }
+
+
             //shoot
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }

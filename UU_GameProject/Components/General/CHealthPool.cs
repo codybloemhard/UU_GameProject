@@ -30,7 +30,9 @@ namespace UU_GameProject
                 ChangeHealth(bulletHitDamage);
                 other.Destroy();
             }
-            if (other.tag.Contains("meleeDamageArea"))
+            //pls halp, keep getting errors
+            //if (GO.GetComponent<Components.General.CFaction.ClashingFactions(base.GO, other)> == true)
+                if (other.tag.Contains("meleeDamageArea"))
                 ChangeHealth(meleeHitDamage);
         }
 

@@ -39,8 +39,11 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\General\CFireballMovement.cs" />
     <Compile Include="Components\General\CDamageArea.cs" />
+    <Compile Include="Components\General\CFaction.cs" />
     <Compile Include="Components\General\CLevelEditorObject.cs" />
+    <Compile Include="Components\General\CMagicness.cs" />
     <Compile Include="Generation\LSystem.cs" />
     <Compile Include="Scenes\Select.cs" />
     <Compile Include="Scenes\LevelEditor.cs" />
