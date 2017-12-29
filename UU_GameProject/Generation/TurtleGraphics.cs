@@ -8,16 +8,20 @@ namespace UU_GameProject
     public struct RotationAct
     {
         public float min, max;
+        public bool relative;
 
-        public RotationAct(float min, float max)
+        public RotationAct(float min, float max, bool relative)
         {
             this.min = min;
             this.max = max;
+            this.relative = relative;
         }
 
-        public float GetAngle()
+        public float GetAngle(float angle)
         {
-            return Image.Lerp(min, max, (float)MathH.random.NextDouble());
+            float change = Image.Lerp(min, max, (float)MathH.random.NextDouble());
+            if (relative) return angle + change;
+            else return change;
         }
     }
 
@@ -84,10 +88,10 @@ namespace UU_GameProject
             sizes.Add(token, size);
         }
 
-        public void AddRotationToken(char token, float min, float max)
+        public void AddRotationToken(char token, float min, float max, bool relative = true)
         {
             if (rotations.ContainsKey(token)) return;
-            rotations.Add(token, new RotationAct(min, max));
+            rotations.Add(token, new RotationAct(min, max, relative));
         }
 
         public void AddPushPopToken(char token, bool pushOrPop)
@@ -136,7 +140,7 @@ namespace UU_GameProject
                 }
                 if (rotations.ContainsKey(token))
                 {
-                    state.angle += rotations[token].GetAngle(); 
+                    state.angle = rotations[token].GetAngle(state.angle); 
                     SetDir();
                     continue;
                 }
