@@ -76,7 +76,7 @@ namespace UU_GameProject
                 velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
                 velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
+            if (GO.Pos.Y > 9) GO.GetComponent<CHealthPool>().ChangeHealth(1000);
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
