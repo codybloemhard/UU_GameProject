@@ -25,6 +25,9 @@ namespace UU_GameProject
             Catalog.CreateTree2(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree3(this, new Vector2(11, 9), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree4(this, new Vector2(14, 9), new Vector2(0.2f), 0, "tree");
+            Catalog.CreateTree5(this, new Vector2(2, 4), new Vector2(0.2f), 0, "tree");
+            Catalog.CreateTree6(this, new Vector2(5, 4), new Vector2(0.2f), 0, "tree");
+            Catalog.CreateTree7(this, new Vector2(8, 4), new Vector2(0.2f), 0, "tree");
         }
         
         public override void Unload() { }
