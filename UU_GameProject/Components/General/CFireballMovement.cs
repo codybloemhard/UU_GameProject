@@ -8,28 +8,16 @@ namespace UU_GameProject
     public class CFireballMovement : Component
     {
         private Vector2 playerSpeed;
-        private float angle;
         private Vector2 dir;
         private Vector2 fireballVelocity;
         private float fireballTotalSpeed = 6;
-        private int xDir;
-        private int yDir;
 
         public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir) : base()
         {
             this.dir = dir;
             this.playerSpeed = playerSpeed;
-            angle = path.Y / path.X;
-            if (path.X < 0)
-                xDir = -1;
-            else xDir = 1;
-            if (path.Y <= 0)
-                yDir = -1;
-            else yDir = 1;
-            fireballVelocity.X = (float)Math.Sqrt((fireballTotalSpeed * fireballTotalSpeed) / (1 + angle * angle));
-            fireballVelocity.Y = fireballTotalSpeed - fireballVelocity.X;
-            fireballVelocity.X *= xDir;
-            fireballVelocity.Y *= yDir;
+            fireballVelocity.X = (fireballTotalSpeed * (path.X / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.X;
+            fireballVelocity.Y = (fireballTotalSpeed * (path.Y / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.Y;
         }
 
         public override void Init()
