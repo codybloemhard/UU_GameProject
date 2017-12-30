@@ -69,7 +69,9 @@ namespace UU_GameProject
             GenerateTexture(1, "_woodlight");
             GenerateTexture(1, "_woodburned");
             GenerateTexture(1, "_woodpalm");
-            GenerateTexture(8, "_greenleaf");
+            GenerateTexture(8, "_greenleafs");
+            GenerateTexture(8, "_blossom");
+            GenerateTexture(8, "_leaf");
             GenerateTexture(16, "_stone");
             GenerateTexture(16, "_stoneshard");
             GenerateTexture(8, "_frostystone");

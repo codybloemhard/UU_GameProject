@@ -62,6 +62,22 @@ namespace UU_GameProject
             return f;
         }
 
+        public static FloatField TriangleFan(uint w, uint h, Vector2 middle, Vector2[] points)
+        {
+            FloatField f = new FloatField(w, h);
+            for(int x = 0; x < w; x++)
+                for(int y = 0; y < h; y++)
+                    for(int i = 0; i < points.Length; i++)
+                    {
+                        Vector2 q;
+                        if (i + 1 >= points.Length) q = points[0];
+                        else q = points[i + 1];
+                        if (!PointInTriangle(new Vector2(x/w, y/h), middle, points[i], q)) continue;
+                        f.array[f.To1D(x, y)] = 1f;
+                    }
+            return f;
+        }
+
         public static FloatField VoronoiCell(uint w, uint h, uint p, float size, float diff)
         {
             Vector2[] points = new Vector2[p];
@@ -506,6 +522,23 @@ namespace UU_GameProject
         public static float RandomDeviation(float x, float t)
         {
             return Lerp(x - t, x + t, (float)MathH.random.NextDouble());
+        }
+
+        public static float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
+        {
+            return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
+        }
+        //source:
+        //https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
+        public static bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3)
+        {
+            bool b1, b2, b3;
+
+            b1 = Sign(pt, v1, v2) < 0.0f;
+            b2 = Sign(pt, v2, v3) < 0.0f;
+            b3 = Sign(pt, v3, v1) < 0.0f;
+
+            return ((b1 == b2) && (b2 == b3));
         }
     }
 }

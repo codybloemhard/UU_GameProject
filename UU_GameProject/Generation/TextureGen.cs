@@ -42,7 +42,9 @@ namespace UU_GameProject
                 case "_woodlight": return GenWoodLight();
                 case "_woodburned": return GenWoodBurned();
                 case "_woodpalm": return GenWoodPalm();
-                case "_greenleaf": return GenGreenLeaf();
+                case "_greenleafs": return GenGreenLeafs();
+                case "_blossom": return GenBlossom();
+                case "_leaf": return GenLeaf();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -403,17 +405,45 @@ namespace UU_GameProject
             cFinal.FloatsToColours(fMask, cDark, cLight);
             return cFinal;
         }
+        
+        public static ColourField GenGreenLeafs()
+        {
+            const uint size = 64;
+            FloatField fGrain = Image.Perlin(size, size, 1, 5f*2, 1f, 1f);
+            Image.ThresholdCut(fGrain, 0.45f, 0.6f, 0f, 0f);
+            FloatField fMask = Image.Circle(size, size, 1f, 1f, 1, 1f, 1f, 0.5f);
+            fGrain = Image.Intersection(fGrain, fMask);
+            Colour cDark = new Colour(0.45f, 1f, 0.3f) * 0.1f;
+            Colour cLight = new Colour(0.6f, 1f, 0.6f) * 1f;
+            ColourField cFinal = new ColourField(size, size);
+            cFinal.FloatsToColours(fGrain, cDark, cLight);
+            return cFinal;
+        }
 
-        public static ColourField GenGreenLeaf()
+        public static ColourField GenBlossom()
+        {
+            const uint size = 8;
+            FloatField fMask = Image.VoronoiCell(size, size, 6, 0.8f, 0.3f);
+            FloatField fGrain = Image.Noise(size, size, 0.3f, 1f);
+            fMask = Image.Intersection(fGrain, fMask);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.2f, 0.1f, 0.3f);
+            Colour cLight = new Colour(8f, 0.4f, 0.7f);
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenLeaf()
         {
             const uint size = 32;
-            FloatField fMask = Image.Perlin(size, size, 1, 5f, 1f, 1f);
-            Image.ThresholdCut(fMask, 0.45f, 0.6f, 0f, 0f);
-            FloatField fFade = Image.Fade(size, size, true, 0.5f, 0f);
-            Image.Multiply(fMask, fFade);
-            Colour cDark = new Colour(0.45f, 1f, 0.3f);
-            Colour cLight = new Colour(0.6f, 1f, 0.6f);
+            Vector2 mid = new Vector2(0.5f);
+            Vector2[] points = new Vector2[] { new Vector2(0.1f, 0.1f),
+            new Vector2(0.4f, 0.2f), new Vector2(0.1f, 0.5f), new Vector2(0.5f, 0.9f),
+            new Vector2(0.9f, 0.5f)};
+            FloatField fMask = Image.TriangleFan(size, size, mid, points);
             ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(1f);
+            Colour cLight = new Colour(1f);
             cFinal.FloatsToColours(fMask, cDark, cLight);
             return cFinal;
         }
