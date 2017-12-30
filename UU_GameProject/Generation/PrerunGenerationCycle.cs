@@ -58,13 +58,18 @@ namespace UU_GameProject
             GenerateTexture(8, "_cloud");
             Console.WriteLine("B: " + timer.GetElapsedTime() + " Seconds.");
         }
-
+        
         private void C()
         {
             PTimer timer = new PTimer();
             timer.GetElapsedTime();
             GenerateTexture(16, "_bush");
-            GenerateTexture(32, "_branch");
+            GenerateTexture(1, "_woodmedium");
+            GenerateTexture(1, "_wooddark");
+            GenerateTexture(1, "_woodlight");
+            GenerateTexture(1, "_woodburned");
+            GenerateTexture(1, "_woodpalm");
+            GenerateTexture(8, "_greenleaf");
             GenerateTexture(16, "_stone");
             GenerateTexture(16, "_stoneshard");
             GenerateTexture(8, "_frostystone");

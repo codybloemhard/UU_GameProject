@@ -37,7 +37,12 @@ namespace UU_GameProject
                 case "_bushleaf": return GenBushLeaf();
                 case "_berry": return GenBerry();
                 case "_bush": return GenBush();
-                case "_branch": return GenBranch();
+                case "_woodmedium": return GenWoodMedium();
+                case "_wooddark": return GenWoodDark();
+                case "_woodlight": return GenWoodLight();
+                case "_woodburned": return GenWoodBurned();
+                case "_woodpalm": return GenWoodPalm();
+                case "_greenleaf": return GenGreenLeaf();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -320,17 +325,96 @@ namespace UU_GameProject
             return bush;
         }
 
-        public static ColourField GenBranch()
+        public static ColourField GenWoodMedium()
         {
-            const uint size = 32;
-            FloatField fMask = Image.Rectangle(size, size, 0.25f, 0f, 0.5f, 1f);
-            FloatField fStart = Image.Circle(size, size, 1f, 1f, 1f, 0f, 0.25f, 0.5f);
-            FloatField fEnd = Image.Circle(size, size, 1f, 1f, 1f, 0f, 0.75f, 0.5f);
-            fMask = Image.Union(fMask, fStart);
-            fMask = Image.Union(fMask, fEnd);
+            const uint size = 8;
+            FloatField fMask = Image.Rectangle(size, size, 0.0f, 0f, 1f, 1f);
+            FloatField fGrain = Image.FiniteNoise(size, size, 5, 0.4f, 1f);
+            FloatField fExtra = Image.Noise(size, size, 0f, 1f);
+            Image.ThresholdCut(fExtra, 0f, 0.05f, 0f, 0f);
+            fMask = Image.Intersection(fGrain, fMask);
+            fMask = Image.Union(fExtra, fMask);
             ColourField cFinal = new ColourField(size, size);
             Colour cDark = new Colour(0.2f, 0.1f, 0.1f);
-            cFinal.FloatsToColours(fMask, cDark, cDark);
+            Colour cLight = new Colour(0.2f, 0.1f, 0.1f)*2f;
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenWoodLight()
+        {
+            const uint size = 8;
+            FloatField fMask = Image.Rectangle(size, size, 0.0f, 0f, 1f, 1f);
+            FloatField fGrain = Image.FiniteNoise(size, size, 5, 0.4f, 1f);
+            FloatField fExtra = Image.Noise(size, size, 0f, 1f);
+            Image.ThresholdCut(fExtra, 0f, 0.05f, 0f, 0f);
+            fMask = Image.Intersection(fGrain, fMask);
+            fMask = Image.Union(fExtra, fMask);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.5f, 0.4f, 0.3f);
+            Colour cLight = new Colour(0.7f, 0.6f, 0.6f);
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenWoodDark()
+        {
+            const uint size = 8;
+            FloatField fMask = Image.Rectangle(size, size, 0.0f, 0f, 1f, 1f);
+            FloatField fGrain = Image.FiniteNoise(size, size, 5, 0.2f, 1f);
+            FloatField fExtra = Image.Noise(size, size, 0f, 1f);
+            Image.ThresholdCut(fExtra, 0f, 0.05f, 0f, 0f);
+            fMask = Image.Intersection(fGrain, fMask);
+            fMask = Image.Union(fExtra, fMask);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.1f, 0.1f, 0.1f);
+            Colour cLight = new Colour(0.2f, 0.1f, 0.1f) * 1.5f;
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenWoodBurned()
+        {
+            const uint size = 8;
+            FloatField fMask = Image.Rectangle(size, size, 0.0f, 0f, 1f, 1f);
+            FloatField fGrain = Image.FiniteNoise(size, size, 5, 0.4f, 1f);
+            FloatField fExtra = Image.Noise(size, size, 0f, 1f);
+            Image.ThresholdCut(fExtra, 0f, 0.05f, 0f, 0f);
+            fMask = Image.Intersection(fGrain, fMask);
+            fMask = Image.Union(fExtra, fMask);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.1f, 0.1f, 0.1f);
+            Colour cLight = new Colour(0.2f, 0.2f, 0.2f) * 1.5f;
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenWoodPalm()
+        {
+            const uint size = 8;
+            FloatField fMask = Image.Rectangle(size, size, 0.0f, 0f, 1f, 1f);
+            FloatField fGrain = Image.FiniteNoise(size, size, 5, 0.4f, 1f);
+            fMask = Image.Intersection(fGrain, fMask);
+            FloatField fFade = Image.Fade(size, size, true, 0f, 1f);
+            Image.Multiply(fMask, fFade);
+            ColourField cFinal = new ColourField(size, size);
+            Colour cDark = new Colour(0.2f, 0.1f, 0.1f);
+            Colour cLight = new Colour(0.6f, 0.5f, 0.4f) * 1.5f;
+            cFinal.FloatsToColours(fMask, cDark, cLight);
+            return cFinal;
+        }
+
+        public static ColourField GenGreenLeaf()
+        {
+            const uint size = 32;
+            FloatField fMask = Image.Perlin(size, size, 1, 5f, 1f, 1f);
+            Image.ThresholdCut(fMask, 0.45f, 0.6f, 0f, 0f);
+            FloatField fFade = Image.Fade(size, size, true, 0.5f, 0f);
+            Image.Multiply(fMask, fFade);
+            Colour cDark = new Colour(0.45f, 1f, 0.3f);
+            Colour cLight = new Colour(0.6f, 1f, 0.6f);
+            ColourField cFinal = new ColourField(size, size);
+            cFinal.FloatsToColours(fMask, cDark, cLight);
             return cFinal;
         }
         //end Plants

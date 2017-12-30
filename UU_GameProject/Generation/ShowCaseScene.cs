@@ -19,7 +19,7 @@ namespace UU_GameProject
             backg.AddComponent(new CRender("block"));
             backg.Pos = Vector2.Zero;
             //backg.Size = new Vector2(16, 9);
-            //ShowCase.CreateRow(this, "_branch", 8, 2, 1f);
+            ShowCase.CreateRow(this, "_greenleaf", 8, 0, 1f);
             Catalog.CreateTree0(this, new Vector2(2, 9), new Vector2(0.1f), 0, "tree");
             Catalog.CreateTree1(this, new Vector2(5, 9), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree2(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");

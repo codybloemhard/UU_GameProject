@@ -193,7 +193,7 @@ namespace UU_GameProject
             lsys.AddRule('F', "F*F");
             Vector2 branchSize = new Vector2(1f, 2f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('F', "_branch0", 1, branchSize);
+            turtle.AddDrawToken('F', "_woodlight0", 1, branchSize);
             turtle.AddDrawToken('X', "block", 0, new Vector2(1f));
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
@@ -214,8 +214,8 @@ namespace UU_GameProject
             lsys.AddRule('X', "F[+*FX]F[-*FX]X");
             Vector2 branchSize = new Vector2(1f, 1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('F', "_branch4", 1, branchSize);
-            turtle.AddDrawToken('X', "block", 0, new Vector2(1f));
+            turtle.AddDrawToken('F', "_wooddark0", 1, branchSize);
+            turtle.AddDrawToken('X', "_greenleaf0", 0, new Vector2(1f));
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
             turtle.AddPushPopToken('[', true);
@@ -238,7 +238,7 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(1f, 0.5f);
             Vector2 leafSize = new Vector2(0.5f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_woodburned0", 1, branchSize);
             turtle.AddDrawToken('Y', "block", 0, leafSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -25f, -35f);
@@ -263,9 +263,9 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(1f, 0.5f);
             Vector2 leafSize = new Vector2(2);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
-            turtle.AddDrawToken('Y', "block", 0, leafSize);
-            turtle.AddDrawToken('Z', "block", 0, leafSize);
+            turtle.AddDrawToken('X', "_woodmedium0", 1, branchSize);
+            turtle.AddDrawToken('Y', "_greenleaf0", 0, leafSize);
+            turtle.AddDrawToken('Z', "_greenleaf0", 0, leafSize);
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
             turtle.AddRotationToken('#', +9f, -9f);
@@ -288,7 +288,7 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(1f, 0.5f);
             Vector2 leafSize = new Vector2(5f, 0.2f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_woodmedium0", 1, branchSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
@@ -312,7 +312,7 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(1f, 0.5f);
             Vector2 leafSize = new Vector2(1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_woodlight0", 1, branchSize);
             turtle.AddDrawToken('Y', "block", 0, leafSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -10f, -15f);
@@ -340,7 +340,7 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(2f, 0.5f);
             Vector2 leafSize = new Vector2(1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_woodmedium0", 1, branchSize);
             turtle.AddDrawToken('Y', "block", 0, leafSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -10f, -15f);
@@ -366,7 +366,7 @@ namespace UU_GameProject
             Vector2 branchSize = new Vector2(2f, 1f);
             Vector2 leafSize = new Vector2(1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_wooddark0", 1, branchSize);
             turtle.AddDrawToken('Y', "block", 0, leafSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -20f, -25f);
@@ -395,7 +395,7 @@ namespace UU_GameProject
             Vector2 leafBranch = new Vector2(2f, 0.2f);
             Vector2 leafSize = new Vector2(1f, 1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('X', "_woodpalm0", 1, branchSize);
             turtle.AddDrawToken('C', "block", 0, leafBranch);
             turtle.AddDrawToken('D', "block", 0, leafBranch);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
@@ -424,8 +424,8 @@ namespace UU_GameProject
             Vector2 subBranchSize = new Vector2(8f, 0.5f);
             Vector2 leafSize = new Vector2(1f, 1f);
             TurtleGraphics turtle = new TurtleGraphics(context);
-            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
-            turtle.AddDrawToken('A', "_branch4", 1, subBranchSize);
+            turtle.AddDrawToken('X', "_woodmedium0", 1, branchSize);
+            turtle.AddDrawToken('A', "_woodmedium0", 1, subBranchSize);
             turtle.AddDrawToken('Z', "block", 1, leafSize);
             turtle.AddRotationToken('+', +20f, +25f);
             turtle.AddRotationToken('-', -20f, -25f);
