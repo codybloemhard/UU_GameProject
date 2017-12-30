@@ -273,7 +273,7 @@ namespace UU_GameProject
             turtle.AddPushPopToken(']', false);
             turtle.AddResizeToken('*', new Vector2(0.99f, 0.7f), "X");
             turtle.Init(feetPos, 180, size);
-            string lstring = lsys.Generate(5);
+            string lstring = lsys.Generate(6);
             GameObject obj = turtle.CreateObject(lstring, 0, tag);
             obj.tag = tag;
             return obj;
@@ -283,17 +283,17 @@ namespace UU_GameProject
         {
             LSystem lsys = new LSystem("X#X#X#XY");
             lsys.AddRule('Y', "#[+*XY][-*XY]", 5);
-            lsys.AddRule('Y', "#[-*XY]XXY[@Z]", 5);
-            lsys.AddRule('Y', "#[+*XY]XXY[@Z]", 5);
+            lsys.AddRule('Y', "#[-*XY]XX[@Z]Y", 5);
+            lsys.AddRule('Y', "#[+*XY]XX[@Z]Y", 5);
             Vector2 branchSize = new Vector2(1f, 0.5f);
-            Vector2 leafSize = new Vector2(0.2f, 3f);
+            Vector2 leafSize = new Vector2(5f, 0.2f);
             TurtleGraphics turtle = new TurtleGraphics(context);
             turtle.AddDrawToken('X', "_branch4", 1, branchSize);
             turtle.AddDrawToken('Z', "block", 0, leafSize);
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
             turtle.AddRotationToken('#', +15f, -15f);
-            turtle.AddRotationToken('@', 90f, 90f, false);
+            turtle.AddRotationToken('@', 0f, 0f, false);
             turtle.AddPushPopToken('[', true);
             turtle.AddPushPopToken(']', false);
             turtle.AddResizeToken('*', new Vector2(0.99f, 0.7f), "X");
@@ -377,6 +377,64 @@ namespace UU_GameProject
             turtle.AddResizeToken('#', new Vector2(1f, 0.85f), "X");
             turtle.Init(feetPos, 180, size);
             string lstring = lsys.Generate(8);
+            GameObject obj = turtle.CreateObject(lstring, 0, tag);
+            obj.tag = tag;
+            return obj;
+        }
+
+        public static GameObject CreateTree8(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            LSystem lsys = new LSystem("X#*X#*X#*X#*X#*X#Y");
+            lsys.AddRule('Y', "*X#X#Y", 2);
+            lsys.AddRule('Y', "X#W", 1);
+            lsys.AddRule('W', "[$A]W", 1);
+            lsys.AddRule('W', "[%B]W", 1);
+            lsys.AddRule('A', "C+C+Z");
+            lsys.AddRule('B', "D-D-Z");
+            Vector2 branchSize = new Vector2(1f, 1f);
+            Vector2 leafBranch = new Vector2(2f, 0.2f);
+            Vector2 leafSize = new Vector2(1f, 1f);
+            TurtleGraphics turtle = new TurtleGraphics(context);
+            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('C', "block", 0, leafBranch);
+            turtle.AddDrawToken('D', "block", 0, leafBranch);
+            turtle.AddDrawToken('Z', "block", 0, leafSize);
+            turtle.AddRotationToken('$', +0f, +85f);
+            turtle.AddRotationToken('%', -0f, -85f);
+            turtle.AddRotationToken('+', +20f, +25f);
+            turtle.AddRotationToken('-', -20f, -25f);
+            turtle.AddRotationToken('#', -15f, 15f);
+            turtle.AddPushPopToken('[', true);
+            turtle.AddPushPopToken(']', false);
+            turtle.AddResizeToken('*', new Vector2(1f, 0.9f), "X");
+            turtle.Init(feetPos, 180, size);
+            string lstring = lsys.Generate(15);
+            GameObject obj = turtle.CreateObject(lstring, 0, tag);
+            obj.tag = tag;
+            return obj;
+        }
+
+        public static GameObject CreateTree9(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            LSystem lsys = new LSystem("XX-X-X-#Y");
+            lsys.AddRule('Y', "*W#Y");
+            lsys.AddRule('W', "X", 2);
+            lsys.AddRule('W', "[--[-AZ][++AZ]]X", 1);
+            Vector2 branchSize = new Vector2(3f, 1f);
+            Vector2 subBranchSize = new Vector2(8f, 0.5f);
+            Vector2 leafSize = new Vector2(1f, 1f);
+            TurtleGraphics turtle = new TurtleGraphics(context);
+            turtle.AddDrawToken('X', "_branch4", 1, branchSize);
+            turtle.AddDrawToken('A', "_branch4", 1, subBranchSize);
+            turtle.AddDrawToken('Z', "block", 1, leafSize);
+            turtle.AddRotationToken('+', +20f, +25f);
+            turtle.AddRotationToken('-', -20f, -25f);
+            turtle.AddRotationToken('#', 25f, 25f);
+            turtle.AddPushPopToken('[', true);
+            turtle.AddPushPopToken(']', false);
+            turtle.AddResizeToken('*', new Vector2(0.97f, 0.97f), "XA");
+            turtle.Init(feetPos, 180-0, size);
+            string lstring = lsys.Generate(50);
             GameObject obj = turtle.CreateObject(lstring, 0, tag);
             obj.tag = tag;
             return obj;

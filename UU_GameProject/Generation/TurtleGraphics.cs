@@ -157,7 +157,7 @@ namespace UU_GameProject
                 {
                     DrawAct da = draw[token];
                     GameObject go = _obj("tag", context, layer + da.layerAdd, da.texture);
-                    Vector2 next = state.pos + (dir * state.sizes[token].X * 1f * size.X);
+                    Vector2 next = state.pos + (dir * state.sizes[token].X * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     state.pos = next;
                     if (!rootDone)
