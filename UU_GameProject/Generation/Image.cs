@@ -72,7 +72,7 @@ namespace UU_GameProject
                         Vector2 q;
                         if (i + 1 >= points.Length) q = points[0];
                         else q = points[i + 1];
-                        if (!PointInTriangle(new Vector2(x/w, y/h), middle, points[i], q)) continue;
+                        if (!PointInTriangle(new Vector2((float)x/w, (float)y/h), middle, points[i], q)) continue;
                         f.array[f.To1D(x, y)] = 1f;
                     }
             return f;
@@ -534,9 +534,9 @@ namespace UU_GameProject
         {
             bool b1, b2, b3;
 
-            b1 = Sign(pt, v1, v2) < 0.0f;
-            b2 = Sign(pt, v2, v3) < 0.0f;
-            b3 = Sign(pt, v3, v1) < 0.0f;
+            b1 = Sign(pt, v1, v2) <= 0.0f;
+            b2 = Sign(pt, v2, v3) <= 0.0f;
+            b3 = Sign(pt, v3, v1) <= 0.0f;
 
             return ((b1 == b2) && (b2 == b3));
         }

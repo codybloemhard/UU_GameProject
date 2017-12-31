@@ -184,7 +184,7 @@ namespace UU_GameProject
             go.Size = new Vector2(1f, 1f); 
             return go;
         }
-
+        
         public static GameObject CreateTree0(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
         {
             LSystem lsys = new LSystem("X");
@@ -266,8 +266,8 @@ namespace UU_GameProject
             Vector2 leafSize = new Vector2(2f);
             TurtleGraphics turtle = new TurtleGraphics(context);
             turtle.AddDrawToken('X', "_woodmedium0", 1, branchSize);
-            turtle.AddDrawToken('Y', "_greenleafs0", 0, leafSize);
-            turtle.AddDrawToken('Z', "_greenleafs0", 0, leafSize);
+            turtle.AddDrawToken('Y', "_leaf0", 0, leafSize);
+            turtle.AddDrawToken('Z', "_leaf0", 0, leafSize);
             turtle.AddRotationToken('-', -25f, -35f);
             turtle.AddRotationToken('+', +25f, 35f);
             turtle.AddRotationToken('#', +9f, -9f);

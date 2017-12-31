@@ -437,14 +437,38 @@ namespace UU_GameProject
         {
             const uint size = 32;
             Vector2 mid = new Vector2(0.5f);
-            Vector2[] points = new Vector2[] { new Vector2(0.1f, 0.1f),
-            new Vector2(0.4f, 0.2f), new Vector2(0.1f, 0.5f), new Vector2(0.5f, 0.9f),
-            new Vector2(0.9f, 0.5f)};
-            FloatField fMask = Image.TriangleFan(size, size, mid, points);
+            List<Vector2> constr = new List<Vector2>();
+            constr.Add(new Vector2(0.5f, 0f));
+            constr.Add(new Vector2(0.4f, 0.1f));
+            constr.Add(new Vector2(0.3f, 0.2f));
+            constr.Add(new Vector2(0.2f, 0.4f));
+            constr.Add(new Vector2(0.1f, 0.6f));
+            constr.Add(new Vector2(0.15f, 0.7f));
+            constr.Add(new Vector2(0.2f, 0.8f));
+            constr.Add(new Vector2(0.3f, 0.9f));
+            constr.Add(new Vector2(0.4f, 1f));
+            for (int i = 1; i < constr.Count - 1; i++)
+            {
+                float diff = 0.1f;
+                float xx = ((float)MathH.random.NextDouble() - 0.5f) * diff;
+                float yy = ((float)MathH.random.NextDouble() - 0.5f) * diff;
+                constr[i] += new Vector2(xx, yy);
+            }
+            for (int i = constr.Count - 1; i > 0; i--)
+            {
+                Vector2 cur = constr[i];
+                constr.Add(new Vector2(1f - cur.X, cur.Y));
+            }
+            FloatField fMask = Image.TriangleFan(size, size, mid, constr.ToArray());
+            FloatField fNoise = Image.FiniteNoise(size, size, 5, 0.3f, 1f);
+            fMask = Image.Intersection(fNoise, fMask);
+            ColourField cRod = new ColourField(1, size);
             ColourField cFinal = new ColourField(size, size);
-            Colour cDark = new Colour(1f);
-            Colour cLight = new Colour(1f);
+            Colour cDark = new Colour(0.2f, 0.5f, 0.1f);
+            Colour cLight = new Colour(0.3f, 0.8f, 0.2f);
             cFinal.FloatsToColours(fMask, cDark, cLight);
+            cRod.Fill(cDark*0.9f);
+            cFinal.DrawOver(cRod, size/2, 0);
             return cFinal;
         }
         //end Plants
