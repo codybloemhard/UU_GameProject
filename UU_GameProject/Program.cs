@@ -15,7 +15,7 @@ namespace UU_GameProject
     public class Run
     {
         private GameWindow game;
-
+        
         public Run()
         {
             game = new GameWindow(1920);
