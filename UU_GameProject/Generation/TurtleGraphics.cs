@@ -178,7 +178,7 @@ namespace UU_GameProject
                 if (draw.ContainsKey(token))
                 {
                     DrawAct da = draw[token];
-                    GameObject go = _obj("tag", context, layer + da.layerAdd, da.GetTex());
+                    GameObject go = _obj("_child", context, layer + da.layerAdd, da.GetTex());
                     Vector2 next = state.pos + (dir * state.sizes[token].X * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     go.Pos += (dir * state.sizes[token].X * size.X) * da.offset;
