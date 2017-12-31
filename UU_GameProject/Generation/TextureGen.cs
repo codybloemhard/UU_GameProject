@@ -42,9 +42,15 @@ namespace UU_GameProject
                 case "_woodlight": return GenWoodLight();
                 case "_woodburned": return GenWoodBurned();
                 case "_woodpalm": return GenWoodPalm();
-                case "_greenleafs": return GenGreenLeafs();
+                case "_greenleafs": return GenGreenLeafs(true);
+                case "_greenleafshalf": return GenGreenLeafsHalf();
+                case "_greenleafsbig": return GenGreenLeafs(false);
                 case "_blossom": return GenBlossom();
-                case "_leaf": return GenLeaf();
+                case "_leaf": return GenLeaf(false, false);
+                case "_leafhigh": return GenLeaf(false, true);
+                case "_leafburned": return GenLeaf(true);
+                case "_hangingleaf": return GenHangingLeaf();
+                case "_palmleafbody": return GenPalmLeafBody();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -406,7 +412,7 @@ namespace UU_GameProject
             return cFinal;
         }
         
-        public static ColourField GenGreenLeafs()
+        public static ColourField GenGreenLeafsHalf()
         {
             const uint size = 64;
             FloatField fGrain = Image.Perlin(size, size, 1, 5f*2, 1f, 1f);
@@ -417,6 +423,24 @@ namespace UU_GameProject
             Colour cLight = new Colour(0.6f, 1f, 0.6f) * 1f;
             ColourField cFinal = new ColourField(size, size);
             cFinal.FloatsToColours(fGrain, cDark, cLight);
+            cFinal.SetAlpha(0.9f);
+            return cFinal;
+        }
+
+        public static ColourField GenGreenLeafs(bool small)
+        {
+            uint size = (uint)(small ? 64 : 128);
+            float mul = small ? 2 : 4;
+            FloatField fGrain = Image.Perlin(size, size, 1, 5f * mul, 1f, 1f);
+            if(small) Image.ThresholdCut(fGrain, 0.45f, 0.6f, 0f, 0f);
+            else Image.ThresholdCut(fGrain, 0.5f, 0.6f, 0f, 0f);
+            FloatField fMask = Image.Circle(size, size, 1f, 1f, 1, 1f, 0.5f, 0.5f);
+            fGrain = Image.Intersection(fGrain, fMask);
+            Colour cDark = new Colour(0.45f, 1f, 0.3f) * 0.1f;
+            Colour cLight = new Colour(0.6f, 1f, 0.6f) * 1f;
+            ColourField cFinal = new ColourField(size, size);
+            cFinal.FloatsToColours(fGrain, cDark, cLight);
+            cFinal.SetAlpha(0.8f);
             return cFinal;
         }
 
@@ -433,20 +457,20 @@ namespace UU_GameProject
             return cFinal;
         }
 
-        public static ColourField GenLeaf()
+        public static ColourField GenLeaf(bool burned = false, bool highres = false)
         {
-            const uint size = 32;
+            uint size = (uint)(highres ? 32 : 16);
             Vector2 mid = new Vector2(0.5f);
             List<Vector2> constr = new List<Vector2>();
-            constr.Add(new Vector2(0.5f, 0f));
-            constr.Add(new Vector2(0.4f, 0.1f));
-            constr.Add(new Vector2(0.3f, 0.2f));
-            constr.Add(new Vector2(0.2f, 0.4f));
-            constr.Add(new Vector2(0.1f, 0.6f));
-            constr.Add(new Vector2(0.15f, 0.7f));
-            constr.Add(new Vector2(0.2f, 0.8f));
-            constr.Add(new Vector2(0.3f, 0.9f));
-            constr.Add(new Vector2(0.4f, 1f));
+            constr.Add(new Vector2(0f, 0.5f));
+            constr.Add(new Vector2(0.1f, 0.4f));
+            constr.Add(new Vector2(0.2f, 0.3f));
+            constr.Add(new Vector2(0.4f, 0.2f));
+            constr.Add(new Vector2(0.6f, 0.1f));
+            constr.Add(new Vector2(0.7f, 0.15f));
+            constr.Add(new Vector2(0.8f, 0.2f));
+            constr.Add(new Vector2(0.9f, 0.3f));
+            constr.Add(new Vector2(1f, 0.5f));
             for (int i = 1; i < constr.Count - 1; i++)
             {
                 float diff = 0.1f;
@@ -457,20 +481,67 @@ namespace UU_GameProject
             for (int i = constr.Count - 1; i > 0; i--)
             {
                 Vector2 cur = constr[i];
-                constr.Add(new Vector2(1f - cur.X, cur.Y));
+                constr.Add(new Vector2(cur.X, 1f - cur.Y));
             }
             FloatField fMask = Image.TriangleFan(size, size, mid, constr.ToArray());
             FloatField fNoise = Image.FiniteNoise(size, size, 5, 0.3f, 1f);
             fMask = Image.Intersection(fNoise, fMask);
-            ColourField cRod = new ColourField(1, size);
+            ColourField cRod = new ColourField(size, 1);
             ColourField cFinal = new ColourField(size, size);
-            Colour cDark = new Colour(0.2f, 0.5f, 0.1f);
-            Colour cLight = new Colour(0.3f, 0.8f, 0.2f);
+            Colour cDark, cLight;
+            if (!burned)
+            {
+                cDark = new Colour(0.2f, 0.5f, 0.1f);
+                cLight = new Colour(0.3f, 0.8f, 0.2f);
+            }
+            else
+            {
+                cDark = new Colour(0.13f, 0.15f, 0.14f);
+                cLight = new Colour(0.23f, 0.25f, 0.3f);
+            }
             cFinal.FloatsToColours(fMask, cDark, cLight);
             cRod.Fill(cDark*0.9f);
-            cFinal.DrawOver(cRod, size/2, 0);
+            cFinal.DrawOver(cRod, 0, size/2);
             return cFinal;
         }
+
+        public static ColourField GenHangingLeaf()
+        {
+            const uint ww = 32, hh = 8;
+            FloatField fMask0 = Image.RandomWalk(ww, hh, 0f, 0.5f, 64, new Vector2(2f, 0f));
+            FloatField fMask1 = Image.RandomWalk(ww, hh, 0f, 0.5f, 64, new Vector2(2f, 0f));
+            ColourField cFinal = new ColourField(ww, hh);
+            ColourField cDetail = new ColourField(ww, hh);
+            Colour cDark = new Colour(0.5f, 0.5f, 0.2f);
+            Colour cLight = new Colour(0.7f, 0.8f, 0.2f);
+            cFinal.FloatsToColours(fMask0, cLight, cLight);
+            cDetail.FloatsToColours(fMask1, cDark, cDark);
+            cFinal.DrawOver(cDetail, 0, 0);
+            return cFinal;
+        }
+
+        public static ColourField GenPalmLeafBody()
+        {
+            const uint size = 32;
+            FloatField fMiddle = Image.RandomWalk(size, size, 0f, 0.5f, 64, new Vector2(10, 0));
+            Colour cDark = new Colour(0.2f, 0.3f, 0.2f);
+            Colour cLight = new Colour(0.3f, 0.5f, 0.2f);
+            ColourField cFinal = new ColourField(size, size);
+            cFinal.FloatsToColours(fMiddle, cDark, cDark);
+            ColourField cTwig = new ColourField(size, size);
+            FloatField fTwig = new FloatField(size, size);
+            for (int i = 0; i < 8; i++)
+            {
+                fTwig = Image.RandomWalk(size, size, (float)i / 7, 0.5f, 12, new Vector2(-2, +1));
+                cTwig.FloatsToColours(fTwig, cLight, cLight);
+                cFinal.DrawOver(cTwig, 0, 0);
+                fTwig = Image.RandomWalk(size, size, (float)i / 7, 0.5f, 12, new Vector2(-2, -1));
+                cTwig.FloatsToColours(fTwig, cLight, cLight);
+                cFinal.DrawOver(cTwig, 0, 0);
+            }
+            return cFinal;
+        }
+
         //end Plants
         //start Snowman
         public static ColourField GenSnowManEye()

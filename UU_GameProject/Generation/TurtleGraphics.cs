@@ -41,11 +41,13 @@ namespace UU_GameProject
     {
         public string texture;
         public uint layerAdd;
+        public float offset;
 
-        public DrawAct(string texture, uint layerAdd)
+        public DrawAct(string texture, uint layerAdd, float offset)
         {
             this.texture = texture;
             this.layerAdd = layerAdd;
+            this.offset = offset;
         }
     }
 
@@ -81,10 +83,10 @@ namespace UU_GameProject
             states = new Stack<TurtleState>();
         }
 
-        public void AddDrawToken(char token, string texture, uint layerAdd, Vector2 size)
+        public void AddDrawToken(char token, string texture, uint layerAdd, Vector2 size, float offset = 0f)
         {
             if (draw.ContainsKey(token)) return;
-            draw.Add(token, new DrawAct(texture, layerAdd));
+            draw.Add(token, new DrawAct(texture, layerAdd, offset));
             sizes.Add(token, size);
         }
 
@@ -159,6 +161,7 @@ namespace UU_GameProject
                     GameObject go = _obj("tag", context, layer + da.layerAdd, da.texture);
                     Vector2 next = state.pos + (dir * state.sizes[token].X * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
+                    go.Pos += (dir * state.sizes[token].X * size.X) * da.offset;
                     state.pos = next;
                     if (!rootDone)
                     {
