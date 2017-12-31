@@ -20,8 +20,8 @@ namespace UU_GameProject
             backg.Renderer.colour = new Color(0.7f, 0.7f, 0.7f);
             backg.Pos = Vector2.Zero;
             backg.Size = new Vector2(16, 9);
-            //ShowCase.CreateRow(this, "_palmleafbody", 8, 0, 1f);
-            /*Catalog.CreateTree0(this, new Vector2(2, 9), new Vector2(0.1f), 0, "tree");
+            ShowCase.CreateRow(this, "_flower", 16, 0, 1f);
+            Catalog.CreateTree0(this, new Vector2(2, 9), new Vector2(0.1f), 0, "tree");
             Catalog.CreateTree1(this, new Vector2(5, 9), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree2(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree3(this, new Vector2(11, 9), new Vector2(0.2f), 0, "tree");
@@ -30,8 +30,7 @@ namespace UU_GameProject
             Catalog.CreateTree6(this, new Vector2(5, 4), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree7(this, new Vector2(8, 4), new Vector2(0.2f), 0, "tree");
             Catalog.CreateTree8(this, new Vector2(11, 4), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree9(this, new Vector2(14, 4), new Vector2(0.2f), 0, "tree");*/
-            Catalog.CreateTree8(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");
+            Catalog.CreateTree9(this, new Vector2(14, 4), new Vector2(0.2f), 0, "tree");
         }
         
         public override void Unload() { }

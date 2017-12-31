@@ -51,6 +51,8 @@ namespace UU_GameProject
                 case "_leafburned": return GenLeaf(true);
                 case "_hangingleaf": return GenHangingLeaf();
                 case "_palmleafbody": return GenPalmLeafBody();
+                case "_grassplant": return GenGrassPlant();
+                case "_flower": return GenFlower();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -538,6 +540,74 @@ namespace UU_GameProject
                 fTwig = Image.RandomWalk(size, size, (float)i / 7, 0.5f, 12, new Vector2(-2, -1));
                 cTwig.FloatsToColours(fTwig, cLight, cLight);
                 cFinal.DrawOver(cTwig, 0, 0);
+            }
+            return cFinal;
+        }
+
+        public static ColourField GenGrassPlant()
+        {
+            const uint size = 32;
+            ColourField cFinal = new ColourField(size, size);
+            ColourField cGrass = new ColourField(size, size);
+            for (int i = 0; i < 12; i++)
+            {
+                float r = Image.RandomDeviation(0.4f, 0.1f);
+                float g = Image.RandomDeviation(0.7f, 0.2f);
+                float b = Image.RandomDeviation(0.3f, 0.1f);
+                Colour cColour = new Colour(r, g, b);
+                FloatField fGrass = Image.RandomWalk(size, size, (float) i / 12, 1f, (uint)Image.RandomDeviation(24, 6), new Vector2(0, -1f));
+                cGrass.FloatsToColours(fGrass, cColour, cColour);
+                cFinal.DrawOver(cGrass, 0, 0);
+            }
+            return cFinal;
+        }
+
+        private static Colour GenFlowerHeartColour()
+        {
+            uint basis = (uint)(MathH.random.NextDouble() * 3);
+            float r = basis == 0 ? 1f : Image.RandomRange(0.2f, 0.4f);
+            float g = basis == 1 ? 1f : Image.RandomRange(0.2f, 0.4f);
+            float b = basis == 2 ? 1f : Image.RandomRange(0.2f, 0.4f);
+            return new Colour(r, g, b);
+        }
+
+        private static Colour GenFlowerLeafColour(Colour heart)
+        {
+            uint basis = 0;
+            if (heart.g == 1f) basis = 1;
+            else if (heart.b == 1f) basis = 2;
+            float r = basis == 0 ? Image.RandomRange(0.2f, 0.4f) : Image.RandomRange(0.5f, 0.9f);
+            float g = basis == 1 ? Image.RandomRange(0.2f, 0.4f) : Image.RandomRange(0.5f, 0.9f);
+            float b = basis == 2 ? Image.RandomRange(0.2f, 0.4f) : Image.RandomRange(0.5f, 0.9f);
+            return new Colour(r, g, b);
+        }
+
+        public static ColourField GenFlower()
+        {
+            const uint size = 16;
+            uint heartHight = 12;
+            uint leaveSize = 3;
+            uint leaves = 9;
+            ColourField cFinal = new ColourField(size, size);
+            FloatField fRoot = Image.RandomWalk(size, size, 0.5f, 1f, heartHight, new Vector2(0, -2));
+            Colour cRootCol = new Colour(0.4f, 0.9f, 0.5f);
+            ColourField cRoot = new ColourField(size, size);
+            cRoot.FloatsToColours(fRoot, cRootCol, cRootCol);
+            FloatField fHeart = Image.Circle(size/3, size/3, 1f, 1f, 1f, 0f, 0.5f, 0.5f);
+            ColourField cHeart = new ColourField(size/3, size/3);
+            Colour cHeartCol = GenFlowerHeartColour();
+            cHeart.FloatsToColours(fHeart, cHeartCol, cHeartCol);
+            cFinal.DrawOver(cRoot, 0, 0);
+            cFinal.DrawOver(cHeart, size/2-size/6, (size-heartHight)-size/6);
+            for(int i = 0; i < leaves; i++)
+            {
+                uint px = (size / 2) + (uint)(Math.Sin(MathH.PI * 2 / leaves * i) * 3.2f);
+                uint py = (size - heartHight) + (uint)(Math.Cos(MathH.PI * 2 / leaves * i) * 3.2f);
+                FloatField fLeaf = Image.Circle(leaveSize, leaveSize, 1f, 1f, 1f, 0f, 0.5f, 0.5f);
+                ColourField cLeaf = new ColourField(leaveSize, leaveSize);
+                Colour cLeafCol = GenFlowerLeafColour(cHeartCol);
+                cLeaf.FloatsToColours(fLeaf, cLeafCol, cLeafCol);
+                cFinal.DrawOver(cLeaf, px - leaveSize / 2, py - leaveSize / 2);
             }
             return cFinal;
         }

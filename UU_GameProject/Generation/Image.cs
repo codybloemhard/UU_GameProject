@@ -533,11 +533,9 @@ namespace UU_GameProject
         public static bool PointInTriangle(Vector2 pt, Vector2 v1, Vector2 v2, Vector2 v3)
         {
             bool b1, b2, b3;
-
             b1 = Sign(pt, v1, v2) <= 0.0f;
             b2 = Sign(pt, v2, v3) <= 0.0f;
             b3 = Sign(pt, v3, v1) <= 0.0f;
-
             return ((b1 == b2) && (b2 == b3));
         }
     }

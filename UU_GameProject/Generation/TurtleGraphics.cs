@@ -39,15 +39,28 @@ namespace UU_GameProject
 
     public struct DrawAct
     {
-        public string texture;
+        public List<string> textures;
         public uint layerAdd;
         public float offset;
 
         public DrawAct(string texture, uint layerAdd, float offset)
         {
-            this.texture = texture;
+            textures = new List<string>();
+            textures.Add(texture);
             this.layerAdd = layerAdd;
             this.offset = offset;
+        }
+
+        public DrawAct(List<string> textures, uint layerAdd, float offset)
+        {
+            this.textures = textures;
+            this.layerAdd = layerAdd;
+            this.offset = offset;
+        }
+
+        public string GetTex()
+        {
+            return textures[(int)(MathH.random.NextDouble() * textures.Count)];
         }
     }
 
@@ -87,6 +100,13 @@ namespace UU_GameProject
         {
             if (draw.ContainsKey(token)) return;
             draw.Add(token, new DrawAct(texture, layerAdd, offset));
+            sizes.Add(token, size);
+        }
+
+        public void AddDrawToken(char token, List<string> textures, uint layerAdd, Vector2 size, float offset = 0f)
+        {
+            if (draw.ContainsKey(token)) return;
+            draw.Add(token, new DrawAct(textures, layerAdd, offset));
             sizes.Add(token, size);
         }
 
@@ -158,7 +178,7 @@ namespace UU_GameProject
                 if (draw.ContainsKey(token))
                 {
                     DrawAct da = draw[token];
-                    GameObject go = _obj("tag", context, layer + da.layerAdd, da.texture);
+                    GameObject go = _obj("tag", context, layer + da.layerAdd, da.GetTex());
                     Vector2 next = state.pos + (dir * state.sizes[token].X * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     go.Pos += (dir * state.sizes[token].X * size.X) * da.offset;
