@@ -20,7 +20,10 @@ namespace UU_GameProject
             backg.Renderer.colour = new Color(0.7f, 0.7f, 0.7f);
             backg.Pos = Vector2.Zero;
             backg.Size = new Vector2(16, 9);
-            //ShowCase.CreateRow(this, "_flower", 16, 0, 1f);
+            Catalog.CreateFlower(this, new Vector2(1, 1), new Vector2(0.5f), 0, "flower");
+            Catalog.CreateGrassPlant(this, new Vector2(2, 1), new Vector2(1f), 0, "grassplant");
+            Catalog.CreateGrassDot(this, new Vector2(3, 1), new Vector2(1f), 0, "grassplant");
+            Catalog.CreateGrassHigh(this, new Vector2(4, 1), new Vector2(1, 2), 0, "grassplant");
         }
         
         public override void Unload() { }
@@ -40,7 +43,7 @@ namespace UU_GameProject
             }
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
-                GameObject[] old = objects.FindAllWithTag("_test");
+                /*GameObject[] old = objects.FindAllWithTag("_test");
                 if(old != null) foreach (GameObject o in old) o.Destroy();
                 old = objects.FindAllWithTag("tree");
                 if (old != null) foreach (GameObject o in old) o.Destroy();
@@ -73,6 +76,7 @@ namespace UU_GameProject
                 Catalog.CreateTree7(this, new Vector2(8, 4), new Vector2(0.2f), 0, "tree");
                 Catalog.CreateTree8(this, new Vector2(11, 4), new Vector2(0.2f), 0, "tree");
                 Catalog.CreateTree9(this, new Vector2(14, 4), new Vector2(0.2f), 0, "tree");
+            */
             }
         }
 
