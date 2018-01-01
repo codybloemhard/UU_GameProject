@@ -76,7 +76,7 @@ namespace UU_GameProject
                 velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
                 velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
+            if (GO.Pos.Y > 9) GO.GetComponent<CHealthPool>().ChangeHealth(1000);
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -259,6 +259,14 @@ namespace UU_GameProject
             if (hitRight.hit && hitRight.distance < 0.02f)
                 rightSideAgainstWall = true;
             else rightSideAgainstWall = false;
+
+            //fireball
+            //fires toward the cursor
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
+            {
+                GO.GetComponent<Components.General.CMagicness>().Fireball(new Vector2(.2f, .2f), velocity);
+            }
+
 
             //shoot
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
