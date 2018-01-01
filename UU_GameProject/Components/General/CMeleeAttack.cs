@@ -6,14 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class CMeleeAttack : Component
+    public class CMeleeAttack : Component
     {
         public CMeleeAttack() : base() { }
-
-        public override void Update(float time)
-        {
-            base.Update(time);
-        }
 
         public void Melee(Vector2 dir, Vector2 dimensions, float duration, string caller)
         {

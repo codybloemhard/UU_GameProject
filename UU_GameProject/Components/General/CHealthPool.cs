@@ -6,13 +6,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class CHealthPool : Component
+    public class CHealthPool : Component
     {
         private int HP;
         private int bulletHitDamage = 10;
         private int meleeHitDamage = 25;
         private bool isInvincible = false;
-        Text healthPool;
+        private Text healthPool;
+
         public CHealthPool(int HP, GameObject GO)
         {
             this.HP = HP;
@@ -23,8 +24,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag.Contains(GO.tag))
-                return;
+            if (other.tag.Contains(GO.tag)) return;
             if (other.tag.Contains("bullet"))
             {
                 ChangeHealth(bulletHitDamage);
