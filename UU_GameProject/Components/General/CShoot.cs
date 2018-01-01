@@ -6,14 +6,8 @@ using Microsoft.Xna.Framework;
 namespace UU_GameProject
 {
     public class CShoot : Component
-    {
-        
+    {   
         public CShoot() : base() { }
-
-        public override void Update(float time)
-        {
-            base.Update(time);
-        }
 
         public void Shoot(Vector2 dir, Vector2 size, Vector2 speed)
         {

@@ -4,16 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject.Components.General
 {
-    class CMagicness : Component
+    public class CMagicness : Component
     {
         private Vector2 dir;
 
         public CMagicness() : base() { }
-
-        public override void Update(float time)
-        {
-            base.Update(time);
-        }
 
         public void Fireball(Vector2 size, Vector2 playerSpeed)
         {
@@ -29,7 +24,6 @@ namespace UU_GameProject.Components.General
             fireball.AddComponent(new CRender("block"));
             fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMousePosition() - (fireball.Pos + .5f * (fireball.Size))), dir));
             fireball.AddComponent(new CAABB());
-
         }
     }
 }
