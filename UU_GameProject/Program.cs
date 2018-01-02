@@ -44,7 +44,9 @@ namespace UU_GameProject
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
             LevelEditor editor = new LevelEditor();
+            LevelTest levelTest = new LevelTest();
             game.states.AddState("editor", editor);
+            game.states.AddState("leveltest", levelTest);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("options", testOptions);

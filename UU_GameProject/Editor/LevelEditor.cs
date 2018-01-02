@@ -10,12 +10,12 @@ namespace UU_GameProject
 {
     public class LevelEditor : GameState
     {
-        private const string url = "../../../../Content/level.txt";
-
         public override void Load(SpriteBatch batch)
         {
-            Button button = new Button(this, "Finish", "block", () => Finish(),
+            Button button = new Button(this, "Finish", "block", () => Finish(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
+            Button quit = new Button(this, "Cancel", "block", () => Finish(false),
+                AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(12, 0), new Vector2(2, 1));
         }
 
         public override void Unload() { }
@@ -47,46 +47,10 @@ namespace UU_GameProject
             base.Draw(time, batch, device);
         }
 
-        public void Finish()
+        public void Finish(bool save)
         {
-            WriteLevel();
-            ReadLevel();
-            GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
-        }
-
-        public void WriteLevel()
-        {
-            using (BinaryWriter w = new BinaryWriter(File.Open(url, FileMode.Open)))
-            {
-                int count = CLevelEditorObject.objectList.Count;
-                w.Write(count);
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject obj = CLevelEditorObject.objectList[i];
-                    w.Write(obj.Pos.X);
-                    w.Write(obj.Pos.Y);
-                    w.Write(obj.Size.X);
-                    w.Write(obj.Size.Y);
-                    w.Write(obj.tag);
-                }
-            }
-        }
-
-        public void ReadLevel()
-        {
-            if (!File.Exists(url)) return;
-            using (BinaryReader r = new BinaryReader(File.Open(url, FileMode.Open)))
-            {
-                int count = r.ReadInt32();
-                for(int i = 0; i < count; i++)
-                {
-                    Console.WriteLine(r.ReadSingle());
-                    Console.WriteLine(r.ReadSingle());
-                    Console.WriteLine(r.ReadSingle());
-                    Console.WriteLine(r.ReadSingle());
-                    Console.WriteLine(r.ReadString());
-                }
-            }
+            if(save) LevelLogic.WriteLevel(LevelLogic.testurl);
+            GameStateManager.RequestChange("leveltest", CHANGETYPE.LOAD);
         }
     }
 }
