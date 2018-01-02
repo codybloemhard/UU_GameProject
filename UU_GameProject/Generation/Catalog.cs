@@ -447,6 +447,42 @@ namespace UU_GameProject
             return obj;
         }
 
+        public static GameObject CreateFlower(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            const string tex = "_flower";
+            GameObject go = CreateObject(context, layer, tag, tex);
+            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
+            go.Size = size;
+            return go;
+        }
+
+        public static GameObject CreateGrassPlant(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            const string tex = "_grassplant";
+            GameObject go = CreateObject(context, layer, tag, tex);
+            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
+            go.Size = size;
+            return go;
+        }
+
+        public static GameObject CreateGrassDot(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            const string tex = "_grassdot";
+            GameObject go = CreateObject(context, layer, tag, tex);
+            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
+            go.Size = size;
+            return go;
+        }
+
+        public static GameObject CreateGrassHigh(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        {
+            const string tex = "_grasshigh";
+            GameObject go = CreateObject(context, layer, tag, tex);
+            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
+            go.Size = size;
+            return go;
+        }
+
         public static GameObject CreateSnowman(GameState context, float x, float y, uint layer, string tag, float scale = 1.0f)
         {
             const string texBody = "_snowmanbody", texEye = "_snowmaneye",

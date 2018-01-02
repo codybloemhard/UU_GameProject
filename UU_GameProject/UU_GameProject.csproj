@@ -42,13 +42,13 @@
     <Compile Include="Components\General\CFireballMovement.cs" />
     <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Components\General\CFaction.cs" />
-    <Compile Include="Components\General\CLevelEditorObject.cs" />
     <Compile Include="Components\General\CMagicness.cs" />
+    <Compile Include="Editor\CLevelEditorObject.cs" />
+    <Compile Include="Editor\LevelEditor.cs" />
     <Compile Include="Generation\LSystem.cs" />
     <Compile Include="Generation\Misc.cs" />
     <Compile Include="Generation\TurtleGraphics.cs" />
     <Compile Include="Scenes\Select.cs" />
-    <Compile Include="Scenes\LevelEditor.cs" />
     <Compile Include="Generation\ColourField.cs" />
     <Compile Include="Generation\Catalog.cs" />
     <Compile Include="Generation\ShowCase.cs" />
