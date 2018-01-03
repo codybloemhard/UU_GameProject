@@ -16,6 +16,8 @@ namespace UU_GameProject
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
             Button quit = new Button(this, "Cancel", "block", () => Finish(false),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(12, 0), new Vector2(2, 1));
+            button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            quit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
 
         public override void Unload() { }

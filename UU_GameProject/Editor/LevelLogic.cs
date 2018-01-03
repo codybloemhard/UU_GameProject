@@ -104,6 +104,7 @@ namespace UU_GameProject
             if (!decorators.ContainsKey(o.tag)) return null;
             Decorator dec = decorators[o.tag];
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
+            go.tag = "";
             go.Pos = o.pos;
             go.Size = o.size;
             return go;

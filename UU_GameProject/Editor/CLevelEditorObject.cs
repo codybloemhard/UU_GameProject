@@ -65,6 +65,8 @@ namespace UU_GameProject
             if (selected == GO)
             {
                 (GO.Renderer as CRender).colour = new Color(180, 180, 180);
+                if (Input.GetKey(PressAction.PRESSED, Keys.Delete))
+                    Destroy();
                 properties.active = true;
             }
             else
@@ -87,7 +89,13 @@ namespace UU_GameProject
             HandleProperties();
         }
 
-        public void HandleProperties()
+        protected void Destroy()
+        {
+            GO.Destroy();
+            properties.Destroy();
+        }
+
+    public void HandleProperties()
         {
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
             {
