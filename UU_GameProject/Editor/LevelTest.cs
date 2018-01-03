@@ -34,13 +34,18 @@ namespace UU_GameProject
             player.AddComponent(new Components.General.CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-
-            LevelFactory builder = new LevelFactory(this);
+            
+            Vector2 chunkSize = new Vector2(32, 32);
+            ChunkFactory builder = new ChunkFactory(this, chunkSize);
             builder.AddSource("solid", 10, true, SolidBuilder);
-            LvObj[] sources = LevelLogic.ReadLevel(LevelLogic.testurl);
-            builder.BuildWorld(sources);
-        }
+            Chunk chunk = LevelLogic.ReadChunk("test.lvl");
+            LoadedChunk lc = builder.BuildChunk(chunk);
 
+            ChunkManager chunks = new ChunkManager();
+            chunks.SetFactory(builder);
+            chunks.Discover(LevelLogic.baseurl);
+        }
+        
         public void SolidBuilder(GameObject o)
         {
             o.AddComponent(new CRender("_dirt0"));

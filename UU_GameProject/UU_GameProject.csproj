@@ -44,6 +44,7 @@
     <Compile Include="Components\General\CFaction.cs" />
     <Compile Include="Components\General\CMagicness.cs" />
     <Compile Include="Editor\CLevelEditorObject.cs" />
+    <Compile Include="Editor\Files.cs" />
     <Compile Include="Editor\LevelEditor.cs" />
     <Compile Include="Editor\LevelLogic.cs" />
     <Compile Include="Editor\LevelTest.cs" />

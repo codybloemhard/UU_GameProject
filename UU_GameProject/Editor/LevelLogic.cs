@@ -13,14 +13,22 @@ namespace UU_GameProject
         public string tag;
     }
 
+    public class Chunk
+    {
+        public LvObj[] source;
+        public int x, y;
+    }
+
     public static class LevelLogic
     {
-        public const string testurl = "../../../../Content/level.txt";
+        public const string baseurl = "../../../../Content/Levels/";
 
-        public static void WriteLevel(string url)
+        public static void WriteChunk(string file, int x, int y)
         {
-            using (BinaryWriter w = new BinaryWriter(File.Open(url, FileMode.Open)))
+            using (BinaryWriter w = new BinaryWriter(File.Open(baseurl + file, FileMode.OpenOrCreate)))
             {
+                w.Write(x);
+                w.Write(y);
                 int count = CLevelEditorObject.objectList.Count;
                 w.Write(count);
                 for (int i = 0; i < count; i++)
@@ -35,11 +43,15 @@ namespace UU_GameProject
             }
         }
 
-        public static LvObj[] ReadLevel(string url)
+        public static Chunk ReadChunk(string file)
         {
+            string url = baseurl + file;
             if (!File.Exists(url)) return null;
+            Chunk chunk = new Chunk();
             List<LvObj> objs = new List<LvObj>();
             BinaryReader r = new BinaryReader(File.Open(url, FileMode.Open));
+            chunk.x = r.ReadInt32();
+            chunk.y = r.ReadInt32();
             int count = r.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -54,7 +66,8 @@ namespace UU_GameProject
                 o.size = new Vector2(w, h);
                 objs.Add(o);
             }
-            return objs.ToArray();
+            chunk.source = objs.ToArray();
+            return chunk;
         }
     }
 
@@ -72,42 +85,114 @@ namespace UU_GameProject
         }
     }
 
-    public class LevelFactory
+    public class LoadedChunk
+    {
+        private GameObject[] objects;
+        private Vector2 pos;
+
+        public LoadedChunk(Vector2 pos)
+        {
+            this.pos = pos;
+        }
+
+        public void Set(GameObject[] gos)
+        {
+            objects = gos;
+        }
+
+        public void Unload()
+        {
+            for(int i = 0; i < objects.Length; i++)
+                if(objects[i] != null)
+                    objects[i].Destroy();
+        }
+    }
+
+    public class ChunkFactory
     {
         private Dictionary<string, Decorator> decorators;
         private GameState context;
+        private Vector2 chunkSize;
 
-        public LevelFactory(GameState context)
+        public ChunkFactory(GameState context, Vector2 chunkSize)
         {
             this.context = context;
+            this.chunkSize = chunkSize;
             decorators = new Dictionary<string, Decorator>();
         }
-
+        
         public void AddSource(string kind, uint layer, bool isStatic, Action<GameObject> action)
         {
             if (decorators.ContainsKey(kind)) return;
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
 
-        public void BuildWorld(LvObj[] source)
+        public LoadedChunk BuildChunk(Chunk chunk)
         {
-            for (int i = 0; i < source.Length; i++)
+            if (chunk == null) return null;
+            if (chunk.source == null) return null;
+            Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
+            LoadedChunk loaded = new LoadedChunk(displace);
+            GameObject[] objects = new GameObject[chunk.source.Length];
+            for (int i = 0; i < chunk.source.Length; i++)
             {
-                GameObject go = BuildObj(source[i]);
+                GameObject go = BuildObj(chunk.source[i], displace);
                 if (go == null) continue;
-                decorators[source[i].tag].action(go);
+                decorators[chunk.source[i].tag].action(go);
+                objects[i] = go;
             }
+            loaded.Set(objects);
+            return loaded;
         }
 
-        private GameObject BuildObj(LvObj o)
+        private GameObject BuildObj(LvObj o, Vector2 displace)
         {
             if (!decorators.ContainsKey(o.tag)) return null;
             Decorator dec = decorators[o.tag];
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
             go.tag = "";
-            go.Pos = o.pos;
+            go.Pos = o.pos + displace;
             go.Size = o.size;
             return go;
+        }
+    }
+
+    public class ChunkManager
+    {
+        private List<Chunk> chunks;
+        private List<LoadedChunk> loaded;
+        private ChunkFactory factory;
+
+        public ChunkManager()
+        {
+            factory = null;
+            chunks = new List<Chunk>();
+            loaded = new List<LoadedChunk>();
+        }
+
+        public void Discover(string path)
+        {
+            string dir = Files.FormatToDir(path);
+            Console.WriteLine(dir);
+            string[] lvlFiles = Files.AllFilesOfExtension(dir, "lvl");
+            Console.WriteLine("Found these chunk files: ");
+            Console.WriteLine(lvlFiles.Length);
+            Files.PrintFiles(path, lvlFiles);
+        }
+
+        public void SetFactory(ChunkFactory factory)
+        {
+            this.factory = factory;
+        }
+
+        public void Update()
+        {
+            if(factory == null)
+            {
+                Console.WriteLine("ChunkManager: ChunkFactory not set!");
+                return;
+            }
+            
         }
     }
 }

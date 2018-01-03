@@ -34,14 +34,14 @@ namespace UU_GameProject
                 newObject.Pos = Input.GetMousePosition();
                 newObject.Size = new Vector2(1f, 1f);
             }
-            if (Input.GetKey(PressAction.DOWN, Keys.A))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0.01f, 0));
-            else if (Input.GetKey(PressAction.DOWN, Keys.D))
+            if (Input.GetKey(PressAction.DOWN, Keys.Left))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(-0.01f, 0));
-            if (Input.GetKey(PressAction.DOWN, Keys.S))
+            else if (Input.GetKey(PressAction.DOWN, Keys.Right))
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(+0.01f, 0));
+            if (Input.GetKey(PressAction.DOWN, Keys.Up))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.01f));
-            else if (Input.GetKey(PressAction.DOWN, Keys.W))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, 0.01f));
+            else if (Input.GetKey(PressAction.DOWN, Keys.Down))
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, +0.01f));
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
@@ -51,7 +51,21 @@ namespace UU_GameProject
 
         public void Finish(bool save)
         {
-            if(save) LevelLogic.WriteLevel(LevelLogic.testurl);
+            if (save)
+            {
+                int x = 0, y = 0;
+                try
+                {
+                    int.TryParse(Console.ReadLine(), out x);
+                    int.TryParse(Console.ReadLine(), out y);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Could not set chunk position!");
+                }
+                Console.WriteLine("Saving chunk with position (" + x + "," + y + ").");
+                LevelLogic.WriteChunk("chunk" + x + y + ".lvl", x, y);
+            }
             GameStateManager.RequestChange("leveltest", CHANGETYPE.LOAD);
         }
     }
