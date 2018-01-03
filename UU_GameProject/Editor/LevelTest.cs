@@ -35,7 +35,7 @@ namespace UU_GameProject
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
 
-            LevelSolidifier builder = new LevelSolidifier(this);
+            LevelFactory builder = new LevelFactory(this);
             builder.AddSource("solid", 10, true, SolidBuilder);
             LvObj[] sources = LevelLogic.ReadLevel(LevelLogic.testurl);
             builder.BuildWorld(sources);

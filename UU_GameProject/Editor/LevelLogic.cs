@@ -72,12 +72,12 @@ namespace UU_GameProject
         }
     }
 
-    public class LevelSolidifier
+    public class LevelFactory
     {
         private Dictionary<string, Decorator> decorators;
         private GameState context;
 
-        public LevelSolidifier(GameState context)
+        public LevelFactory(GameState context)
         {
             this.context = context;
             decorators = new Dictionary<string, Decorator>();

@@ -25,7 +25,7 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            if (Input.GetKey(PressAction.PRESSED, Keys.Enter))
+            if (Input.GetKey(PressAction.PRESSED, Keys.Q))
             {
                 GameObject newObject = new GameObject("new", this, 0, true);
                 newObject.AddComponent(new CRender("block"));
@@ -34,13 +34,13 @@ namespace UU_GameProject
                 newObject.Pos = Input.GetMousePosition();
                 newObject.Size = new Vector2(1f, 1f);
             }
-            if (Input.GetKey(PressAction.DOWN, Keys.Right))
+            if (Input.GetKey(PressAction.DOWN, Keys.A))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0.01f, 0));
-            else if (Input.GetKey(PressAction.DOWN, Keys.Left))
+            else if (Input.GetKey(PressAction.DOWN, Keys.D))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(-0.01f, 0));
-            if (Input.GetKey(PressAction.DOWN, Keys.Up))
+            if (Input.GetKey(PressAction.DOWN, Keys.S))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.01f));
-            else if (Input.GetKey(PressAction.DOWN, Keys.Down))
+            else if (Input.GetKey(PressAction.DOWN, Keys.W))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, 0.01f));
         }
 

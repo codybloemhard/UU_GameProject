@@ -65,7 +65,7 @@ namespace UU_GameProject
             if (selected == GO)
             {
                 (GO.Renderer as CRender).colour = new Color(180, 180, 180);
-                if (Input.GetKey(PressAction.PRESSED, Keys.Delete))
+                if (Input.GetKey(PressAction.PRESSED, Keys.E))
                     Destroy();
                 properties.active = true;
             }
@@ -95,9 +95,10 @@ namespace UU_GameProject
             properties.Destroy();
         }
 
-    public void HandleProperties()
+        public void HandleProperties()
         {
-            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT)
+                || Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 if (properties.Hover != -1)
                 {
@@ -107,7 +108,6 @@ namespace UU_GameProject
                         {
                             HandleInput();
                             properties.text[properties.selected] = backup;
-                            Console.WriteLine("ok");
                         }
                         backup = properties.text[properties.Hover];
                     }
