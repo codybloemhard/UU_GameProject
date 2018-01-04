@@ -25,20 +25,22 @@ namespace UU_GameProject
         public static string[] AllFiles(string dir)
         {
             string[] allfiles = System.IO.Directory.GetFiles(dir, "*.*", System.IO.SearchOption.AllDirectories);
-            //FileInfo info = new FileInfo(file);
             return allfiles;
         }
 
         public static bool HasExtension(string s, string extension)
         {
             string ex = "";
-            bool read = false;
-            for (int i = 0; i < s.Length; i++)
+            bool read = true;
+            for(int i = s.Length - 1; i >= 0; i--)
             {
-                if (read) ex += s[i];
-                if (s[i] == '.') read = true;
+                if (s[i] == '.') break;
+                ex += s[i];
             }
-            if (ex == extension) return true;
+            string ext = "";
+            for(int i = ex.Length - 1; i >= 0; i--)
+                ext += ex[i];
+            if (ext == extension) return true;
             return false;
         }
 
@@ -46,7 +48,7 @@ namespace UU_GameProject
         {
             string[] all = AllFiles(dir);
             l.Clear();
-            foreach (string s in all) if (HasExtension(s, "cs")) l.Add(s);
+            foreach (string s in all) if (HasExtension(s, ex)) l.Add(s);
             return l.ToArray();
         }
 

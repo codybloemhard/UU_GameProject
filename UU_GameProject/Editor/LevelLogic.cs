@@ -21,11 +21,9 @@ namespace UU_GameProject
 
     public static class LevelLogic
     {
-        public const string baseurl = "../../../../Content/Levels/";
-
         public static void WriteChunk(string file, int x, int y)
         {
-            using (BinaryWriter w = new BinaryWriter(File.Open(baseurl + file, FileMode.OpenOrCreate)))
+            using (BinaryWriter w = new BinaryWriter(File.Open(file, FileMode.OpenOrCreate)))
             {
                 w.Write(x);
                 w.Write(y);
@@ -45,11 +43,10 @@ namespace UU_GameProject
 
         public static Chunk ReadChunk(string file)
         {
-            string url = baseurl + file;
-            if (!File.Exists(url)) return null;
+            if (!File.Exists(file)) return null;
             Chunk chunk = new Chunk();
             List<LvObj> objs = new List<LvObj>();
-            BinaryReader r = new BinaryReader(File.Open(url, FileMode.Open));
+            BinaryReader r = new BinaryReader(File.Open(file, FileMode.Open));
             chunk.x = r.ReadInt32();
             chunk.y = r.ReadInt32();
             int count = r.ReadInt32();
@@ -106,6 +103,14 @@ namespace UU_GameProject
                 if(objects[i] != null)
                     objects[i].Destroy();
         }
+
+        public bool IsChunk(int x, int y)
+        {
+            if (pos.X == x && pos.Y == y) return true;
+            return false;
+        }
+
+        public Vector2 Pos { get { return pos; } }
     }
 
     public class ChunkFactory
@@ -155,6 +160,8 @@ namespace UU_GameProject
             go.Size = o.size;
             return go;
         }
+
+        public Vector2 ChunkSize { get { return chunkSize; } }
     }
 
     public class ChunkManager
@@ -162,27 +169,24 @@ namespace UU_GameProject
         private List<Chunk> chunks;
         private List<LoadedChunk> loaded;
         private ChunkFactory factory;
+        private GameObject player;
+        private Vector2 middle = Vector2.Zero;
 
         public ChunkManager()
         {
             factory = null;
+            player = null;
             chunks = new List<Chunk>();
             loaded = new List<LoadedChunk>();
         }
 
-        public void Discover(string path)
+        public void Discover(string path, ChunkFactory factory, GameObject player)
         {
-            string dir = Files.FormatToDir(path);
-            Console.WriteLine(dir);
-            string[] lvlFiles = Files.AllFilesOfExtension(dir, "lvl");
-            Console.WriteLine("Found these chunk files: ");
-            Console.WriteLine(lvlFiles.Length);
-            Files.PrintFiles(path, lvlFiles);
-        }
-
-        public void SetFactory(ChunkFactory factory)
-        {
+            string[] files = Files.AllFilesOfExtension(path, "lvl");
             this.factory = factory;
+            this.player = player;
+            foreach (string f in files)
+                chunks.Add(LevelLogic.ReadChunk(f));
         }
 
         public void Update()
@@ -192,7 +196,46 @@ namespace UU_GameProject
                 Console.WriteLine("ChunkManager: ChunkFactory not set!");
                 return;
             }
-            
+            if(player == null)
+            {
+                Console.WriteLine("ChunkManager: Player is not set!");
+                return;
+            }
+            Vector2 newmid = player.Pos;
+            newmid /= factory.ChunkSize;
+            newmid.X = (int)Math.Floor(newmid.X);
+            newmid.Y = (int)Math.Floor(newmid.Y);
+            if (newmid == middle) return;
+            List<LoadedChunk> newloaded = new List<LoadedChunk>();
+            List<LoadedChunk> tobeLoaded = new List<LoadedChunk>();
+            for(int x = 0; x < 3; x++)
+                for(int y = 0; y < 3; y++)
+                {
+                    int xx = (int)newmid.X - 1;
+                    int yy = (int)newmid.Y - 1;
+                    LoadedChunk c = new LoadedChunk(new Vector2(xx, yy));
+                    newloaded.Add(c);
+                }
+
+            middle = newmid;
+            for(int i = 0; i < newloaded.Count; i++)
+            {
+                int xx = (int)newloaded[i].Pos.X;
+                int yy = (int)newloaded[i].Pos.Y;
+                LoadedChunk alreadyLoaded = GetLoadedChunk(xx, yy);
+                if (alreadyLoaded == null)
+                    tobeLoaded.Add(alreadyLoaded);
+            }
+            //Chunk chunk = LevelLogic.ReadChunk("test.lvl");
+            //LoadedChunk lc = factory.BuildChunk(chunk);
+        }
+
+        private LoadedChunk GetLoadedChunk(int x, int y)
+        {
+            for (int i = 0; i < loaded.Count; i++)
+                if (loaded[i].IsChunk(x, y))
+                    return loaded[i];
+            return null;
         }
     }
 }
