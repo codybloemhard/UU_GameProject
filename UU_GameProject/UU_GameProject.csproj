@@ -39,7 +39,6 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components\Enemy\CMovement.cs" />
     <Compile Include="Components\General\CFireballMovement.cs" />
     <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Components\General\CFaction.cs" />
