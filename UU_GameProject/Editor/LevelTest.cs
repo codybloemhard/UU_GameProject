@@ -41,7 +41,7 @@ namespace UU_GameProject
             player.AddComponent(new CFreeCamera());
             player.AddComponent(new CRender("player"));
             player.Size = new Vector2(1f);
-            player.Pos = new Vector2(8, 4.5f) - player.Size/2f;
+            player.Pos = new Vector2(2, 2);
 
             Vector2 chunkSize = new Vector2(32, 32);
             ChunkFactory builder = new ChunkFactory(this, chunkSize);

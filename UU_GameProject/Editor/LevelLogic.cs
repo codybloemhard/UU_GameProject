@@ -82,19 +82,24 @@ namespace UU_GameProject
         }
     }
 
+    public enum ChunkAction
+    {
+        STAY,
+        LOAD,
+        DESTROY,
+        NULL
+    }
+
     public class LoadedChunk
     {
-        private GameObject[] objects;
-        private Vector2 pos;
+        public GameObject[] objects;
+        public Vector2 pos;
+        public ChunkAction action;
 
         public LoadedChunk(Vector2 pos)
         {
             this.pos = pos;
-        }
-
-        public void Set(GameObject[] gos)
-        {
-            objects = gos;
+            action = ChunkAction.NULL;
         }
 
         public void Unload()
@@ -109,8 +114,6 @@ namespace UU_GameProject
             if (pos.X == x && pos.Y == y) return true;
             return false;
         }
-
-        public Vector2 Pos { get { return pos; } }
     }
 
     public class ChunkFactory
@@ -132,12 +135,12 @@ namespace UU_GameProject
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
 
-        public LoadedChunk BuildChunk(Chunk chunk)
+        public void BuildChunk(Chunk chunk, LoadedChunk lc)
         {
-            if (chunk == null) return null;
-            if (chunk.source == null) return null;
+            if (chunk == null) return;
+            if (chunk.source == null) return;
+            if (lc == null) return;
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-            LoadedChunk loaded = new LoadedChunk(displace);
             GameObject[] objects = new GameObject[chunk.source.Length];
             for (int i = 0; i < chunk.source.Length; i++)
             {
@@ -146,8 +149,7 @@ namespace UU_GameProject
                 decorators[chunk.source[i].tag].action(go);
                 objects[i] = go;
             }
-            loaded.Set(objects);
-            return loaded;
+            lc.objects = objects;
         }
 
         private GameObject BuildObj(LvObj o, Vector2 displace)
@@ -166,18 +168,20 @@ namespace UU_GameProject
 
     public class ChunkManager
     {
-        private List<Chunk> chunks;
-        private List<LoadedChunk> loaded;
+        private Dictionary<Vector2, Chunk> chunks;
+        private List<LoadedChunk> loaded, newloaded;
         private ChunkFactory factory;
         private GameObject player;
-        private Vector2 middle = Vector2.Zero;
+        private Vector2 middle;
 
         public ChunkManager()
         {
             factory = null;
             player = null;
-            chunks = new List<Chunk>();
+            chunks = new Dictionary<Vector2, Chunk>();
             loaded = new List<LoadedChunk>();
+            newloaded = new List<LoadedChunk>();
+            middle = new Vector2(float.MaxValue, float.MinValue);
         }
 
         public void Discover(string path, ChunkFactory factory, GameObject player)
@@ -186,7 +190,12 @@ namespace UU_GameProject
             this.factory = factory;
             this.player = player;
             foreach (string f in files)
-                chunks.Add(LevelLogic.ReadChunk(f));
+            {
+                Chunk c = LevelLogic.ReadChunk(f);
+                chunks.Add(new Vector2(c.x, c.y), c);
+            }
+            Console.WriteLine("files found: ");
+            Files.PrintFiles(path, files);
         }
 
         public void Update()
@@ -200,34 +209,86 @@ namespace UU_GameProject
             {
                 Console.WriteLine("ChunkManager: Player is not set!");
                 return;
-            }
+            }//check if we changed chunk
             Vector2 newmid = player.Pos;
             newmid /= factory.ChunkSize;
             newmid.X = (int)Math.Floor(newmid.X);
             newmid.Y = (int)Math.Floor(newmid.Y);
             if (newmid == middle) return;
-            List<LoadedChunk> newloaded = new List<LoadedChunk>();
-            List<LoadedChunk> tobeLoaded = new List<LoadedChunk>();
-            for(int x = 0; x < 3; x++)
-                for(int y = 0; y < 3; y++)
+            Console.WriteLine("Chunk change!");
+            newloaded.Clear();//set new chunks that need to be
+            for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
                 {
-                    int xx = (int)newmid.X - 1;
-                    int yy = (int)newmid.Y - 1;
+                    int xx = (int)newmid.X + (x - 1);
+                    int yy = (int)newmid.Y + (y - 1);
                     LoadedChunk c = new LoadedChunk(new Vector2(xx, yy));
                     newloaded.Add(c);
                 }
+            SetActions();//see what chunks need what action
+            LoadChunks();//create and destroy physical chunks
+            middle = newmid;//switch
+            loaded = newloaded;//switch
+        }
 
-            middle = newmid;
+        private void SetActions()
+        {         
+            for (int i = 0; i < newloaded.Count; i++)
+            {
+                int xx = (int)newloaded[i].pos.X;
+                int yy = (int)newloaded[i].pos.Y;
+                LoadedChunk alreadyLoaded = GetLoadedChunk(xx, yy);
+                if (alreadyLoaded != null)
+                {
+                    newloaded[i].action = ChunkAction.STAY;
+                    Console.WriteLine("!!stay " + xx + " " + yy);
+                }
+                else
+                {
+                    newloaded[i].action = ChunkAction.LOAD;
+                    Console.WriteLine("!!load");
+                }
+            }
+            for (int i = 0; i < loaded.Count; i++)
+            {
+                int x0 = (int)loaded[i].pos.X;
+                int y0 = (int)loaded[i].pos.Y;
+                bool found = false;
+                for (int j = 0; j < newloaded.Count; j++)
+                {
+                    int x1 = (int)newloaded[j].pos.X;
+                    int y1 = (int)newloaded[j].pos.Y;
+                    if (x0 == x1 && y0 == y1)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    loaded[i].action = ChunkAction.DESTROY;
+                    Console.WriteLine("!!destroy");
+                }
+            }
+        }
+        
+        private void LoadChunks()
+        {
+            for(int i = 0; i < loaded.Count; i++)
+            {
+                if (loaded[i].action != ChunkAction.DESTROY) continue;
+                loaded[i].Unload();
+            }
             for(int i = 0; i < newloaded.Count; i++)
             {
-                int xx = (int)newloaded[i].Pos.X;
-                int yy = (int)newloaded[i].Pos.Y;
-                LoadedChunk alreadyLoaded = GetLoadedChunk(xx, yy);
-                if (alreadyLoaded == null)
-                    tobeLoaded.Add(alreadyLoaded);
+                if (newloaded[i].action == ChunkAction.NULL ||
+                    newloaded[i].action == ChunkAction.STAY)
+                    continue;
+                Vector2 pos = newloaded[i].pos;
+                if (!chunks.ContainsKey(pos)) continue;
+                Chunk chunk = chunks[pos];
+                factory.BuildChunk(chunk, newloaded[i]);
             }
-            //Chunk chunk = LevelLogic.ReadChunk("test.lvl");
-            //LoadedChunk lc = factory.BuildChunk(chunk);
         }
 
         private LoadedChunk GetLoadedChunk(int x, int y)
