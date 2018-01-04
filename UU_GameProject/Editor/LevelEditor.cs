@@ -16,6 +16,7 @@ namespace UU_GameProject
         {
             Button button = new Button(this, "Finish", "block", () => Finish(),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
+            button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
 
         public override void Unload() { }
