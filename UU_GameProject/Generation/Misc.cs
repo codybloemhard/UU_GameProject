@@ -12,5 +12,13 @@ namespace UU_GameProject
                 newd.Add(entry.Key, entry.Value);
             return newd;
         }
+
+        public static List<T> Copy<T>(List<T> orig)
+        {
+            List<T> newl = new List<T>();
+            for (int i = 0; i < orig.Count; i++)
+                newl.Add(orig[i]);
+            return newl;
+        }
     }
 }

@@ -43,12 +43,13 @@ namespace UU_GameProject
             player.Size = new Vector2(1f);
             player.Pos = new Vector2(2, 2);
 
-            Vector2 chunkSize = new Vector2(32, 32);
+            Vector2 chunkSize = new Vector2(16, 16);
             ChunkFactory builder = new ChunkFactory(this, chunkSize);
             builder.AddSource("solid", 10, true, SolidBuilder);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
+            //Debug.FullDebugMode();
         }
         
         public void SolidBuilder(GameObject o)
@@ -65,12 +66,6 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             chunks.Update();
-            if (Input.GetKey(PressAction.PRESSED, Keys.P))
-            {
-                if (Debug.Mode == DEBUGMODE.PROFILING)
-                    Debug.FullDebugMode();
-                else Debug.ProfilingMode();
-            }
             base.Update(time);
         }
 

@@ -104,6 +104,7 @@ namespace UU_GameProject
 
         public void Unload()
         {
+            if (objects == null) return;
             for(int i = 0; i < objects.Length; i++)
                 if(objects[i] != null)
                     objects[i].Destroy();
@@ -228,26 +229,20 @@ namespace UU_GameProject
             SetActions();//see what chunks need what action
             LoadChunks();//create and destroy physical chunks
             middle = newmid;//switch
-            loaded = newloaded;//switch
+            loaded = Misc.Copy(newloaded);//switch
         }
 
         private void SetActions()
-        {         
+        {
             for (int i = 0; i < newloaded.Count; i++)
             {
                 int xx = (int)newloaded[i].pos.X;
                 int yy = (int)newloaded[i].pos.Y;
                 LoadedChunk alreadyLoaded = GetLoadedChunk(xx, yy);
                 if (alreadyLoaded != null)
-                {
                     newloaded[i].action = ChunkAction.STAY;
-                    Console.WriteLine("!!stay " + xx + " " + yy);
-                }
                 else
-                {
                     newloaded[i].action = ChunkAction.LOAD;
-                    Console.WriteLine("!!load");
-                }
             }
             for (int i = 0; i < loaded.Count; i++)
             {
@@ -267,7 +262,6 @@ namespace UU_GameProject
                 if (!found)
                 {
                     loaded[i].action = ChunkAction.DESTROY;
-                    Console.WriteLine("!!destroy");
                 }
             }
         }
@@ -281,13 +275,20 @@ namespace UU_GameProject
             }
             for(int i = 0; i < newloaded.Count; i++)
             {
-                if (newloaded[i].action == ChunkAction.NULL ||
-                    newloaded[i].action == ChunkAction.STAY)
-                    continue;
-                Vector2 pos = newloaded[i].pos;
-                if (!chunks.ContainsKey(pos)) continue;
-                Chunk chunk = chunks[pos];
-                factory.BuildChunk(chunk, newloaded[i]);
+                if(newloaded[i].action == ChunkAction.LOAD)
+                {
+                    Vector2 pos = newloaded[i].pos;
+                    if (!chunks.ContainsKey(pos)) continue;
+                    Chunk chunk = chunks[pos];
+                    factory.BuildChunk(chunk, newloaded[i]);
+                }
+                else if(newloaded[i].action == ChunkAction.STAY)
+                {
+                    int xx = (int)newloaded[i].pos.X;
+                    int yy = (int)newloaded[i].pos.Y;
+                    LoadedChunk alreadyLoaded = GetLoadedChunk(xx, yy);
+                    newloaded[i] = alreadyLoaded;
+                }
             }
         }
 
