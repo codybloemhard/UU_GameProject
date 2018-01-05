@@ -49,7 +49,7 @@ namespace UU_GameProject
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
         
         public void SolidBuilder(GameObject o)
@@ -58,10 +58,7 @@ namespace UU_GameProject
             o.AddComponent(new CAABB());
         }
 
-        public override void Unload()
-        {
-
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {

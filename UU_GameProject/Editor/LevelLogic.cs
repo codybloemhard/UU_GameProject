@@ -21,17 +21,17 @@ namespace UU_GameProject
 
     public static class LevelLogic
     {
-        public static void WriteChunk(string file, int x, int y)
+        public static void WriteChunk(List<GameObject> objects, string file, int x, int y)
         {
             using (BinaryWriter w = new BinaryWriter(File.Open(file, FileMode.OpenOrCreate)))
             {
                 w.Write(x);
                 w.Write(y);
-                int count = CLevelEditorObject.objectList.Count;
+                int count = objects.Count;
                 w.Write(count);
                 for (int i = 0; i < count; i++)
                 {
-                    GameObject obj = CLevelEditorObject.objectList[i];
+                    GameObject obj = objects[i];
                     w.Write(obj.Pos.X);
                     w.Write(obj.Pos.Y);
                     w.Write(obj.Size.X);
