@@ -45,7 +45,7 @@ namespace UU_GameProject
 
             Vector2 chunkSize = new Vector2(16, 16);
             ChunkFactory builder = new ChunkFactory(this, chunkSize);
-            builder.AddSource("solid", 10, true, SolidBuilder);
+            builder.AddSource("solid", 10, true, Catalog.DecoratorGrassPlant);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
@@ -54,7 +54,7 @@ namespace UU_GameProject
         
         public void SolidBuilder(GameObject o)
         {
-            o.AddComponent(new CRender("_dirt0"));
+            Catalog.DecorateBlock(this, o, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             o.AddComponent(new CAABB());
         }
 

@@ -70,13 +70,23 @@ namespace UU_GameProject
 
     public struct Decorator
     {
-        public Action<GameObject> action;
+        public Action<GameObject> decorator;
+        public Action<Vector2> replacer;
         public uint layer;
         public bool isStatic;
 
-        public Decorator(Action<GameObject> action, uint layer, bool isStatic)
+        public Decorator(Action<GameObject> decorator, uint layer, bool isStatic)
         {
-            this.action = action;
+            this.decorator = decorator;
+            this.replacer = null;
+            this.layer = layer;
+            this.isStatic = isStatic;
+        }
+
+        public Decorator(Action<Vector2> replacer, uint layer, bool isStatic)
+        {
+            this.decorator = null;
+            this.replacer = replacer;
             this.layer = layer;
             this.isStatic = isStatic;
         }
@@ -136,6 +146,12 @@ namespace UU_GameProject
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
 
+        public void AddSource(string kind, uint layer, bool isStatic, Action<Vector2> action)
+        {
+            if (decorators.ContainsKey(kind)) return;
+            decorators.Add(kind, new Decorator(action, layer, isStatic));
+        }
+
         public void BuildChunk(Chunk chunk, LoadedChunk lc)
         {
             if (chunk == null) return;
@@ -147,7 +163,13 @@ namespace UU_GameProject
             {
                 GameObject go = BuildObj(chunk.source[i], displace);
                 if (go == null) continue;
-                decorators[chunk.source[i].tag].action(go);
+                Decorator dec = decorators[chunk.source[i].tag];
+                if (dec.decorator != null) dec.decorator(go);
+                else
+                {
+                    dec.replacer(go.Pos);
+                    //TODO
+                }
                 objects[i] = go;
             }
             lc.objects = objects;

@@ -72,7 +72,7 @@ namespace UU_GameProject
             return go;
         }
 
-        public static GameObject CreateBlock(GameState context, float x, float y, uint layer, string tag, 
+        public static void DecorateBlock(GameState context, GameObject go,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -104,30 +104,28 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-            GameObject basego = CreateObject(context, layer + 3, tag, basetex);
-            basego.Pos = new Vector2(x, y);
-            basego.Size = new Vector2(1f, 1f);
+            go.AddComponent(new CRender(RandomTexture(basetex)));
+            
             if (layer0tex != "")
             {
-                GameObject layergo = CreateObject(context, layer + 2, tag, layer0tex);
-                layergo.Pos = new Vector2(x, y);
-                layergo.Size = new Vector2(1f, 1f);
+                GameObject layergo = CreateObject(context, go.Layer - 1, go.tag, layer0tex);
+                layergo.Pos = go.Pos;
+                layergo.Size = go.Size;
             }
             if (layer1tex != "")
             {
-                GameObject layergo = CreateObject(context, layer + 1, tag, layer1tex);
-                layergo.Pos = new Vector2(x, y);
-                layergo.Size = new Vector2(1f, 1f);
+                GameObject layergo = CreateObject(context, go.Layer - 2, go.tag, layer1tex);
+                layergo.Pos = go.Pos;
+                layergo.Size = go.Size;
             }
             if (toptex != "")
             {
-                GameObject layergo = CreateObject(context, layer, tag, toptex);
-                layergo.Pos = new Vector2(x, y);
-                layergo.Size = new Vector2(1f, 0.5f);
+                GameObject layergo = CreateObject(context, go.Layer - 3, go.tag, toptex);
+                layergo.Pos = go.Pos;
+                layergo.Size = go.Size * new Vector2(1f, 0.5f);
             }
-            return basego;
         }
-
+        
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)
         {
             const string tex = "_boulder";
@@ -446,23 +444,17 @@ namespace UU_GameProject
             obj.tag = tag;
             return obj;
         }
-
-        public static GameObject CreateFlower(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        //TODO
+        public static void DecoratorFlower(GameObject go)
         {
             const string tex = "_flower";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
-            go.Size = size;
-            return go;
+            go.AddComponent(new CRender(RandomTexture(tex)));
         }
 
-        public static GameObject CreateGrassPlant(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)
+        public static void DecoratorGrassPlant(GameObject go)
         {
             const string tex = "_grassplant";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(feetPos.X, feetPos.Y - size.Y);
-            go.Size = size;
-            return go;
+            go.AddComponent(new CRender(RandomTexture(tex)));
         }
 
         public static GameObject CreateGrassDot(GameState context, Vector2 feetPos, Vector2 size, uint layer, string tag)

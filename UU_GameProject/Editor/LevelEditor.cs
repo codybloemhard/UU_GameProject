@@ -71,7 +71,7 @@ namespace UU_GameProject
             GameStateManager.RequestChange("leveltest", CHANGETYPE.LOAD);
         }
 
-        private void TestChunks()
+        private void TestChunks()//write 441 random chunks
         {
             List<GameObject> list = new List<GameObject>();
             for (int i = 0; i < 10; i++)
