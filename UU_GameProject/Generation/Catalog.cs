@@ -71,8 +71,8 @@ namespace UU_GameProject
             go.AddComponent(new CRender(RandomTexture(tex)));
             return go;
         }
-
-        public static void DecorateBlock(GameState context, GameObject go,
+        
+        public static GameObject[] ReplacerBlock(ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -104,26 +104,40 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-            go.AddComponent(new CRender(RandomTexture(basetex)));
-            
+            int size = 1;
+            if (layer0tex != "") size++;
+            if (layer1tex != "") size++;
+            if (toptex != "") size++;
+            GameObject[] objs = new GameObject[size];
+            int count = 1;
+
+            GameObject basego = CreateObject(i.context,  i.layer + 3, "", basetex);
+            basego.Pos = i.obj.pos;
+            basego.Size = i.obj.size;
+            objs[0] = basego;
+
             if (layer0tex != "")
             {
-                GameObject layergo = CreateObject(context, go.Layer - 1, go.tag, layer0tex);
-                layergo.Pos = go.Pos;
-                layergo.Size = go.Size;
+                GameObject layergo = CreateObject(i.context, i.layer + 2, "", layer0tex);
+                layergo.Pos = i.obj.pos;
+                layergo.Size = i.obj.size;
+                objs[count++] = layergo;
             }
             if (layer1tex != "")
             {
-                GameObject layergo = CreateObject(context, go.Layer - 2, go.tag, layer1tex);
-                layergo.Pos = go.Pos;
-                layergo.Size = go.Size;
+                GameObject layergo = CreateObject(i.context, i.layer + 1, "", layer1tex);
+                layergo.Pos = i.obj.pos;
+                layergo.Size = i.obj.size;
+                objs[count++] = layergo;
             }
             if (toptex != "")
             {
-                GameObject layergo = CreateObject(context, go.Layer - 3, go.tag, toptex);
-                layergo.Pos = go.Pos;
-                layergo.Size = go.Size * new Vector2(1f, 0.5f);
+                GameObject layergo = CreateObject(i.context, i.layer, "", toptex);
+                layergo.Pos = i.obj.pos;
+                layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
+                objs[count++] = layergo;
             }
+            return objs;
         }
         
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)

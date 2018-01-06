@@ -71,7 +71,7 @@ namespace UU_GameProject
     public struct Decorator
     {
         public Action<GameObject> decorator;
-        public Action<Vector2> replacer;
+        public Func<ReplacerInput, GameObject[]> replacer;
         public uint layer;
         public bool isStatic;
 
@@ -83,12 +83,28 @@ namespace UU_GameProject
             this.isStatic = isStatic;
         }
 
-        public Decorator(Action<Vector2> replacer, uint layer, bool isStatic)
+        public Decorator(Func<ReplacerInput, GameObject[]> replacer, uint layer, bool isStatic)
         {
             this.decorator = null;
             this.replacer = replacer;
             this.layer = layer;
             this.isStatic = isStatic;
+        }
+    }
+
+    public struct ReplacerInput
+    {
+        public uint layer;
+        public bool isStatic;
+        public LvObj obj;
+        public GameState context;
+
+        public ReplacerInput(uint l, bool s, LvObj o, GameState c)
+        {
+            layer = l;
+            isStatic = s;
+            obj = o;
+            context = c;
         }
     }
 
@@ -146,7 +162,7 @@ namespace UU_GameProject
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
 
-        public void AddSource(string kind, uint layer, bool isStatic, Action<Vector2> action)
+        public void AddSource(string kind, uint layer, bool isStatic, Func<ReplacerInput, GameObject[]> action)
         {
             if (decorators.ContainsKey(kind)) return;
             decorators.Add(kind, new Decorator(action, layer, isStatic));
@@ -158,30 +174,36 @@ namespace UU_GameProject
             if (chunk.source == null) return;
             if (lc == null) return;
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-            GameObject[] objects = new GameObject[chunk.source.Length];
+            List<GameObject> objects = new List<GameObject>();
             for (int i = 0; i < chunk.source.Length; i++)
             {
-                GameObject go = BuildObj(chunk.source[i], displace);
-                if (go == null) continue;
-                Decorator dec = decorators[chunk.source[i].tag];
-                if (dec.decorator != null) dec.decorator(go);
+                string key = chunk.source[i].tag;
+                if (!decorators.ContainsKey(key)) continue;
+                Decorator dec = decorators[key];
+                if (dec.decorator != null)
+                {
+                    GameObject go = BuildObj(chunk.source[i]);
+                    go.Pos += displace;
+                    dec.decorator(go);
+                    objects.Add(go);
+                }
                 else
                 {
-                    dec.replacer(go.Pos);
-                    //TODO
+                    ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
+                    GameObject[] objs = dec.replacer(input);
+                    foreach (GameObject o in objs) o.Pos += displace;
+                    objects.Add(objs);
                 }
-                objects[i] = go;
             }
-            lc.objects = objects;
+            lc.objects = objects.ToArray();
         }
 
-        private GameObject BuildObj(LvObj o, Vector2 displace)
+        private GameObject BuildObj(LvObj o)
         {
-            if (!decorators.ContainsKey(o.tag)) return null;
             Decorator dec = decorators[o.tag];
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
             go.tag = "";
-            go.Pos = o.pos + displace;
+            go.Pos = o.pos;
             go.Size = o.size;
             return go;
         }
