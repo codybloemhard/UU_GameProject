@@ -19,7 +19,7 @@ namespace UU_GameProject
         private float input;
         public static List<GameObject> objectList = new List<GameObject>();
 
-        public CLevelEditorObject(GameObject GO)
+        public CLevelEditorObject(GameObject GO, bool spawner)
         {
             List<string> text = new List<string>();
             text.Add("XSize:");

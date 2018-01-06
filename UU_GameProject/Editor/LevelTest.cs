@@ -47,10 +47,9 @@ namespace UU_GameProject
             ChunkFactory builder = new ChunkFactory(this, chunkSize);
             builder.AddSource("solid", 10, true, 
                 delegate(ReplacerInput i) {
-                GameObject[] objs = Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
-                objs[0].AddComponent(new CAABB());
-                return objs;
+                return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             });
+            builder.AddSource("!", 10, true, Catalog.ReplacerTree8);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);

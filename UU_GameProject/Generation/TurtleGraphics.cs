@@ -137,10 +137,9 @@ namespace UU_GameProject
             this.size = size;
         }
         
-        public GameObject CreateObject(string lstring, uint layer, string tag)
+        public GameObject[] CreateObject(string lstring, uint layer, string tag)
         {
-            GameObject root = null;
-            bool rootDone = false;
+            List<GameObject> list = new List<GameObject>();
             for (int i = 0; i < lstring.Length; i++)
             {
                 char token = lstring[i];
@@ -183,14 +182,10 @@ namespace UU_GameProject
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     go.Pos += (dir * state.sizes[token].X * size.X) * da.offset;
                     state.pos = next;
-                    if (!rootDone)
-                    {
-                        root = go;
-                        rootDone = true;
-                    }
+                    list.Add(go);
                 }
             }
-            return root;
+            return list.ToArray();
         }
         
         private void SetDir()

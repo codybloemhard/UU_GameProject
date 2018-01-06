@@ -29,6 +29,7 @@ namespace UU_GameProject
             generator.GenTest();
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
             TextureManager.LoadTexture("playerWalking", "playerWalkingSimple", 4, 1);
             TextureManager.LoadTexture("playerCrouching", "playerCrouchingSimple", 2, 1);

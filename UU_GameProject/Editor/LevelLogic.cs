@@ -32,10 +32,16 @@ namespace UU_GameProject
                 for (int i = 0; i < count; i++)
                 {
                     GameObject obj = objects[i];
+                    bool spawner = obj.tag[0] == '!';
+                    if (spawner) w.Write(true);
+                    else w.Write(false);
                     w.Write(obj.Pos.X);
                     w.Write(obj.Pos.Y);
-                    w.Write(obj.Size.X);
-                    w.Write(obj.Size.Y);
+                    if (!spawner)
+                    {
+                        w.Write(obj.Size.X);
+                        w.Write(obj.Size.Y);
+                    }
                     w.Write(obj.tag);
                 }
             }
@@ -53,11 +59,16 @@ namespace UU_GameProject
             for (int i = 0; i < count; i++)
             {
                 LvObj o = new LvObj();
-                float x, y, w, h;
+                bool spawner;
+                float x, y, w = 0f, h = 0f;
+                spawner = r.ReadBoolean();
                 x = r.ReadSingle();
                 y = r.ReadSingle();
-                w = r.ReadSingle();
-                h = r.ReadSingle();
+                if (!spawner)
+                {
+                    w = r.ReadSingle();
+                    h = r.ReadSingle();
+                }
                 o.tag = r.ReadString();
                 o.pos = new Vector2(x, y);
                 o.size = new Vector2(w, h);
