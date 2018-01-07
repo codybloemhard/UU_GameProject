@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Core;
 using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 
 namespace UU_GameProject
 {
@@ -184,34 +185,39 @@ namespace UU_GameProject
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
-            Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-            List<GameObject> objects = new List<GameObject>();
-            for (int i = 0; i < chunk.source.Length; i++)
+            //DOES NOT WORK
+            Task.Factory.StartNew(()=>
             {
-                string key = chunk.source[i].tag;
-                if (!decorators.ContainsKey(key)) continue;
-                Decorator dec = decorators[key];
-                if (dec.decorator != null)
+                Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
+                List<GameObject> objects = new List<GameObject>();
+                for (int i = 0; i < chunk.source.Length; i++)
                 {
-                    GameObject go = BuildObj(chunk.source[i]);
-                    go.Pos += displace;
-                    dec.decorator(go);
-                    objects.Add(go);
+                    string key = chunk.source[i].tag;
+                    if (!decorators.ContainsKey(key)) continue;
+                    Decorator dec = decorators[key];
+                    if (dec.decorator != null)
+                    {
+                        GameObject go = BuildObj(chunk.source[i]);
+                        go.Pos += displace;
+                        dec.decorator(go);
+                        objects.Add(go);
+                    }
+                    else
+                    {
+                        ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
+                        GameObject[] objs = dec.replacer(input);
+                        foreach (GameObject o in objs) o.Pos += displace;
+                        objects.Add(objs);
+                    }
                 }
-                else
-                {
-                    ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
-                    GameObject[] objs = dec.replacer(input);
-                    foreach (GameObject o in objs) o.Pos += displace;
-                    objects.Add(objs);
-                }
-            }
-            lc.objects = objects.ToArray();
+                lc.objects = objects.ToArray();
+            });
         }
 
         private GameObject BuildObj(LvObj o)
         {
             Decorator dec = decorators[o.tag];
+            if (context == null) Console.WriteLine("HELP");
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
             go.tag = "";
             go.Pos = o.pos;

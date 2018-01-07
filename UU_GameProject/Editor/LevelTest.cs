@@ -4,6 +4,7 @@ using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Threading.Tasks;
 
 namespace UU_GameProject
 {
@@ -49,19 +50,42 @@ namespace UU_GameProject
                 delegate(ReplacerInput i) {
                 return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             });
-            builder.AddSource("!", 10, true, Catalog.ReplacerTree8);
+            builder.AddSource("!", 10, true, Catalog.ReplacerTree0);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
             //Debug.FullDebugMode();
         }
 
+        private void dectest(GameObject o)
+        {
+            o.Size = new Vector2(1f);
+            o.AddComponent(new CRender("_grassdot0"));
+        }
+
         public override void Unload() { }
 
         public override void Update(float time)
         {
-            chunks.Update();
             base.Update(time);
+            chunks.Update();
+            if (Input.GetKey(PressAction.PRESSED, Keys.Q))
+            {
+                Task.Factory.StartNew(test);
+                Task.Factory.StartNew(test);
+            }
+        }
+
+        private void test()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                GameObject a = new GameObject(this, 0);
+                a.Pos = new Vector2((float)MathH.random.NextDouble() * 16, (float)MathH.random.NextDouble() * 16);
+                a.Size = new Vector2(0.5f);
+                a.AddComponent(new CRender("block"));
+                a.AddComponent(new CAABB());
+            }
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
