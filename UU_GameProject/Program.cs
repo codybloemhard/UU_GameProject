@@ -30,6 +30,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
             TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("menu", "menutile");
             TextureManager.LoadTexture("playerWalking", "playerWalkingSimple", 4, 1);
             TextureManager.LoadTexture("playerCrouching", "playerCrouchingSimple", 2, 1);
             TextureManager.LoadTexture("playerCrawling", "playerCrawlingSimple", 4, 1);

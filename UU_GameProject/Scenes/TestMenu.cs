@@ -24,21 +24,21 @@ namespace UU_GameProject
             testTimer.tag = "timerText";
 
             //buttons
-            buttonStart = new Button(this, "New game", "block", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
+            buttonStart = new Button(this, "New game", "menutile2", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
                 font, new Vector2(6, 3), new Vector2(4, 1f));
-            buttonStart.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            buttonContinue = new Button(this, "Continue. Not implemented", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+            buttonContinue = new Button(this, "Continue. Not implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 font, new Vector2(6, 4.2f), new Vector2(4, 1f));
-            buttonContinue.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            buttonContinue.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            buttonOptions = new Button(this, "Options", "block", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
+            buttonOptions = new Button(this, "Options", "menutile2", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
                 font, new Vector2(6, 5.4f), new Vector2(4, 1f));
-            buttonOptions.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            buttonOptions.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            buttonQuit = new Button(this, "Exit. Not implemented", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+            buttonQuit = new Button(this, "Exit. Not implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 font, new Vector2(6, 6.6f), new Vector2(4, 1f));
-            buttonQuit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            buttonQuit.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
             //others
             Timers.Add("timer", 10, changeTextColour);
