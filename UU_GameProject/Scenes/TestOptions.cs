@@ -7,9 +7,9 @@ namespace UU_GameProject
 {
     public class TestOptions : GameState
     {
-        private Text text, text2;
+        private Text text, text2, text3, text4;
         private Button buttonMainmenu, fullscreen;
-        private SliderBar audioslider;
+        private SliderBar masteraudio, musicaudio, sfaudio;
         private bool Fullscreen;
         private uint width, height;
         
@@ -21,17 +21,28 @@ namespace UU_GameProject
             width = 1000;
             height = width / 16 * 9;
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text(this, "Options", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
+            text = new Text(this, "Options", new Vector2(0f, 0.5f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
 
+            //buttons
             fullscreen = new Button(this, "Full screen", "menutile2", () => setFullscreen(),
-                font, new Vector2(6, 3f), new Vector2(4, 1.2f));
+                font, new Vector2(6, 2f), new Vector2(4, 1.2f));
             fullscreen.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            text2 = new Text(this, "Audio", new Vector2(0f, 4.5f), new Vector2(16f, 1f), font);
+            text2 = new Text(this, "Audio", new Vector2(-2f, 3.4f), new Vector2(16f, 1f), font);
             text2.colour = new Color(255, 0, 0);
-            audioslider = new SliderBar(this, "menutile2", "menutile2", 1, new Vector2(10, 4.5f), new Vector2(4, 1.2f), "x");
-            audioslider.colour = Color.BurlyWood;
+            masteraudio = new SliderBar(this, "menutile2", "menutile2", 1, new Vector2(8, 3.4f), new Vector2(4, 1.0f), "x");
+            masteraudio.colour = Color.BurlyWood;
+
+            text3 = new Text(this, "Music", new Vector2(-2f, 4.6f), new Vector2(16f, 1f), font);
+            text3.colour = new Color(255, 0, 0);
+            musicaudio = new SliderBar(this, "menutile2", "menutile2", 1, new Vector2(8, 4.6f), new Vector2(4, 1.0f), "x");
+            musicaudio.colour = Color.BurlyWood;
+
+            text4 = new Text(this, "Sound Effects", new Vector2(-2f, 5.8f), new Vector2(16f, 1f), font);
+            text4.colour = new Color(255, 0, 0);
+            sfaudio = new SliderBar(this, "menutile2", "menutile2", 1, new Vector2(8, 5.8f), new Vector2(4, 1.0f), "x");
+            sfaudio.colour = Color.BurlyWood;
 
             buttonMainmenu = new Button(this, "Main menu", "menutile2", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(12, 7.8f), new Vector2(4, 1.2f));
