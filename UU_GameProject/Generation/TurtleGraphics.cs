@@ -195,7 +195,7 @@ namespace UU_GameProject
 
         private GameObject _obj(string t, GameState c, uint l, string tex)
         {
-            GameObject go = new GameObject(t, c, l);
+            GameObject go = new GameObject(t, c, l, true);
             go.AddComponent(new CRender(tex));
             return go;
         }

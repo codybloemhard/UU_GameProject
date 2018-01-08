@@ -143,9 +143,12 @@ namespace UU_GameProject
         public void Unload()
         {
             if (objects == null) return;
-            for(int i = 0; i < objects.Length; i++)
-                if(objects[i] != null)
-                    objects[i].Destroy();
+            Task.Run(() =>
+            {
+                for (int i = 0; i < objects.Length; i++)
+                    if (objects[i] != null)
+                        objects[i].Destroy();
+            });
         }
 
         public bool IsChunk(int x, int y)
@@ -160,12 +163,21 @@ namespace UU_GameProject
         private Dictionary<string, Decorator> decorators;
         private GameState context;
         private Vector2 chunkSize;
+        private TaskEngine engine;
+        private uint chunkcounter = 0;
+        private Dictionary<string, List<GameObject>> lists;
+        private Dictionary<string, uint> counters;
+        private Dictionary<string, LoadedChunk> chunks;
 
         public ChunkFactory(GameState context, Vector2 chunkSize)
         {
             this.context = context;
             this.chunkSize = chunkSize;
             decorators = new Dictionary<string, Decorator>();
+            engine = new TaskEngine();
+            lists = new Dictionary<string, List<GameObject>>();
+            counters = new Dictionary<string, uint>();
+            chunks = new Dictionary<string, LoadedChunk>();
         }
         
         public void AddSource(string kind, uint layer, bool isStatic, Action<GameObject> action)
@@ -185,39 +197,61 @@ namespace UU_GameProject
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
-            //DOES NOT WORK
-            Task.Factory.StartNew(()=>
+            //Task.Run(()=>
+            //{
+            Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
+            string cstring = chunkcounter.ToString();
+            lists.Add(cstring, new List<GameObject>());
+            chunks.Add(cstring, lc);
+            for (int i = 0; i < chunk.source.Length; i++)
             {
-                Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-                List<GameObject> objects = new List<GameObject>();
-                for (int i = 0; i < chunk.source.Length; i++)
+                string key = chunk.source[i].tag;
+                if (!decorators.ContainsKey(key)) continue;
+                Decorator dec = decorators[key];
+                if (dec.decorator != null)
                 {
-                    string key = chunk.source[i].tag;
-                    if (!decorators.ContainsKey(key)) continue;
-                    Decorator dec = decorators[key];
-                    if (dec.decorator != null)
-                    {
-                        GameObject go = BuildObj(chunk.source[i]);
-                        go.Pos += displace;
-                        dec.decorator(go);
-                        objects.Add(go);
-                    }
-                    else
-                    {
-                        ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
-                        GameObject[] objs = dec.replacer(input);
-                        foreach (GameObject o in objs) o.Pos += displace;
-                        objects.Add(objs);
-                    }
+                    GameObject go = BuildObj(chunk.source[i]);
+                    go.Pos += displace;
+                    dec.decorator(go);
+                    lists[cstring].Add(go);
                 }
-                lc.objects = objects.ToArray();
-            });
+                else
+                {
+                    ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
+                    engine.Add(delegate() { return Function(input, dec, displace, cstring); }, Callback);
+                    if (counters.ContainsKey(cstring))
+                        counters[cstring]++;
+                    else counters.Add(cstring, 1);
+                }
+            }
+            //});
+            chunkcounter++;
+        }
+
+        private void Callback(Returner<GameObject[]> returner)
+        {
+            lists[returner.msg].Add(returner.result);
+            counters[returner.msg]--;
+            if (counters[returner.msg] == 0)
+            {
+                chunks[returner.msg].objects = lists[returner.msg].ToArray();
+                lists[returner.msg].Clear();
+                chunks.Remove(returner.msg);
+                lists.Remove(returner.msg);
+                counters.Remove(returner.msg);
+            }
+        }
+
+        private Returner<GameObject[]> Function(ReplacerInput input, Decorator dec, Vector2 displace, string msg)
+        {
+            GameObject[] objs = dec.replacer(input);
+            foreach (GameObject o in objs) o.Pos += displace;
+            return new Returner<GameObject[]>(objs, msg);
         }
 
         private GameObject BuildObj(LvObj o)
         {
             Decorator dec = decorators[o.tag];
-            if (context == null) Console.WriteLine("HELP");
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
             go.tag = "";
             go.Pos = o.pos;

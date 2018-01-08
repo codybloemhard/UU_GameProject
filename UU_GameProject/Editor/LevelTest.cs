@@ -54,9 +54,9 @@ namespace UU_GameProject
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
-
+        
         private void dectest(GameObject o)
         {
             o.Size = new Vector2(1f);
@@ -69,23 +69,7 @@ namespace UU_GameProject
         {
             base.Update(time);
             chunks.Update();
-            if (Input.GetKey(PressAction.PRESSED, Keys.Q))
-            {
-                Task.Factory.StartNew(test);
-                Task.Factory.StartNew(test);
-            }
-        }
-
-        private void test()
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                GameObject a = new GameObject(this, 0);
-                a.Pos = new Vector2((float)MathH.random.NextDouble() * 16, (float)MathH.random.NextDouble() * 16);
-                a.Size = new Vector2(0.5f);
-                a.AddComponent(new CRender("block"));
-                a.AddComponent(new CAABB());
-            }
+            TaskEngine.UpdateAll();
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
