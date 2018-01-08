@@ -112,7 +112,7 @@ namespace UU_GameProject
             if (length < range && wait == 0)
             {
                 Vector2 thing = shootdir(GO.Pos.X - GO.FindWithTag("player").Pos.X);
-                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero);
+                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<Components.General.CFaction>().GetFaction());
                 wait = 1.75f;
             }
 

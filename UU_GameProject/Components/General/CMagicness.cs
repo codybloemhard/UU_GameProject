@@ -7,6 +7,7 @@ namespace UU_GameProject.Components.General
     class CMagicness : Component
     {
         private Vector2 dir;
+        private float regenTime;
 
         public CMagicness() : base() { }
 
@@ -15,7 +16,7 @@ namespace UU_GameProject.Components.General
             base.Update(time);
         }
 
-        public void Fireball(Vector2 size, Vector2 playerSpeed)
+        public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
             if (Input.GetMousePosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
@@ -29,6 +30,26 @@ namespace UU_GameProject.Components.General
             fireball.AddComponent(new CRender("block"));
             fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMousePosition() - (fireball.Pos + .5f * (fireball.Size))), dir));
             fireball.AddComponent(new CAABB());
+            fireball.AddComponent(new CFaction(Faction));
+
+        }
+
+        public void Lightning(Vector2 dimensions, float duration, string caller, string Faction)
+        {
+            GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);
+            lightningStrike.AddComponent(new CRender("block"));
+            lightningStrike.AddComponent(new CLightningStrike(duration, caller));
+            lightningStrike.AddComponent(new CAABB());
+            lightningStrike.AddComponent(new CFaction(Faction));
+            lightningStrike.Pos = Input.GetMousePosition() - new Vector2(dimensions.X / 2f, dimensions.Y / 2f);
+            lightningStrike.Size = dimensions;
+        }
+        public void HealthRegen()
+        {
+
+        }
+        public void Heal()
+        {
 
         }
     }

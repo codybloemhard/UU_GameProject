@@ -14,9 +14,13 @@ namespace UU_GameProject.Components.General
         {
             this.Faction = Faction;
         }
+        public string GetFaction()
+        {
+            return Faction;
+        }
         public bool ClashingFactions(GameObject Collisionee, GameObject Collider)
         {
-            if (Collisionee.GetComponent<CFaction>().Faction != Collider.GetComponent<CFaction>().Faction)
+            if (Collisionee.GetComponent<CFaction>().GetFaction() != Collider.GetComponent<CFaction>().GetFaction())
                 return true;
             else return false;
         }
