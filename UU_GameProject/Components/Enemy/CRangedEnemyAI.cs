@@ -57,27 +57,28 @@ namespace UU_GameProject
             if (hit.hit && hit.distance < 0.05f) grounded = true;
             else grounded = false;
 
-            if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
+            if (grounded && (hitLeft.distance > 0.1f || hitRight.distance > 0.1f))
             {
                 dir *= -1;
                 speed *= -1;
+                GO.Pos += Vector2.UnitX * speed * 0.05f;
             }
             //fix voor window draggen bug
+            float hordisplace = 0f, verdisplace = 0f;
             if (grounded)
             {
-                float hordisplace = speed * ctime;
-                float verdisplace = Math.Min(hit.distance, vertVelo * ctime);
-                if (ctime > 0.25f)
-                {
-                    hordisplace = 0f;
-                    verdisplace = 0f;
-                }
-                GO.Pos += new Vector2(hordisplace, verdisplace);
+                hordisplace = speed * ctime;
+                vertVelo = 0f;            
             }
             else
                 vertVelo += gravity * ctime;
-            //EN waarom twee keer pos het zelfde veranderen? ff gecomment
-            //GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            if (ctime > 0.25f)
+            {
+                hordisplace = 0f;
+                verdisplace = 0f;
+            }
+            verdisplace = Math.Min(hit.distance, vertVelo * ctime);
+            GO.Pos += new Vector2(hordisplace, verdisplace);
         }
 
         private void ActiveBehaviour()
@@ -99,32 +100,39 @@ namespace UU_GameProject
             if (hit.hit && hit.distance < 0.05f) grounded = true;
             else grounded = false;
 
+            GameObject player = GO.FindWithTag("player");
             //Moving left or right, depending on where the player is in relation to the enemy and keeping distance.
-            if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
+            float diff = player.Pos.X - GO.Pos.X;
+            if (diff > 0 && dir.X < 0)
+                dir *= -1;
+            if (diff < 0 && dir.X > 0)
+                dir *= -1;
+            bool run = false;
+            if (length < range)
             {
-                if (dir.X > 0)
-                    dir *= -1; speed *= -1;
+                run = true;
+                if (diff > 0 && speed > 0)
+                    speed *= -1;
+                if (diff < 0 && speed < 0)
+                    speed *= -1;
             }
-            else if(dir.X < 0)
-                dir *= -1; speed *= -1;
-
+            if (hitLeft.distance > 0.1f || hitRight.distance > 0.1f)
+                run = false;
             if (length < range && wait == 0)
             {
-                Vector2 thing = shootdir(GO.Pos.X - GO.FindWithTag("player").Pos.X);
+                Vector2 thing = shootdir(GO.Pos.X - player.Pos.X);
                 GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero);
                 wait = 1.75f;
             }
-
-            if (grounded && length > range - 0.4f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
-                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-            else if (grounded && length < range - 0.5f && wait < 1.3f && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
+            if (!grounded)
             {
-                dir *= -1;
-                speed *= -1;
+                vertVelo += gravity * ctime;
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             }
-            else if (!grounded)
-                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            else if(run)
+            {
+                GO.Pos += new Vector2(speed * ctime, 0f);
+            }
         }
 
         //Choosing one out of 8 directions to shoot.

@@ -291,3 +291,5 @@ UU_GameProject/Content/level.txt
 *.pdb
 *.cache
 *.xml
+*.exe
+*.pdb
