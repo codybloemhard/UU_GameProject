@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject.Components.General
 {
-    class CMagicness : Component
+    public class CMagicness : Component
     {
         private Vector2 dir;
         private float regenTime;

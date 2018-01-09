@@ -59,7 +59,7 @@ namespace UU_GameProject
         {
             if (MP < maxMana && shouldManaRegen)
             {
-                manaRegenMultiplier = 3.0f - Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X);
+                manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
                 Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
                 MP += 1;
                 shouldManaRegen = false;

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class Select : GameState
+    public class Select : GameState
     {
         private Button dude, dudette, thing, thing2;
         private Text text;

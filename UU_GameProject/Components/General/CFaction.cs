@@ -7,9 +7,10 @@ using Core;
 
 namespace UU_GameProject.Components.General
 {
-    class CFaction : Component
+    public class CFaction : Component
     {
         private string Faction;
+
         public CFaction(string Faction)
         {
             this.Faction = Faction;
