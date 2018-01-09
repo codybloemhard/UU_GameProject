@@ -9,6 +9,7 @@ namespace UU_GameProject
 {
     public class CLevelEditorObject : Component
     {
+        private int select;
         private float precision = 2;
         private string backup;
         private static bool staticGrabbed;
@@ -120,6 +121,38 @@ namespace UU_GameProject
                 }
                 properties.selected = properties.Hover;
             }
+
+            if (Input.GetKey(PressAction.PRESSED, Keys.NumPad1))
+                select = 0;
+            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad2))
+                select = 1;
+            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad3))
+                select = 2;
+            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad4))
+                select = 3;
+            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad5))
+                select = 4;
+            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad6))
+                select = 5;
+            else select = -1;
+
+            if (select != -1)
+            {
+                if (select != properties.selected)
+                {
+                    if (properties.selected != -1)
+                    {
+                        HandleInput();
+                        properties.text[properties.selected] = backup;
+                    }
+                    backup = properties.text[select];
+                }
+                properties.text[select] = "";
+                properties.selected = select;
+            }
+            
+
+
             if (properties.selected != -1)
                 properties.text[properties.selected] = Input.Type(properties.text[properties.selected]);
         }
