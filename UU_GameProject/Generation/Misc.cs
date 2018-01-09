@@ -20,5 +20,11 @@ namespace UU_GameProject
                 newl.Add(orig[i]);
             return newl;
         }
+
+        public static void Add<T>(this List<T> l, T[] arr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+                l.Add(arr[i]);
+        }
     }
 }

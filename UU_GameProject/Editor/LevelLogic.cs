@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Core;
 using Microsoft.Xna.Framework;
+using System.Threading.Tasks;
 
 namespace UU_GameProject
 {
@@ -21,21 +22,27 @@ namespace UU_GameProject
 
     public static class LevelLogic
     {
-        public static void WriteChunk(string file, int x, int y)
+        public static void WriteChunk(List<GameObject> objects, string file, int x, int y)
         {
             using (BinaryWriter w = new BinaryWriter(File.Open(file, FileMode.OpenOrCreate)))
             {
                 w.Write(x);
                 w.Write(y);
-                int count = CLevelEditorObject.objectList.Count;
+                int count = objects.Count;
                 w.Write(count);
                 for (int i = 0; i < count; i++)
                 {
-                    GameObject obj = CLevelEditorObject.objectList[i];
+                    GameObject obj = objects[i];
+                    bool spawner = obj.tag[0] == '!';
+                    if (spawner) w.Write(true);
+                    else w.Write(false);
                     w.Write(obj.Pos.X);
                     w.Write(obj.Pos.Y);
-                    w.Write(obj.Size.X);
-                    w.Write(obj.Size.Y);
+                    if (!spawner)
+                    {
+                        w.Write(obj.Size.X);
+                        w.Write(obj.Size.Y);
+                    }
                     w.Write(obj.tag);
                 }
             }
@@ -53,11 +60,16 @@ namespace UU_GameProject
             for (int i = 0; i < count; i++)
             {
                 LvObj o = new LvObj();
-                float x, y, w, h;
+                bool spawner;
+                float x, y, w = 0f, h = 0f;
+                spawner = r.ReadBoolean();
                 x = r.ReadSingle();
                 y = r.ReadSingle();
-                w = r.ReadSingle();
-                h = r.ReadSingle();
+                if (!spawner)
+                {
+                    w = r.ReadSingle();
+                    h = r.ReadSingle();
+                }
                 o.tag = r.ReadString();
                 o.pos = new Vector2(x, y);
                 o.size = new Vector2(w, h);
@@ -70,15 +82,41 @@ namespace UU_GameProject
 
     public struct Decorator
     {
-        public Action<GameObject> action;
+        public Action<GameObject> decorator;
+        public Func<ReplacerInput, GameObject[]> replacer;
         public uint layer;
         public bool isStatic;
 
-        public Decorator(Action<GameObject> action, uint layer, bool isStatic)
+        public Decorator(Action<GameObject> decorator, uint layer, bool isStatic)
         {
-            this.action = action;
+            this.decorator = decorator;
+            this.replacer = null;
             this.layer = layer;
             this.isStatic = isStatic;
+        }
+
+        public Decorator(Func<ReplacerInput, GameObject[]> replacer, uint layer, bool isStatic)
+        {
+            this.decorator = null;
+            this.replacer = replacer;
+            this.layer = layer;
+            this.isStatic = isStatic;
+        }
+    }
+
+    public struct ReplacerInput
+    {
+        public uint layer;
+        public bool isStatic;
+        public LvObj obj;
+        public GameState context;
+
+        public ReplacerInput(uint l, bool s, LvObj o, GameState c)
+        {
+            layer = l;
+            isStatic = s;
+            obj = o;
+            context = c;
         }
     }
 
@@ -105,9 +143,12 @@ namespace UU_GameProject
         public void Unload()
         {
             if (objects == null) return;
-            for(int i = 0; i < objects.Length; i++)
-                if(objects[i] != null)
-                    objects[i].Destroy();
+            Task.Run(() =>
+            {
+                for (int i = 0; i < objects.Length; i++)
+                    if (objects[i] != null)
+                        objects[i].Destroy();
+            });
         }
 
         public bool IsChunk(int x, int y)
@@ -122,15 +163,30 @@ namespace UU_GameProject
         private Dictionary<string, Decorator> decorators;
         private GameState context;
         private Vector2 chunkSize;
+        private TaskEngine engine;
+        private uint chunkcounter = 0;
+        private Dictionary<string, List<GameObject>> lists;
+        private Dictionary<string, uint> counters;
+        private Dictionary<string, LoadedChunk> chunks;
 
         public ChunkFactory(GameState context, Vector2 chunkSize)
         {
             this.context = context;
             this.chunkSize = chunkSize;
             decorators = new Dictionary<string, Decorator>();
+            engine = new TaskEngine();
+            lists = new Dictionary<string, List<GameObject>>();
+            counters = new Dictionary<string, uint>();
+            chunks = new Dictionary<string, LoadedChunk>();
         }
         
         public void AddSource(string kind, uint layer, bool isStatic, Action<GameObject> action)
+        {
+            if (decorators.ContainsKey(kind)) return;
+            decorators.Add(kind, new Decorator(action, layer, isStatic));
+        }
+
+        public void AddSource(string kind, uint layer, bool isStatic, Func<ReplacerInput, GameObject[]> action)
         {
             if (decorators.ContainsKey(kind)) return;
             decorators.Add(kind, new Decorator(action, layer, isStatic));
@@ -141,25 +197,64 @@ namespace UU_GameProject
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
+            //Task.Run(()=>
+            //{
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-            GameObject[] objects = new GameObject[chunk.source.Length];
+            string cstring = chunkcounter.ToString();
+            lists.Add(cstring, new List<GameObject>());
+            chunks.Add(cstring, lc);
             for (int i = 0; i < chunk.source.Length; i++)
             {
-                GameObject go = BuildObj(chunk.source[i], displace);
-                if (go == null) continue;
-                decorators[chunk.source[i].tag].action(go);
-                objects[i] = go;
+                string key = chunk.source[i].tag;
+                if (!decorators.ContainsKey(key)) continue;
+                Decorator dec = decorators[key];
+                if (dec.decorator != null)
+                {
+                    GameObject go = BuildObj(chunk.source[i]);
+                    go.Pos += displace;
+                    dec.decorator(go);
+                    lists[cstring].Add(go);
+                }
+                else
+                {
+                    ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
+                    engine.Add(delegate() { return Function(input, dec, displace, cstring); }, Callback);
+                    if (counters.ContainsKey(cstring))
+                        counters[cstring]++;
+                    else counters.Add(cstring, 1);
+                }
             }
-            lc.objects = objects;
+            //});
+            chunkcounter++;
         }
 
-        private GameObject BuildObj(LvObj o, Vector2 displace)
+        private void Callback(Returner<GameObject[]> returner)
         {
-            if (!decorators.ContainsKey(o.tag)) return null;
+            lists[returner.msg].Add(returner.result);
+            counters[returner.msg]--;
+            if (counters[returner.msg] == 0)
+            {
+                chunks[returner.msg].objects = lists[returner.msg].ToArray();
+                lists[returner.msg].Clear();
+                chunks.Remove(returner.msg);
+                lists.Remove(returner.msg);
+                counters.Remove(returner.msg);
+            }
+        }
+
+        private Returner<GameObject[]> Function(ReplacerInput input, Decorator dec, Vector2 displace, string msg)
+        {
+            GameObject[] objs = dec.replacer(input);
+            foreach (GameObject o in objs) o.Pos += displace;
+            return new Returner<GameObject[]>(objs, msg);
+        }
+
+        private GameObject BuildObj(LvObj o)
+        {
             Decorator dec = decorators[o.tag];
             GameObject go = new GameObject(context, dec.layer, dec.isStatic);
             go.tag = "";
-            go.Pos = o.pos + displace;
+            go.Pos = o.pos;
             go.Size = o.size;
             return go;
         }

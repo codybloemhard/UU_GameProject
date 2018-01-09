@@ -4,6 +4,7 @@ using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Threading.Tasks;
 
 namespace UU_GameProject
 {
@@ -45,28 +46,30 @@ namespace UU_GameProject
 
             Vector2 chunkSize = new Vector2(16, 16);
             ChunkFactory builder = new ChunkFactory(this, chunkSize);
-            builder.AddSource("solid", 10, true, SolidBuilder);
+            builder.AddSource("solid", 10, true, 
+                delegate(ReplacerInput i) {
+                return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
+            });
+            builder.AddSource("!", 10, true, Catalog.ReplacerTree0);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
         
-        public void SolidBuilder(GameObject o)
+        private void dectest(GameObject o)
         {
-            o.AddComponent(new CRender("_dirt0"));
-            o.AddComponent(new CAABB());
+            o.Size = new Vector2(1f);
+            o.AddComponent(new CRender("_grassdot0"));
         }
 
-        public override void Unload()
-        {
-
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {
-            chunks.Update();
             base.Update(time);
+            chunks.Update();
+            TaskEngine.UpdateAll();
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)

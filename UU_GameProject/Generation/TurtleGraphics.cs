@@ -137,10 +137,9 @@ namespace UU_GameProject
             this.size = size;
         }
         
-        public GameObject CreateObject(string lstring, uint layer, string tag)
+        public GameObject[] CreateObject(string lstring, uint layer, string tag)
         {
-            GameObject root = null;
-            bool rootDone = false;
+            List<GameObject> list = new List<GameObject>();
             for (int i = 0; i < lstring.Length; i++)
             {
                 char token = lstring[i];
@@ -178,19 +177,15 @@ namespace UU_GameProject
                 if (draw.ContainsKey(token))
                 {
                     DrawAct da = draw[token];
-                    GameObject go = _obj("_child", context, layer + da.layerAdd, da.GetTex());
+                    GameObject go = _obj(tag, context, layer + da.layerAdd, da.GetTex());
                     Vector2 next = state.pos + (dir * state.sizes[token].X * size.X);
                     FromToTranslation(go, state.pos, next, state.sizes[token].Y * size.Y);
                     go.Pos += (dir * state.sizes[token].X * size.X) * da.offset;
                     state.pos = next;
-                    if (!rootDone)
-                    {
-                        root = go;
-                        rootDone = true;
-                    }
+                    list.Add(go);
                 }
             }
-            return root;
+            return list.ToArray();
         }
         
         private void SetDir()
@@ -200,7 +195,7 @@ namespace UU_GameProject
 
         private GameObject _obj(string t, GameState c, uint l, string tex)
         {
-            GameObject go = new GameObject(t, c, l);
+            GameObject go = new GameObject(t, c, l, true);
             go.AddComponent(new CRender(tex));
             return go;
         }

@@ -10,6 +10,8 @@ namespace UU_GameProject
 {
     public class LevelEditor : GameState
     {
+        private const string baseurl = "../../../../Content/Levels/";
+
         public override void Load(SpriteBatch batch)
         {
             Button button = new Button(this, "Finish", "block", () => Finish(true),
@@ -25,12 +27,21 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
+            if(Input.GetKey(PressAction.PRESSED, Keys.W))
+            {
+                GameObject newObject = new GameObject("spawner", this, 0, true);
+                newObject.AddComponent(new CRender("cross"));
+                newObject.AddComponent(new CAABB());
+                newObject.AddComponent(new CLevelEditorObject(newObject, true));
+                newObject.Pos = Input.GetMousePosition();
+                newObject.Size = new Vector2(1f, 1f);
+            }
             if (Input.GetKey(PressAction.PRESSED, Keys.Q))
             {
                 GameObject newObject = new GameObject("new", this, 0, true);
                 newObject.AddComponent(new CRender("block"));
                 newObject.AddComponent(new CAABB());
-                newObject.AddComponent(new CLevelEditorObject(newObject));
+                newObject.AddComponent(new CLevelEditorObject(newObject, false));
                 newObject.Pos = Input.GetMousePosition();
                 newObject.Size = new Vector2(1f, 1f);
             }
@@ -48,9 +59,10 @@ namespace UU_GameProject
         {
             base.Draw(time, batch, device);
         }
-
+        
         public void Finish(bool save)
         {
+            //if (!save) TestChunks();
             if (save)
             {
                 int x = 0, y = 0;
@@ -64,9 +76,32 @@ namespace UU_GameProject
                     Console.WriteLine("Could not set chunk position!");
                 }
                 Console.WriteLine("Saving chunk with position (" + x + "," + y + ").");
-                LevelLogic.WriteChunk("chunk" + x + y + ".lvl", x, y);
+                LevelLogic.WriteChunk(CLevelEditorObject.objectList, baseurl + "chunk" + x + y + ".lvl", x, y);
             }
             GameStateManager.RequestChange("leveltest", CHANGETYPE.LOAD);
+        }
+        
+        private void TestChunks()//write 441 random chunks
+        {
+            List<GameObject> list = new List<GameObject>();
+            list.Add(new GameObject("!", this, 0));
+            for (int i = 1; i < 10; i++)
+            {
+                GameObject go = new GameObject("solid", this, 0);
+                go.Size = new Vector2(1, 1);
+                list.Add(go);
+            }
+            for (int x = -10; x <= 10; x++)
+                for (int y = -10; y <= 10; y++)
+                {
+                    for (int i = 1; i < 10; i++)
+                    {
+                        list[i].Pos = new Vector2((float)MathH.random.NextDouble() * 16,
+                                                    (float)MathH.random.NextDouble() * 16);
+                    }
+                    list[0].Pos = list[1].Pos + (list[1].Size * new Vector2(0.5f, 0f));
+                    LevelLogic.WriteChunk(list, baseurl + "chunk" + x + y + ".lvl", x, y);
+                }
         }
     }
 }
