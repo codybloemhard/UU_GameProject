@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace UU_GameProject
 {
-    public class LevelEditor : GameState
+    class LevelEditor : GameState
     {
-        private List<GameObject> allObjects = new List<GameObject>();
+        List<GameObject> allObjects = new List<GameObject>();
 
         public override void Load(SpriteBatch batch)
         {

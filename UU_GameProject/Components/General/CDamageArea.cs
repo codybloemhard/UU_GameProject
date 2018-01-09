@@ -9,7 +9,7 @@ namespace UU_GameProject
     {
         private float duration;
         private string caller;
-        private Vector2 dimensions;//never used?
+        private Vector2 dimensions;
         private Vector2 dir;
 
         public CDamageArea(Vector2 dir, float duration, string caller) : base()
@@ -33,6 +33,11 @@ namespace UU_GameProject
             else
                 GO.Pos = GO.FindWithTag(caller).Pos + new Vector2(GO.FindWithTag(caller).Size.X / 2f - GO.Size.X, 0);
             Timers.Add("DamageAreaLifespan", duration, Destroy);
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            
         }
 
         public void Destroy()

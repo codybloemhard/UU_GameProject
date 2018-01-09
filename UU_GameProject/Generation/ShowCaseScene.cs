@@ -11,26 +11,36 @@ namespace UU_GameProject
     {
         public ShowCaseScene() : base() { }
 
+        LSystem lsys;
+
         public override void Load(SpriteBatch batch)
         {
             GameStateManager.SetRenderingMode(BlendState.NonPremultiplied, SamplerState.PointWrap);
             Debug.ProfilingMode();
             GameObject backg = new GameObject(this, 10, true);
             backg.AddComponent(new CRender("block"));
-            backg.Renderer.colour = new Color(0.7f, 0.7f, 0.7f);
             backg.Pos = Vector2.Zero;
             backg.Size = new Vector2(16, 9);
-            ShowCase.CreateRow(this, "_flower", 16, 0, 1f);
-            Catalog.CreateTree0(this, new Vector2(2, 9), new Vector2(0.1f), 0, "tree");
-            Catalog.CreateTree1(this, new Vector2(5, 9), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree2(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree3(this, new Vector2(11, 9), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree4(this, new Vector2(14, 9), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree5(this, new Vector2(2, 4), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree6(this, new Vector2(5, 4), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree7(this, new Vector2(8, 4), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree8(this, new Vector2(11, 4), new Vector2(0.2f), 0, "tree");
-            Catalog.CreateTree9(this, new Vector2(14, 4), new Vector2(0.2f), 0, "tree");
+            //ShowCase.CreateRow(this, "_crackedlayer", 8, 2, 1f);
+            //ShowCase.CreateRow(this, "_stone", 16, 2, 1f);
+            //ShowCase.CreateRow(this, "_frostydirt", 16, 2, 1f);
+            lsys = new LSystem("A");
+            lsys.AddRule('A', "AB");
+            lsys.AddRule('B', "A");
+            GameObject p = new GameObject("p", this, 0);
+            p.AddComponent(new CRender("block"));
+            p.Pos = new Vector2(1,1);
+            p.Size = new Vector2(0.2f, 0.2f);
+            p.Renderer.colour = Color.Red;
+            GameObject q = new GameObject("q", this, 0);
+            q.AddComponent(new CRender("block"));
+            q.Pos = new Vector2(3, 4);
+            q.Size = new Vector2(0.2f, 0.2f);
+            q.Renderer.colour = Color.Red;
+            GameObject r = new GameObject("r", this, 1);
+            r.AddComponent(new CRender("block"));
+            r.Renderer.colour = Color.Blue;
+            lsys.FromToTranslation(r, p.Pos, q.Pos);
         }
         
         public override void Unload() { }
@@ -38,16 +48,13 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            if (Input.GetKey(PressAction.DOWN, Keys.P))
-            {
-                Debug.showAtlas = true;
-                Debug.printData = true;
-            }
-            else
-            {
-                Debug.showAtlas = false;
-                Debug.printData = false;
-            }
+            if (Input.GetKey(PressAction.DOWN, Keys.P)) Debug.showAtlas = true;
+            else Debug.showAtlas = false;
+            GameObject p = objects.FindWithTag("p");
+            GameObject q = objects.FindWithTag("q");
+            q.Pos = Input.GetMousePosition();
+            GameObject r = objects.FindWithTag("r");
+            lsys.FromToTranslation(r, p.Pos, q.Pos);
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 GameObject[] old = objects.FindAllWithTag("_test");
@@ -67,7 +74,23 @@ namespace UU_GameProject
                 Catalog.CreateBlock(this, 0xC, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.CRACKS);
                 Catalog.CreateBlock(this, 0xD, 0, 0, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.GRASS);
                 Catalog.CreateBlock(this, 0xE, 0, 0, "_test", BASETILES.SAND);
-                Catalog.CreateBlock(this, 0xF, 0, 0, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);              
+                Catalog.CreateBlock(this, 0xF, 0, 0, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);
+
+                /*Catalog.CreateSnowman(this, 1, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 3, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 5, 1, 0, "_test", 1f);
+                Catalog.CreateSnowman(this, 7, 1, 0, "_test", 1f);*/
+
+                /*Catalog.CreateStoneShard(this, 3, 1, 0, "_test");
+                Catalog.CreateStone(this, 4, 1, 0, "_test");
+                Catalog.CreateSnowyStone(this, 5, 1, 0, "_test");
+                Catalog.CreateFrostyStone(this, 6, 1, 0, "_test");*/
+
+                Catalog.CreateCloud(this, 1, 3, 0, "_test");
+                Catalog.CreateCloud(this, 3, 3, 0, "_test");
+                Catalog.CreateCloud(this, 5, 3, 0, "_test");
+                Catalog.CreateCloud(this, 7, 3, 0, "_test");
+                //Catalog.CreateCloud(this, 2, 4, 0, "_test");
             }
         }
 

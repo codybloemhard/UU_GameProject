@@ -74,6 +74,7 @@ namespace UU_GameProject
             player.AddComponent(new Components.General.CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
+
             GameObject enemy = new GameObject("Nenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CNormalEnemyAI(2f));

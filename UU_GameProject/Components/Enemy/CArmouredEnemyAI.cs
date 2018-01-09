@@ -62,10 +62,15 @@ namespace UU_GameProject
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
+            if (hitLeft.distance > hitRight.distance)
+                hit = hitRight;
+            else
+                hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f) grounded = true;
+            if (hit.hit && hit.distance < 0.05f)
+            {
+                grounded = true;
+            }
             else grounded = false;
 
             if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
@@ -77,10 +82,7 @@ namespace UU_GameProject
             if (grounded)
                 GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
             else
-            {
-                vertVelo += gravity * ctime;
-                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-            }       
+            { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
         }
 
         private void ActiveBehaviour()
@@ -91,6 +93,7 @@ namespace UU_GameProject
             //We need to figure out how to make this dude immune to dmg from the front, 
             //but die in 2 to 3 hits from the back.
             //Thus he needs to wait for a timer before turning around to make it fair.
+
             float reach = 2.25f;
             wait = Math.Max(0, wait - ctime);
             turntime = Math.Max(0, wait - ctime);
@@ -100,54 +103,50 @@ namespace UU_GameProject
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
+            if (hitLeft.distance > hitRight.distance)
+                hit = hitRight;
+            else
+                hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f) grounded = true;
-            else grounded = false;
+            if (hit.hit && hit.distance < 0.05f)
+                grounded = true;
+            else
+                grounded = false;
 
             //Moving left or right, depending on where the player is in relation to the enemy.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
             {
                 if (dir.X > 0 && turntime == 0)
-                {
-                    dir *= -1;
-                    speed *= -1;
-                }
+                { dir *= -1; speed *= -1; }
+
                 if (length < reach - (0.1f * reach) && wait <= 0 && dir.X < 0)
                 {
                     GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.5f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }
+
                 if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f) && dir.X < 0)
                     GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
                 else if (!grounded)
-                {
-                    vertVelo += gravity * ctime;
-                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-                }
+                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
             }
             else if (turntime == 0)
             {
                 if (dir.X < 0 && turntime == 0)
-                {
-                    dir *= -1;
-                    speed *= -1;
-                }
+                { dir *= -1; speed *= -1; }
+
                 if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0 && dir.X > 0)
                 {
                     GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(4, 2), 1.0f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
                     wait = 1.3f;
                     Console.WriteLine("OUCH!");
                 }
+
                 if (grounded && length > 2 * reach / 3 && !(hitLeft.distance > 0.05f || hitRight.distance > 0.05f) && dir.X > 0)
                     GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
                 else if (!grounded)
-                {
-                    vertVelo += gravity * ctime;
-                    GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
-                }
+                { vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime)); }
             }
         }
 

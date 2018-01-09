@@ -33,7 +33,8 @@ namespace UU_GameProject
 
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "stone") GO.Destroy();
+            if (other.tag == "stone")
+                GO.Destroy();
         }
 
         public Vector2 direction()

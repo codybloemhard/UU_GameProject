@@ -51,9 +51,13 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance)
                 hit = hitRight;
-            else hit = hitLeft;
+            else
+                hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f) grounded = true;
+            if (hit.hit && hit.distance < 0.05f)
+            {
+                grounded = true;
+            }
             else grounded = false;
 
             if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
@@ -73,8 +77,10 @@ namespace UU_GameProject
             //When the player comes within a certain range, 
             //start running at the player to get within melee range and then making a melee attack.
             //Melee attack needs a timer to prevent instadeath.
+
             float reach = 1.0f;
             wait = Math.Max(0, wait - ctime);
+
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
@@ -82,19 +88,20 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance)
                 hit = hitRight;
-            else hit = hitLeft;
+            else
+                hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f) grounded = true;
-            else grounded = false;
+            if (hit.hit && hit.distance < 0.05f)
+                grounded = true;
+            else
+                grounded = false;
 
             //Moving left or right, depending on where the player is in relation to the enemy.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
             {
                 if (dir.X > 0)
-                {
-                    dir *= -1;
-                    speed *= -1;
-                }
+                { dir *= -1; speed *= -1; }
+
                 if (length < reach - (0.1f * reach) && wait <= 0)
                 {
                     GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
@@ -105,10 +112,8 @@ namespace UU_GameProject
             else
             {
                 if (dir.X < 0)
-                {
-                    dir *= -1;
-                    speed *= -1;
-                }
+                { dir *= -1; speed *= -1; }
+
                 if (length - GO.Pos.X < reach - (0.1f * reach) && wait <= 0)
                 {
                     GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
