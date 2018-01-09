@@ -40,3 +40,5 @@ C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_G
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_GameProject.exe
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_GameProject.pdb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\cross.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\menutile.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\menutile2.xnb

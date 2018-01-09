@@ -284,3 +284,8 @@ __pycache__/
 UU_GameProject/Content/level.txt
 *.lvl
 *.lvl
+*.exe
+*.exe
+*.pdb
+*.pdb
+*.pdb
