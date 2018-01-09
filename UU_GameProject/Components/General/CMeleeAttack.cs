@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class CMeleeAttack : Component
+    public class CMeleeAttack : Component
     {
         public CMeleeAttack() : base() { }
 

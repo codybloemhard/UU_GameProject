@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    class CHealthPool : Component
+    public class CHealthPool : Component
     {
         private int HP;
         private int maxHP;
@@ -21,7 +21,8 @@ namespace UU_GameProject
         private int lightningDamage = 20;
         private int fireballDamage = 12;
         private bool isInvincible = false;
-        Text healthPool;
+        private Text healthPool;
+
         public CHealthPool(int HP, GameObject GO)
         {
             this.HP = HP;

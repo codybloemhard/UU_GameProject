@@ -30,7 +30,11 @@ namespace UU_GameProject
         private bool isCrouching = false;
         private bool isSliding = false;
         private bool isDown = false;
-        Vector2 velocity = Vector2.Zero;
+        private Vector2 velocity = Vector2.Zero;
+        private bool initiated = false;
+        private CAnimatedSprite animation;
+        private CHealthPool healthPool;
+        private CManaPool manaPool;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -38,26 +42,32 @@ namespace UU_GameProject
             dir = new Vector2(1, 0);
         }
 
-        public override void Init()
+        public void InitPlayer()
         {
-            CRender render = GO.Renderer as CRender;
+            initiated = true;
+            Renderer render = GO.Renderer;
             if (render != null) render.colour = Color.White;
+            animation = GO.Renderer as CAnimatedSprite;
+            healthPool = GO.GetComponent<CHealthPool>();
+            manaPool = GO.GetComponent<CManaPool>();
         }
 
         public override void Update(float time)
         {
+            if (!initiated) InitPlayer();
             //animations
             if (isCrawling)
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("crawling", 2);
+                animation.PlayAnimation("crawling", 2);
             else if (isSliding)
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("sliding", 2);
+                animation.PlayAnimation("sliding", 2);
             else if (isCrouching)
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("crouching", 2);
+                animation.PlayAnimation("crouching", 2);
             else if (!grounded)
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("airborn", 2);
+                animation.PlayAnimation("airborn", 2);
             else if (fallPanic)
-                (GO.Renderer as CAnimatedSprite).PlayAnimation("fallPanic", 2);
-            else (GO.Renderer as CAnimatedSprite).PlayAnimation("walking", 2);
+                animation.PlayAnimation("fallPanic", 2);
+            else
+                animation.PlayAnimation("walking", 2);
 
             //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
@@ -76,7 +86,7 @@ namespace UU_GameProject
                 velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
                 velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
+            if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000);
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -100,8 +110,7 @@ namespace UU_GameProject
             }
 
             //crouching
-            if (isDown && velocity.X == 0)
-                isCrouching = true;
+            if (isDown && velocity.X == 0) isCrouching = true;
             else isCrouching = false;
 
             //crawling
@@ -128,9 +137,7 @@ namespace UU_GameProject
                 fallPanic = true;
                 //fall damage
                 if (grounded)
-                {
-                    GO.GetComponent<CHealthPool>().ChangeHealth((int)lastVertVelo - 25);
-                }
+                    healthPool.ChangeHealth((int)lastVertVelo - 25);
                 lastVertVelo = vertVelo;
             }
             else fallPanic = false;
@@ -158,7 +165,7 @@ namespace UU_GameProject
             }
             
             //the dashing itself
-            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && GO.GetComponent<CManaPool>().ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && manaPool.ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
 
             //gravity, jump and player head and bottom collision
@@ -197,7 +204,7 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (GO.GetComponent<CManaPool>().ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
+                if (manaPool.ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
                     vertVelo = -jumpPower;
                     jumpDelayTime = 0;
@@ -259,7 +266,6 @@ namespace UU_GameProject
             if (hitRight.hit && hitRight.distance < 0.02f)
                 rightSideAgainstWall = true;
             else rightSideAgainstWall = false;
-
             //fireball
             //fires toward the cursor
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
@@ -283,7 +289,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "killer")
-                GO.GetComponent<CHealthPool>().ChangeHealth(20);
+                healthPool.ChangeHealth(20);
         }
 
         public Vector2 Velocity()

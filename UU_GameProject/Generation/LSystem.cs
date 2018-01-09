@@ -6,29 +6,58 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
+    public struct RuleResult
+    {
+        public string result;
+        public uint weight;
+
+        public RuleResult(string result, uint weight)
+        {
+            this.result = result;
+            this.weight = weight;
+        }
+    }
+
     public class LSystem
     {
         private readonly string start;
-        private Dictionary<char, string> rules;
-        private Dictionary<char, string> textures;
+        private Dictionary<char, List<RuleResult>> rules;
 
         public LSystem(string start)
         {
             this.start = start;
-            rules = new Dictionary<char, string>();
-            textures = new Dictionary<char, string>();
+            rules = new Dictionary<char, List<RuleResult>>();
         }
 
-        public void AddRule(char input, string output)
+        public void AddRule(char input, string output, uint weight = 1)
         {
-            if (rules.ContainsKey(input)) return;
-            rules.Add(input, output);
+            if (rules.ContainsKey(input))
+                rules[input].Add(new RuleResult(output, weight));
+            else
+            {
+                List<RuleResult> l = new List<RuleResult>();
+                l.Add(new RuleResult(output, weight));
+                rules.Add(input, l);
+            }
         }
 
-        public void AddTexture(char token, string texture)
+        private string Choose(char token)
         {
-            if (textures.ContainsKey(token)) return;
-            textures.Add(token, texture);
+            if (!rules.ContainsKey(token)) return "";
+            uint max = 0;
+            List<RuleResult> l = rules[token];
+            for (int i = 0; i < l.Count; i++)
+                max += l[i].weight;
+            float r = (float)(MathH.random.NextDouble() * max);
+            uint bar = 0;
+            int c = 0;
+            for (int i = 0; i < l.Count; i++)
+            {
+                bar += l[i].weight;
+                c = i;
+                if (r <= bar) break;
+            }
+            return l[c].result;
         }
 
         public string Generate(uint iterations)
@@ -39,29 +68,13 @@ namespace UU_GameProject
                 StringBuilder temp = new StringBuilder();
                 for(int j = 0; j < builder.Length; j++)
                 {
-                    if (!rules.ContainsKey(builder[j])) continue;
-                    temp.Append(rules[builder[j]]);
+                    if (!rules.ContainsKey(builder[j]))
+                        temp.Append(builder[j]);
+                    else temp.Append(Choose(builder[j]));
                 }
                 builder = temp;
             }
             return builder.ToString();
-        }
-
-        /*public GameObject CreateObject(Vector2 feetPos, string lstring)
-        {
-
-        }*/
-
-        public void FromToTranslation(GameObject go, Vector2 p, Vector2 q)
-        {
-            if (go.Renderer == null) return;
-            Vector2 diff = p - q;
-            float len = diff.Length();
-            float rot = (float)Math.Atan2(diff.Y, diff.X) * MathH.RAD_TO_DEG;
-            go.Renderer.SetRotation(rot);
-            go.Size = new Vector2(len, 0.2f);
-            Vector2 orig = go.Size / 2f;
-            go.Pos = p + ((q - p) / 2) - orig;
         }
     }
 }

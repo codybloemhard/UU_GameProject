@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class CRangedEnemyAI : Component
+    public class CRangedEnemyAI : Component
     {
         private float speed, ctime, wait, length;
         private Vector2 dir = new Vector2(1, 0);
@@ -52,13 +52,9 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance)
                 hit = hitRight;
-            else
-                hit = hitLeft;
+            else hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f)
-            {
-                grounded = true;
-            }
+            if (hit.hit && hit.distance < 0.05f) grounded = true;
             else grounded = false;
 
             if (grounded && (hitLeft.distance > 0.05f || hitRight.distance > 0.05f))
@@ -66,11 +62,22 @@ namespace UU_GameProject
                 dir *= -1;
                 speed *= -1;
             }
-
+            //fix voor window draggen bug
             if (grounded)
-                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            {
+                float hordisplace = speed * ctime;
+                float verdisplace = Math.Min(hit.distance, vertVelo * ctime);
+                if (ctime > 0.25f)
+                {
+                    hordisplace = 0f;
+                    verdisplace = 0f;
+                }
+                GO.Pos += new Vector2(hordisplace, verdisplace);
+            }
             else
-                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+                vertVelo += gravity * ctime;
+            //EN waarom twee keer pos het zelfde veranderen? ff gecomment
+            //GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
 
         private void ActiveBehaviour()
@@ -78,10 +85,8 @@ namespace UU_GameProject
             //Aiming at the player and shooting the projectile in one of 8 directions,
             //when the player is within a certain range of course.
             //After having shot try to keep optimal distance, for safety, from the player.
-
             float range = 4.5f;
             wait = Math.Max(0, wait - ctime);
-
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
@@ -89,13 +94,10 @@ namespace UU_GameProject
             RaycastResult hit;
             if (hitLeft.distance > hitRight.distance)
                 hit = hitRight;
-            else
-                hit = hitLeft;
+            else hit = hitLeft;
 
-            if (hit.hit && hit.distance < 0.05f)
-                grounded = true;
-            else
-                grounded = false;
+            if (hit.hit && hit.distance < 0.05f) grounded = true;
+            else grounded = false;
 
             //Moving left or right, depending on where the player is in relation to the enemy and keeping distance.
             if (GO.Pos.X > GO.FindWithTag("player").Pos.X)
@@ -103,11 +105,8 @@ namespace UU_GameProject
                 if (dir.X > 0)
                     dir *= -1; speed *= -1;
             }
-            else
-            {
-                if (dir.X < 0)
-                    dir *= -1; speed *= -1;
-            }
+            else if(dir.X < 0)
+                dir *= -1; speed *= -1;
 
             if (length < range && wait == 0)
             {
