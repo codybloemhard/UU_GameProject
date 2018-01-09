@@ -62,11 +62,22 @@ namespace UU_GameProject
                 dir *= -1;
                 speed *= -1;
             }
-
+            //fix voor window draggen bug
             if (grounded)
-                GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+            {
+                float hordisplace = speed * ctime;
+                float verdisplace = Math.Min(hit.distance, vertVelo * ctime);
+                if (ctime > 0.25f)
+                {
+                    hordisplace = 0f;
+                    verdisplace = 0f;
+                }
+                GO.Pos += new Vector2(hordisplace, verdisplace);
+            }
             else
-                vertVelo += gravity * ctime; GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
+                vertVelo += gravity * ctime;
+            //EN waarom twee keer pos het zelfde veranderen? ff gecomment
+            //GO.Pos += new Vector2(speed * ctime, Math.Min(hit.distance, vertVelo * ctime));
         }
 
         private void ActiveBehaviour()
