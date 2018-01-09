@@ -24,7 +24,7 @@ namespace UU_GameProject
             //Objects
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0, 8);
-            stone0.Size = new Vector2(8, 1);
+            stone0.Size = new Vector2(16, 1);
             stone0.AddComponent(new CRender("block"));
             stone0.AddComponent(new CAABB());
             GameObject stone1 = new GameObject("stone", this, 2, true);
@@ -81,7 +81,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new Components.General.CFaction("enemy"));
-            enemy.Pos = new Vector2(12.5f, 1.99f);
+            enemy.Pos = new Vector2(12.5f, 7f);
             enemy.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy1 = new GameObject("Renemy", this, 2);
             enemy1.AddComponent(new CRender("player"));
