@@ -4,16 +4,19 @@ using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Threading.Tasks;
 
 namespace UU_GameProject
 {
     public class LevelTest : GameState
     {
+        private ChunkManager chunks;
+
         public LevelTest() : base() { }
 
         public override void Load(SpriteBatch batch)
         {
-            GameObject player = new GameObject("player", this, 1);
+            /*GameObject player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
             anim.AddAnimation("walking", "playerWalking");
@@ -33,35 +36,40 @@ namespace UU_GameProject
             player.AddComponent(new Components.General.CMagicness());
             player.AddComponent(new Components.General.CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
-            player.Size = new Vector2(0.5f, 1.0f);
+            player.Size = new Vector2(0.5f, 1.0f);*/
 
-            LevelSolidifier builder = new LevelSolidifier(this);
-            builder.AddSource("solid", 10, true, SolidBuilder);
-            LvObj[] sources = LevelLogic.ReadLevel(LevelLogic.testurl);
-            builder.BuildWorld(sources);
+            GameObject player = new GameObject(this, 0);
+            player.AddComponent(new CFreeCamera());
+            player.AddComponent(new CRender("player"));
+            player.Size = new Vector2(1f);
+            player.Pos = new Vector2(2, 2);
+
+            Vector2 chunkSize = new Vector2(16, 16);
+            ChunkFactory builder = new ChunkFactory(this, chunkSize);
+            builder.AddSource("solid", 10, true, 
+                delegate(ReplacerInput i) {
+                return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
+            });
+            builder.AddSource("!", 10, true, Catalog.ReplacerTree0);
+            string baseurl = "../../../../Content/Levels/";
+            chunks = new ChunkManager();
+            chunks.Discover(baseurl, builder, player);
+            Debug.FullDebugMode();
         }
-
-        public void SolidBuilder(GameObject o)
+        
+        private void dectest(GameObject o)
         {
-            o.AddComponent(new CRender("_dirt0"));
-            o.AddComponent(new CAABB());
+            o.Size = new Vector2(1f);
+            o.AddComponent(new CRender("_grassdot0"));
         }
 
-        public override void Unload()
-        {
-
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {
-            Camera.SetCameraTopLeft(new Vector2(0, 0));
-            if (Input.GetKey(PressAction.PRESSED, Keys.P))
-            {
-                if (Debug.Mode == DEBUGMODE.PROFILING)
-                    Debug.FullDebugMode();
-                else Debug.ProfilingMode();
-            }
             base.Update(time);
+            chunks.Update();
+            TaskEngine.UpdateAll();
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
