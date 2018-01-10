@@ -281,7 +281,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-UU_GameProject/Content/level.txt
 *.lvl
 *.lvl
 *.exe
@@ -297,6 +296,9 @@ UU_GameProject/Content/level.txt
 *.pdb
 *.exe
 *.pdb
-UU_GameProject/obj/x86/Debug/UU_GameProject.pdb
 *.exe
 *.pdb
+*.exe
+UU_GameProject/obj/x86/Debug/UU_GameProject.exe
+UU_GameProject/obj/x86/Debug/UU_GameProject.exe
+UU_GameProject/bin/Windows/x86/Debug/UU_GameProject.pdb
