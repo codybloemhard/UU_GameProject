@@ -9,32 +9,85 @@ namespace UU_GameProject
     public class CHealthPool : Component
     {
         private int HP;
+        private int maxHP;
+        private int Duration;
+        private float amount;
+        private float regenExcess;
+        private float timer = 0;
+        private bool untilEnd;
+        private bool Heal;
         private int bulletHitDamage = 10;
         private int meleeHitDamage = 25;
+        private int lightningDamage = 20;
+        private int fireballDamage = 12;
         private bool isInvincible = false;
         private Text healthPool;
 
         public CHealthPool(int HP, GameObject GO)
         {
             this.HP = HP;
+            maxHP = HP;
             healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
             healthPool.AddGameObject(GO, Vector2.Zero);
+        }
+
+        public void Update()
+        {
+            if (amount != 0 && MP < maxMana && shouldManaRegen)
+            {
+                manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
+                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
+                MP += 1;
+                shouldManaRegen = false;
+                Timers.FindWithTag("manaRegen").Reset();
+            }
         }
 
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag.Contains(GO.tag)) return;
-            if (other.tag.Contains("bullet"))
+            if (other.tag.Contains(GO.tag))
+                return;
+            if (!other.IsStatic) 
             {
-                ChangeHealth(bulletHitDamage);
-                other.Destroy();
+                if (GO.GetComponent<Components.General.CFaction>().ClashingFactions(GO, other) == true)
+                {
+                    if (other.tag.Contains("bullet"))
+                    {
+                        ChangeHealth(bulletHitDamage);
+                        other.Destroy();
+                    }
+                    if (other.tag.Contains("meleeDamageArea"))
+                        ChangeHealth(meleeHitDamage);
+                    if (other.tag.Contains("lightningStrike"))
+                        ChangeHealth(lightningDamage);
+                    if (other.tag.Contains("fireball"))
+                    {
+                        ChangeHealth(fireballDamage);
+                        other.Destroy();
+                    }
+
+
+                }
             }
-            //pls halp, keep getting errors
-            //if (GO.GetComponent<Components.General.CFaction.ClashingFactions(base.GO, other)> == true)
-                if (other.tag.Contains("meleeDamageArea"))
-                ChangeHealth(meleeHitDamage);
         }
+
+        //method to be called for gradually regenerating or depleting health (i.e. poison)
+        public void GradualChange(int Duration, int totalAmount, bool Heal)
+        {
+            this.Heal = Heal;
+            this.Duration = Duration;
+            amount = totalAmount / this.Duration;
+        }
+        //GradualChange, but then to heal until HP is full or damage until HP is empty
+        public void GradualChangeUntilEnd(float amountPerSecond, bool Heal)
+        {
+            this.Heal = Heal;
+            untilEnd = true;
+            amount = amountPerSecond;
+        }
+
+
 
         //method to be called for instances that change HP
         /// <summary>

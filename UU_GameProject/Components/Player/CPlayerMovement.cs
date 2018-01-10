@@ -269,14 +269,21 @@ namespace UU_GameProject
             //fireball
             //fires toward the cursor
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
-                GO.GetComponent<Components.General.CMagicness>().Fireball(new Vector2(.2f, .2f), velocity);
+            {
+                GO.GetComponent<Components.General.CMagicness>().Fireball(new Vector2(.2f, .2f), velocity, GO.GetComponent<Components.General.CFaction>().GetFaction());
+            }
+
+            //RAITUNINGU STORAIKO!!!
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
+                GO.GetComponent<Components.General.CMagicness>().Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
+
             //shoot
             //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
             //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
-            if (Input.GetKey(PressAction.PRESSED, Keys.F) && manaPool.ConsumeMana(20))
-                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
+            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, GO.GetComponent<Components.General.CFaction>().GetFaction());
+            if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
+                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity, GO.GetComponent<Components.General.CFaction>().GetFaction());
         }
 
         public override void OnCollision(GameObject other)

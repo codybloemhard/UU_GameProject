@@ -6,14 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    public class CManaPool : Component
+    class CManaPool : Component
     {
         private int MP;
         private int maxMana = 100;
         private float manaRegenMultiplier;
         private bool shouldManaRegen = true;
-        private Text manaPool;
-
+        Text manaPool;
         public CManaPool(int MP, GameObject GO)
         {
             this.MP = MP;
@@ -47,6 +46,7 @@ namespace UU_GameProject
                 Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
                 return false;
             }
+
         }
 
         //method to be called by the regen timer
@@ -59,7 +59,7 @@ namespace UU_GameProject
         {
             if (MP < maxMana && shouldManaRegen)
             {
-                manaRegenMultiplier = 3.0f - Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X);
+                manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
                 Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
                 MP += 1;
                 shouldManaRegen = false;
