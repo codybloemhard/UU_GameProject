@@ -16,7 +16,7 @@ namespace UU_GameProject
         public override void Load(SpriteBatch batch)
         {
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text(this, "Title of the Game!", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
+            text = new Text(this, "The Crashed Janitor", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "exampleTag";
             testTimer = new Text(this, "time: ", new Vector2(0, 8), new Vector2(16f, 1f), font);
@@ -28,7 +28,7 @@ namespace UU_GameProject
                 font, new Vector2(6, 3), new Vector2(4, 1f));
             buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            buttonContinue = new Button(this, "Continue. Not implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+            buttonContinue = new Button(this, "Continue. Most certainly implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 font, new Vector2(6, 4.2f), new Vector2(4, 1f));
             buttonContinue.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
@@ -36,7 +36,7 @@ namespace UU_GameProject
                 font, new Vector2(6, 5.4f), new Vector2(4, 1f));
             buttonOptions.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            buttonQuit = new Button(this, "Exit. Not implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+            buttonQuit = new Button(this, "Exit. Also definetly implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 font, new Vector2(6, 6.6f), new Vector2(4, 1f));
             buttonQuit.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
