@@ -68,25 +68,25 @@ namespace UU_GameProject
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CMeleeAttack());
-            player.AddComponent(new CHealthPool(100, player));
+            player.AddComponent(new CHealthPool(100));
             player.AddComponent(new CManaPool(100, player));
             player.AddComponent(new CMagicness());
             player.AddComponent(new CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy = new GameObject("Nenemy", this, 2);
-            enemy.AddComponent(new CRender("player"));
-            enemy.AddComponent(new CNormalEnemyAI(2f));
-            enemy.AddComponent(new CHealthPool(50, enemy));
-            enemy.AddComponent(new CAABB());
-            enemy.AddComponent(new CMeleeAttack());
-            enemy.AddComponent(new CFaction("enemy"));
-            enemy.Pos = new Vector2(12.5f, 7f);
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy0 = new GameObject("Nenemy", this, 2);
+            enemy0.AddComponent(new CRender("player"));
+            enemy0.AddComponent(new CNormalEnemyAI(2f));
+            enemy0.AddComponent(new CHealthPool(50));
+            enemy0.AddComponent(new CAABB());
+            enemy0.AddComponent(new CMeleeAttack());
+            enemy0.AddComponent(new CFaction("enemy"));
+            enemy0.Pos = new Vector2(12.5f, 7f);
+            enemy0.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy1 = new GameObject("Renemy", this, 2);
             enemy1.AddComponent(new CRender("player"));
             enemy1.AddComponent(new CRangedEnemyAI(2.5f));
-            enemy1.AddComponent(new CHealthPool(25, enemy1));
+            enemy1.AddComponent(new CHealthPool(25));
             enemy1.AddComponent(new CAABB());
             enemy1.AddComponent(new CShoot());
             enemy1.AddComponent(new CFaction("enemy"));
@@ -95,12 +95,13 @@ namespace UU_GameProject
             GameObject enemy2 = new GameObject("Aenemy", this, 2);
             enemy2.AddComponent(new CRender("player"));
             enemy2.AddComponent(new CArmouredEnemyAI(1.75f));
-            enemy2.AddComponent(new CHealthPool(100, enemy2));
+            enemy2.AddComponent(new CHealthPool(100));
             enemy2.AddComponent(new CAABB());
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.AddComponent(new CFaction("enemy"));
-            enemy2.Pos = new Vector2(2.5f, 3.0f);
+            enemy2.Pos = new Vector2(2.5f, 5.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
+            Debug.ProfilingMode();
         }
 
         public override void Unload()

@@ -22,11 +22,17 @@ namespace UU_GameProject
         private int fireballDamage = 12;
         private bool isInvincible = false;
         private Text healthPool;
+        public bool isProtected = false;
 
-        public CHealthPool(int HP, GameObject GO)
+        public CHealthPool(int HP)
         {
             this.HP = HP;
             maxHP = HP;
+        }
+
+        public override void Init()
+        {
+            base.Init();
             healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
             healthPool.AddGameObject(GO, Vector2.Zero);
         }
@@ -46,29 +52,22 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag.Contains(GO.tag))
-                return;
-            if (!other.IsStatic) 
+            if (other.tag.Contains(GO.tag)) return;
+            if (other.IsStatic) return;
+            if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
+            if (other.tag.Contains("bullet"))
             {
-                if (GO.GetComponent<CFaction>().ClashingFactions(GO, other) == true)
-                {
-                    if (other.tag.Contains("bullet"))
-                    {
-                        ChangeHealth(bulletHitDamage);
-                        other.Destroy();
-                    }
-                    if (other.tag.Contains("meleeDamageArea"))
-                        ChangeHealth(meleeHitDamage);
-                    if (other.tag.Contains("lightningStrike"))
-                        ChangeHealth(lightningDamage);
-                    if (other.tag.Contains("fireball"))
-                    {
-                        ChangeHealth(fireballDamage);
-                        other.Destroy();
-                    }
-
-
-                }
+                ChangeHealth(bulletHitDamage);
+                other.Destroy();
+            }
+            if (other.tag.Contains("meleeDamageArea"))
+                ChangeHealth(meleeHitDamage);
+            if (other.tag.Contains("lightningStrike"))
+                ChangeHealth(lightningDamage);
+            if (other.tag.Contains("fireball"))
+            {
+                ChangeHealth(fireballDamage);
+                other.Destroy();
             }
         }
 
@@ -86,9 +85,7 @@ namespace UU_GameProject
             untilEnd = true;
             amount = amountPerSecond;
         }
-
-
-
+        
         //method to be called for instances that change HP
         /// <summary>
         /// Reduces the health of a character by the amount specified, use -NUMBER for healsies
@@ -96,7 +93,7 @@ namespace UU_GameProject
         /// <param name="amount">Positive: Take damage, Negative: Recieve heals</param>
         public void ChangeHealth(int amount)
         {
-            if (!isInvincible)
+            if (!isInvincible && !isProtected)
             {
                 HP = Math.Max(0, HP - amount);
                 isInvincible = true;

@@ -80,7 +80,7 @@ namespace UU_GameProject
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X + 0.01f, GO.Size.Y);
             RaycastResult hitToLeft = GO.Raycast(feetLeft, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
             RaycastResult hitToRight = GO.Raycast(feetRight, new Vector2(+1, 0), RAYCASTTYPE.STATIC);
-            if (hitToLeft.hit && hitToLeft.distance < speed * ctime)
+            if (hitToLeft.hit && hitToLeft.distance < -speed * ctime)
                 leftBlocked = true;
             if (hitToRight.hit && hitToRight.distance < speed * ctime)
                 rightBlocked = true;

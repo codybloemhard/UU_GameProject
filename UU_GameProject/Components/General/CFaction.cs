@@ -9,19 +9,24 @@ namespace UU_GameProject
 {
     public class CFaction : Component
     {
-        private string Faction;
+        private string faction;
 
         public CFaction(string Faction)
         {
-            this.Faction = Faction;
+            this.faction = Faction;
         }
         public string GetFaction()
         {
-            return Faction;
+            return faction;
         }
+
         public bool ClashingFactions(GameObject Collisionee, GameObject Collider)
         {
-            if (Collisionee.GetComponent<CFaction>().GetFaction() != Collider.GetComponent<CFaction>().GetFaction())
+            CFaction fac0 = Collisionee.GetComponent<CFaction>();
+            CFaction fac1 = Collider.GetComponent<CFaction>();
+            if (fac0 == null || fac1 == null)
+                return false;
+            if (fac0.GetFaction() != fac1.GetFaction())
                 return true;
             else return false;
         }
