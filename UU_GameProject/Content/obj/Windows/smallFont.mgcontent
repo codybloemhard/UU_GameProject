@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/cblmh/Desktop/_GITHUB_/UU_GameProject/UU_GameProject/Content/smallFont.spritefont</SourceFile>
+  <SourceTime>2017-12-24T19:30:23.1860923+01:00</SourceTime>
+  <DestFile>C:/Users/cblmh/Desktop/_GITHUB_/UU_GameProject/UU_GameProject/Content/bin/Windows/smallFont.xnb</DestFile>
+  <DestTime>2017-12-25T14:59:42.4840128+01:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2016-03-30T08:36:08+02:00</ProcessorTime>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

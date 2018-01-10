@@ -29,7 +29,9 @@ namespace UU_GameProject
             generator.GenTest();
             TextureManager.LoadTexture("block", "block");
             TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
+            TextureManager.LoadTexture("menu", "menutile");
             TextureManager.LoadTexture("playerWalking", "playerWalkingSimple", 4, 1);
             TextureManager.LoadTexture("playerCrouching", "playerCrouchingSimple", 2, 1);
             TextureManager.LoadTexture("playerCrawling", "playerCrawlingSimple", 4, 1);
@@ -41,18 +43,19 @@ namespace UU_GameProject
             TestOptions testOptions = new TestOptions();
             Select select = new Select();
             TestGame testGame = new TestGame();
-            LevelEditor levelEditor = new LevelEditor();
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
-			
-            game.states.AddState("editor", levelEditor);
+            LevelEditor editor = new LevelEditor();
+            LevelTest levelTest = new LevelTest();
+            game.states.AddState("editor", editor);
+            game.states.AddState("leveltest", levelTest);
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("options", testOptions);
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("menu");
+            game.states.SetStartingState("show");
         }
     }
 }

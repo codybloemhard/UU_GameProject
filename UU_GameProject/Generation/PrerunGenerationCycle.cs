@@ -80,6 +80,9 @@ namespace UU_GameProject
             GenerateTexture(4, "_palmleafbody");
             GenerateTexture(8, "_grassplant");
             GenerateTexture(16, "_flower");
+            GenerateTexture(8, "_grassdot");
+            GenerateTexture(8, "_grasshigh");
+
             GenerateTexture(16, "_stone");
             GenerateTexture(16, "_stoneshard");
             GenerateTexture(8, "_frostystone");

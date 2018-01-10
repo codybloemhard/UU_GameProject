@@ -131,22 +131,5 @@ namespace UU_GameProject
         {
             base.Draw(time, batch, device);
         }
-
-        public void LoadFromFile(string path)
-        {
-            using (StreamReader fileReader = new StreamReader(path))
-            {
-                string line = fileReader.ReadLine();
-                while (line != null)
-                {
-                    string[] properties = line.Split('|');
-                    for(int i = 0; i < properties.Length; i++)
-                    {
-                        
-                    }
-                }
-            }
-
-        }
     }
 }

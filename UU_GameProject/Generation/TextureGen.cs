@@ -53,6 +53,8 @@ namespace UU_GameProject
                 case "_palmleafbody": return GenPalmLeafBody();
                 case "_grassplant": return GenGrassPlant();
                 case "_flower": return GenFlower();
+                case "_grassdot": return GenGrassDot();
+                case "_grasshigh": return GenGrassHigh();
                 //snowman
                 case "_snowmanbody": return GenSnowManBody();
                 case "_snowmaneye": return GenSnowManEye();
@@ -608,6 +610,47 @@ namespace UU_GameProject
                 Colour cLeafCol = GenFlowerLeafColour(cHeartCol);
                 cLeaf.FloatsToColours(fLeaf, cLeafCol, cLeafCol);
                 cFinal.DrawOver(cLeaf, px - leaveSize / 2, py - leaveSize / 2);
+            }
+            return cFinal;
+        }
+
+        public static ColourField GenGrassDot()
+        {
+            const uint size = 32;
+            ColourField cFinal = new ColourField(size, size);
+            ColourField cTemp = new ColourField(size, size);
+            for(int i = 0; i < Image.RandomDeviation(8, 4); i++)
+            {
+                uint len = (uint)Image.RandomDeviation(16, 4);
+                Vector2 dir = new Vector2((float)MathH.random.NextDouble()*2-1f, -1f);
+                FloatField fMask = Image.RandomWalk(size, size, 0.5f, 1f, len, dir);
+                float r = Image.RandomDeviation(0.4f, 0.1f);
+                float g = Image.RandomDeviation(0.7f, 0.2f);
+                float b = Image.RandomDeviation(0.3f, 0.1f);
+                Colour cColour = new Colour(r, g, b);
+                cTemp.FloatsToColours(fMask, cColour, cColour);
+                cFinal.DrawOver(cTemp, 0, 0);
+            }
+            return cFinal;
+        }
+
+        public static ColourField GenGrassHigh()
+        {
+            const uint ww = 32, hh = 64;
+            ColourField cFinal = new ColourField(ww, hh);
+            ColourField cTemp = new ColourField(ww, hh);
+            int max = (int)Image.RandomDeviation(8, 2);
+            for (int i = 0; i < max; i++)
+            {
+                uint len = (uint)Image.RandomDeviation(60, 4);
+                Vector2 dir = new Vector2(0, -2f);
+                FloatField fMask = Image.RandomWalk(ww, hh, (float)i / (max-1), 1f, len, dir);
+                float r = Image.RandomDeviation(0.4f, 0.1f);
+                float g = Image.RandomDeviation(0.9f, 0.2f);
+                float b = Image.RandomDeviation(0.3f, 0.1f);
+                Colour cColour = new Colour(r, g, b);
+                cTemp.FloatsToColours(fMask, cColour, cColour);
+                cFinal.DrawOver(cTemp, 0, 0);
             }
             return cFinal;
         }

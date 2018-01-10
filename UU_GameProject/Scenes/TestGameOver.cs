@@ -25,7 +25,7 @@ namespace UU_GameProject
 
         public override void Unload()
         {
-            Timers.FindWithTag("timer").Reset();
+            //Timers.FindWithTag("timer").Reset();
         }
 
         public override void Update(float time)
