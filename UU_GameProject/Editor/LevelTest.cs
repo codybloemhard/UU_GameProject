@@ -50,11 +50,11 @@ namespace UU_GameProject
                 delegate(ReplacerInput i) {
                 return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             });
-            builder.AddSource("!", 10, true, Catalog.ReplacerTree0);
+            builder.AddSource("!", 10, true, Catalog.ReplacerTree8);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            Debug.FullDebugMode();
+            //Debug.FullDebugMode();
         }
         
         private void dectest(GameObject o)

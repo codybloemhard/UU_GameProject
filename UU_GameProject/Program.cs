@@ -55,7 +55,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("show");
+            game.states.SetStartingState("game");
         }
     }
 }

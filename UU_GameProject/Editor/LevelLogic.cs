@@ -197,8 +197,6 @@ namespace UU_GameProject
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
-            //Task.Run(()=>
-            //{
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
             string cstring = chunkcounter.ToString();
             lists.Add(cstring, new List<GameObject>());
@@ -224,7 +222,6 @@ namespace UU_GameProject
                     else counters.Add(cstring, 1);
                 }
             }
-            //});
             chunkcounter++;
         }
 
