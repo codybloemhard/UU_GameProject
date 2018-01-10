@@ -20,7 +20,7 @@ namespace UU_GameProject
             bullet.AddComponent(new CRender("block"));
             bullet.AddComponent(new CBulletMovement(6 + Math.Abs(speed.X), dir));
             bullet.AddComponent(new CAABB());
-            bullet.AddComponent(new Components.General.CFaction(Faction));
+            bullet.AddComponent(new CFaction(Faction));
             if (dir.X > 0)
                 bullet.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
             else

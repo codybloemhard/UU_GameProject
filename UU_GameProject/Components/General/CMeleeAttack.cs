@@ -21,7 +21,7 @@ namespace UU_GameProject
             meleeDamageArea.AddComponent(new CRender("block"));
             meleeDamageArea.AddComponent(new CDamageArea(dir, duration, caller));
             meleeDamageArea.AddComponent(new CAABB());
-            meleeDamageArea.AddComponent(new Components.General.CFaction(Faction));
+            meleeDamageArea.AddComponent(new CFaction(Faction));
             if (dir.X > 0)
                 meleeDamageArea.Pos = GO.Pos + new Vector2(dimensions.X / 2f, 0);
             else

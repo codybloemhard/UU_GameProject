@@ -33,14 +33,14 @@ namespace UU_GameProject
 
         public void Update()
         {
-            if (amount != 0 && MP < maxMana && shouldManaRegen)
+            /*if (amount != 0 && MP < maxMana && shouldManaRegen)
             {
                 manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
                 Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
                 MP += 1;
                 shouldManaRegen = false;
                 Timers.FindWithTag("manaRegen").Reset();
-            }
+            }*/
         }
 
         public override void OnCollision(GameObject other)
@@ -50,7 +50,7 @@ namespace UU_GameProject
                 return;
             if (!other.IsStatic) 
             {
-                if (GO.GetComponent<Components.General.CFaction>().ClashingFactions(GO, other) == true)
+                if (GO.GetComponent<CFaction>().ClashingFactions(GO, other) == true)
                 {
                     if (other.tag.Contains("bullet"))
                     {

@@ -2,7 +2,7 @@
 using Core;
 using Microsoft.Xna.Framework;
 
-namespace UU_GameProject.Components.General
+namespace UU_GameProject
 {
     public class CMagicness : Component
     {

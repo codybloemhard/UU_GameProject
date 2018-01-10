@@ -297,3 +297,6 @@ UU_GameProject/Content/level.txt
 *.pdb
 *.exe
 *.pdb
+UU_GameProject/obj/x86/Debug/UU_GameProject.pdb
+*.exe
+*.pdb

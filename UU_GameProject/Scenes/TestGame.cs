@@ -70,8 +70,8 @@ namespace UU_GameProject
             player.AddComponent(new CMeleeAttack());
             player.AddComponent(new CHealthPool(100, player));
             player.AddComponent(new CManaPool(100, player));
-            player.AddComponent(new Components.General.CMagicness());
-            player.AddComponent(new Components.General.CFaction("friendly"));
+            player.AddComponent(new CMagicness());
+            player.AddComponent(new CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy = new GameObject("Nenemy", this, 2);
@@ -80,7 +80,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CHealthPool(50, enemy));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
-            enemy.AddComponent(new Components.General.CFaction("enemy"));
+            enemy.AddComponent(new CFaction("enemy"));
             enemy.Pos = new Vector2(12.5f, 7f);
             enemy.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy1 = new GameObject("Renemy", this, 2);
@@ -89,7 +89,7 @@ namespace UU_GameProject
             enemy1.AddComponent(new CHealthPool(25, enemy1));
             enemy1.AddComponent(new CAABB());
             enemy1.AddComponent(new CShoot());
-            enemy1.AddComponent(new Components.General.CFaction("enemy"));
+            enemy1.AddComponent(new CFaction("enemy"));
             enemy1.Pos = new Vector2(9.5f, 4.0f);
             enemy1.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy2 = new GameObject("Aenemy", this, 2);
@@ -98,7 +98,7 @@ namespace UU_GameProject
             enemy2.AddComponent(new CHealthPool(100, enemy2));
             enemy2.AddComponent(new CAABB());
             enemy2.AddComponent(new CMeleeAttack());
-            enemy2.AddComponent(new Components.General.CFaction("enemy"));
+            enemy2.AddComponent(new CFaction("enemy"));
             enemy2.Pos = new Vector2(2.5f, 3.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
         }

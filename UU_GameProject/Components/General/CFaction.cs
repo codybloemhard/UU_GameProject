@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 
-namespace UU_GameProject.Components.General
+namespace UU_GameProject
 {
     public class CFaction : Component
     {
