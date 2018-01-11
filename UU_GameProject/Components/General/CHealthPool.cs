@@ -64,6 +64,16 @@ namespace UU_GameProject
                 other.Destroy();
             }
         }
+
+        public void Reset()
+        {
+            hp = maxHP;
+            isInvincible = false;
+            isProtected = false;
+            healTime = 0f;
+            healRate = 0f;
+            healthPool.text = "Health: " + (int)hp;
+        }
         
         public void HealOverTime(float rate, float time)
         {
@@ -98,10 +108,13 @@ namespace UU_GameProject
 
         private void Die()
         {
-            healthPool.Destroy();
             if (GO.tag.Contains("player"))
-                GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
-            else GO.active = false;
+                GO.GetComponent<CPlayerMovement>().Reset();
+            else
+            {
+                GO.Destroy();
+                healthPool.Destroy();
+            }
         }
 
         private void ResetInvincibility()

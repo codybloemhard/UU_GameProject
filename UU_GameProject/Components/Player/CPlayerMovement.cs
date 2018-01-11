@@ -31,6 +31,7 @@ namespace UU_GameProject
         private bool isSliding = false;
         private bool isDown = false;
         private Vector2 velocity = Vector2.Zero;
+        private Vector2 checkPos = new Vector2(-1000, -1000);
         private bool initiated = false;
         private CAnimatedSprite animation;
         private CHealthPool healthPool;
@@ -38,13 +39,13 @@ namespace UU_GameProject
 
         public CPlayerMovement(float speed) : base()
         {
-            this.speed = speed;
-            dir = new Vector2(1, 0);
+            this.speed = speed;         
         }
 
         public void InitPlayer()
         {
             initiated = true;
+            dir = new Vector2(1, 0);
             Renderer render = GO.Renderer;
             if (render != null) render.colour = Color.White;
             animation = GO.Renderer as CAnimatedSprite;
@@ -289,8 +290,10 @@ namespace UU_GameProject
 
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "killer")
-                healthPool.ChangeHealth(20);
+            if(other.tag == "checkpoint")
+            {
+                checkPos = GO.Pos;
+            }
         }
 
         public Vector2 Velocity()
@@ -300,9 +303,12 @@ namespace UU_GameProject
 
         public void Reset()
         {
-            GO.Pos = new Vector2(1, 7);
+            if (checkPos != new Vector2(-1000, -1000))
+                GO.Pos = checkPos;
             velocity = new Vector2(0, 0);
             vertVelo = 0;
+            healthPool.Reset();
+            manaPool.Reset();
         }
     }
 }

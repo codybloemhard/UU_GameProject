@@ -47,12 +47,6 @@ namespace UU_GameProject
             stone4.Size = new Vector2(3, 0.2f);
             stone4.AddComponent(new CRender("block"));
             stone4.AddComponent(new CAABB());
-            GameObject killer = new GameObject("killer", this, 2);
-            killer.AddComponent(new CRender("suprise"));
-            killer.AddComponent(new CAABB());
-            killer.Pos = new Vector2(3, 5);
-            killer.Size = new Vector2(1, 1);
-            (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -73,8 +67,18 @@ namespace UU_GameProject
             player.AddComponent(new CMagicness());
             player.AddComponent(new CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
-            player.Size = new Vector2(0.5f, 1.0f);
-            /*GameObject enemy0 = new GameObject("Nenemy", this, 2);
+            player.Size = new Vector2(0.5f, 1);
+            GameObject respawn0 = new GameObject("checkpoint", this, 2);
+            respawn0.Size = new Vector2(0.5f, 1);
+            respawn0.Pos = new Vector2(0, 7);
+            respawn0.AddComponent(new CAABB());
+            respawn0.AddComponent(new CRender("suprise"));
+            GameObject respawn1 = new GameObject("checkpoint", this, 2);
+            respawn1.Size = new Vector2(0.5f, 1);
+            respawn1.Pos = new Vector2(14, 2);
+            respawn1.AddComponent(new CAABB());
+            respawn1.AddComponent(new CRender("suprise"));
+            GameObject enemy0 = new GameObject("Nenemy", this, 2);
             enemy0.AddComponent(new CRender("player"));
             enemy0.AddComponent(new CNormalEnemyAI(2f));
             enemy0.AddComponent(new CHealthPool(50));
@@ -100,7 +104,7 @@ namespace UU_GameProject
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.AddComponent(new CFaction("enemy"));
             enemy2.Pos = new Vector2(2.5f, 5.0f);
-            enemy2.Size = new Vector2(0.5f, 1.0f);*/
+            enemy2.Size = new Vector2(0.5f, 1.0f);
             Debug.ProfilingMode();
         }
         

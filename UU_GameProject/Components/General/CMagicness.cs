@@ -44,10 +44,12 @@ namespace UU_GameProject
             lightningStrike.Pos = Input.GetMousePosition() - new Vector2(dimensions.X / 2f, dimensions.Y / 2f);
             lightningStrike.Size = dimensions;
         }
+
         public void HealthRegen()
         {
 
         }
+
         public void Heal()
         {
 

@@ -28,6 +28,12 @@ namespace UU_GameProject
             manaPool.text = "Mana: " + MP;
         }
 
+        public void Reset()
+        {
+            MP = maxMana;
+            shouldManaRegen = true;
+        }
+
         /// <summary>
         /// Method that will attempt to consume the amount of mana specified,
         /// and will return true if the requested amount is succesfully subtracted.
