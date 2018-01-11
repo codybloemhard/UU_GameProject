@@ -62,7 +62,7 @@ namespace UU_GameProject
             anim.AddAnimation("sliding", "playerSliding");
             anim.AddAnimation("airborn", "playerAirborn");
             anim.AddAnimation("melee", "playerMelee");
-            anim.PlayAnimation("walking", 5);
+            anim.PlayAnimation("walking", 2);
             player.AddComponent(anim);
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
@@ -74,7 +74,7 @@ namespace UU_GameProject
             player.AddComponent(new CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy0 = new GameObject("Nenemy", this, 2);
+            /*GameObject enemy0 = new GameObject("Nenemy", this, 2);
             enemy0.AddComponent(new CRender("player"));
             enemy0.AddComponent(new CNormalEnemyAI(2f));
             enemy0.AddComponent(new CHealthPool(50));
@@ -100,7 +100,7 @@ namespace UU_GameProject
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.AddComponent(new CFaction("enemy"));
             enemy2.Pos = new Vector2(2.5f, 5.0f);
-            enemy2.Size = new Vector2(0.5f, 1.0f);
+            enemy2.Size = new Vector2(0.5f, 1.0f);*/
             Debug.ProfilingMode();
         }
         

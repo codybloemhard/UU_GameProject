@@ -110,7 +110,8 @@ namespace UU_GameProject
             }
 
             //crouching
-            if (isDown && velocity.X == 0) isCrouching = true;
+            if (isDown && Math.Abs(velocity.X) < 0.1f)
+                isCrouching = true;
             else isCrouching = false;
 
             //crawling
