@@ -103,7 +103,7 @@ namespace UU_GameProject
             enemy2.Size = new Vector2(0.5f, 1.0f);
             Debug.ProfilingMode();
         }
-
+        
         public override void Unload()
         {
             
@@ -121,6 +121,9 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+            if (Input.GetKey(PressAction.DOWN, Keys.O))
+                Debug.showAtlas = true;
+            else Debug.showAtlas = false;
             base.Update(time);
         }
 

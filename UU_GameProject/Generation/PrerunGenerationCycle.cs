@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 using System.Threading;
+//<author:cody>
 namespace UU_GameProject
 {
     public class PrerunGenerationCycle

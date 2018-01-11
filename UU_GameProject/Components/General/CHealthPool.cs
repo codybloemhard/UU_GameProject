@@ -8,45 +8,39 @@ namespace UU_GameProject
 {
     public class CHealthPool : Component
     {
-        private int HP;
+        private float hp;
         private int maxHP;
-        private int Duration;
-        private float amount;
-        private float regenExcess;
-        private float timer = 0;
-        private bool untilEnd;
-        private bool Heal;
         private int bulletHitDamage = 10;
         private int meleeHitDamage = 25;
         private int lightningDamage = 20;
         private int fireballDamage = 12;
         private bool isInvincible = false;
         private Text healthPool;
+        private float healTime = 0f;
+        private float healRate = 0f;
         public bool isProtected = false;
 
         public CHealthPool(int HP)
         {
-            this.HP = HP;
+            this.hp = HP;
             maxHP = HP;
         }
 
         public override void Init()
         {
             base.Init();
-            healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
+            healthPool = new Text(GO.Context, "Health: " + (int)hp, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
             healthPool.AddGameObject(GO, Vector2.Zero);
         }
 
-        public void Update()
+        public override void Update(float time)
         {
-            /*if (amount != 0 && MP < maxMana && shouldManaRegen)
+            if(healTime > 0f)
             {
-                manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
-                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
-                MP += 1;
-                shouldManaRegen = false;
-                Timers.FindWithTag("manaRegen").Reset();
-            }*/
+                healTime -= time;
+                if (time < 0) time = 0;
+                ModifyHP(healRate * time);
+            }
         }
 
         public override void OnCollision(GameObject other)
@@ -70,42 +64,44 @@ namespace UU_GameProject
                 other.Destroy();
             }
         }
-
-        //method to be called for gradually regenerating or depleting health (i.e. poison)
-        public void GradualChange(int Duration, int totalAmount, bool Heal)
+        
+        public void HealOverTime(float rate, float time)
         {
-            this.Heal = Heal;
-            this.Duration = Duration;
-            amount = totalAmount / this.Duration;
-        }
-        //GradualChange, but then to heal until HP is full or damage until HP is empty
-        public void GradualChangeUntilEnd(float amountPerSecond, bool Heal)
-        {
-            this.Heal = Heal;
-            untilEnd = true;
-            amount = amountPerSecond;
+            if (healRate != 0f)//cancel potion or healing
+            {
+                healRate = 0f;
+                healTime = 0f;
+                return;
+            }
+            healTime = time;
+            healRate = rate;
         }
         
-        //method to be called for instances that change HP
-        /// <summary>
-        /// Reduces the health of a character by the amount specified, use -NUMBER for healsies
-        /// </summary>
-        /// <param name="amount">Positive: Take damage, Negative: Recieve heals</param>
-        public void ChangeHealth(int amount)
+        //amount > 0 :: take dmg, amount < 0 :: heal
+        public void ChangeHealth(float amount)
         {
             if (!isInvincible && !isProtected)
             {
-                HP = Math.Max(0, HP - amount);
                 isInvincible = true;
-                Timers.Add("manaRegen", 0.5f, ResetInvincibility);
-                healthPool.text = "Health: " + HP;
-                if (HP <= 0)
-                {
-                    if (GO.tag.Contains("player"))
-                        GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
-                    else GO.active = false;
-                }
+                Timers.Add("hpRegen", 0.5f, ResetInvincibility);
+                ModifyHP(amount);
             }
+        }
+
+        private void ModifyHP(float amount)
+        {
+            hp = Math.Max(0f, hp - amount);
+            healthPool.text = "Health: " + (int)hp;
+            if (hp <= 0) Die();
+            if (hp > maxHP) hp = maxHP;
+        }
+
+        private void Die()
+        {
+            healthPool.Destroy();
+            if (GO.tag.Contains("player"))
+                GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+            else GO.active = false;
         }
 
         private void ResetInvincibility()

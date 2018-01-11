@@ -57,17 +57,17 @@ namespace UU_GameProject
             if (!initiated) InitPlayer();
             //animations
             if (isCrawling)
-                animation.PlayAnimation("crawling", 2);
+                animation.PlayAnimationIfDifferent("crawling", 2);
             else if (isSliding)
-                animation.PlayAnimation("sliding", 2);
+                animation.PlayAnimationIfDifferent("sliding", 2);
             else if (isCrouching)
-                animation.PlayAnimation("crouching", 2);
+                animation.PlayAnimationIfDifferent("crouching", 2);
             else if (!grounded)
-                animation.PlayAnimation("airborn", 2);
+                animation.PlayAnimationIfDifferent("airborn", 2);
             else if (fallPanic)
-                animation.PlayAnimation("fallPanic", 2);
+                animation.PlayAnimationIfDifferent("fallPanic", 2);
             else
-                animation.PlayAnimation("walking", 2);
+                animation.PlayAnimationIfDifferent("walking", 2);
 
             //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)

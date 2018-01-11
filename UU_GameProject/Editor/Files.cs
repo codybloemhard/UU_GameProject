@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+//<author:cody>
 //Copy of:
 //https://github.com/ocdy1001/CodeAnalyser/blob/master/CodeAnalyser/Files.cs
 namespace UU_GameProject

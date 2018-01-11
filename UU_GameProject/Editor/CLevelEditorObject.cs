@@ -4,7 +4,7 @@ using Core;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public class CLevelEditorObject : Component
