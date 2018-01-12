@@ -308,3 +308,5 @@ UU_GameProject/obj/x86/Debug/UU_GameProject.exe
 *.exe
 *.pdb
 UU_GameProject/bin/Windows/x86/Debug/UU_GameProject.pdb
+*.exe
+UU_GameProject/bin/Windows/x86/Debug/UU_GameProject.exe

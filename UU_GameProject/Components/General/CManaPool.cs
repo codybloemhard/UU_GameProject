@@ -34,13 +34,7 @@ namespace UU_GameProject
             shouldManaRegen = true;
         }
 
-        /// <summary>
-        /// Method that will attempt to consume the amount of mana specified,
-        /// and will return true if the requested amount is succesfully subtracted.
-        /// Otherwise will return false, and not subtract any.
-        /// </summary>
-        /// <param name="amount">Mana cost of an ability</param>
-        /// <returns></returns>
+        //true when has enough, false when not and will not subtract
         public bool ConsumeMana(int amount)
         {
             if (MP >= amount)
@@ -53,7 +47,6 @@ namespace UU_GameProject
                 Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
                 return false;
             }
-
         }
 
         //method to be called by the regen timer

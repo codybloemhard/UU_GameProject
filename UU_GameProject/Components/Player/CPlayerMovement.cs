@@ -9,11 +9,10 @@ namespace UU_GameProject
     {
         private float speed;
         private float maxPlayerSpeed = 2.0f;
-        private Vector2 dir;
         private float intendedDir;
         private float jumpPower = 13f;
         private float acceleration = 50f, vertVelo = 0f;
-        private float playerAccel = 0.02f;
+        private float playerAccel = 8f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
         private float dashSlowdownDelayTime = 0;
@@ -30,12 +29,18 @@ namespace UU_GameProject
         private bool isCrouching = false;
         private bool isSliding = false;
         private bool isDown = false;
+        private bool initiated = false;
+        private bool canMelee = true;
+        private Vector2 dir;
         private Vector2 velocity = Vector2.Zero;
         private Vector2 checkPos = new Vector2(-1000, -1000);
-        private bool initiated = false;
         private CAnimatedSprite animation;
         private CHealthPool healthPool;
         private CManaPool manaPool;
+        private CMagicness magicness;
+        private CFaction faction;
+        private CMeleeAttack melee;
+        private CShoot shoot;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -51,6 +56,10 @@ namespace UU_GameProject
             animation = GO.Renderer as CAnimatedSprite;
             healthPool = GO.GetComponent<CHealthPool>();
             manaPool = GO.GetComponent<CManaPool>();
+            magicness = GO.GetComponent<CMagicness>();
+            faction = GO.GetComponent<CFaction>();
+            melee = GO.GetComponent<CMeleeAttack>();
+            shoot = GO.GetComponent<CShoot>();
         }
 
         public override void Update(float time)
@@ -70,11 +79,12 @@ namespace UU_GameProject
             else
                 animation.PlayAnimationIfDifferent("walking", 2);
 
+            float timeAccel = playerAccel * time;
             //basic movement: slowly accelerates the player
-            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
-                velocity += new Vector2(playerAccel, 0);
-            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - playerAccel >= -maxPlayerSpeed)
-                velocity += new Vector2(-playerAccel, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + timeAccel <= maxPlayerSpeed)
+                velocity += new Vector2(timeAccel, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - timeAccel >= -maxPlayerSpeed)
+                velocity += new Vector2(-timeAccel, 0);
 
             //stops the player when they hit a wall
             if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
@@ -84,9 +94,9 @@ namespace UU_GameProject
 
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
-                velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
+                velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
-                velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
+                velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
             if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000);
             if (velocity != Vector2.Zero)
             {
@@ -123,12 +133,12 @@ namespace UU_GameProject
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - playerAccel * 0.2f);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - timeAccel * 0.2f);
                 isSliding = true;
             } //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + playerAccel * 0.2f);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + timeAccel * 0.2f);
                 isSliding = true;
             } //not sliding
             else isSliding = false;
@@ -167,8 +177,9 @@ namespace UU_GameProject
             }
             
             //the dashing itself
-            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && manaPool.ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
-                velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
+                if(magicness.Dash())
+                    velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
 
             //gravity, jump and player head and bottom collision
             Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -206,10 +217,13 @@ namespace UU_GameProject
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (manaPool.ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
+                if (fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
-                    vertVelo = -jumpPower;
-                    jumpDelayTime = 0;
+                    if (magicness.DoubleJump())
+                    {
+                        vertVelo = -jumpPower;
+                        jumpDelayTime = 0;
+                    }
                 }
             }
             if (!grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
@@ -268,32 +282,33 @@ namespace UU_GameProject
             if (hitRight.hit && hitRight.distance < 0.02f)
                 rightSideAgainstWall = true;
             else rightSideAgainstWall = false;
+            
             //fireball
-            //fires toward the cursor
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
-            {
-                GO.GetComponent<CMagicness>().Fireball(new Vector2(.2f, .2f), velocity, GO.GetComponent<CFaction>().GetFaction());
-            }
-
-            //RAITUNINGU STORAIKO!!!
+                magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
+            //lightning
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
-                GO.GetComponent<CMagicness>().Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, GO.GetComponent<CFaction>().GetFaction());
-
-            //shoot
-            //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-            //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
+                magicness.Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, faction.GetFaction());
+            //heal
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+                magicness.Heal();
+            //melee
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, GO.GetComponent<CFaction>().GetFaction());
-            if (Input.GetKey(PressAction.PRESSED, Keys.F) && GO.GetComponent<CManaPool>().ConsumeMana(20))
-                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity, GO.GetComponent<CFaction>().GetFaction());
+                DoMelee();
+        }
+
+        private void DoMelee()
+        {
+            if (!canMelee) return;
+            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, faction.GetFaction());
+            canMelee = false;
+            Timers.Add("playermelee", 0.5f, () => canMelee = true);
         }
 
         public override void OnCollision(GameObject other)
         {
             if(other.tag == "checkpoint")
-            {
                 checkPos = GO.Pos;
-            }
         }
 
         public Vector2 Velocity()

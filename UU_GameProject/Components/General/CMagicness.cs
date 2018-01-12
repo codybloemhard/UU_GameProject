@@ -7,17 +7,29 @@ namespace UU_GameProject
     public class CMagicness : Component
     {
         private Vector2 dir;
-        private float regenTime;
+        private bool unlockedLightning, unlockedFitness, unlockedHealing;
+        private bool iniated = false;
+        private CManaPool manaPool;
+        private CHealthPool healthPool;
 
         public CMagicness() : base() { }
+
+        private void Init()
+        {
+            iniated = true;
+            manaPool = GO.GetComponent<CManaPool>();
+            healthPool = GO.GetComponent<CHealthPool>();
+        }
 
         public override void Update(float time)
         {
             base.Update(time);
+            if (!iniated) Init();
         }
 
         public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
+            if (!manaPool.ConsumeMana(10)) return;
             if (Input.GetMousePosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
             else dir = new Vector2(-1,0);
@@ -36,6 +48,8 @@ namespace UU_GameProject
 
         public void Lightning(Vector2 dimensions, float duration, string caller, string Faction)
         {
+            if (!unlockedLightning) return;
+            if (!manaPool.ConsumeMana(30)) return;
             GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);
             lightningStrike.AddComponent(new CRender("block"));
             lightningStrike.AddComponent(new CLightningStrike(duration, caller));
@@ -45,14 +59,25 @@ namespace UU_GameProject
             lightningStrike.Size = dimensions;
         }
 
-        public void HealthRegen()
-        {
-
-        }
-
         public void Heal()
         {
+            if (!unlockedHealing) return;
+            if (!manaPool.ConsumeMana(30)) return;
+            GO.GetComponent<CHealthPool>().HealOverTime(5f, 5f);
+        }
 
+        public bool Dash()
+        {
+            if (!unlockedFitness) return false;
+            if (manaPool.ConsumeMana(25)) return true;
+            return false;
+        }
+
+        public bool DoubleJump()
+        {
+            if (!unlockedFitness) return false;
+            if (manaPool.ConsumeMana(75)) return true;
+            return false;
         }
     }
 }
