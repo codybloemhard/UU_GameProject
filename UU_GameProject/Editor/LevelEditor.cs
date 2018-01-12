@@ -14,6 +14,8 @@ namespace UU_GameProject
 
         public override void Load(SpriteBatch batch)
         {
+            //lineRenderer.Add(new Line(Vector2.Zero, new Vector2(16, 0), Color.Red));
+            //lineRenderer.Add(new Line(Vector2.Zero, new Vector2(16, 16), Color.Red));
             Button button = new Button(this, "Finish", "block", () => Finish(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
             Button quit = new Button(this, "Cancel", "block", () => Finish(false),
@@ -27,22 +29,22 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            if(Input.GetKey(PressAction.PRESSED, Keys.W))
+            if(Input.GetKey(PressAction.PRESSED, Keys.W) && !CLevelEditorObject.Handling)
             {
                 GameObject newObject = new GameObject("spawner", this, 0, true);
                 newObject.AddComponent(new CRender("cross"));
                 newObject.AddComponent(new CAABB());
                 newObject.AddComponent(new CLevelEditorObject(newObject, true));
-                newObject.Pos = Input.GetMousePosition();
+                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 16), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 16), 0));
                 newObject.Size = new Vector2(1f, 1f);
             }
-            if (Input.GetKey(PressAction.PRESSED, Keys.Q))
+            if (Input.GetKey(PressAction.PRESSED, Keys.Q) && !CLevelEditorObject.Handling)
             {
                 GameObject newObject = new GameObject("new", this, 0, true);
                 newObject.AddComponent(new CRender("block"));
                 newObject.AddComponent(new CAABB());
                 newObject.AddComponent(new CLevelEditorObject(newObject, false));
-                newObject.Pos = Input.GetMousePosition();
+                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 16), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 16), 0));
                 newObject.Size = new Vector2(1f, 1f);
             }
             if (Input.GetKey(PressAction.DOWN, Keys.Left))
@@ -58,6 +60,7 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
+
         }
         
         public void Finish(bool save)
@@ -99,7 +102,7 @@ namespace UU_GameProject
                         list[i].Pos = new Vector2((float)MathH.random.NextDouble() * 16,
                                                     (float)MathH.random.NextDouble() * 16);
                     }
-                    list[0].Pos = list[1].Pos + (list[1].Size * new Vector2(0.5f, 0f));
+                    list[0].Pos = list[1].Pos + (list[1].Size * new Vector2(0.5f, 0f)) - new Vector2(0.5f);
                     LevelLogic.WriteChunk(list, baseurl + "chunk" + x + y + ".lvl", x, y);
                 }
         }

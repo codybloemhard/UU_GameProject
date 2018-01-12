@@ -37,7 +37,6 @@ namespace UU_GameProject
             player.AddComponent(new Components.General.CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);*/
-
             GameObject player = new GameObject(this, 0);
             player.AddComponent(new CFreeCamera());
             player.AddComponent(new CRender("player"));
@@ -50,7 +49,7 @@ namespace UU_GameProject
                 delegate(ReplacerInput i) {
                 return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             });
-            builder.AddSource("!", 10, true, Catalog.ReplacerTree0);
+            builder.AddSource("!tree", 10, true, Catalog.ReplacerTree0);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);

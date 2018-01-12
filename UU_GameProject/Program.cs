@@ -18,7 +18,7 @@ namespace UU_GameProject
         
         public Run()
         {
-            game = new GameWindow(1600);
+            game = new GameWindow(1200);
             game.SetLoad(Load);
             game.Run();
         }
@@ -54,7 +54,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("show");
+            game.states.SetStartingState("editor");
         }
     }
 }

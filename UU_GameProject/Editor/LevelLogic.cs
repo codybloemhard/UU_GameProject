@@ -35,13 +35,18 @@ namespace UU_GameProject
                     GameObject obj = objects[i];
                     bool spawner = obj.tag[0] == '!';
                     if (spawner) w.Write(true);
-                    else w.Write(false);
-                    w.Write(obj.Pos.X);
-                    w.Write(obj.Pos.Y);
+                    else w.Write(false);           
                     if (!spawner)
                     {
+                        w.Write(obj.Pos.X);
+                        w.Write(obj.Pos.Y);
                         w.Write(obj.Size.X);
                         w.Write(obj.Size.Y);
+                    }
+                    else
+                    {
+                        w.Write(obj.Pos.X + 0.5f);
+                        w.Write(obj.Pos.Y + 0.5f);
                     }
                     w.Write(obj.tag);
                 }
