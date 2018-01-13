@@ -35,6 +35,7 @@ namespace UU_GameProject
             else
                 GO.Pos = obj.Pos + new Vector2(obj.Size.X / 2f - GO.Size.X, 0);
             Timers.Add("DamageAreaLifespan", duration, () => GO.Destroy());
+            AudioManager.PlayEffect("melee");
         }
 
         public override void Update(float time)

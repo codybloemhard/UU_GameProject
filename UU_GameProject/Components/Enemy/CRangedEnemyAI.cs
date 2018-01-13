@@ -69,6 +69,7 @@ namespace UU_GameProject
             {
                 Vector2 thing = shootdir(GO.Pos.X - player.Pos.X);
                 GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction());
+                AudioManager.PlayEffect("shoot");
                 wait = 1.75f;
             }
             if (!grounded)

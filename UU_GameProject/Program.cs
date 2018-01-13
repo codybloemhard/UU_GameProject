@@ -39,7 +39,15 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerMelee", "playerMeleeSimple", 4, 1);
             TextureManager.LoadTexture("playerAirborn", "playerAirbornSimple", 4, 1);
             TextureManager.LoadTexture("playerFallPanic", "playerFallPanicSimple", 4, 1);
+            AudioManager.LoadTrack("moonlightsonata", "beethoven");
             AudioManager.LoadEffect("jump", "jump");
+            AudioManager.LoadEffect("dead", "dead");
+            AudioManager.LoadEffect("healing", "healing");
+            AudioManager.LoadEffect("hit", "hit");
+            AudioManager.LoadEffect("kill", "kill");
+            AudioManager.LoadEffect("lightning", "lightning");
+            AudioManager.LoadEffect("melee", "melee");
+            AudioManager.LoadEffect("shoot", "shoot"); 
             TestMenu testMenu = new TestMenu();
             TestOptions testOptions = new TestOptions();
             Select select = new Select();
@@ -57,6 +65,9 @@ namespace UU_GameProject
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
             game.states.SetStartingState("game");
+            DataManager.SetData<float>("mastervolume", 1f);
+            DataManager.SetData<float>("trackvolume", 1f);
+            DataManager.SetData<float>("effectvolume", 1f);
         }
     }
 }

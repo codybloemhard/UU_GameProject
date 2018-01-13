@@ -65,7 +65,6 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            //float percentage = 1 - audioslider.GetValue;
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)

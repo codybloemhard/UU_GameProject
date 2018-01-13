@@ -44,3 +44,12 @@ C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\De
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\menutile2.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\animatie0.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\jump.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\beethoven.wma
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\beethoven.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\dead.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\healing.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\hit.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\kill.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\lightning.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\melee.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\shoot.xnb

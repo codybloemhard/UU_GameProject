@@ -158,8 +158,12 @@ namespace UU_GameProject
             //turning dashing state on
             if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
             {
-                isDashing = true;
-                dashToggleDelayTime = 0;
+                if (magicness.Dash())
+                {
+                    isDashing = true;
+                    dashToggleDelayTime = 0;
+                    AudioManager.PlayEffect("jump");
+                }
             }
             dashToggleDelayTime += time;
 
@@ -178,8 +182,7 @@ namespace UU_GameProject
             
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
-                if(magicness.Dash())
-                    velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
+                velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
 
             //gravity, jump and player head and bottom collision
             Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
@@ -320,6 +323,7 @@ namespace UU_GameProject
 
         public void Reset()
         {
+            AudioManager.PlayEffect("dead");
             if (checkPos != new Vector2(-1000, -1000))
                 GO.Pos = checkPos;
             velocity = new Vector2(0, 0);

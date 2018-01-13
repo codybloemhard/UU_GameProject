@@ -100,6 +100,8 @@ namespace UU_GameProject
             hp = Math.Max(0f, hp - amount);
             if (hp <= 0) Die();
             if (hp > maxHP) hp = maxHP;
+            if(amount > 0)
+                AudioManager.PlayEffect("hit");
         }
 
         private void Die()
@@ -107,7 +109,10 @@ namespace UU_GameProject
             if (GO.tag.Contains("player"))
                 GO.GetComponent<CPlayerMovement>().Reset();
             else
+            {
                 GO.Destroy();
+                AudioManager.PlayEffect("kill");
+            }
         }
 
         private void ResetInvincibility()

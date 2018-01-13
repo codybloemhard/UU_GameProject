@@ -122,6 +122,7 @@ namespace UU_GameProject
             enemy2.Pos = new Vector2(2.5f, 5.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
             Debug.ProfilingMode();
+            AudioManager.PlayTrack("moonlightsonata");
         }
         
         public override void Unload() { }

@@ -48,7 +48,7 @@ namespace UU_GameProject
             fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMousePosition() - (fireball.Pos + .5f * (fireball.Size))), dir));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
-
+            AudioManager.PlayEffect("shoot");
         }
 
         public void Lightning(Vector2 dimensions, float duration, string caller, string Faction)
@@ -62,6 +62,7 @@ namespace UU_GameProject
             lightningStrike.AddComponent(new CFaction(Faction));
             lightningStrike.Pos = Input.GetMousePosition() - new Vector2(dimensions.X / 2f, dimensions.Y / 2f);
             lightningStrike.Size = dimensions;
+            AudioManager.PlayEffect("lightning");
         }
 
         public void Heal()
@@ -69,6 +70,7 @@ namespace UU_GameProject
             if (!unlockedHealing) return;
             if (!manaPool.ConsumeMana(healingCost)) return;
             GO.GetComponent<CHealthPool>().HealOverTime(-10f, 5f);
+            AudioManager.PlayEffect("healing");
         }
 
         public bool Dash()
