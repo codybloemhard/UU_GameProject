@@ -11,16 +11,29 @@ namespace UU_GameProject
     {
         public TestGame() : base() { }
 
+        private UITextureElement healthbar, manabar, fitness, healing, lightning;
+        private GameObject player;
+        private CMagicness magicness;
+        private CHealthPool healthpool;
+        private CManaPool manapool;
+        private Color cGreen = new Color(0, 255, 0),
+            cRed = new Color(255, 0, 0),
+            cOrange = new Color(255, 255, 0);
+
         public override void Load(SpriteBatch batch)
         {
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
-            text.colour = new Color(0, 255, 0);
-            text.tag = "positionText";
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            healthbar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
+            healthbar.colour = new Color(0, 255, 0);
+            manabar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
+            manabar.colour = new Color(0, 0, 255);
+            fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
+            healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
+            lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
             //Objects
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0, 8);
@@ -47,7 +60,7 @@ namespace UU_GameProject
             stone4.Size = new Vector2(3, 0.2f);
             stone4.AddComponent(new CRender("block"));
             stone4.AddComponent(new CAABB());
-            GameObject player = new GameObject("player", this, 1);
+            player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
             anim.AddAnimation("walking", "playerWalking");
@@ -58,13 +71,16 @@ namespace UU_GameProject
             anim.AddAnimation("melee", "playerMelee");
             anim.PlayAnimation("walking", 2);
             player.AddComponent(anim);
+            magicness = new CMagicness();
+            healthpool = new CHealthPool(100);
+            manapool = new CManaPool(100, player);
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CMeleeAttack());
-            player.AddComponent(new CHealthPool(100));
-            player.AddComponent(new CManaPool(100, player));
-            player.AddComponent(new CMagicness());
+            player.AddComponent(healthpool);
+            player.AddComponent(manapool);
+            player.AddComponent(magicness);
             player.AddComponent(new CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1);
@@ -108,17 +124,38 @@ namespace UU_GameProject
             Debug.ProfilingMode();
         }
         
-        public override void Unload()
-        {
-            
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {
             Camera.SetCameraTopLeft(new Vector2(0, 0));
-            Text text = ui.FindWithTag("positionText") as Text;
-            GameObject player = objects.FindWithTag("player");
-            text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            float health = healthpool.HealhPercent;
+            float mana = manapool.ManaPercentage;
+            healthbar.Size = new Vector2(1f, 3f * health);
+            healthbar.Pos = new Vector2(0.2f, 9f - healthbar.Size.Y);
+            manabar.Size = new Vector2(1f, 3f * mana);
+            manabar.Pos = new Vector2(1.4f, 9f - manabar.Size.Y);
+            if (magicness.UnlockedFitness)
+                fitness.Size = new Vector2(1f);
+            else fitness.Size = new Vector2(0f);
+            if (magicness.UnlockedHealing)
+                healing.Size = new Vector2(1f);
+            else healing.Size = new Vector2(0f);
+            if (magicness.UnlockedLightning)
+                lightning.Size = new Vector2(1f);
+            else lightning.Size = new Vector2(0f);
+            if (magicness.CanHeal)
+                healing.colour = cGreen;
+            else healing.colour = cRed;
+            if (magicness.CanLightning)
+                lightning.colour = cGreen;
+            else lightning.colour = cRed;
+            if (magicness.CanDoublejump)
+                fitness.colour = cGreen;
+            else if (magicness.CanDash)
+                fitness.colour = cOrange;
+            else fitness.colour = cRed;
+
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
             {
                 if (Debug.Mode == DEBUGMODE.PROFILING)

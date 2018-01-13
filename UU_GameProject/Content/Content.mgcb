@@ -217,3 +217,9 @@
 /processorParam:TextureFormat=Color
 /build:animatie0.png
 
+#begin jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jump.wav
+

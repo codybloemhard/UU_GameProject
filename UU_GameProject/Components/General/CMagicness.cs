@@ -11,6 +11,8 @@ namespace UU_GameProject
         private bool iniated = false;
         private CManaPool manaPool;
         private CHealthPool healthPool;
+        private const int lightningCost = 75, healingCost = 50,
+            dashCost = 25, jumpCost = 50;
 
         public CMagicness() : base() { }
 
@@ -19,6 +21,9 @@ namespace UU_GameProject
             iniated = true;
             manaPool = GO.GetComponent<CManaPool>();
             healthPool = GO.GetComponent<CHealthPool>();
+            unlockedLightning = true;
+            unlockedFitness = true;
+            unlockedHealing = true;
         }
 
         public override void Update(float time)
@@ -49,7 +54,7 @@ namespace UU_GameProject
         public void Lightning(Vector2 dimensions, float duration, string caller, string Faction)
         {
             if (!unlockedLightning) return;
-            if (!manaPool.ConsumeMana(30)) return;
+            if (!manaPool.ConsumeMana(lightningCost)) return;
             GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);
             lightningStrike.AddComponent(new CRender("block"));
             lightningStrike.AddComponent(new CLightningStrike(duration, caller));
@@ -62,22 +67,47 @@ namespace UU_GameProject
         public void Heal()
         {
             if (!unlockedHealing) return;
-            if (!manaPool.ConsumeMana(30)) return;
-            GO.GetComponent<CHealthPool>().HealOverTime(5f, 5f);
+            if (!manaPool.ConsumeMana(healingCost)) return;
+            GO.GetComponent<CHealthPool>().HealOverTime(-10f, 5f);
         }
 
         public bool Dash()
         {
             if (!unlockedFitness) return false;
-            if (manaPool.ConsumeMana(25)) return true;
+            if (manaPool.ConsumeMana(dashCost)) return true;
             return false;
         }
 
         public bool DoubleJump()
         {
             if (!unlockedFitness) return false;
-            if (manaPool.ConsumeMana(75)) return true;
+            if (manaPool.ConsumeMana(jumpCost)) return true;
             return false;
         }
+
+        public bool CanLightning { get
+        {
+            if (manaPool == null) return false;
+            return manaPool.PeekMana(lightningCost);
+        } }
+        public bool CanHeal { get
+        {
+            if (manaPool == null) return false;
+            return manaPool.PeekMana(healingCost);
+        } }
+        public bool CanDoublejump { get
+        {
+            if (manaPool == null) return false;
+            return manaPool.PeekMana(jumpCost);
+        } }
+        public bool CanDash { get
+        {
+            if (manaPool == null) return false;
+            return manaPool.PeekMana(dashCost);
+        } }
+
+        public bool UnlockedLightning { get { return unlockedLightning; } }
+        public bool UnlockedHealing { get { return unlockedHealing; } }
+        public bool UnlockedFitness { get { return unlockedFitness; } }
     }
 }

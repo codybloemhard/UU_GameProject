@@ -43,3 +43,4 @@ C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\De
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\menutile.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\menutile2.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\animatie0.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\jump.xnb

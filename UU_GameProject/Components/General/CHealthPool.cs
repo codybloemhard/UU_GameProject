@@ -15,7 +15,6 @@ namespace UU_GameProject
         private int lightningDamage = 20;
         private int fireballDamage = 12;
         private bool isInvincible = false;
-        private Text healthPool;
         private float healTime = 0f;
         private float healRate = 0f;
         public bool isProtected = false;
@@ -29,8 +28,6 @@ namespace UU_GameProject
         public override void Init()
         {
             base.Init();
-            healthPool = new Text(GO.Context, "Health: " + (int)hp, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
-            healthPool.AddGameObject(GO, Vector2.Zero);
         }
 
         public override void Update(float time)
@@ -72,12 +69,12 @@ namespace UU_GameProject
             isProtected = false;
             healTime = 0f;
             healRate = 0f;
-            healthPool.text = "Health: " + (int)hp;
         }
         
         public void HealOverTime(float rate, float time)
         {
-            if (healRate != 0f)//cancel potion or healing
+            if ((healRate < 0f && rate > 0f)
+                && (healRate > 0f && rate < 0f))//cancel potion or healing
             {
                 healRate = 0f;
                 healTime = 0f;
@@ -101,7 +98,6 @@ namespace UU_GameProject
         private void ModifyHP(float amount)
         {
             hp = Math.Max(0f, hp - amount);
-            healthPool.text = "Health: " + (int)hp;
             if (hp <= 0) Die();
             if (hp > maxHP) hp = maxHP;
         }
@@ -111,15 +107,15 @@ namespace UU_GameProject
             if (GO.tag.Contains("player"))
                 GO.GetComponent<CPlayerMovement>().Reset();
             else
-            {
                 GO.Destroy();
-                healthPool.Destroy();
-            }
         }
 
         private void ResetInvincibility()
         {
             isInvincible = false;
         }
+
+        public float Health { get { return hp; } }
+        public float HealhPercent { get { return hp / maxHP; } }
     }
 }

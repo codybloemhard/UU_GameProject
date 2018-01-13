@@ -9,8 +9,8 @@ namespace UU_GameProject
     {
         private float duration;
         private string caller;
-        private Vector2 dimensions;//never used?
         private Vector2 dir;
+        private bool iniated = false;
 
         public CDamageArea(Vector2 dir, float duration, string caller) : base()
         {
@@ -25,19 +25,22 @@ namespace UU_GameProject
             if (render != null) render.colour = Color.Red;
         }
 
+        public void Set()
+        {
+            iniated = true;
+            GameObject obj = GO.FindWithTag(caller);
+            if (obj == null) return;
+            if (dir.X > 0)
+                GO.Pos = obj.Pos + new Vector2(obj.Size.X / 2f, 0);
+            else
+                GO.Pos = obj.Pos + new Vector2(obj.Size.X / 2f - GO.Size.X, 0);
+            Timers.Add("DamageAreaLifespan", duration, () => GO.Destroy());
+        }
+
         public override void Update(float time)
         {
             base.Update(time);
-            if (dir.X > 0)
-                GO.Pos = GO.FindWithTag(caller).Pos + new Vector2(GO.FindWithTag(caller).Size.X / 2f, 0);
-            else
-                GO.Pos = GO.FindWithTag(caller).Pos + new Vector2(GO.FindWithTag(caller).Size.X / 2f - GO.Size.X, 0);
-            Timers.Add("DamageAreaLifespan", duration, Destroy);
-        }
-
-        public void Destroy()
-        {
-            GO.Destroy();
+            if (!iniated) Set();
         }
     }
 }

@@ -8,38 +8,34 @@ namespace UU_GameProject
 {
     public class CManaPool : Component
     {
-        private int MP;
+        private int mana;
         private int maxMana = 100;
         private float manaRegenMultiplier;
         private bool shouldManaRegen = true;
-        private Text manaPool;
 
         public CManaPool(int MP, GameObject GO)
         {
-            this.MP = MP;
-            manaPool = new Text(GO.Context, "Mana: " + MP, new Vector2(0, 0), new Vector2(4, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
-            manaPool.AddGameObject(GO, Vector2.Zero);
+            this.mana = MP;
         }
 
         public override void Update(float time)
         {
             base.Update(time);
             RegenerateMana(time);
-            manaPool.text = "Mana: " + MP;
         }
 
         public void Reset()
         {
-            MP = maxMana;
+            mana = maxMana;
             shouldManaRegen = true;
         }
 
         //true when has enough, false when not and will not subtract
         public bool ConsumeMana(int amount)
         {
-            if (MP >= amount)
+            if (mana >= amount)
             {
-                MP -= amount;
+                mana -= amount;
                 return true;
             }
             else
@@ -47,6 +43,13 @@ namespace UU_GameProject
                 Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
                 return false;
             }
+        }
+
+        public bool PeekMana(int amount)
+        {
+            if (mana >= amount)
+                return true;
+            return false;
         }
 
         //method to be called by the regen timer
@@ -57,14 +60,16 @@ namespace UU_GameProject
 
         public void RegenerateMana(float time)
         {
-            if (MP < maxMana && shouldManaRegen)
+            if (mana < maxMana && shouldManaRegen)
             {
                 manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
                 Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
-                MP += 1;
+                mana += 1;
                 shouldManaRegen = false;
                 Timers.FindWithTag("manaRegen").Reset();
             }
         }
+
+        public float ManaPercentage { get { return (float)mana / maxMana; } }
     }
 }

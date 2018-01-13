@@ -39,6 +39,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerMelee", "playerMeleeSimple", 4, 1);
             TextureManager.LoadTexture("playerAirborn", "playerAirbornSimple", 4, 1);
             TextureManager.LoadTexture("playerFallPanic", "playerFallPanicSimple", 4, 1);
+            AudioManager.LoadEffect("jump", "jump");
             TestMenu testMenu = new TestMenu();
             TestOptions testOptions = new TestOptions();
             Select select = new Select();

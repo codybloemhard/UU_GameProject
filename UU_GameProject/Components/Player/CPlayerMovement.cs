@@ -214,6 +214,7 @@ namespace UU_GameProject
             {
                 vertVelo = -jumpPower;
                 jumpDelayTime = 0;
+                AudioManager.PlayEffect("jump");
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
@@ -223,6 +224,7 @@ namespace UU_GameProject
                     {
                         vertVelo = -jumpPower;
                         jumpDelayTime = 0;
+                        AudioManager.PlayEffect("jump");
                     }
                 }
             }
