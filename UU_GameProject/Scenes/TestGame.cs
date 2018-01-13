@@ -82,6 +82,7 @@ namespace UU_GameProject
             player.AddComponent(manapool);
             player.AddComponent(magicness);
             player.AddComponent(new CFaction("friendly"));
+            player.AddComponent(new CCamera());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1);
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
@@ -129,7 +130,6 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            Camera.SetCameraTopLeft(new Vector2(0, 0));
             float health = healthpool.HealhPercent;
             float mana = manapool.ManaPercentage;
             healthbar.Size = new Vector2(1f, 3f * health);

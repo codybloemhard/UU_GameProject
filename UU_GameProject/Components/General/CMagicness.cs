@@ -35,7 +35,7 @@ namespace UU_GameProject
         public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
             if (!manaPool.ConsumeMana(10)) return;
-            if (Input.GetMousePosition().X >= GO.Pos.X)
+            if (Input.GetMouseWorldPosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
             else dir = new Vector2(-1,0);
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
@@ -45,7 +45,7 @@ namespace UU_GameProject
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
             fireball.Size = size;
             fireball.AddComponent(new CRender("block"));
-            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMousePosition() - (fireball.Pos + .5f * (fireball.Size))), dir));
+            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");
@@ -60,7 +60,7 @@ namespace UU_GameProject
             lightningStrike.AddComponent(new CLightningStrike(duration, caller));
             lightningStrike.AddComponent(new CAABB());
             lightningStrike.AddComponent(new CFaction(Faction));
-            lightningStrike.Pos = Input.GetMousePosition() - new Vector2(dimensions.X / 2f, dimensions.Y / 2f);
+            lightningStrike.Pos = Input.GetMouseWorldPosition() - new Vector2(dimensions.X / 2f, dimensions.Y / 2f);
             lightningStrike.Size = dimensions;
             AudioManager.PlayEffect("lightning");
         }
