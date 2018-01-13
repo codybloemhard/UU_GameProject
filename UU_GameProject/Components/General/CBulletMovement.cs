@@ -9,11 +9,13 @@ namespace UU_GameProject
     {
         private float speed;
         private Vector2 dir;
+        public float Damage { get; private set; }
 
-        public CBulletMovement(float speed, Vector2 dir) : base()
+        public CBulletMovement(float speed, Vector2 dir, float damage) : base()
         {
             this.speed = speed;
             this.dir = dir;
+            Damage = damage;
         }
 
         public override void Init()

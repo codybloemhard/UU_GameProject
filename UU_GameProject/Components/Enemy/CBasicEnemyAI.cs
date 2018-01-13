@@ -5,6 +5,11 @@ using Core;
 
 namespace UU_GameProject
 {
+    public enum ENEMY
+    {
+        MAGIC, ROBOT, CYBORG
+    }
+
     public class CBasicEnemyAI : Component
     {
         protected float speed, ctime, wait, length;
@@ -15,10 +20,12 @@ namespace UU_GameProject
         protected GameObject player;
         protected bool leftBlocked { get; private set; }
         protected bool rightBlocked { get; private set; }
+        protected ENEMY type;
 
-        public CBasicEnemyAI(float speed)
+        public CBasicEnemyAI(float speed, ENEMY type)
         {
             this.speed = speed;
+            this.type = type;
         }
 
         public override void Init()

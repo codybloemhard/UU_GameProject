@@ -11,13 +11,15 @@ namespace UU_GameProject
         private Vector2 dir;
         private Vector2 fireballVelocity;
         private float fireballTotalSpeed = 6;
+        public float Damage { get; private set; }
 
-        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir) : base()
+        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage) : base()
         {
             this.dir = dir;
             this.playerSpeed = playerSpeed;
             fireballVelocity.X = (fireballTotalSpeed * (path.X / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.X;
             fireballVelocity.Y = (fireballTotalSpeed * (path.Y / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.Y;
+            Damage = damage;
         }
 
         public override void Init()

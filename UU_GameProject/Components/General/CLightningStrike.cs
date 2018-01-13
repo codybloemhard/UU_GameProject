@@ -9,13 +9,13 @@ namespace UU_GameProject
     {
         private float duration;
         private string caller;
-        private Vector2 dimensions;
-        private Vector2 dir;
+        public float Damage { get; private set; }
 
-        public CLightningStrike(float duration, string caller) : base()
+        public CLightningStrike(float duration, string caller, float damage) : base()
         {
             this.duration = duration;
             this.caller = caller;
+            Damage = damage;
         }
 
         public override void Init()

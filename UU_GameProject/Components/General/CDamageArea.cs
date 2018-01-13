@@ -11,12 +11,14 @@ namespace UU_GameProject
         private string caller;
         private Vector2 dir;
         private bool iniated = false;
+        public float Damage { get; private set; }
 
-        public CDamageArea(Vector2 dir, float duration, string caller) : base()
+        public CDamageArea(Vector2 dir, float duration, string caller, float damage) : base()
         {
             this.duration = duration;
             this.caller = caller;
             this.dir = dir;
+            Damage = damage;
         }
 
         public override void Init()

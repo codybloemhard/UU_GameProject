@@ -97,7 +97,7 @@ namespace UU_GameProject
                 velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
                 velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000);
+            if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000, false);
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -149,7 +149,7 @@ namespace UU_GameProject
                 fallPanic = true;
                 //fall damage
                 if (grounded)
-                    healthPool.ChangeHealth((int)lastVertVelo - 25);
+                    healthPool.ChangeHealth((int)lastVertVelo - 25, false);
                 lastVertVelo = vertVelo;
             }
             else fallPanic = false;
@@ -305,7 +305,7 @@ namespace UU_GameProject
         private void DoMelee()
         {
             if (!canMelee) return;
-            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag, faction.GetFaction());
+            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, 15, GO.tag, faction.GetFaction());
             canMelee = false;
             Timers.Add("playermelee", 0.5f, () => canMelee = true);
         }

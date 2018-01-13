@@ -97,7 +97,7 @@ namespace UU_GameProject
             respawn1.AddComponent(new CRender("suprise"));
             GameObject enemy0 = new GameObject("Nenemy", this, 2);
             enemy0.AddComponent(new CRender("player"));
-            enemy0.AddComponent(new CNormalEnemyAI(2f));
+            enemy0.AddComponent(new CNormalEnemyAI(2f, ENEMY.ROBOT));
             enemy0.AddComponent(new CHealthPool(50));
             enemy0.AddComponent(new CAABB());
             enemy0.AddComponent(new CMeleeAttack());
@@ -106,7 +106,7 @@ namespace UU_GameProject
             enemy0.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy1 = new GameObject("Renemy", this, 2);
             enemy1.AddComponent(new CRender("player"));
-            enemy1.AddComponent(new CRangedEnemyAI(2.5f));
+            enemy1.AddComponent(new CRangedEnemyAI(2.5f, ENEMY.ROBOT));
             enemy1.AddComponent(new CHealthPool(25));
             enemy1.AddComponent(new CAABB());
             enemy1.AddComponent(new CShoot());
@@ -115,7 +115,7 @@ namespace UU_GameProject
             enemy1.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy2 = new GameObject("Aenemy", this, 2);
             enemy2.AddComponent(new CRender("player"));
-            enemy2.AddComponent(new CArmouredEnemyAI(1.75f));
+            enemy2.AddComponent(new CArmouredEnemyAI(1.75f, ENEMY.ROBOT));
             enemy2.AddComponent(new CHealthPool(100));
             enemy2.AddComponent(new CAABB());
             enemy2.AddComponent(new CMeleeAttack());

@@ -10,10 +10,6 @@ namespace UU_GameProject
     {
         private float hp;
         private int maxHP;
-        private int bulletHitDamage = 10;
-        private int meleeHitDamage = 25;
-        private int lightningDamage = 20;
-        private int fireballDamage = 12;
         private bool isInvincible = false;
         private float healTime = 0f;
         private float healRate = 0f;
@@ -48,16 +44,16 @@ namespace UU_GameProject
             if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
             if (other.tag.Contains("bullet"))
             {
-                ChangeHealth(bulletHitDamage);
+                ChangeHealth(other.GetComponent<CBulletMovement>().Damage, false);
                 other.Destroy();
             }
             if (other.tag.Contains("meleeDamageArea"))
-                ChangeHealth(meleeHitDamage);
+                ChangeHealth(other.GetComponent<CDamageArea>().Damage, true);
             if (other.tag.Contains("lightningStrike"))
-                ChangeHealth(lightningDamage);
+                ChangeHealth(other.GetComponent<CLightningStrike>().Damage, true);
             if (other.tag.Contains("fireball"))
             {
-                ChangeHealth(fireballDamage);
+                ChangeHealth(other.GetComponent<CFireballMovement>().Damage, false);
                 other.Destroy();
             }
         }
@@ -84,13 +80,17 @@ namespace UU_GameProject
             healRate = rate;
         }
         
-        //amount > 0 :: take dmg, amount < 0 :: heal
-        public void ChangeHealth(float amount)
+        //amount > 0, take dmg | amount < 0, heal
+        public void ChangeHealth(float amount, bool useInvincible)
         {
-            if (!isInvincible && !isProtected)
+            if (!isInvincible && !isProtected && useInvincible)
             {
                 isInvincible = true;
                 Timers.Add("hpRegen", 0.5f, ResetInvincibility);
+                ModifyHP(amount);
+            }
+            else if (!useInvincible)
+            {
                 ModifyHP(amount);
             }
         }
