@@ -48,30 +48,20 @@ namespace UU_GameProject
             if (other.tag.Contains(GO.tag)) return;
             if (other.IsStatic) return;
             if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
-            bool applPotion = false;
+            CDamageDealer comp = other.GetComponent<CDamageDealer>();
+            if (comp == null) return;
+            bool applPotion = comp.Potionous;
             if (other.tag.Contains("bullet"))
             {
-                CBulletMovement comp = other.GetComponent<CBulletMovement>();
-                applPotion = comp.Potionous;
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
             if (other.tag.Contains("meleeDamageArea"))
-            {
-                CDamageArea comp = other.GetComponent<CDamageArea>();
-                applPotion = comp.Potionous;
                 ChangeHealth(comp.Damage, true);
-            }
             if (other.tag.Contains("lightningStrike"))
-            {
-                CLightningStrike comp = other.GetComponent<CLightningStrike>();
-                applPotion = comp.Potionous;
                 ChangeHealth(comp.Damage, true);
-            }
             if (other.tag.Contains("fireball"))
             {
-                CFireballMovement comp = other.GetComponent<CFireballMovement>();
-                applPotion = comp.Potionous;
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }

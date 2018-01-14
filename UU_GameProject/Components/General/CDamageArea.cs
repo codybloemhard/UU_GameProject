@@ -5,22 +5,18 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    public class CDamageArea : Component
+    public class CDamageArea : CDamageDealer
     {
         private float duration;
         private string caller;
         private Vector2 dir;
         private bool iniated = false;
-        public float Damage { get; private set; }
-        public bool Potionous { get; private set; }
 
-        public CDamageArea(Vector2 dir, float duration, string caller, float damage, bool potionous) : base()
+        public CDamageArea(Vector2 dir, float duration, string caller, float damage, bool potionous) : base(damage, potionous)
         {
             this.duration = duration;
             this.caller = caller;
             this.dir = dir;
-            Damage = damage;
-            Potionous = potionous;
         }
 
         public override void Init()

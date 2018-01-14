@@ -5,19 +5,15 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    public class CBulletMovement : Component
+    public class CBulletMovement : CDamageDealer
     {
         private float speed;
         private Vector2 dir;
-        public float Damage { get; private set; }
-        public bool Potionous { get; private set; }
 
-        public CBulletMovement(float speed, Vector2 dir, float damage, bool potionous) : base()
+        public CBulletMovement(float speed, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
         {
             this.speed = speed;
             this.dir = dir;
-            Damage = damage;
-            Potionous = potionous;
         }
 
         public override void Init()
