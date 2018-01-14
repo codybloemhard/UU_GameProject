@@ -20,11 +20,17 @@ namespace UU_GameProject
         protected GameObject player;
         protected bool leftBlocked { get; private set; }
         protected bool rightBlocked { get; private set; }
-        protected ENEMY type;
 
-        public CBasicEnemyAI(float speed, ENEMY type)
+        protected ENEMY type;
+        protected float turnTime;
+        protected float damage = 0;
+        protected int maxHP = 0;
+        protected float maxSpeed = 0;
+        protected bool iniated = false;
+        protected int magicChange = -1;
+
+        public CBasicEnemyAI(ENEMY type)
         {
-            this.speed = speed;
             this.type = type;
         }
 
@@ -33,9 +39,33 @@ namespace UU_GameProject
             player = GO.FindWithTag("player");
         }
 
+        private void Set()
+        {
+            iniated = true;
+            if (type == ENEMY.ROBOT)
+            {
+                speed = maxSpeed * 1.2f;
+                damage *= 1.2f;
+                maxHP = (int)(maxHP * 1.2f);
+                magicChange = -1;
+            }
+            else if (type == ENEMY.MAGIC)
+            {
+                speed = maxSpeed;
+            }
+            else
+            {
+                speed = maxSpeed * 1.1f;
+                damage *= 1.1f;
+                maxHP = (int)(maxHP * 1.1f);
+            }
+            GO.GetComponent<CHealthPool>().InitHP(maxHP);
+        }
+
         public override void Update(float time)
         {
             base.Update(time);
+            if (!iniated) Set();
             ctime = time;
             Vector2 difference = player.Pos - GO.Pos;
             length = difference.Length();
@@ -77,6 +107,20 @@ namespace UU_GameProject
             }
             verdisplace = Math.Min(hit.distance, vertVelo * ctime);
             GO.Pos += new Vector2(hordisplace, verdisplace);
+        }
+
+        protected bool DoPotion()
+        {
+            if (magicChange > 0)
+            {
+                int r = (int)(MathH.random.NextDouble() * magicChange);
+                if (r == 0)
+                {
+                    Console.WriteLine("used");
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void CheckSides()

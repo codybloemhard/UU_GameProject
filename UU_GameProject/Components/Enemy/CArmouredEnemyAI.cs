@@ -7,11 +7,14 @@ namespace UU_GameProject
 {
     public class CArmouredEnemyAI : CBasicEnemyAI
     {
-        private float turnTime;
-        private float damage = 10;
-
-        public CArmouredEnemyAI(float speed, ENEMY type) : base(speed, type) { }
-    
+        public CArmouredEnemyAI(ENEMY type) : base(type)
+        {
+            damage = 10f;
+            maxSpeed = 1.75f;
+            maxHP = 100;
+            magicChange = 6;
+        }
+        
         public override void Init()
         {
             base.Init();
@@ -79,7 +82,7 @@ namespace UU_GameProject
                 run = false;
             if (length < range && wait == 0)
             {
-                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, GO.tag, GO.GetComponent<CFaction>().GetFaction());
+                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPotion(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
                 wait = 1f;
                 turnTime = 0f;
             }

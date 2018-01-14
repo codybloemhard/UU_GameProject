@@ -10,12 +10,14 @@ namespace UU_GameProject
         private float duration;
         private string caller;
         public float Damage { get; private set; }
+        public bool Potionous { get; private set; }
 
-        public CLightningStrike(float duration, string caller, float damage) : base()
+        public CLightningStrike(float duration, string caller, float damage, bool potionous) : base()
         {
             this.duration = duration;
             this.caller = caller;
             Damage = damage;
+            Potionous = potionous;
         }
 
         public override void Init()
