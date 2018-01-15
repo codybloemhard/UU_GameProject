@@ -268,10 +268,16 @@ namespace UU_GameProject
             //player side collision
             Vector2 leftDownCastOffset = GO.Pos + new Vector2(-0.5f, 0);
             Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X + 0.5f, 0);
+            Vector2 feetLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
+            Vector2 feetRightCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
             RaycastResult LeftBoundary = GO.Raycast(leftDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
             RaycastResult RightBoundary = GO.Raycast(rightDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult LeftDefault = GO.Raycast(feetLeftCastOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult RightDefault = GO.Raycast(feetRightCastOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
 
-            if (LeftBoundary.distance <= GO.Size.Y)
+            if (LeftDefault.hit && LeftDefault.distance < GO.Size.X / 2)
+                leftSideAgainstWall = true;
+            else if (LeftBoundary.distance <= GO.Size.Y)
             {
                 Vector2 hitLeftOffset = GO.Pos + new Vector2(GO.Size.X / 2, LeftBoundary.distance + 0.01f);
                 RaycastResult hitLeft = GO.Raycast(hitLeftOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
@@ -280,7 +286,9 @@ namespace UU_GameProject
             }
             else leftSideAgainstWall = false;
 
-            if (RightBoundary.distance <= GO.Size.Y)
+            if (RightDefault.hit && RightDefault.distance < GO.Size.X / 2)
+                rightSideAgainstWall = true;
+            else if (RightBoundary.distance <= GO.Size.Y)
             {
                 Vector2 hitRightOffset = GO.Pos + new Vector2(GO.Size.X / 2, RightBoundary.distance + 0.01f);
                 RaycastResult hitRight = GO.Raycast(hitRightOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
