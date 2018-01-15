@@ -7,7 +7,13 @@ namespace UU_GameProject
 {
     public class CRangedEnemyAI : CBasicEnemyAI
     {
-        public CRangedEnemyAI(float speed, ENEMY type) : base(speed, type) { }
+        public CRangedEnemyAI(ENEMY type) : base(type)
+        {
+            damage = 10f;
+            maxSpeed = 2.5f;
+            maxHP = 25;
+            magicChange = 4;
+        }
 
         public override void Init()
         {
@@ -68,7 +74,7 @@ namespace UU_GameProject
             if (length < range && wait == 0)
             {
                 Vector2 thing = shootdir(GO.Pos.X - player.Pos.X);
-                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), 20);
+                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), damage, DoPotion());
                 AudioManager.PlayEffect("shoot");
                 wait = 1.75f;
             }

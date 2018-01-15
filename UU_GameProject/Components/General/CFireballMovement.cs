@@ -5,21 +5,19 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    public class CFireballMovement : Component
+    public class CFireballMovement : CDamageDealer
     {
         private Vector2 playerSpeed;
         private Vector2 dir;
         private Vector2 fireballVelocity;
         private float fireballTotalSpeed = 6;
-        public float Damage { get; private set; }
 
-        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage) : base()
+        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
         {
             this.dir = dir;
             this.playerSpeed = playerSpeed;
             fireballVelocity.X = (fireballTotalSpeed * (path.X / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.X;
             fireballVelocity.Y = (fireballTotalSpeed * (path.Y / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.Y;
-            Damage = damage;
         }
 
         public override void Init()

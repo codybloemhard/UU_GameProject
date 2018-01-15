@@ -297,7 +297,7 @@ namespace UU_GameProject
         private void DoMelee()
         {
             if (!canMelee) return;
-            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, 15, GO.tag, faction.GetFaction());
+            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, 15, false, GO.tag, faction.GetFaction());
             canMelee = false;
             Timers.Add("playermelee", 0.5f, () => canMelee = true);
         }

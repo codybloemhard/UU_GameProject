@@ -39,6 +39,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerMelee", "playerMeleeSimple", 4, 1);
             TextureManager.LoadTexture("playerAirborn", "playerAirbornSimple", 4, 1);
             TextureManager.LoadTexture("playerFallPanic", "playerFallPanicSimple", 4, 1);
+            TextureManager.LoadTexture("repeat", "block", 0, 0);
             AudioManager.LoadTrack("moonlightsonata", "beethoven");
             AudioManager.LoadEffect("jump", "jump");
             AudioManager.LoadEffect("dead", "dead");

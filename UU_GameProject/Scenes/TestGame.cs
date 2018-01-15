@@ -19,7 +19,7 @@ namespace UU_GameProject
         private Color cGreen = new Color(0, 255, 0),
             cRed = new Color(255, 0, 0),
             cOrange = new Color(255, 255, 0);
-
+        
         public override void Load(SpriteBatch batch)
         {
             //UI
@@ -97,7 +97,7 @@ namespace UU_GameProject
             respawn1.AddComponent(new CRender("suprise"));
             GameObject enemy0 = new GameObject("Nenemy", this, 2);
             enemy0.AddComponent(new CRender("player"));
-            enemy0.AddComponent(new CNormalEnemyAI(2f, ENEMY.ROBOT));
+            enemy0.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy0.AddComponent(new CHealthPool(50));
             enemy0.AddComponent(new CAABB());
             enemy0.AddComponent(new CMeleeAttack());
@@ -106,7 +106,7 @@ namespace UU_GameProject
             enemy0.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy1 = new GameObject("Renemy", this, 2);
             enemy1.AddComponent(new CRender("player"));
-            enemy1.AddComponent(new CRangedEnemyAI(2.5f, ENEMY.ROBOT));
+            enemy1.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy1.AddComponent(new CHealthPool(25));
             enemy1.AddComponent(new CAABB());
             enemy1.AddComponent(new CShoot());
@@ -115,13 +115,23 @@ namespace UU_GameProject
             enemy1.Size = new Vector2(0.5f, 1.0f);
             GameObject enemy2 = new GameObject("Aenemy", this, 2);
             enemy2.AddComponent(new CRender("player"));
-            enemy2.AddComponent(new CArmouredEnemyAI(1.75f, ENEMY.ROBOT));
-            enemy2.AddComponent(new CHealthPool(100));
+            enemy2.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
+            enemy2.AddComponent(new CHealthPool(1));
             enemy2.AddComponent(new CAABB());
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.AddComponent(new CFaction("enemy"));
             enemy2.Pos = new Vector2(2.5f, 5.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
+            //testing
+            GameObject floor = new GameObject("stone", this, 2, true);
+            floor.Pos = new Vector2(-80, 8);
+            floor.Size = new Vector2(80, 1);
+            floor.AddComponent(new CRender("block"));
+            floor.AddComponent(new CAABB());
+            GameObject testDoor = new GameObject("bossdoor", this, 0, true);
+            testDoor.Pos = new Vector2(-4f, 8f - 5f);
+            testDoor.Size = new Vector2(1f, 5f);
+            testDoor.AddComponent(new CGrowingDoor());
             Debug.ProfilingMode();
             AudioManager.PlayTrack("moonlightsonata");
         }
@@ -162,6 +172,14 @@ namespace UU_GameProject
                 if (Debug.Mode == DEBUGMODE.PROFILING)
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
+            }
+            if(Input.GetKey(PressAction.PRESSED, Keys.X))
+            {
+                objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
+            }
+            if (Input.GetKey(PressAction.PRESSED, Keys.C))
+            {
+                objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Open();
             }
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;

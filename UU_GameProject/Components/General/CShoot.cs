@@ -14,11 +14,11 @@ namespace UU_GameProject
             base.Update(time);
         }
 
-        public void Shoot(Vector2 dir, Vector2 size, Vector2 speed, string Faction, float damage)
+        public void Shoot(Vector2 dir, Vector2 size, Vector2 speed, string Faction, float damage, bool potionous)
         {
             GameObject bullet = new GameObject("bullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
-            bullet.AddComponent(new CBulletMovement(6 + Math.Abs(speed.X), dir, damage));
+            bullet.AddComponent(new CBulletMovement(6 + Math.Abs(speed.X), dir, damage, potionous));
             bullet.AddComponent(new CAABB());
             bullet.AddComponent(new CFaction(Faction));
             if (dir.X > 0)

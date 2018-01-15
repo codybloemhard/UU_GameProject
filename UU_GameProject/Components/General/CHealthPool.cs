@@ -14,10 +14,16 @@ namespace UU_GameProject
         private float healTime = 0f;
         private float healRate = 0f;
         public bool isProtected = false;
-
+        
         public CHealthPool(int HP)
         {
             this.hp = HP;
+            maxHP = HP;
+        }
+
+        public void InitHP(int HP)
+        {
+            hp = HP;
             maxHP = HP;
         }
 
@@ -32,7 +38,7 @@ namespace UU_GameProject
             {
                 healTime -= time;
                 if (time < 0) time = 0;
-                ModifyHP(healRate * time);
+                ModifyHP(healRate * time, true);
             }
         }
 
@@ -42,20 +48,24 @@ namespace UU_GameProject
             if (other.tag.Contains(GO.tag)) return;
             if (other.IsStatic) return;
             if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
+            CDamageDealer comp = other.GetComponent<CDamageDealer>();
+            if (comp == null) return;
+            bool applPotion = comp.Potionous;
             if (other.tag.Contains("bullet"))
             {
-                ChangeHealth(other.GetComponent<CBulletMovement>().Damage, false);
+                ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
             if (other.tag.Contains("meleeDamageArea"))
-                ChangeHealth(other.GetComponent<CDamageArea>().Damage, true);
+                ChangeHealth(comp.Damage, true);
             if (other.tag.Contains("lightningStrike"))
-                ChangeHealth(other.GetComponent<CLightningStrike>().Damage, true);
+                ChangeHealth(comp.Damage, true);
             if (other.tag.Contains("fireball"))
             {
-                ChangeHealth(other.GetComponent<CFireballMovement>().Damage, false);
+                ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
+            if (applPotion) HealOverTime(4f, 10f);
         }
 
         public void Reset()
@@ -70,7 +80,7 @@ namespace UU_GameProject
         public void HealOverTime(float rate, float time)
         {
             if ((healRate < 0f && rate > 0f)
-                && (healRate > 0f && rate < 0f))//cancel potion or healing
+                || (healRate > 0f && rate < 0f))//cancel potion or healing
             {
                 healRate = 0f;
                 healTime = 0f;
@@ -95,12 +105,12 @@ namespace UU_GameProject
             }
         }
 
-        private void ModifyHP(float amount)
+        private void ModifyHP(float amount, bool fromPotion = false)
         {
             hp = Math.Max(0f, hp - amount);
             if (hp <= 0) Die();
             if (hp > maxHP) hp = maxHP;
-            if(amount > 0)
+            if(amount > 0 && !fromPotion)
                 AudioManager.PlayEffect("hit");
         }
 

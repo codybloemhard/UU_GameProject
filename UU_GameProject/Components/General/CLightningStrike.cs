@@ -5,17 +5,15 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    public class CLightningStrike : Component
+    public class CLightningStrike : CDamageDealer
     {
         private float duration;
         private string caller;
-        public float Damage { get; private set; }
 
-        public CLightningStrike(float duration, string caller, float damage) : base()
+        public CLightningStrike(float duration, string caller, float damage, bool potionous) : base(damage, potionous)
         {
             this.duration = duration;
             this.caller = caller;
-            Damage = damage;
         }
 
         public override void Init()
@@ -30,10 +28,7 @@ namespace UU_GameProject
             Timers.Add("DamageAreaLifespan", duration, Destroy);
         }
 
-        public override void OnCollision(GameObject other)
-        {
-            
-        }
+        public override void OnCollision(GameObject other) { }
 
         public void Destroy()
         {
