@@ -31,8 +31,6 @@ namespace UU_GameProject
         private bool isDown = false;
         private bool initiated = false;
         private bool canMelee = true;
-        private bool didDownRaycastHit = false;
-        private bool didLeftRaycastHit = false;
         private Vector2 dir;
         private Vector2 velocity = Vector2.Zero;
         private Vector2 checkPos = new Vector2(-1000, -1000);
