@@ -267,7 +267,6 @@ namespace UU_GameProject
                     leftSideAgainstWall = true;
             }
             else leftSideAgainstWall = false;
-            Console.WriteLine(leftSideAgainstWall);
 
             if (RightBoundary.distance <= GO.Size.Y)
             {
