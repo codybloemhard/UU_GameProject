@@ -25,7 +25,6 @@ namespace UU_GameProject
             startpos = GO.Pos;
             width = GO.Size.X;
             GO.Size = new Vector2(width, 0f);
-            Console.WriteLine(width);
         }
 
         public override void Update(float time)

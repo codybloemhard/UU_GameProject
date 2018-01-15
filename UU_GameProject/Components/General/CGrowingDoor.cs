@@ -15,7 +15,7 @@ namespace UU_GameProject
 
         private void Set()
         {
-            GameObject obj = new GameObject("doei", GO.Context, 0, false);
+            GameObject obj = new GameObject("doorgraphics", GO.Context, 0, false);
             obj.AddComponent(new CRender("block"));
             obj.Pos = GO.Pos + (Vector2.UnitY * GO.Size.Y);
             obj.Size = GO.Size;

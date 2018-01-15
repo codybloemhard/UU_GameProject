@@ -36,10 +36,5 @@ namespace UU_GameProject
             if (other.tag == "stone")
                 GO.Destroy();
         }
-
-        public Vector2 direction()
-        {
-            return dir;
-        }
     }
 }

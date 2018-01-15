@@ -46,7 +46,7 @@ namespace UU_GameProject
         {
             this.speed = speed;         
         }
-
+        
         public void InitPlayer()
         {
             initiated = true;
@@ -97,13 +97,11 @@ namespace UU_GameProject
                 velocity += new Vector2(timeAccel, 0);
             if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - timeAccel >= -maxPlayerSpeed)
                 velocity += new Vector2(-timeAccel, 0);
-
             //stops the player when they hit a wall
             if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
                 velocity.X = 0;
             if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
                 velocity.X = 0;
-            
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
                 velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
@@ -119,7 +117,6 @@ namespace UU_GameProject
                 intendedDir = 1;
             if (Input.GetKey(PressAction.DOWN, Keys.A))
                 intendedDir = -1;
-
             //down
             if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
@@ -131,43 +128,37 @@ namespace UU_GameProject
                 maxPlayerSpeed = 2.0f;
                 isDown = false;
             }
-
             //crouching
             if (isDown && Math.Abs(velocity.X) < 0.1f)
                 isCrouching = true;
             else isCrouching = false;
-
             //crawling
             if (isDown && ((velocity.X > 0 && velocity.X <= maxPlayerSpeed) || (velocity.X < 0 && velocity.X >= -maxPlayerSpeed)))
                 isCrawling = true;
             else isCrawling = false;
-
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
                 velocity.X = Math.Max(maxPlayerSpeed, velocity.X - timeAccel * 0.2f);
                 isSliding = true;
-            } //sliding backward
+            } 
+            //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
                 velocity.X = Math.Min(maxPlayerSpeed, velocity.X + timeAccel * 0.2f);
                 isSliding = true;
-            } //not sliding
+            }
             else isSliding = false;
-
-            //fall panic
+            //fall panic and damage
             if (vertVelo > 25 || lastVertVelo > 25)
             {
                 fallPanic = true;
-                //fall damage
                 if (grounded)
                     healthPool.ChangeHealth((int)lastVertVelo - 25, false);
                 lastVertVelo = vertVelo;
             }
             else fallPanic = false;
-
-            //Dashing
-            //turning dashing state on
+            //Dashing, broken!
             if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
             {
                 if (magicness.Dash())
@@ -178,7 +169,6 @@ namespace UU_GameProject
                 }
             }
             dashToggleDelayTime += time;
-
             //turning dashing state off
             if ((Math.Abs(velocity.X) > maxDashSpeed) || (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && dashToggleDelayTime > time) || isDown || dir.X != intendedDir)
                 isDashing = false;
@@ -190,11 +180,10 @@ namespace UU_GameProject
                 dashSlowdownDelayTime += time;
                 if (dashSlowdownDelayTime >= 15 * time)
                     velocity.X -= .1f * dir.X;
-            }       
+            }
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
-
             //gravity, jump and player head and bottom collision
             Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 BottomRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
@@ -216,14 +205,12 @@ namespace UU_GameProject
 
             if (hitBottom.hit && hitBottom.distance < 0.001f)
                 grounded = true;
-
             else grounded = false;
 
             if (hitTop.hit && hitTop.distance < 0.03f && vertVelo <= 0)
                 vertVelo = 0;
 
-            if (grounded && vertVelo > 0)
-                vertVelo = 0;
+            if (grounded && vertVelo > 0) vertVelo = 0;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
@@ -247,11 +234,9 @@ namespace UU_GameProject
                 vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
-
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
-
             //Wall sliding
             if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
                 leftIsSlidingOnWall = true;
@@ -263,7 +248,6 @@ namespace UU_GameProject
 
             if (leftIsSlidingOnWall || rightIsSlidingOnWall)
                 vertVelo = 1;
-
             //player side collision
             Vector2 leftDownCastOffset = GO.Pos + new Vector2(-0.5f, 0);
             Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X + 0.5f, 0);
@@ -295,17 +279,13 @@ namespace UU_GameProject
                     rightSideAgainstWall = true;
             }
             else rightSideAgainstWall = false;
-
-            //fireball
+            //attacks
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
                 magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
-            //lightning
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
                 magicness.Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, faction.GetFaction());
-            //heal
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
                 magicness.Heal();
-            //melee
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
                 DoMelee();
         }

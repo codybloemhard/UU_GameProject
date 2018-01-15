@@ -27,11 +27,6 @@ namespace UU_GameProject
             maxHP = HP;
         }
 
-        public override void Init()
-        {
-            base.Init();
-        }
-
         public override void Update(float time)
         {
             if(healTime > 0f)
@@ -96,13 +91,11 @@ namespace UU_GameProject
             if (!isInvincible && !isProtected && useInvincible)
             {
                 isInvincible = true;
-                Timers.Add("hpRegen", 0.5f, ResetInvincibility);
+                Timers.Add("hpRegen", 0.5f, () => isInvincible = false);
                 ModifyHP(amount);
             }
             else if (!useInvincible)
-            {
                 ModifyHP(amount);
-            }
         }
 
         private void ModifyHP(float amount, bool fromPotion = false)
@@ -123,11 +116,6 @@ namespace UU_GameProject
                 GO.Destroy();
                 AudioManager.PlayEffect("kill");
             }
-        }
-
-        private void ResetInvincibility()
-        {
-            isInvincible = false;
         }
 
         public float Health { get { return hp; } }

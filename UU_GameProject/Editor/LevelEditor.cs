@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Core;
 using System.IO;
 using System.Collections.Generic;
-//<author:cody>
+
 namespace UU_GameProject
 {
     public class LevelEditor : GameState

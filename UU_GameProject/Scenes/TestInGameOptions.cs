@@ -7,9 +7,6 @@ namespace UU_GameProject
 {
     public class TestInGameOptions : GameState
     {
-        private Text text, text2;
-        private Button buttonMainmenu, fullscreen;
-        private SliderBar audioslider;
         private bool Fullscreen;
         private uint width, height;
         
@@ -20,19 +17,19 @@ namespace UU_GameProject
             width = 1000;
             height = width / 16 * 9;
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text(this, "Options", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
+            Text text = new Text(this, "Options", new Vector2(0f, 1f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
 
-            fullscreen = new Button(this, "Full screen", "block", () => setFullscreen(),
+            Button fullscreen = new Button(this, "Full screen", "block", () => setFullscreen(),
                 font, new Vector2(6, 3f), new Vector2(4, 1.2f));
             fullscreen.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
 
-            text2 = new Text(this, "Audio", new Vector2(0f, 4.5f), new Vector2(16f, 1f), font);
+            Text text2 = new Text(this, "Audio", new Vector2(0f, 4.5f), new Vector2(16f, 1f), font);
             text2.colour = new Color(255, 0, 0);
-            audioslider = new SliderBar(this, "block", "block", 1, new Vector2(10, 4.5f), new Vector2(4, 1.2f), "x");
+            SliderBar audioslider = new SliderBar(this, "block", "block", 1, new Vector2(10, 4.5f), new Vector2(4, 1.2f), "x");
             audioslider.colour = Color.Red;
 
-            buttonMainmenu = new Button(this, "Main menu", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
+            Button buttonMainmenu = new Button(this, "Main menu", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(12, 7.8f), new Vector2(4, 1.2f));
             buttonMainmenu.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
@@ -59,8 +56,7 @@ namespace UU_GameProject
                 Camera.SetupResolution(width, height, false);
         }
 
-        public override void Unload()
-        { }
+        public override void Unload() { }
 
         public override void Update(float time)
         {

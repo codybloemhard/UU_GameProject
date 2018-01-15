@@ -38,11 +38,7 @@ namespace UU_GameProject
                 mana -= amount;
                 return true;
             }
-            else
-            {
-                Console.WriteLine("Not enough mana!"); //<- placeholder for any not-enough-mana-message
-                return false;
-            }
+            return false;
         }
 
         public bool PeekMana(int amount)
@@ -52,18 +48,12 @@ namespace UU_GameProject
             return false;
         }
 
-        //method to be called by the regen timer
-        public void manaRegenerateTimer()
-        {
-            shouldManaRegen = true;
-        }
-
         public void RegenerateMana(float time)
         {
             if (mana < maxMana && shouldManaRegen)
             {
                 manaRegenMultiplier = 3.0f - Math.Min(Math.Abs(GO.GetComponent<CPlayerMovement>().Velocity().X), 2.9f);
-                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, manaRegenerateTimer);
+                Timers.Add("manaRegen", 0.03f * manaRegenMultiplier, ()=> shouldManaRegen = true);
                 mana += 1;
                 shouldManaRegen = false;
                 Timers.FindWithTag("manaRegen").Reset();
