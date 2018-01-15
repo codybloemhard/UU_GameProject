@@ -72,12 +72,24 @@ namespace UU_GameProject
                 animation.PlayAnimationIfDifferent("sliding", 2);
             else if (isCrouching)
                 animation.PlayAnimationIfDifferent("crouching", 2);
-            else if (!grounded)
-                animation.PlayAnimationIfDifferent("airborn", 2);
+            else if (leftIsSlidingOnWall)
+                animation.PlayAnimationIfDifferent("wallSlidingRight", 2);
+            else if (rightIsSlidingOnWall)
+                animation.PlayAnimationIfDifferent("wallSlidingLeft", 2);
+            else if (!grounded && intendedDir > 0)
+                animation.PlayAnimationIfDifferent("airborneRight", 2);
+            else if (!grounded && intendedDir < 0)
+                animation.PlayAnimationIfDifferent("airborneLeft", 2);
             else if (fallPanic)
                 animation.PlayAnimationIfDifferent("fallPanic", 2);
+            else if (velocity.X < 0)
+                animation.PlayAnimationIfDifferent("runningLeft", 8);
+            else if (velocity.X > 0)
+                animation.PlayAnimationIfDifferent("runningRight", 8);
+            else if (intendedDir > 0)
+                animation.PlayAnimationIfDifferent("standingRight", 8);
             else
-                animation.PlayAnimationIfDifferent("walking", 2);
+                animation.PlayAnimationIfDifferent("standingLeft", 8);
 
             float timeAccel = playerAccel * time;
             //basic movement: slowly accelerates the player
