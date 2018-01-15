@@ -31,6 +31,8 @@ namespace UU_GameProject
         private bool isDown = false;
         private bool initiated = false;
         private bool canMelee = true;
+        private bool didDownRaycastHit = false;
+        private bool didLeftRaycastHit = false;
         private Vector2 dir;
         private Vector2 velocity = Vector2.Zero;
         private Vector2 checkPos = new Vector2(-1000, -1000);
@@ -208,7 +210,7 @@ namespace UU_GameProject
 
             else grounded = false;
 
-            if (hitTop.hit && hitTop.distance < 0.03f)
+            if (hitTop.hit && hitTop.distance < 0.03f && vertVelo <= 0)
                 vertVelo = 0;
 
             if (grounded && vertVelo > 0)
@@ -254,40 +256,30 @@ namespace UU_GameProject
                 vertVelo = 1;
 
             //player side collision
-            Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
-            Vector2 leftMiddle = GO.Pos + new Vector2(-0.01f, 0.5f * GO.Size.Y);
-            Vector2 leftBottom = GO.Pos + new Vector2(-0.01f, GO.Size.Y);
-            Vector2 rightTop = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0);
-            Vector2 rightMiddle = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0.5f * GO.Size.Y);
-            Vector2 rightBottom = GO.Pos + new Vector2(GO.Size.X + 0.01f, GO.Size.Y);
-            RaycastResult hitLeftTop = GO.Raycast(leftTop, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeftMiddle = GO.Raycast(leftMiddle, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeftBottom = GO.Raycast(leftBottom, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightTop = GO.Raycast(rightTop, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightMiddle = GO.Raycast(rightMiddle, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightBottom = GO.Raycast(rightBottom, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeft;
-            RaycastResult hitRight;
-            if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftTop.distance)
-                hitLeft = hitLeftTop;
-            else if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftMiddle.distance)
-                hitLeft = hitLeftMiddle;
-            else hitLeft = hitLeftBottom;
+            Vector2 leftDownCastOffset = GO.Pos + new Vector2(-0.5f, 0);
+            Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X + 0.5f, 0);
+            RaycastResult LeftBoundary = GO.Raycast(leftDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult RightBoundary = GO.Raycast(rightDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
 
-            if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightTop.distance)
-                hitRight = hitRightTop;
-            else if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightMiddle.distance)
-                hitRight = hitRightMiddle;
-            else hitRight = hitRightBottom;
-
-            if (hitLeft.hit && hitLeft.distance < 0.02f)
-                leftSideAgainstWall = true;
+            if (LeftBoundary.distance <= GO.Size.Y)
+            {
+                Vector2 hitLeftOffset = GO.Pos + new Vector2(GO.Size.X / 2, LeftBoundary.distance + 0.01f);
+                RaycastResult hitLeft = GO.Raycast(hitLeftOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+                if (hitLeft.hit && hitLeft.distance < GO.Size.X / 2)
+                    leftSideAgainstWall = true;
+            }
             else leftSideAgainstWall = false;
+            Console.WriteLine(leftSideAgainstWall);
 
-            if (hitRight.hit && hitRight.distance < 0.02f)
-                rightSideAgainstWall = true;
+            if (RightBoundary.distance <= GO.Size.Y)
+            {
+                Vector2 hitRightOffset = GO.Pos + new Vector2(GO.Size.X / 2, RightBoundary.distance + 0.01f);
+                RaycastResult hitRight = GO.Raycast(hitRightOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+                if (hitRight.hit && hitRight.distance < GO.Size.X / 2)
+                    rightSideAgainstWall = true;
+            }
             else rightSideAgainstWall = false;
-            
+
             //fireball
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
                 magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
