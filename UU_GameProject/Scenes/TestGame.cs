@@ -123,17 +123,18 @@ namespace UU_GameProject
             enemy2.Pos = new Vector2(2.5f, 5.0f);
             enemy2.Size = new Vector2(0.5f, 1.0f);
             //testing
-            GameObject floor = new GameObject("stone", this, 2, true);
-            floor.Pos = new Vector2(-80, 8);
-            floor.Size = new Vector2(80, 1);
+            /*GameObject floor = new GameObject("stone", this, 2, true);
+            floor.Pos = new Vector2(-100, 8);
+            floor.Size = new Vector2(100, 1);
             floor.AddComponent(new CRender("block"));
-            floor.AddComponent(new CAABB());
+            floor.AddComponent(new CAABB());*/
             GameObject testDoor = new GameObject("bossdoor", this, 0, true);
             testDoor.Pos = new Vector2(-4f, 8f - 5f);
             testDoor.Size = new Vector2(1f, 5f);
             testDoor.AddComponent(new CGrowingDoor());
-            Debug.ProfilingMode();
+            Debug.FullDebugMode();
             AudioManager.PlayTrack("moonlightsonata");
+            AudioManager.SetMasterVolume(0f);
         }
         
         public override void Unload() { }
@@ -174,13 +175,9 @@ namespace UU_GameProject
                 else Debug.ProfilingMode();
             }
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
-            {
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
-            }
             if (Input.GetKey(PressAction.PRESSED, Keys.C))
-            {
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Open();
-            }
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
             else Debug.showAtlas = false;

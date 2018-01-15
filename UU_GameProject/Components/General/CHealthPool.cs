@@ -41,7 +41,7 @@ namespace UU_GameProject
                 ModifyHP(healRate * time, true);
             }
         }
-
+        
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);

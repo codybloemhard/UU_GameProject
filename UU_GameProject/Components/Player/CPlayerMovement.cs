@@ -91,13 +91,13 @@ namespace UU_GameProject
                 velocity.X = 0;
             if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
                 velocity.X = 0;
-
+            
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
                 velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
                 velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000, false);
+            if (GO.Pos.Y > 200) Reset();
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -178,8 +178,7 @@ namespace UU_GameProject
                 dashSlowdownDelayTime += time;
                 if (dashSlowdownDelayTime >= 15 * time)
                     velocity.X -= .1f * dir.X;
-            }
-            
+            }       
             //the dashing itself
             if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
@@ -315,7 +314,7 @@ namespace UU_GameProject
             if(other.tag == "checkpoint")
                 checkPos = GO.Pos;
         }
-
+        
         public Vector2 Velocity()
         {
             return velocity;

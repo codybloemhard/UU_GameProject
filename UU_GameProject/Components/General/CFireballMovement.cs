@@ -10,7 +10,8 @@ namespace UU_GameProject
         private Vector2 playerSpeed;
         private Vector2 dir;
         private Vector2 fireballVelocity;
-        private float fireballTotalSpeed = 6;
+        private float fireballTotalSpeed = 6f;
+        private float time;
 
         public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
         {
@@ -30,9 +31,8 @@ namespace UU_GameProject
         {
             base.Update(time);
             GO.Pos += fireballVelocity * time;
-            if (GO.Pos.X < 0 || GO.Pos.X > 16
-                || GO.Pos.Y < 0 || GO.Pos.Y > 9)
-                GO.Destroy();
+            this.time += time;
+            if (this.time > 10f) GO.Destroy();
         }
 
         public override void OnCollision(GameObject other)

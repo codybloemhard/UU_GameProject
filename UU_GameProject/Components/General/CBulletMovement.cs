@@ -9,6 +9,7 @@ namespace UU_GameProject
     {
         private float speed;
         private Vector2 dir;
+        private float time = 0f;
 
         public CBulletMovement(float speed, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
         {
@@ -26,14 +27,14 @@ namespace UU_GameProject
         {
             base.Update(time);
             GO.Pos += dir * speed * time;
-            if (GO.Pos.X < 0 || GO.Pos.X > 16
-                || GO.Pos.Y < 0 || GO.Pos.Y > 9)
-                GO.Destroy();
+            this.time = time;
+            if (this.time > 10f) GO.Destroy();
         }
 
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "stone") GO.Destroy();
+            if (other.tag == "stone")
+                GO.Destroy();
         }
 
         public Vector2 direction()
