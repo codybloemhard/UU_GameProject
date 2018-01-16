@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Core;
 using System.Text;
 using Microsoft.Xna.Framework;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public struct RuleResult

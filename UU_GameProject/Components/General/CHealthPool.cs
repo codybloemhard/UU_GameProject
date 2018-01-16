@@ -8,59 +8,117 @@ namespace UU_GameProject
 {
     public class CHealthPool : Component
     {
-        private int HP;
-        private int bulletHitDamage = 10;
-        private int meleeHitDamage = 25;
+        private float hp;
+        private int maxHP;
         private bool isInvincible = false;
-        private Text healthPool;
-
-        public CHealthPool(int HP, GameObject GO)
+        private float healTime = 0f;
+        private float healRate = 0f;
+        public bool isProtected = false;
+        
+        public CHealthPool(int HP)
         {
-            this.HP = HP;
-            healthPool = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(4, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
-            healthPool.AddGameObject(GO, Vector2.Zero);
+            this.hp = HP;
+            maxHP = HP;
         }
 
+        public void InitHP(int HP)
+        {
+            hp = HP;
+            maxHP = HP;
+        }
+
+        public override void Update(float time)
+        {
+            if(healTime > 0f)
+            {
+                healTime -= time;
+                if (time < 0) time = 0;
+                ModifyHP(healRate * time, true);
+            }
+        }
+        
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
             if (other.tag.Contains(GO.tag)) return;
+            if (other.IsStatic) return;
+            if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
+            CDamageDealer comp = other.GetComponent<CDamageDealer>();
+            if (comp == null) return;
+            bool applPotion = comp.Potionous;
             if (other.tag.Contains("bullet"))
             {
-                ChangeHealth(bulletHitDamage);
+                ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            //pls halp, keep getting errors
-            //if (GO.GetComponent<Components.General.CFaction.ClashingFactions(base.GO, other)> == true)
-                if (other.tag.Contains("meleeDamageArea"))
-                ChangeHealth(meleeHitDamage);
+            if (other.tag.Contains("meleeDamageArea"))
+                ChangeHealth(comp.Damage, true);
+            if (other.tag.Contains("lightningStrike"))
+                ChangeHealth(comp.Damage, true);
+            if (other.tag.Contains("fireball"))
+            {
+                ChangeHealth(comp.Damage, false);
+                other.Destroy();
+            }
+            if (applPotion) HealOverTime(4f, 10f);
         }
 
-        //method to be called for instances that change HP
-        /// <summary>
-        /// Reduces the health of a character by the amount specified, use -NUMBER for healsies
-        /// </summary>
-        /// <param name="amount">Positive: Take damage, Negative: Recieve heals</param>
-        public void ChangeHealth(int amount)
+        public void Reset()
         {
-            if (!isInvincible)
+            hp = maxHP;
+            isInvincible = false;
+            isProtected = false;
+            healTime = 0f;
+            healRate = 0f;
+        }
+        
+        public void HealOverTime(float rate, float time)
+        {
+            if ((healRate < 0f && rate > 0f)
+                || (healRate > 0f && rate < 0f))//cancel potion or healing
             {
-                HP = Math.Max(0, HP - amount);
+                healRate = 0f;
+                healTime = 0f;
+                return;
+            }
+            healTime = time;
+            healRate = rate;
+        }
+        
+        //amount > 0, take dmg | amount < 0, heal
+        public void ChangeHealth(float amount, bool useInvincible)
+        {
+            if (!isInvincible && !isProtected && useInvincible)
+            {
                 isInvincible = true;
-                Timers.Add("manaRegen", 0.5f, ResetInvincibility);
-                healthPool.text = "Health: " + HP;
-                if (HP <= 0)
-                {
-                    if (GO.tag.Contains("player"))
-                        GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
-                    else GO.active = false;
-                }
+                Timers.Add("hpRegen", 0.5f, () => isInvincible = false);
+                ModifyHP(amount);
+            }
+            else if (!useInvincible)
+                ModifyHP(amount);
+        }
+
+        private void ModifyHP(float amount, bool fromPotion = false)
+        {
+            hp = Math.Max(0f, hp - amount);
+            if (hp <= 0) Die();
+            if (hp > maxHP) hp = maxHP;
+            if(amount > 0 && !fromPotion)
+                AudioManager.PlayEffect("hit");
+        }
+
+        private void Die()
+        {
+            if (GO.tag.Contains("player"))
+                GO.GetComponent<CPlayerMovement>().Reset();
+            else
+            {
+                GO.Destroy();
+                AudioManager.PlayEffect("kill");
             }
         }
 
-        private void ResetInvincibility()
-        {
-            isInvincible = false;
-        }
+        public float Health { get { return hp; } }
+        public float HealhPercent { get { return hp / maxHP; } }
     }
 }

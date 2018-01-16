@@ -39,14 +39,23 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\General\CGrowingDoor.cs" />
+    <Compile Include="Components\General\CLightningStrike.cs" />
+    <Compile Include="Components\Enemy\CBasicEnemyAI.cs" />
     <Compile Include="Components\General\CFireballMovement.cs" />
     <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Components\General\CFaction.cs" />
     <Compile Include="Components\General\CMagicness.cs" />
+    <Compile Include="Components\General\CDamageDealer.cs" />
+    <Compile Include="Components\General\CGrowingDoorSprite.cs" />
+    <Compile Include="Components\Player\CCamera.cs" />
+    <Compile Include="Editor\CFreeCamera.cs" />
     <Compile Include="Editor\CLevelEditorObject.cs" />
+    <Compile Include="Editor\Files.cs" />
     <Compile Include="Editor\LevelEditor.cs" />
     <Compile Include="Editor\LevelLogic.cs" />
     <Compile Include="Editor\LevelTest.cs" />
+    <Compile Include="Editor\TaskEngine.cs" />
     <Compile Include="Generation\LSystem.cs" />
     <Compile Include="Generation\Misc.cs" />
     <Compile Include="Generation\TurtleGraphics.cs" />

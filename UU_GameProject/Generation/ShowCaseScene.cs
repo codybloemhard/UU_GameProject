@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Core;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public class ShowCaseScene : GameState
@@ -18,12 +18,14 @@ namespace UU_GameProject
             GameObject backg = new GameObject(this, 20, true);
             backg.AddComponent(new CRender("block"));
             backg.Renderer.colour = new Color(0.7f, 0.7f, 0.7f);
-            backg.Pos = Vector2.Zero;
-            backg.Size = new Vector2(16, 9);
-            Catalog.CreateFlower(this, new Vector2(1, 1), new Vector2(0.5f), 0, "flower");
-            Catalog.CreateGrassPlant(this, new Vector2(2, 1), new Vector2(1f), 0, "grassplant");
-            Catalog.CreateGrassDot(this, new Vector2(3, 1), new Vector2(1f), 0, "grassplant");
-            Catalog.CreateGrassHigh(this, new Vector2(4, 1), new Vector2(1, 2), 0, "grassplant");
+            backg.Size = new Vector2(80, 30);
+            backg.Pos = new Vector2(0, -backg.Size.Y);
+
+            GameObject player = new GameObject(this, 10);
+            player.AddComponent(new CFreeCamera());
+            player.AddComponent(new CRender("player"));
+            player.Size = new Vector2(0.5f, 1f);
+            player.Pos = new Vector2(2, 2);
         }
         
         public override void Unload() { }
@@ -43,40 +45,20 @@ namespace UU_GameProject
             }
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
-                /*GameObject[] old = objects.FindAllWithTag("_test");
+                GameObject[] old = objects.FindAllWithTag("_test");
                 if(old != null) foreach (GameObject o in old) o.Destroy();
-                old = objects.FindAllWithTag("tree");
+                old = objects.FindAllWithTag("_tree");
                 if (old != null) foreach (GameObject o in old) o.Destroy();
-                old = objects.FindAllWithTag("_child");
-                if (old != null) foreach (GameObject o in old) o.Destroy();
-                Catalog.CreateBlock(this, 0x0, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE);
-                Catalog.CreateBlock(this, 0x1, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.GRASS);
-                Catalog.CreateBlock(this, 0x2, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.ICE, LAYERTILES.NONE);
-                Catalog.CreateBlock(this, 0x3, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, LAYERTILES.NONE);
-                Catalog.CreateBlock(this, 0x4, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.ICETOP, LAYERTILES.NONE, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0x5, 0, 10, "_test", BASETILES.DIRT, LAYERTILES.NONE, LAYERTILES.NONE, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0x6, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE);
-                Catalog.CreateBlock(this, 0x7, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE);
-                Catalog.CreateBlock(this, 0x8, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICETOP);
-                Catalog.CreateBlock(this, 0x9, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICETOP, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0xA, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0xB, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.SNOW);
-                Catalog.CreateBlock(this, 0xC, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.CRACKS);
-                Catalog.CreateBlock(this, 0xD, 0, 10, "_test", BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.NONE, TOPTILES.GRASS);
-                Catalog.CreateBlock(this, 0xE, 0, 10, "_test", BASETILES.SAND);
-                Catalog.CreateBlock(this, 0xF, 0, 10, "_test", BASETILES.SANDSTONE, LAYERTILES.CRACKS);
-
-                Catalog.CreateTree0(this, new Vector2(2, 9), new Vector2(0.1f), 0, "tree");
-                Catalog.CreateTree1(this, new Vector2(5, 9), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree2(this, new Vector2(8, 9), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree3(this, new Vector2(11, 9), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree4(this, new Vector2(14, 9), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree5(this, new Vector2(2, 4), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree6(this, new Vector2(5, 4), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree7(this, new Vector2(8, 4), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree8(this, new Vector2(11, 4), new Vector2(0.2f), 0, "tree");
-                Catalog.CreateTree9(this, new Vector2(14, 4), new Vector2(0.2f), 0, "tree");
-            */
+                Catalog.CreateFromReplacer(this, new Vector2(4, 0), Catalog.ReplacerTree0);
+                Catalog.CreateFromReplacer(this, new Vector2(10, 0), Catalog.ReplacerTree1);
+                Catalog.CreateFromReplacer(this, new Vector2(18, 0), Catalog.ReplacerTree2);
+                Catalog.CreateFromReplacer(this, new Vector2(24, 0), Catalog.ReplacerTree3);
+                Catalog.CreateFromReplacer(this, new Vector2(32, 0), Catalog.ReplacerTree4);
+                Catalog.CreateFromReplacer(this, new Vector2(38, 0), Catalog.ReplacerTree5);
+                Catalog.CreateFromReplacer(this, new Vector2(48, 0), Catalog.ReplacerTree6);
+                Catalog.CreateFromReplacer(this, new Vector2(60, 0), Catalog.ReplacerTree7);
+                Catalog.CreateFromReplacer(this, new Vector2(68, 0), Catalog.ReplacerTree8);
+                Catalog.CreateFromReplacer(this, new Vector2(74, 0), Catalog.ReplacerTree9);
             }
         }
 

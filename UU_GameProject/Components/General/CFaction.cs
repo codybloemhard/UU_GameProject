@@ -5,20 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 
-namespace UU_GameProject.Components.General
+namespace UU_GameProject
 {
     public class CFaction : Component
     {
-        private string Faction;
+        private string faction;
 
-        public CFaction(string Faction)
+        public CFaction(string faction)
         {
-            this.Faction = Faction;
+            this.faction = faction;
+        }
+        public string GetFaction()
+        {
+            return faction;
         }
 
-        public bool ClashingFactions(GameObject Collisionee, GameObject Collider)
+        public bool ClashingFactions(GameObject collisionee, GameObject collider)
         {
-            if (Collisionee.GetComponent<CFaction>().Faction != Collider.GetComponent<CFaction>().Faction)
+            CFaction fac0 = collisionee.GetComponent<CFaction>();
+            CFaction fac1 = collider.GetComponent<CFaction>();
+            if (fac0 == null || fac1 == null)
+                return false;
+            if (fac0.GetFaction() != fac1.GetFaction())
                 return true;
             else return false;
         }
