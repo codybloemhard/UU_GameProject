@@ -139,7 +139,7 @@ namespace UU_GameProject
             testDoor.Pos = new Vector2(-4f, 8f - 5f);
             testDoor.Size = new Vector2(1f, 5f);
             testDoor.AddComponent(new CGrowingDoor());
-            Debug.FullDebugMode();
+            //Debug.FullDebugMode();
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
         }
