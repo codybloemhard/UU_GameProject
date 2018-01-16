@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+//<author:cody>
 //Copy of:
 //https://github.com/ocdy1001/CodeAnalyser/blob/master/CodeAnalyser/Files.cs
 namespace UU_GameProject
@@ -31,7 +32,6 @@ namespace UU_GameProject
         public static bool HasExtension(string s, string extension)
         {
             string ex = "";
-            bool read = true;
             for(int i = s.Length - 1; i >= 0; i--)
             {
                 if (s[i] == '.') break;

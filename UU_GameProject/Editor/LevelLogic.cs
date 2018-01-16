@@ -4,7 +4,7 @@ using System.IO;
 using Core;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public struct LvObj
@@ -202,8 +202,6 @@ namespace UU_GameProject
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
-            //Task.Run(()=>
-            //{
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
             string cstring = chunkcounter.ToString();
             lists.Add(cstring, new List<GameObject>());
@@ -229,7 +227,6 @@ namespace UU_GameProject
                     else counters.Add(cstring, 1);
                 }
             }
-            //});
             chunkcounter++;
         }
 
@@ -316,7 +313,6 @@ namespace UU_GameProject
             newmid.X = (int)Math.Floor(newmid.X);
             newmid.Y = (int)Math.Floor(newmid.Y);
             if (newmid == middle) return;
-            Console.WriteLine("Chunk change!");
             newloaded.Clear();//set new chunks that need to be
             for (int x = 0; x < 3; x++)
                 for (int y = 0; y < 3; y++)
@@ -359,10 +355,7 @@ namespace UU_GameProject
                         break;
                     }
                 }
-                if (!found)
-                {
-                    loaded[i].action = ChunkAction.DESTROY;
-                }
+                if (!found) loaded[i].action = ChunkAction.DESTROY;
             }
         }
         
@@ -395,8 +388,7 @@ namespace UU_GameProject
         private LoadedChunk GetLoadedChunk(int x, int y)
         {
             for (int i = 0; i < loaded.Count; i++)
-                if (loaded[i].IsChunk(x, y))
-                    return loaded[i];
+                if (loaded[i].IsChunk(x, y)) return loaded[i];
             return null;
         }
     }

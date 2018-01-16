@@ -9,11 +9,10 @@ namespace UU_GameProject
     {
         private float speed;
         private float maxPlayerSpeed = 2.0f;
-        private Vector2 dir;
         private float intendedDir;
         private float jumpPower = 13f;
         private float acceleration = 50f, vertVelo = 0f;
-        private float playerAccel = 0.02f;
+        private float playerAccel = 8f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
         private float dashSlowdownDelayTime = 0;
@@ -30,63 +29,85 @@ namespace UU_GameProject
         private bool isCrouching = false;
         private bool isSliding = false;
         private bool isDown = false;
-        private Vector2 velocity = Vector2.Zero;
         private bool initiated = false;
+        private bool canMelee = true;
+        private Vector2 dir;
+        private Vector2 velocity = Vector2.Zero;
+        private Vector2 checkPos = new Vector2(-1000, -1000);
         private CAnimatedSprite animation;
         private CHealthPool healthPool;
         private CManaPool manaPool;
+        private CMagicness magicness;
+        private CFaction faction;
+        private CMeleeAttack melee;
+        private CShoot shoot;
 
         public CPlayerMovement(float speed) : base()
         {
-            this.speed = speed;
-            dir = new Vector2(1, 0);
+            this.speed = speed;         
         }
-
+        
         public void InitPlayer()
         {
             initiated = true;
+            dir = new Vector2(1, 0);
             Renderer render = GO.Renderer;
             if (render != null) render.colour = Color.White;
             animation = GO.Renderer as CAnimatedSprite;
             healthPool = GO.GetComponent<CHealthPool>();
             manaPool = GO.GetComponent<CManaPool>();
+            magicness = GO.GetComponent<CMagicness>();
+            faction = GO.GetComponent<CFaction>();
+            melee = GO.GetComponent<CMeleeAttack>();
+            shoot = GO.GetComponent<CShoot>();
         }
 
         public override void Update(float time)
         {
             if (!initiated) InitPlayer();
             //animations
-            if (isCrawling)
-                animation.PlayAnimation("crawling", 2);
+            else if (isCrawling && intendedDir > 0)
+                animation.PlayAnimationIfDifferent("crawlingRight", 6);
+            else if (isCrawling && intendedDir < 0)
+                animation.PlayAnimationIfDifferent("crawlingLeft", 6);
             else if (isSliding)
-                animation.PlayAnimation("sliding", 2);
-            else if (isCrouching)
-                animation.PlayAnimation("crouching", 2);
-            else if (!grounded)
-                animation.PlayAnimation("airborn", 2);
+                animation.PlayAnimationIfDifferent("sliding", 2);
+            else if (leftIsSlidingOnWall)
+                animation.PlayAnimationIfDifferent("wallSlidingRight", 2);
+            else if (rightIsSlidingOnWall)
+                animation.PlayAnimationIfDifferent("wallSlidingLeft", 2);
+            else if (!grounded && intendedDir > 0)
+                animation.PlayAnimationIfDifferent("airborneRight", 2);
+            else if (!grounded && intendedDir < 0)
+                animation.PlayAnimationIfDifferent("airborneLeft", 2);
             else if (fallPanic)
-                animation.PlayAnimation("fallPanic", 2);
+                animation.PlayAnimationIfDifferent("fallPanic", 2);
+            else if (velocity.X < 0)
+                animation.PlayAnimationIfDifferent("runningLeft", 8);
+            else if (velocity.X > 0)
+                animation.PlayAnimationIfDifferent("runningRight", 8);
+            else if (intendedDir > 0)
+                animation.PlayAnimationIfDifferent("standingRight", 8);
             else
-                animation.PlayAnimation("walking", 2);
+                animation.PlayAnimationIfDifferent("standingLeft", 8);
 
+            float timeAccel = playerAccel * time;
             //basic movement: slowly accelerates the player
-            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + playerAccel <= maxPlayerSpeed)
-                velocity += new Vector2(playerAccel, 0);
-            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - playerAccel >= -maxPlayerSpeed)
-                velocity += new Vector2(-playerAccel, 0);
-
+            if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + timeAccel <= maxPlayerSpeed)
+                velocity += new Vector2(timeAccel, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - timeAccel >= -maxPlayerSpeed)
+                velocity += new Vector2(-timeAccel, 0);
             //stops the player when they hit a wall
             if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
                 velocity.X = 0;
             if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
                 velocity.X = 0;
-
             //stops the player if no buttons are pressed
             if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
-                velocity -= new Vector2(Math.Min(playerAccel, velocity.X), 0);
+                velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
             if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
-                velocity -= new Vector2(Math.Max(-playerAccel, velocity.X), 0);
-            if (GO.Pos.Y > 9) healthPool.ChangeHealth(1000);
+                velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
+            if (GO.Pos.Y > 200) Reset();
             if (velocity != Vector2.Zero)
             {
                 dir = velocity;
@@ -96,7 +117,6 @@ namespace UU_GameProject
                 intendedDir = 1;
             if (Input.GetKey(PressAction.DOWN, Keys.A))
                 intendedDir = -1;
-
             //down
             if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
             {
@@ -108,49 +128,47 @@ namespace UU_GameProject
                 maxPlayerSpeed = 2.0f;
                 isDown = false;
             }
-
             //crouching
-            if (isDown && velocity.X == 0) isCrouching = true;
+            if (isDown && Math.Abs(velocity.X) < 0.1f)
+                isCrouching = true;
             else isCrouching = false;
-
             //crawling
             if (isDown && ((velocity.X > 0 && velocity.X <= maxPlayerSpeed) || (velocity.X < 0 && velocity.X >= -maxPlayerSpeed)))
                 isCrawling = true;
             else isCrawling = false;
-
             //sliding forward
             if (isDown && velocity.X > maxPlayerSpeed)
             {
-                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - playerAccel * 0.2f);
+                velocity.X = Math.Max(maxPlayerSpeed, velocity.X - timeAccel * 0.2f);
                 isSliding = true;
-            } //sliding backward
+            } 
+            //sliding backward
             else if (isDown && velocity.X < -maxPlayerSpeed)
             {
-                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + playerAccel * 0.2f);
+                velocity.X = Math.Min(maxPlayerSpeed, velocity.X + timeAccel * 0.2f);
                 isSliding = true;
-            } //not sliding
+            }
             else isSliding = false;
-
-            //fall panic
+            //fall panic and damage
             if (vertVelo > 25 || lastVertVelo > 25)
             {
                 fallPanic = true;
-                //fall damage
                 if (grounded)
-                    healthPool.ChangeHealth((int)lastVertVelo - 25);
+                    healthPool.ChangeHealth((int)lastVertVelo - 25, false);
                 lastVertVelo = vertVelo;
             }
             else fallPanic = false;
-
-            //Dashing
-            //turning dashing state on
+            //Dashing, broken!
             if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
             {
-                isDashing = true;
-                dashToggleDelayTime = 0;
+                if (magicness.Dash())
+                {
+                    isDashing = true;
+                    dashToggleDelayTime = 0;
+                    AudioManager.PlayEffect("jump");
+                }
             }
             dashToggleDelayTime += time;
-
             //turning dashing state off
             if ((Math.Abs(velocity.X) > maxDashSpeed) || (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && dashToggleDelayTime > time) || isDown || dir.X != intendedDir)
                 isDashing = false;
@@ -163,11 +181,9 @@ namespace UU_GameProject
                 if (dashSlowdownDelayTime >= 15 * time)
                     velocity.X -= .1f * dir.X;
             }
-            
             //the dashing itself
-            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && manaPool.ConsumeMana(25) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
+            if (isDashing && ((Input.GetKey(PressAction.DOWN, Keys.A)) || (Input.GetKey(PressAction.DOWN, Keys.D))) && Math.Abs(velocity.X) <= maxDashSpeed * .75)
                 velocity.X = Math.Min(Math.Abs(velocity.X) + 2.0f, maxDashSpeed) * dir.X;
-
             //gravity, jump and player head and bottom collision
             Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 BottomRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
@@ -189,25 +205,28 @@ namespace UU_GameProject
 
             if (hitBottom.hit && hitBottom.distance < 0.001f)
                 grounded = true;
-
             else grounded = false;
 
-            if (hitTop.hit && hitTop.distance < 0.03f)
+            if (hitTop.hit && hitTop.distance < 0.03f && vertVelo <= 0)
                 vertVelo = 0;
 
-            if (grounded && vertVelo > 0)
-                vertVelo = 0;
+            if (grounded && vertVelo > 0) vertVelo = 0;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
                 jumpDelayTime = 0;
+                AudioManager.PlayEffect("jump");
             }
             if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
-                if (manaPool.ConsumeMana(75) && fallPanic == false && jumpDelayTime >= 0.166666f)
+                if (fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
-                    vertVelo = -jumpPower;
-                    jumpDelayTime = 0;
+                    if (magicness.DoubleJump())
+                    {
+                        vertVelo = -jumpPower;
+                        jumpDelayTime = 0;
+                        AudioManager.PlayEffect("jump");
+                    }
                 }
             }
             if (!grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
@@ -215,11 +234,9 @@ namespace UU_GameProject
                 vertVelo += acceleration * time;
                 jumpDelayTime += time;
             }
-
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
-
             //Wall sliding
             if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
                 leftIsSlidingOnWall = true;
@@ -231,60 +248,62 @@ namespace UU_GameProject
 
             if (leftIsSlidingOnWall || rightIsSlidingOnWall)
                 vertVelo = 1;
-
             //player side collision
-            Vector2 leftTop = GO.Pos + new Vector2(-0.01f, 0);
-            Vector2 leftMiddle = GO.Pos + new Vector2(-0.01f, 0.5f * GO.Size.Y);
-            Vector2 leftBottom = GO.Pos + new Vector2(-0.01f, GO.Size.Y);
-            Vector2 rightTop = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0);
-            Vector2 rightMiddle = GO.Pos + new Vector2(GO.Size.X + 0.01f, 0.5f * GO.Size.Y);
-            Vector2 rightBottom = GO.Pos + new Vector2(GO.Size.X + 0.01f, GO.Size.Y);
-            RaycastResult hitLeftTop = GO.Raycast(leftTop, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeftMiddle = GO.Raycast(leftMiddle, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeftBottom = GO.Raycast(leftBottom, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightTop = GO.Raycast(rightTop, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightMiddle = GO.Raycast(rightMiddle, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitRightBottom = GO.Raycast(rightBottom, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult hitLeft;
-            RaycastResult hitRight;
-            if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftTop.distance)
-                hitLeft = hitLeftTop;
-            else if (Math.Min(hitLeftTop.distance, Math.Min(hitLeftMiddle.distance, hitLeftBottom.distance)) == hitLeftMiddle.distance)
-                hitLeft = hitLeftMiddle;
-            else hitLeft = hitLeftBottom;
+            Vector2 leftDownCastOffset = GO.Pos + new Vector2(-0.5f, 0);
+            Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X + 0.5f, 0);
+            Vector2 feetLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
+            Vector2 feetRightCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
+            RaycastResult LeftBoundary = GO.Raycast(leftDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult RightBoundary = GO.Raycast(rightDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
+            RaycastResult LeftDefault = GO.Raycast(feetLeftCastOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+            RaycastResult RightDefault = GO.Raycast(feetRightCastOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
 
-            if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightTop.distance)
-                hitRight = hitRightTop;
-            else if (Math.Min(hitRightTop.distance, Math.Min(hitRightMiddle.distance, hitRightBottom.distance)) == hitRightMiddle.distance)
-                hitRight = hitRightMiddle;
-            else hitRight = hitRightBottom;
-
-            if (hitLeft.hit && hitLeft.distance < 0.02f)
+            if (LeftDefault.hit && LeftDefault.distance < GO.Size.X / 2)
                 leftSideAgainstWall = true;
+            else if (LeftBoundary.distance <= GO.Size.Y)
+            {
+                Vector2 hitLeftOffset = GO.Pos + new Vector2(GO.Size.X / 2, LeftBoundary.distance + 0.01f);
+                RaycastResult hitLeft = GO.Raycast(hitLeftOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
+                if (hitLeft.hit && hitLeft.distance < GO.Size.X / 2)
+                    leftSideAgainstWall = true;
+            }
             else leftSideAgainstWall = false;
 
-            if (hitRight.hit && hitRight.distance < 0.02f)
+            if (RightDefault.hit && RightDefault.distance < GO.Size.X / 2)
                 rightSideAgainstWall = true;
+            else if (RightBoundary.distance <= GO.Size.Y)
+            {
+                Vector2 hitRightOffset = GO.Pos + new Vector2(GO.Size.X / 2, RightBoundary.distance + 0.01f);
+                RaycastResult hitRight = GO.Raycast(hitRightOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
+                if (hitRight.hit && hitRight.distance < GO.Size.X / 2)
+                    rightSideAgainstWall = true;
+            }
             else rightSideAgainstWall = false;
-            //fireball
-            //fires toward the cursor
+            //attacks
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
-                GO.GetComponent<Components.General.CMagicness>().Fireball(new Vector2(.2f, .2f), velocity);
-            //shoot
-            //if (Input.GetKey(PressAction.PRESSED, Keys.Space))
-            //{ GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(2, 2), 1.0f); }
+                magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
+                magicness.Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, faction.GetFaction());
+            if (Input.GetKey(PressAction.PRESSED, Keys.F))
+                magicness.Heal();
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
-            GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, GO.tag);
-            if (Input.GetKey(PressAction.PRESSED, Keys.F) && manaPool.ConsumeMana(20))
-                GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f), velocity);
+                DoMelee();
+        }
+
+        private void DoMelee()
+        {
+            if (!canMelee) return;
+            melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, 15, false, GO.tag, faction.GetFaction());
+            canMelee = false;
+            Timers.Add("playermelee", 0.5f, () => canMelee = true);
         }
 
         public override void OnCollision(GameObject other)
         {
-            if (other.tag == "killer")
-                healthPool.ChangeHealth(20);
+            if(other.tag == "checkpoint")
+                checkPos = GO.Pos;
         }
-
+        
         public Vector2 Velocity()
         {
             return velocity;
@@ -292,9 +311,13 @@ namespace UU_GameProject
 
         public void Reset()
         {
-            GO.Pos = new Vector2(1, 7);
+            AudioManager.PlayEffect("dead");
+            if (checkPos != new Vector2(-1000, -1000))
+                GO.Pos = checkPos;
             velocity = new Vector2(0, 0);
             vertVelo = 0;
+            healthPool.Reset();
+            manaPool.Reset();
         }
     }
 }

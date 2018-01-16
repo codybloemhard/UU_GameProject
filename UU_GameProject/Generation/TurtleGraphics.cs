@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Core;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public struct RotationAct

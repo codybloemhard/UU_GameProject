@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 using System.Threading;
+//<author:cody>
 namespace UU_GameProject
 {
     public class PrerunGenerationCycle
@@ -15,7 +16,7 @@ namespace UU_GameProject
             PTimer timer = new PTimer();
             timer.GetElapsedTime();
 
-            /*Thread a = new Thread(new ThreadStart(A));
+            Thread a = new Thread(new ThreadStart(A));
             Thread b = new Thread(new ThreadStart(B));
             Thread c = new Thread(new ThreadStart(C));
             Thread d = new Thread(new ThreadStart(D));
@@ -23,11 +24,11 @@ namespace UU_GameProject
             a.Join();
             b.Join();
             c.Join();
-            d.Join();*/
-            A();
+            d.Join();
+            /*A();
             B();
             C();
-            D();
+            D();*/
             double elap = timer.GetElapsedTime();
             Console.WriteLine("Generation: " + elap + " Seconds.");
             GC.Collect();

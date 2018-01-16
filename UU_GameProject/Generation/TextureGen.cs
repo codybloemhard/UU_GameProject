@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
-
+//<author:cody>
 namespace UU_GameProject
 {
     public static class TextureGen

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
-/*
-biomes: artic, desert, hills, forest
-*/
+//<author:cody>
 namespace UU_GameProject
 {
     public enum BASETILES
