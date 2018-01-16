@@ -28,7 +28,7 @@ namespace UU_GameProject
                 delegate(ReplacerInput i) {
                 return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
             });
-            builder.AddSource("!", 10, true, Catalog.ReplacerTree8);
+            builder.AddSource("!tree", 10, true, Catalog.ReplacerTree0);
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
