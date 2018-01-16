@@ -66,12 +66,12 @@ namespace UU_GameProject
         {
             if (!initiated) InitPlayer();
             //animations
-            if (isCrawling)
-                animation.PlayAnimationIfDifferent("crawling", 2);
+            else if (isCrawling && intendedDir > 0)
+                animation.PlayAnimationIfDifferent("crawlingRight", 6);
+            else if (isCrawling && intendedDir < 0)
+                animation.PlayAnimationIfDifferent("crawlingLeft", 6);
             else if (isSliding)
                 animation.PlayAnimationIfDifferent("sliding", 2);
-            else if (isCrouching)
-                animation.PlayAnimationIfDifferent("crouching", 2);
             else if (leftIsSlidingOnWall)
                 animation.PlayAnimationIfDifferent("wallSlidingRight", 2);
             else if (rightIsSlidingOnWall)

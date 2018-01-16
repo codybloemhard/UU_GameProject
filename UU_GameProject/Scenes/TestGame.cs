@@ -68,7 +68,8 @@ namespace UU_GameProject
             anim.AddAnimation("runningRight", "playerRunningRight");
             anim.AddAnimation("runningLeft", "playerRunningLeft");
             anim.AddAnimation("crouching", "playerCrouching");
-            anim.AddAnimation("crawling", "playerCrawling");
+            anim.AddAnimation("crawlingRight", "playerCrawlingRight");
+            anim.AddAnimation("crawlingLeft", "playerCrawlingLeft");
             anim.AddAnimation("sliding", "playerSliding");
             anim.AddAnimation("airborneRight", "playerAirborneRight");
             anim.AddAnimation("airborneLeft", "playerAirborneLeft");

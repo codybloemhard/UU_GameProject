@@ -37,7 +37,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerRunningRight", "Player_Running_Right", 8, 1);
             TextureManager.LoadTexture("playerRunningLeft", "Player_Running_Left", 8, 1);
             TextureManager.LoadTexture("playerCrouching", "playerCrouchingSimple", 2, 1);
-            TextureManager.LoadTexture("playerCrawling", "playerCrawlingSimple", 4, 1);
+            TextureManager.LoadTexture("playerCrawlingRight", "Player_Crawling_Right", 2, 1);
+            TextureManager.LoadTexture("playerCrawlingLeft", "Player_Crawling_Left", 2, 1);
             TextureManager.LoadTexture("playerSliding", "playerSlidingSimple", 2, 1);
             TextureManager.LoadTexture("playerMelee", "playerMeleeSimple", 4, 1);
             TextureManager.LoadTexture("playerAirborneRight", "Player_Airborne_Right", 2, 1);
