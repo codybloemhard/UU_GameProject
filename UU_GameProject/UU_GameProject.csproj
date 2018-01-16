@@ -47,7 +47,6 @@
     <Compile Include="Components\General\CFaction.cs" />
     <Compile Include="Components\General\CMagicness.cs" />
     <Compile Include="Components\General\CRaycasts.cs" />
-    <Compile Include="Components\Player\CPlayerMovement - Copy.cs" />
     <Compile Include="Editor\CFreeCamera.cs" />
     <Compile Include="Editor\CLevelEditorObject.cs" />
     <Compile Include="Editor\Files.cs" />
