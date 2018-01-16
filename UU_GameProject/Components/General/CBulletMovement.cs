@@ -26,8 +26,7 @@ namespace UU_GameProject
         {
             base.Update(time);
             GO.Pos += dir * speed * time;
-            if (GO.Pos.X < 0 || GO.Pos.X > 16
-                || GO.Pos.Y < 0 || GO.Pos.Y > 9)
+            if (GO.Pos.X < 0 || GO.Pos.X > 16 || GO.Pos.Y < 0 || GO.Pos.Y > 9)
                 GO.Destroy();
         }
 

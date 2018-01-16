@@ -34,17 +34,17 @@ namespace UU_GameProject
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(8, 5);
-            stone2.Size = new Vector2(3, 0.2f);
+            stone2.Size = new Vector2(3, 0.3f);
             stone2.AddComponent(new CRender("block"));
             stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
             stone3.Pos = new Vector2(12, 3);
-            stone3.Size = new Vector2(3, 0.2f);
+            stone3.Size = new Vector2(3, 0.3f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
             GameObject stone4 = new GameObject("stone", this, 2, true);
             stone4.Pos = new Vector2(2, 4);
-            stone4.Size = new Vector2(3, 0.2f);
+            stone4.Size = new Vector2(3, 0.3f);
             stone4.AddComponent(new CRender("block"));
             stone4.AddComponent(new CAABB());
             GameObject killer = new GameObject("killer", this, 2);
@@ -68,39 +68,22 @@ namespace UU_GameProject
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CMeleeAttack());
-            player.AddComponent(new CHealthPool(100, player));
+            player.AddComponent(new CHealthPool(1000, player));
             player.AddComponent(new CManaPool(100, player));
             player.AddComponent(new Components.General.CMagicness());
             player.AddComponent(new Components.General.CFaction("friendly"));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy = new GameObject("Nenemy", this, 2);
-            enemy.AddComponent(new CRender("player"));
-            enemy.AddComponent(new CNormalEnemyAI(2f));
-            enemy.AddComponent(new CHealthPool(50, enemy));
-            enemy.AddComponent(new CAABB());
-            enemy.AddComponent(new CMeleeAttack());
-            enemy.AddComponent(new Components.General.CFaction("enemy"));
-            enemy.Pos = new Vector2(12.5f, 1.99f);
-            enemy.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy1 = new GameObject("Renemy", this, 2);
-            enemy1.AddComponent(new CRender("player"));
-            enemy1.AddComponent(new CRangedEnemyAI(2.5f));
-            enemy1.AddComponent(new CHealthPool(25, enemy1));
-            enemy1.AddComponent(new CAABB());
-            enemy1.AddComponent(new CShoot());
-            enemy1.AddComponent(new Components.General.CFaction("enemy"));
-            enemy1.Pos = new Vector2(9.5f, 4.0f);
-            enemy1.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy2 = new GameObject("Aenemy", this, 2);
-            enemy2.AddComponent(new CRender("player"));
-            enemy2.AddComponent(new CArmouredEnemyAI(1.75f));
-            enemy2.AddComponent(new CHealthPool(100, enemy2));
-            enemy2.AddComponent(new CAABB());
-            enemy2.AddComponent(new CMeleeAttack());
-            enemy2.AddComponent(new Components.General.CFaction("enemy"));
-            enemy2.Pos = new Vector2(2.5f, 3.0f);
-            enemy2.Size = new Vector2(0.5f, 1.0f);
+            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
+            robotBoss.AddComponent(new CRender("player"));
+            robotBoss.AddComponent(new CRobotBoss(3));
+            robotBoss.AddComponent(new CRaycasts());
+            robotBoss.AddComponent(new CHealthPool(50, robotBoss));
+            robotBoss.AddComponent(new CAABB());
+            robotBoss.AddComponent(new CShoot());
+            robotBoss.Pos = new Vector2(12.5f, 2f);
+            robotBoss.Size = new Vector2(0.5f, 1f);
+            
         }
 
         public override void Unload()
@@ -110,7 +93,7 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            Camera.SetCameraTopLeft(new Vector2(0, 0));
+            //Camera.SetCameraTopLeft(new Vector2(0, 0));
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
@@ -120,16 +103,43 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
-            if(Input.GetKey(PressAction.PRESSED, Keys.X))
-            {
-                
-            }
+
+            if (shakeTime > 0)
+                ShakeCamera(strength, time);
+
             base.Update(time);
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
+        }
+
+        private Vector2 returnPos;
+        private float shakeTime = 0;
+        private int strength;
+
+        private void ShakeCamera(int strength, float time)
+        {
+            shakeTime -= time;
+            Console.WriteLine(strength);
+            Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos + Math.Min((.1f + shakeTime), 2) * new Vector2(MathH.random.Next(-strength, strength), MathH.random.Next(-strength, strength))));
+            if (shakeTime <= 0)
+            {
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos));
+            }
+        }
+
+        public void ShakeCamera(float shakeTime, int strength)
+        {
+            if(this.shakeTime <= 0 || strength > this.strength)
+            {
+                this.strength = strength;
+                this.shakeTime = shakeTime;
+                
+                if(!(strength > this.strength))
+                    returnPos = Camera.TopLeft;
+            }
         }
     }
 }

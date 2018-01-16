@@ -39,10 +39,15 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\Enemy\CHeatSeakingBullet.cs" />
+    <Compile Include="Components\Enemy\CRobotBoss.cs" />
+    <Compile Include="Components\General\CExplosionArea.cs" />
     <Compile Include="Components\General\CFireballMovement.cs" />
     <Compile Include="Components\General\CDamageArea.cs" />
     <Compile Include="Components\General\CFaction.cs" />
     <Compile Include="Components\General\CMagicness.cs" />
+    <Compile Include="Components\General\CRaycasts.cs" />
+    <Compile Include="Components\Player\CPlayerMovement - Copy.cs" />
     <Compile Include="Editor\CFreeCamera.cs" />
     <Compile Include="Editor\CLevelEditorObject.cs" />
     <Compile Include="Editor\Files.cs" />
