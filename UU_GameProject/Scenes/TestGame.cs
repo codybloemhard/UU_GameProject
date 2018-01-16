@@ -47,17 +47,17 @@ namespace UU_GameProject
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(8, 5);
-            stone2.Size = new Vector2(3, 0.2f);
+            stone2.Size = new Vector2(3, 0.3f);
             stone2.AddComponent(new CRender("block"));
             stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
             stone3.Pos = new Vector2(12, 3);
-            stone3.Size = new Vector2(3, 0.2f);
+            stone3.Size = new Vector2(3, 0.3f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
             GameObject stone4 = new GameObject("stone", this, 2, true);
             stone4.Pos = new Vector2(2, 4);
-            stone4.Size = new Vector2(3, 0.2f);
+            stone4.Size = new Vector2(3, 0.3f);
             stone4.AddComponent(new CRender("block"));
             stone4.AddComponent(new CAABB());
             player = new GameObject("player", this, 1);
@@ -91,7 +91,18 @@ namespace UU_GameProject
             player.AddComponent(new CFaction("friendly"));
             player.AddComponent(new CCamera());
             player.Pos = new Vector2(1, 1);
-            player.Size = new Vector2(0.5f, 1);
+            player.Size = new Vector2(0.5f, 1.0f);
+            
+            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
+            robotBoss.AddComponent(new CRender("player"));
+            robotBoss.AddComponent(new CRobotBoss(3));
+            robotBoss.AddComponent(new CRaycasts());
+            robotBoss.AddComponent(new CHealthPool(50, robotBoss));
+            robotBoss.AddComponent(new CAABB());
+            robotBoss.AddComponent(new CShoot());
+            robotBoss.Pos = new Vector2(12.5f, 2f);
+            robotBoss.Size = new Vector2(0.5f, 1f);
+            
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
             respawn0.Size = new Vector2(0.5f, 1);
             respawn0.Pos = new Vector2(0, 7);
@@ -181,6 +192,10 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+
+            if (shakeTime > 0)
+                ShakeCamera(strength, time);
+
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
             if (Input.GetKey(PressAction.PRESSED, Keys.C))
@@ -194,6 +209,33 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
+        }
+
+        private Vector2 returnPos;
+        private float shakeTime = 0;
+        private int strength;
+
+        private void ShakeCamera(int strength, float time)
+        {
+            shakeTime -= time;
+            Console.WriteLine(strength);
+            Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos + Math.Min((.1f + shakeTime), 2) * new Vector2(MathH.random.Next(-strength, strength), MathH.random.Next(-strength, strength))));
+            if (shakeTime <= 0)
+            {
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos));
+            }
+        }
+
+        public void ShakeCamera(float shakeTime, int strength)
+        {
+            if(this.shakeTime <= 0 || strength > this.strength)
+            {
+                this.strength = strength;
+                this.shakeTime = shakeTime;
+                
+                if(!(strength > this.strength))
+                    returnPos = Camera.TopLeft;
+            }
         }
     }
 }
