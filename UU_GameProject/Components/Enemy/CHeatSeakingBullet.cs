@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    class CHeatSeakingBullet : Component
+    public class CHeatSeakingBullet : Component
     {
         private string spawnerTag;
         private bool initiated;

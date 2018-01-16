@@ -9,10 +9,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class CRobotBoss : Component
+    public class CRobotBoss : Component
     {
-        GameObject player;
+        private GameObject player;
+        private CCamera camera;
+        private CMeleeAttack melee;
         private CRaycasts cRaycasts;
+        private CFaction faction;
         private bool initiated;
         private FSM fsm = new FSM();
         private Vector2 velocity, difference, dir = Vector2.Zero;
@@ -34,15 +37,15 @@ namespace UU_GameProject
             cRaycasts = GO.GetComponent<CRaycasts>();
             player = GO.FindWithTag("player");
             Vector2 difference = player.Pos + player.Size / 2 - (GO.Pos + GO.Size / 2);
-
+            camera = player.GetComponent<CCamera>();
+            melee = GO.GetComponent<CMeleeAttack>();
+            faction = GO.GetComponent<CFaction>();
             if (render != null) render.colour = Color.White;
 
             fsm.Add("walk", IdleBehaviour);
             fsm.Add("fly", Fly);
             fsm.Add("chase", Chase);
         }
-
-
 
         public override void Update(float time)
         {
@@ -61,8 +64,6 @@ namespace UU_GameProject
                 ChangeFSM(false);
                 fsm.SetCurrentState("chase");
             }
-
-            Console.WriteLine(chaseTime);
         }
 
         private void ChangeFSM(bool chase)
@@ -99,8 +100,8 @@ namespace UU_GameProject
                 shootTime -= ctime;
             else if ((velocity.X < 0 && difference.X < 0) || (velocity.X > 0 && difference.X > 0))
             {
-                    ShootAtPlayer(difference);
-                    shootTime = shootDelay;
+                ShootAtPlayer(difference);
+                shootTime = shootDelay;
             }
 
             GO.Pos += cRaycasts.Move(velocity * ctime);
@@ -108,8 +109,7 @@ namespace UU_GameProject
 
         private void Fly()
         { 
-            if(crushTime > 0)
-                crushTime -= ctime;
+            if(crushTime > 0) crushTime -= ctime;
 
             if (crushTime <= 0 && GO.Pos.X + GO.Size.X / 2 > player.Pos.X && GO.Pos.X + GO.Size.X / 2 < player.Pos.X + player.Size.X)
             {
@@ -122,12 +122,12 @@ namespace UU_GameProject
             {
                 velocity.Y += crushSpeed * ctime;
                 if (cRaycasts.DistanceToFloor == 0)
-                { 
+                {
                     crushing = false;
-                    (GO.Context as TestGame).ShakeCamera(1f, (int)Math.Min(velocity.Y * 2f, 100));
+                    camera.ShakeCamera(1f, Math.Min(velocity.Y * 2f, 0.3f));
+                    melee.Melee(new Vector2(0, 1), new Vector2(0.75f, 1.5f), 0.2f, 50, false, GO.tag, faction.GetFaction());
                 }
             }
-
             else
             {
                 if (difference.X < -2)
@@ -158,9 +158,6 @@ namespace UU_GameProject
                     shootTime = shootDelay;
                 }
             }
-
-            if (Input.GetKey(PressAction.PRESSED, Keys.X))
-                (GO.Context as TestGame).ShakeCamera(1f, 100);
 
             GO.Pos += cRaycasts.Move(velocity * ctime);
         }
@@ -195,17 +192,18 @@ namespace UU_GameProject
                 }
 
                 dir = new Vector2((float)Math.Cos(dirRads), (float)Math.Sin(dirRads));
-
                 GO.Pos += cRaycasts.Move(dir * speed * chaseSpeedIncrease * ctime);
             }
         }
-
+        
         private void ShootAtPlayer(Vector2 dir)
         {
             GameObject bullet = new GameObject(GO.tag + "exploBullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());
+            bullet.AddComponent(new CDamageDealer(10, false));
+            bullet.AddComponent(new CFaction("enemy"));
             if (dir.X > 0)
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f + new Vector2(GO.Size.X / 2f + .2f, 0);
             else
@@ -215,7 +213,6 @@ namespace UU_GameProject
 
         public void Explode()
         {
-            Console.WriteLine("yeah");
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);
             explosion.AddComponent(new CRender("block"));
             explosion.Renderer.colour = Color.Red;

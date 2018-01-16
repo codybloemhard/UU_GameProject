@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    class CRaycasts : Component
+    public class CRaycasts : Component
     {
         private bool initiated;
         private Vector2[] leftOrigins, topOrigins, rightOrigins, botOrigins;

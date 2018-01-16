@@ -100,6 +100,8 @@ namespace UU_GameProject
             robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
+            robotBoss.AddComponent(new CFaction("enemy"));
+            robotBoss.AddComponent(new CMeleeAttack());
             robotBoss.Pos = new Vector2(12.5f, 2f);
             robotBoss.Size = new Vector2(0.5f, 1f);
             
@@ -113,7 +115,7 @@ namespace UU_GameProject
             respawn1.Pos = new Vector2(14, 2);
             respawn1.AddComponent(new CAABB());
             respawn1.AddComponent(new CRender("suprise"));
-            GameObject enemy0 = new GameObject("Nenemy", this, 2);
+            /*GameObject enemy0 = new GameObject("Nenemy", this, 2);
             enemy0.AddComponent(new CRender("player"));
             enemy0.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy0.AddComponent(new CHealthPool(50));
@@ -139,7 +141,7 @@ namespace UU_GameProject
             enemy2.AddComponent(new CMeleeAttack());
             enemy2.AddComponent(new CFaction("enemy"));
             enemy2.Pos = new Vector2(2.5f, 5.0f);
-            enemy2.Size = new Vector2(0.5f, 1.0f);
+            enemy2.Size = new Vector2(0.5f, 1.0f);*/
             //testing
             /*GameObject floor = new GameObject("stone", this, 2, true);
             floor.Pos = new Vector2(-100, 8);
@@ -150,9 +152,9 @@ namespace UU_GameProject
             testDoor.Pos = new Vector2(-4f, 8f - 5f);
             testDoor.Size = new Vector2(1f, 5f);
             testDoor.AddComponent(new CGrowingDoor());
-            //Debug.FullDebugMode();
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
+            //Debug.FullDebugMode();
         }
         
         public override void Unload() { }
@@ -193,9 +195,6 @@ namespace UU_GameProject
                 else Debug.ProfilingMode();
             }
 
-            if (shakeTime > 0)
-                ShakeCamera(strength, time);
-
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
             if (Input.GetKey(PressAction.PRESSED, Keys.C))
@@ -209,33 +208,6 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
-        }
-
-        private Vector2 returnPos;
-        private float shakeTime = 0;
-        private int strength;
-
-        private void ShakeCamera(int strength, float time)
-        {
-            shakeTime -= time;
-            Console.WriteLine(strength);
-            Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos + Math.Min((.1f + shakeTime), 2) * new Vector2(MathH.random.Next(-strength, strength), MathH.random.Next(-strength, strength))));
-            if (shakeTime <= 0)
-            {
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos));
-            }
-        }
-
-        public void ShakeCamera(float shakeTime, int strength)
-        {
-            if(this.shakeTime <= 0 || strength > this.strength)
-            {
-                this.strength = strength;
-                this.shakeTime = shakeTime;
-                
-                if(!(strength > this.strength))
-                    returnPos = Camera.TopLeft;
-            }
         }
     }
 }
