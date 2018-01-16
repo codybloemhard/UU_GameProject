@@ -97,7 +97,7 @@ namespace UU_GameProject
             robotBoss.AddComponent(new CRender("player"));
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(50, robotBoss));
+            robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.Pos = new Vector2(12.5f, 2f);
