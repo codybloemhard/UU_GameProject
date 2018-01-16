@@ -32,7 +32,6 @@ namespace UU_GameProject
         public static bool HasExtension(string s, string extension)
         {
             string ex = "";
-            bool read = true;
             for(int i = s.Length - 1; i >= 0; i--)
             {
                 if (s[i] == '.') break;

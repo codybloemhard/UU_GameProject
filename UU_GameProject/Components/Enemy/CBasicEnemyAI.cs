@@ -20,7 +20,6 @@ namespace UU_GameProject
         protected GameObject player;
         protected bool leftBlocked { get; private set; }
         protected bool rightBlocked { get; private set; }
-
         protected ENEMY type;
         protected float turnTime;
         protected float damage = 0;
@@ -50,9 +49,7 @@ namespace UU_GameProject
                 magicChange = -1;
             }
             else if (type == ENEMY.MAGIC)
-            {
                 speed = maxSpeed;
-            }
             else
             {
                 speed = maxSpeed * 1.1f;
@@ -72,10 +69,9 @@ namespace UU_GameProject
             CheckSides();
             fsm.Update();
         }
-
+        //patrolling a platform.
         protected void IdleBehaviour()
         {
-            //Passive movement behaviour, patrolling a platform.
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
             RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
@@ -114,11 +110,7 @@ namespace UU_GameProject
             if (magicChange > 0)
             {
                 int r = (int)(MathH.random.NextDouble() * magicChange);
-                if (r == 0)
-                {
-                    Console.WriteLine("used");
-                    return true;
-                }
+                if (r == 0) return true;
             }
             return false;
         }

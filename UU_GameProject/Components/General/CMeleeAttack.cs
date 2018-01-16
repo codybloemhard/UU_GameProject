@@ -10,11 +10,6 @@ namespace UU_GameProject
     {
         public CMeleeAttack() : base() { }
 
-        public override void Update(float time)
-        {
-            base.Update(time);
-        }
-
         public void Melee(Vector2 dir, Vector2 dimensions, float duration, float damage, bool potionous, string caller, string Faction)
         {
             GameObject meleeDamageArea = new GameObject("meleeDamageArea" + GO.tag, GO.Context, 0);

@@ -308,7 +308,6 @@ namespace UU_GameProject
             newmid.X = (int)Math.Floor(newmid.X);
             newmid.Y = (int)Math.Floor(newmid.Y);
             if (newmid == middle) return;
-            Console.WriteLine("Chunk change!");
             newloaded.Clear();//set new chunks that need to be
             for (int x = 0; x < 3; x++)
                 for (int y = 0; y < 3; y++)
@@ -351,10 +350,7 @@ namespace UU_GameProject
                         break;
                     }
                 }
-                if (!found)
-                {
-                    loaded[i].action = ChunkAction.DESTROY;
-                }
+                if (!found) loaded[i].action = ChunkAction.DESTROY;
             }
         }
         
@@ -387,8 +383,7 @@ namespace UU_GameProject
         private LoadedChunk GetLoadedChunk(int x, int y)
         {
             for (int i = 0; i < loaded.Count; i++)
-                if (loaded[i].IsChunk(x, y))
-                    return loaded[i];
+                if (loaded[i].IsChunk(x, y)) return loaded[i];
             return null;
         }
     }

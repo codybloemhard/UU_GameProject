@@ -20,19 +20,9 @@ namespace UU_GameProject
         {
             CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Red;
-        }
-
-        public override void Update(float time)
-        {
-            base.Update(time);
-            Timers.Add("DamageAreaLifespan", duration, Destroy);
+            Timers.Add("lightningDuration", duration, () => GO.Destroy());
         }
 
         public override void OnCollision(GameObject other) { }
-
-        public void Destroy()
-        {
-            GO.Destroy();
-        }
     }
 }

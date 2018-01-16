@@ -11,7 +11,6 @@ C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\De
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\playerFallPanicSimple.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\playerMeleeSimple.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\playerSlidingSimple.xnb
-C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\playerWalkingSimple.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\smallFont.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\suprise.xnb
 C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\UU_GameProject.exe
@@ -116,3 +115,11 @@ C:\Users\Joria\OneDrive\Documents\GitHub\UU_GameProject\UU_GameProject\bin\Windo
 C:\Users\Joria\OneDrive\Documents\GitHub\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_GameProject.csprojResolveAssemblyReference.cache
 C:\Users\Joria\OneDrive\Documents\GitHub\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_GameProject.exe
 C:\Users\Joria\OneDrive\Documents\GitHub\UU_GameProject\UU_GameProject\obj\x86\Debug\UU_GameProject.pdb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Airborne_Left.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Airborne_Right.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Running_Left.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Running_Right.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Standing_Left.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Standing_Right.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Wall_Sliding_Left.xnb
+C:\Users\cblmh\Desktop\_GITHUB_\UU_GameProject\UU_GameProject\bin\Windows\x86\Debug\Content\Player_Wall_Sliding_Right.xnb
