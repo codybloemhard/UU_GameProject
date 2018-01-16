@@ -11,7 +11,7 @@ namespace UU_GameProject
 
         public void Shoot(Vector2 dir, Vector2 size, Vector2 speed, string Faction, float damage, bool potionous)
         {
-            GameObject bullet = new GameObject("bullet", GO.Context, 0);
+            GameObject bullet = new GameObject(GO.tag + "bullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
             bullet.AddComponent(new CBulletMovement(6 + Math.Abs(speed.X), dir, damage, potionous));
             bullet.AddComponent(new CAABB());
