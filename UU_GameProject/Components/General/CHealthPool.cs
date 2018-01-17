@@ -46,16 +46,21 @@ namespace UU_GameProject
             CDamageDealer comp = other.GetComponent<CDamageDealer>();
             if (comp == null) return;
             bool applPotion = comp.Potionous;
-            if (other.tag.Contains("bullet"))
+            if (other.tag.Contains("exploBullet"))
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            if (other.tag.Contains("meleeDamageArea"))
+            else if (other.tag.Contains("bullet"))
+            {
+                ChangeHealth(comp.Damage, false);
+                other.Destroy();
+            }
+            else if(other.tag.Contains("meleeDamageArea"))
                 ChangeHealth(comp.Damage, true);
-            if (other.tag.Contains("lightningStrike"))
+            else if(other.tag.Contains("lightningStrike"))
                 ChangeHealth(comp.Damage, true);
-            if (other.tag.Contains("fireball"))
+            else if(other.tag.Contains("fireball"))
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();

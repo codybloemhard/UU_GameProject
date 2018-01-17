@@ -90,17 +90,29 @@ namespace UU_GameProject
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             
-            GameObject cyborgBoss = new GameObject("robotboss", this, 2);
-            cyborgBoss.AddComponent(new CRender("player"));
-            cyborgBoss.AddComponent(new CRobotBoss(3));
-            cyborgBoss.AddComponent(new CRaycasts());
-            cyborgBoss.AddComponent(new CHealthPool(50));
-            cyborgBoss.AddComponent(new CDamageDealer(50, false));
-            cyborgBoss.AddComponent(new CAABB());
-            cyborgBoss.AddComponent(new CShoot());
-            cyborgBoss.Pos = new Vector2(12.5f, 2f);
-            cyborgBoss.Size = new Vector2(0.5f, 1f);
-            
+            //GameObject cyborgBoss = new GameObject("robotboss", this, 2);
+            //cyborgBoss.AddComponent(new CRender("player"));
+            //cyborgBoss.AddComponent(new CRobotBoss(3));
+            //cyborgBoss.AddComponent(new CRaycasts());
+            //cyborgBoss.AddComponent(new CHealthPool(50));
+            //cyborgBoss.AddComponent(new CDamageDealer(50, false));
+            //cyborgBoss.AddComponent(new CAABB());
+            //cyborgBoss.AddComponent(new CShoot());
+            //cyborgBoss.Pos = new Vector2(12.5f, 2f);
+            //cyborgBoss.Size = new Vector2(0.5f, 1f);
+
+            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
+            robotBoss.AddComponent(new CRender("player"));
+            robotBoss.AddComponent(new CRobotBoss(3));
+            robotBoss.AddComponent(new CRaycasts());
+            robotBoss.AddComponent(new CHealthPool(50));
+            robotBoss.AddComponent(new CAABB());
+            robotBoss.AddComponent(new CShoot());
+            robotBoss.AddComponent(new CFaction("enemy"));
+            robotBoss.AddComponent(new CMeleeAttack());
+            robotBoss.Pos = new Vector2(12.5f, 2f);
+            robotBoss.Size = new Vector2(0.5f, 1f);
+
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
             respawn0.Size = new Vector2(0.5f, 1);
             respawn0.Pos = new Vector2(0, 7);
@@ -112,6 +124,34 @@ namespace UU_GameProject
             respawn1.AddComponent(new CAABB());
             respawn1.AddComponent(new CRender("suprise"));
 
+            /*GameObject enemy0 = new GameObject("Nenemy", this, 2);
+            enemy0.AddComponent(new CRender("player"));
+            enemy0.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
+            enemy0.AddComponent(new CHealthPool(50));
+            enemy0.AddComponent(new CAABB());
+            enemy0.AddComponent(new CMeleeAttack());
+            enemy0.AddComponent(new CFaction("enemy"));
+            enemy0.Pos = new Vector2(12.5f, 7f);
+            enemy0.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy1 = new GameObject("Renemy", this, 2);
+            enemy1.AddComponent(new CRender("player"));
+            enemy1.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
+            enemy1.AddComponent(new CHealthPool(25));
+            enemy1.AddComponent(new CAABB());
+            enemy1.AddComponent(new CShoot());
+            enemy1.AddComponent(new CFaction("enemy"));
+            enemy1.Pos = new Vector2(9.5f, 4.0f);
+            enemy1.Size = new Vector2(0.5f, 1.0f);
+            GameObject enemy2 = new GameObject("Aenemy", this, 2);
+            enemy2.AddComponent(new CRender("player"));
+            enemy2.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
+            enemy2.AddComponent(new CHealthPool(1));
+            enemy2.AddComponent(new CAABB());
+            enemy2.AddComponent(new CMeleeAttack());
+            enemy2.AddComponent(new CFaction("enemy"));
+            enemy2.Pos = new Vector2(2.5f, 5.0f);
+            enemy2.Size = new Vector2(0.5f, 1.0f);*/
+
             //testing
             /*GameObject floor = new GameObject("stone", this, 2, true);
             floor.Pos = new Vector2(-100, 8);
@@ -122,9 +162,9 @@ namespace UU_GameProject
             testDoor.Pos = new Vector2(-4f, 8f - 5f);
             testDoor.Size = new Vector2(1f, 5f);
             testDoor.AddComponent(new CGrowingDoor());
-            //Debug.FullDebugMode();
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
+            //Debug.FullDebugMode();
         }
         
         public override void Unload() { }
@@ -165,9 +205,6 @@ namespace UU_GameProject
                 else Debug.ProfilingMode();
             }
 
-            if (shakeTime > 0)
-                ShakeCamera(strength, time);
-
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
             if (Input.GetKey(PressAction.PRESSED, Keys.C))
@@ -181,33 +218,6 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
-        }
-
-        private Vector2 returnPos;
-        private float shakeTime = 0;
-        private int strength;
-
-        private void ShakeCamera(int strength, float time)
-        {
-            shakeTime -= time;
-            Console.WriteLine(strength);
-            Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos + Math.Min((.1f + shakeTime), 2) * new Vector2(MathH.random.Next(-strength, strength), MathH.random.Next(-strength, strength))));
-            if (shakeTime <= 0)
-            {
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(returnPos));
-            }
-        }
-
-        public void ShakeCamera(float shakeTime, int strength)
-        {
-            if(this.shakeTime <= 0 || strength > this.strength)
-            {
-                this.strength = strength;
-                this.shakeTime = shakeTime;
-                
-                if(!(strength > this.strength))
-                    returnPos = Camera.TopLeft;
-            }
         }
     }
 }

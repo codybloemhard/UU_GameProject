@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/cblmh/Desktop/_GITHUB_/UU_GameProject/UU_GameProject/Content/cross.png</SourceFile>
-  <SourceTime>2018-01-09T09:24:03.3272194+01:00</SourceTime>
-  <DestFile>C:/Users/cblmh/Desktop/_GITHUB_/UU_GameProject/UU_GameProject/Content/bin/Windows/cross.xnb</DestFile>
-  <DestTime>2018-01-09T17:35:23.3231429+01:00</DestTime>
+  <SourceFile>C:/Users/JB/Documents/Erwin/Gameprogrammeren/GameProject Sajoerma Code/UU_GameProject/UU_GameProject/Content/cross.png</SourceFile>
+  <SourceTime>2018-01-16T10:42:55.0961944+01:00</SourceTime>
+  <DestFile>C:/Users/JB/Documents/Erwin/Gameprogrammeren/GameProject Sajoerma Code/UU_GameProject/UU_GameProject/Content/bin/Windows/cross.xnb</DestFile>
+  <DestTime>2018-01-17T11:05:21.7472049+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

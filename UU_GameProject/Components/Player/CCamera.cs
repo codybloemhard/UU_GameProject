@@ -9,6 +9,9 @@ namespace UU_GameProject
     {
         private Vector2 campos;
         private Vector2 middle = new Vector2(8f, 4.5f);
+        private Vector2 returnPos;
+        private float shakeTime = 0;
+        private float strength;
 
         public CCamera() : base()
         {
@@ -27,7 +30,28 @@ namespace UU_GameProject
             Vector2 move = Lerp(from, to, distx, disty);
             Camera.SetCameraTopLeft(move - middle);
             campos = move;
+            returnPos = move - middle;
+            if (shakeTime > 0)
+                shakeCamera(strength, time);
         }
+
+        private void shakeCamera(float strength, float time)
+        {
+            shakeTime -= time;
+            float a = (float)MathH.random.NextDouble() * strength*2 - strength;
+            float b = (float)MathH.random.NextDouble() * strength * 2 - strength;
+            Vector2 vec = new Vector2(a, b);
+            Camera.SetCameraTopLeft(returnPos + vec);
+        }
+
+        public void ShakeCamera(float shakeTime, float strength)
+        {
+            if (this.shakeTime > 0 && strength < this.strength)
+                return;
+            this.strength = strength;
+            this.shakeTime = shakeTime;
+        }
+
         //math functions not centralized, to be refactored
         public float Lerp(float a, float b, float t)
         {
