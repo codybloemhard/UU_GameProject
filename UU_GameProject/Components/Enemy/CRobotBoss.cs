@@ -215,7 +215,10 @@ namespace UU_GameProject
         private void ShootAtPlayer(Vector2 dir)
         {
             GameObject bullet = new GameObject("explobullet", GO.Context, 0);
-            bullet.AddComponent(new CRender("block"));
+            CAnimatedSprite animBullet = new CAnimatedSprite();
+            animBullet.AddAnimation("bullet", "bullet");
+            animBullet.PlayAnimation("bullet", 4);
+            bullet.AddComponent(animBullet);
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());
             bullet.AddComponent(new CDamageDealer(10, false));
@@ -224,7 +227,7 @@ namespace UU_GameProject
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f + new Vector2(GO.Size.X / 2f + .2f, 0);
             else
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f - new Vector2(GO.Size.X / 2f + .2f, 0);
-            bullet.Size = new Vector2(.2f);
+            bullet.Size = new Vector2(.6f, 0.2f);
         }
 
         public void Explode()
