@@ -42,16 +42,14 @@ namespace UU_GameProject
             base.OnCollision(other);
             if (other.tag.Contains(GO.tag)) return;
             if (other.IsStatic) return;
-            //if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
+            CFaction faction = GO.GetComponent<CFaction>();
+            if (faction == null) return;
+            if (!faction.ClashingFactions(GO, other)) return;
             CDamageDealer comp = other.GetComponent<CDamageDealer>();
             if (comp == null) return;
             bool applPotion = comp.Potionous;
-            if (other.tag.Contains("exploBullet"))
-            {
-                ChangeHealth(comp.Damage, false);
-                other.Destroy();
-            }
-            else if (other.tag.Contains("bullet"))
+            
+            if (other.tag == "bullet")
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
@@ -65,17 +63,18 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            if (other.tag == "cyborgboss")
+            else if (other.tag == "cyborgboss")
                 ChangeHealth(comp.Damage, true);
-            if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Crushing)
-                ChangeHealth(comp.Damage, true);
-            if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Chasing)
+            else if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Chasing)
                 other.GetComponent<CRobotBoss>().Explode();
-            if (other.tag.Contains("explobullet"))
-                other.GetComponent<CHeatSeakingBullet>().Explode();
-            if (other.tag.Contains("explosion"))
+            else if (other.tag.Contains("explobullet"))
+            {
                 ChangeHealth(comp.Damage, false);
-            if (other.tag.Contains("chase"))
+                other.Destroy();
+            }
+            else if (other.tag.Contains("explosion"))
+                ChangeHealth(comp.Damage, false);
+            else if (other.tag.Contains("chase"))
                 ChangeHealth(comp.Damage, true);
 
             if (applPotion) HealOverTime(4f, 10f);

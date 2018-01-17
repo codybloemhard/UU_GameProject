@@ -198,7 +198,7 @@ namespace UU_GameProject
         
         private void ShootAtPlayer(Vector2 dir)
         {
-            GameObject bullet = new GameObject(GO.tag + "explobullet", GO.Context, 0);
+            GameObject bullet = new GameObject("explobullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());

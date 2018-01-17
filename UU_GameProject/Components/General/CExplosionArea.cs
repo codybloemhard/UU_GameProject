@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
-    class CExplosionArea : Component
+    public class CExplosionArea : Component
     {
         private int destroy = 0; 
 
