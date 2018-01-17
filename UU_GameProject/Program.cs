@@ -49,6 +49,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("robotBossWalking", "Spider_Boss_Walking", 2, 1);
             TextureManager.LoadTexture("robotBossFlying", "Spider_Boss_Flying", 2, 1);
             TextureManager.LoadTexture("robotBossFalling", "Spider_Boss_Falling", 2, 1);
+            TextureManager.LoadTexture("bullet", "Bullet", 2, 1);
             TextureManager.LoadTexture("repeat", "block", 0, 0);
             AudioManager.LoadTrack("moonlightsonata", "beethoven");
             AudioManager.LoadEffect("jump", "jump");
