@@ -12,6 +12,7 @@ namespace UU_GameProject
     public class CRobotBoss : Component
     {
         private GameObject player;
+        private CAnimatedSprite animationBoss;
         private CCamera camera;
         private CMeleeAttack melee;
         private CRaycasts cRaycasts;
@@ -22,7 +23,7 @@ namespace UU_GameProject
         private bool movingRight, crushing, chasing;
         private float speed, gravity = 10f, jetpackPower = 10, acceleration = 5f, maxYSpeed = 3,crushSpeed = 20f, turningSpeed = 3;
         private float ctime, shootDelay = 1f, shootTime, crushDelay = 5, crushTime, changeDelay = 5, changeTime, chaseTime, chaseMax = 5, chaseSpeedIncrease;
-        private bool grounded;
+        private bool grounded, falling;
 
         public CRobotBoss(float speed)
         {
@@ -34,6 +35,7 @@ namespace UU_GameProject
         {
             initiated = true;
             Renderer render = GO.Renderer;
+            animationBoss = GO.Renderer as CAnimatedSprite;
             cRaycasts = GO.GetComponent<CRaycasts>();
             player = GO.FindWithTag("player");
             Vector2 difference = player.Pos + player.Size / 2 - (GO.Pos + GO.Size / 2);
@@ -51,6 +53,14 @@ namespace UU_GameProject
         {
             chasing = false;
             if (!initiated) InitRobot();
+
+            else if (fsm.CurrentState == "fly" && falling)
+                animationBoss.PlayAnimationIfDifferent("flying", 4);
+            else if (fsm.CurrentState == "fly" && !falling)
+                animationBoss.PlayAnimationIfDifferent("falling", 4);
+            else
+                animationBoss.PlayAnimationIfDifferent("walking", 2);
+
             difference = player.Pos + player.Size / 2 - (GO.Pos + GO.Size / 2);
             fsm.Update();
             ctime = time;
@@ -146,9 +156,15 @@ namespace UU_GameProject
                     velocity.Y = 0;
 
                 if (cRaycasts.DistanceToFloor > 2f && velocity.Y < maxYSpeed)
+                {
+                    falling = false;
                     velocity.Y += gravity * ctime;
+                }
                 else if (velocity.Y > -maxYSpeed)
+                {
+                    falling = true;
                     velocity.Y -= jetpackPower * ctime;
+                }
 
                 if (shootTime > 0)
                     shootTime -= ctime;

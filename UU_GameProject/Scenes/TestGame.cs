@@ -102,7 +102,7 @@ namespace UU_GameProject
             //cyborgBoss.Size = new Vector2(0.5f, 1f);
 
             GameObject robotBoss = new GameObject("RobotBoss", this, 2);
-            robotBoss.AddComponent(new CRender("player"));
+            CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
             robotBoss.AddComponent(new CHealthPool(50));
@@ -110,8 +110,13 @@ namespace UU_GameProject
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
             robotBoss.AddComponent(new CMeleeAttack());
+            animBoss.AddAnimation("walking", "robotBossWalking");
+            animBoss.AddAnimation("flying", "robotBossFlying");
+            animBoss.AddAnimation("falling", "robotBossFalling");
+            animBoss.PlayAnimation("walking", 2);
+            robotBoss.AddComponent(animBoss);
             robotBoss.Pos = new Vector2(12.5f, 2f);
-            robotBoss.Size = new Vector2(0.5f, 1f);
+            robotBoss.Size = new Vector2(3f, 3f);
 
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
             respawn0.Size = new Vector2(0.5f, 1);

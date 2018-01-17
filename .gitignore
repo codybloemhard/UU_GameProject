@@ -288,3 +288,4 @@ __pycache__/
 *.mgcontent
 UU_GameProject/Content/obj/Windows/.mgcontent
 UU_GameProject/Content/obj/Windows/.mgcontent
+*.mgcontent
