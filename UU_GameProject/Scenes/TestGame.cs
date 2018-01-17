@@ -158,11 +158,11 @@ namespace UU_GameProject
             enemy2.Size = new Vector2(0.5f, 1.0f);*/
 
             //testing
-            /*GameObject floor = new GameObject("stone", this, 2, true);
+            GameObject floor = new GameObject("stone", this, 2, true);
             floor.Pos = new Vector2(-100, 8);
             floor.Size = new Vector2(100, 1);
             floor.AddComponent(new CRender("block"));
-            floor.AddComponent(new CAABB());*/
+            floor.AddComponent(new CAABB());
             GameObject testDoor = new GameObject("bossdoor", this, 0, true);
             testDoor.Pos = new Vector2(-4f, 8f - 5f);
             testDoor.Size = new Vector2(1f, 5f);

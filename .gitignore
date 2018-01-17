@@ -286,6 +286,6 @@ __pycache__/
 *.pdb
 *.cache
 *.mgcontent
-UU_GameProject/Content/obj/Windows/.mgcontent
-UU_GameProject/Content/obj/Windows/.mgcontent
-*.mgcontent
+.vs/UU_GameProject/v14/.suo
+UU_GameProject/Content/obj
+UU_GameProject/Content/bin
