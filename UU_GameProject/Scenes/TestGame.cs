@@ -36,30 +36,26 @@ namespace UU_GameProject
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
             //Objects
             GameObject stone0 = new GameObject("stone", this, 2, true);
-            stone0.Pos = new Vector2(0, 8);
+            stone0.Pos = new Vector2(0);
             stone0.Size = new Vector2(16, 1);
             stone0.AddComponent(new CRender("block"));
             stone0.AddComponent(new CAABB());
             GameObject stone1 = new GameObject("stone", this, 2, true);
-            stone1.Pos = new Vector2(9, 7);
-            stone1.Size = new Vector2(2, 2);
+            stone1.Pos = new Vector2(0);
+            stone1.Size = new Vector2(1, 9);
             stone1.AddComponent(new CRender("block"));
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
-            stone2.Pos = new Vector2(8, 5);
-            stone2.Size = new Vector2(3, 0.3f);
+            stone2.Pos = new Vector2(15, 0);
+            stone2.Size = new Vector2(1, 9);
             stone2.AddComponent(new CRender("block"));
             stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
-            stone3.Pos = new Vector2(12, 3);
-            stone3.Size = new Vector2(3, 0.3f);
+            stone3.Pos = new Vector2(0, 8);
+            stone3.Size = new Vector2(16, 1f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
-            GameObject stone4 = new GameObject("stone", this, 2, true);
-            stone4.Pos = new Vector2(2, 4);
-            stone4.Size = new Vector2(3, 0.3f);
-            stone4.AddComponent(new CRender("block"));
-            stone4.AddComponent(new CAABB());
+
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -85,6 +81,7 @@ namespace UU_GameProject
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CMeleeAttack());
+            player.AddComponent(new CDamageDealer(50, false));
             player.AddComponent(healthpool);
             player.AddComponent(manapool);
             player.AddComponent(magicness);
@@ -93,15 +90,16 @@ namespace UU_GameProject
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             
-            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
-            robotBoss.AddComponent(new CRender("player"));
-            robotBoss.AddComponent(new CRobotBoss(3));
-            robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(50));
-            robotBoss.AddComponent(new CAABB());
-            robotBoss.AddComponent(new CShoot());
-            robotBoss.Pos = new Vector2(12.5f, 2f);
-            robotBoss.Size = new Vector2(0.5f, 1f);
+            GameObject cyborgBoss = new GameObject("robotboss", this, 2);
+            cyborgBoss.AddComponent(new CRender("player"));
+            cyborgBoss.AddComponent(new CRobotBoss(3));
+            cyborgBoss.AddComponent(new CRaycasts());
+            cyborgBoss.AddComponent(new CHealthPool(50));
+            cyborgBoss.AddComponent(new CDamageDealer(50, false));
+            cyborgBoss.AddComponent(new CAABB());
+            cyborgBoss.AddComponent(new CShoot());
+            cyborgBoss.Pos = new Vector2(12.5f, 2f);
+            cyborgBoss.Size = new Vector2(0.5f, 1f);
             
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
             respawn0.Size = new Vector2(0.5f, 1);
@@ -113,33 +111,7 @@ namespace UU_GameProject
             respawn1.Pos = new Vector2(14, 2);
             respawn1.AddComponent(new CAABB());
             respawn1.AddComponent(new CRender("suprise"));
-            GameObject enemy0 = new GameObject("Nenemy", this, 2);
-            enemy0.AddComponent(new CRender("player"));
-            enemy0.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
-            enemy0.AddComponent(new CHealthPool(50));
-            enemy0.AddComponent(new CAABB());
-            enemy0.AddComponent(new CMeleeAttack());
-            enemy0.AddComponent(new CFaction("enemy"));
-            enemy0.Pos = new Vector2(12.5f, 7f);
-            enemy0.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy1 = new GameObject("Renemy", this, 2);
-            enemy1.AddComponent(new CRender("player"));
-            enemy1.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
-            enemy1.AddComponent(new CHealthPool(25));
-            enemy1.AddComponent(new CAABB());
-            enemy1.AddComponent(new CShoot());
-            enemy1.AddComponent(new CFaction("enemy"));
-            enemy1.Pos = new Vector2(9.5f, 4.0f);
-            enemy1.Size = new Vector2(0.5f, 1.0f);
-            GameObject enemy2 = new GameObject("Aenemy", this, 2);
-            enemy2.AddComponent(new CRender("player"));
-            enemy2.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
-            enemy2.AddComponent(new CHealthPool(1));
-            enemy2.AddComponent(new CAABB());
-            enemy2.AddComponent(new CMeleeAttack());
-            enemy2.AddComponent(new CFaction("enemy"));
-            enemy2.Pos = new Vector2(2.5f, 5.0f);
-            enemy2.Size = new Vector2(0.5f, 1.0f);
+
             //testing
             /*GameObject floor = new GameObject("stone", this, 2, true);
             floor.Pos = new Vector2(-100, 8);

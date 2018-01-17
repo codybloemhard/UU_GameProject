@@ -83,6 +83,7 @@ namespace UU_GameProject
             explosion.Renderer.colour = Color.Red;
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
+            explosion.AddComponent(new CDamageDealer(20, false));
             explosion.Size = new Vector2(.8f);
             explosion.Pos = GO.Pos + GO.Size / 2 - explosion.Size/2;
             GO.Destroy();

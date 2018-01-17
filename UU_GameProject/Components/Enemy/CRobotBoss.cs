@@ -202,7 +202,7 @@ namespace UU_GameProject
 
         private void ShootAtPlayer(Vector2 dir)
         {
-            GameObject bullet = new GameObject(GO.tag + "exploBullet", GO.Context, 0);
+            GameObject bullet = new GameObject(GO.tag + "explobullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());
@@ -215,12 +215,12 @@ namespace UU_GameProject
 
         public void Explode()
         {
-            Console.WriteLine("yeah");
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);
             explosion.AddComponent(new CRender("block"));
             explosion.Renderer.colour = Color.Red;
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
+            explosion.AddComponent(new CDamageDealer(50, false));
             explosion.Size = new Vector2(1.8f);
             explosion.Pos = GO.Pos + GO.Size / 2 - explosion.Size / 2;
             ChangeFSM(true);
