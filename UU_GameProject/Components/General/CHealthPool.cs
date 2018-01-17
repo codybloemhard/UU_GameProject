@@ -42,7 +42,7 @@ namespace UU_GameProject
             base.OnCollision(other);
             if (other.tag.Contains(GO.tag)) return;
             if (other.IsStatic) return;
-            if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
+            //if (!GO.GetComponent<CFaction>().ClashingFactions(GO, other)) return;
             CDamageDealer comp = other.GetComponent<CDamageDealer>();
             if (comp == null) return;
             bool applPotion = comp.Potionous;
@@ -65,6 +65,19 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
+            if (other.tag == "cyborgboss")
+                ChangeHealth(comp.Damage, true);
+            if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Crushing)
+                ChangeHealth(comp.Damage, true);
+            if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Chasing)
+                other.GetComponent<CRobotBoss>().Explode();
+            if (other.tag.Contains("explobullet"))
+                other.GetComponent<CHeatSeakingBullet>().Explode();
+            if (other.tag.Contains("explosion"))
+                ChangeHealth(comp.Damage, false);
+            if (other.tag.Contains("chase"))
+                ChangeHealth(comp.Damage, true);
+
             if (applPotion) HealOverTime(4f, 10f);
         }
 
@@ -116,6 +129,8 @@ namespace UU_GameProject
         {
             if (GO.tag.Contains("player"))
                 GO.GetComponent<CPlayerMovement>().Reset();
+            else if (GO.tag.Contains("cyborgboss"))
+                GO.GetComponent<CCyborgBoss>().Split();
             else
             {
                 GO.Destroy();

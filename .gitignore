@@ -287,3 +287,5 @@ __pycache__/
 *.cache
 *.mgcontent
 .vs/UU_GameProject/v14/.suo
+UU_GameProject/Content/obj
+UU_GameProject/Content/obj
