@@ -283,7 +283,7 @@ namespace UU_GameProject
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
                 magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
-                magicness.Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, faction.GetFaction());
+                magicness.Lightning(new Vector2(1.5f, 1.5f), 0.1f, GO.tag, faction.GetFaction());
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
                 magicness.Heal();
             if (Input.GetKey(PressAction.PRESSED, Keys.E))

@@ -45,7 +45,7 @@ namespace UU_GameProject
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
             fireball.Size = size;
             fireball.AddComponent(new CRender("block"));
-            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir, 1f, false));
+            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir, 10, false));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");

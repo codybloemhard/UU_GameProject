@@ -40,11 +40,11 @@ namespace UU_GameProject
             stone0.Size = new Vector2(16, 1);
             stone0.AddComponent(new CRender("block"));
             stone0.AddComponent(new CAABB());
-            /*GameObject stone1 = new GameObject("stone", this, 2, true);
+            GameObject stone1 = new GameObject("stone", this, 2, true);
             stone1.Pos = new Vector2(0);
             stone1.Size = new Vector2(1, 9);
             stone1.AddComponent(new CRender("block"));
-            stone1.AddComponent(new CAABB());*/
+            stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(15, 0);
             stone2.Size = new Vector2(1, 9);
@@ -89,34 +89,34 @@ namespace UU_GameProject
             player.AddComponent(new CCamera());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            
-            //GameObject cyborgBoss = new GameObject("robotboss", this, 2);
-            //cyborgBoss.AddComponent(new CRender("player"));
-            //cyborgBoss.AddComponent(new CRobotBoss(3));
-            //cyborgBoss.AddComponent(new CRaycasts());
-            //cyborgBoss.AddComponent(new CHealthPool(50));
-            //cyborgBoss.AddComponent(new CDamageDealer(50, false));
-            //cyborgBoss.AddComponent(new CAABB());
-            //cyborgBoss.AddComponent(new CShoot());
-            //cyborgBoss.Pos = new Vector2(12.5f, 2f);
-            //cyborgBoss.Size = new Vector2(0.5f, 1f);
 
-            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
-            CAnimatedSprite animBoss = new CAnimatedSprite();
-            robotBoss.AddComponent(new CRobotBoss(3));
-            robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(50));
-            robotBoss.AddComponent(new CAABB());
-            robotBoss.AddComponent(new CShoot());
-            robotBoss.AddComponent(new CFaction("enemy"));
-            robotBoss.AddComponent(new CMeleeAttack());
-            animBoss.AddAnimation("walking", "robotBossWalking");
-            animBoss.AddAnimation("flying", "robotBossFlying");
-            animBoss.AddAnimation("falling", "robotBossFalling");
-            animBoss.PlayAnimation("walking", 2);
-            robotBoss.AddComponent(animBoss);
-            robotBoss.Pos = new Vector2(12.5f, 2f);
-            robotBoss.Size = new Vector2(3f, 3f);
+            GameObject mageBoss = new GameObject("mageboss", this, 2);
+            mageBoss.AddComponent(new CRender("block"));
+            mageBoss.AddComponent(new CAABB());
+            mageBoss.AddComponent(new CMageBoss());
+            mageBoss.AddComponent(new CDamageDealer(50, false));
+            mageBoss.AddComponent(new CRaycasts());
+            mageBoss.AddComponent(new CHealthPool(50));
+            mageBoss.AddComponent(new CFaction("enemy"));
+            mageBoss.Pos = new Vector2(10f, 2f);
+            mageBoss.Size = new Vector2(1f, 1f);
+
+            //GameObject robotBoss = new GameObject("RobotBoss", this, 2);
+            //CAnimatedSprite animBoss = new CAnimatedSprite();
+            //robotBoss.AddComponent(new CRobotBoss(3));
+            //robotBoss.AddComponent(new CRaycasts());
+            //robotBoss.AddComponent(new CHealthPool(50));
+            //robotBoss.AddComponent(new CAABB());
+            //robotBoss.AddComponent(new CShoot());
+            //robotBoss.AddComponent(new CFaction("enemy"));
+            //robotBoss.AddComponent(new CMeleeAttack());
+            //animBoss.AddAnimation("walking", "robotBossWalking");
+            //animBoss.AddAnimation("flying", "robotBossFlying");
+            //animBoss.AddAnimation("falling", "robotBossFalling");
+            //animBoss.PlayAnimation("walking", 2);
+            //robotBoss.AddComponent(animBoss);
+            //robotBoss.Pos = new Vector2(12.5f, 2f);
+            //robotBoss.Size = new Vector2(3f, 3f);
 
             GameObject respawn0 = new GameObject("checkpoint", this, 2);
             respawn0.Size = new Vector2(0.5f, 1);
@@ -209,6 +209,10 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+
+            if (Input.GetKey(PressAction.PRESSED, Keys.V))
+                foreach(GameObject obj in objects.FindAllWithTag("cyborgboss"))
+                    obj.GetComponent<CCyborgBoss>().Split();
 
             if(Input.GetKey(PressAction.PRESSED, Keys.X))
                 objects.FindWithTag("bossdoor").GetComponent<CGrowingDoor>().Close();
