@@ -94,6 +94,14 @@ namespace UU_GameProject
                 input.obj.size = new Vector2(h);
                 GetBlocks(list, input, baset, layert0, layert1, topt);
             }
+            if(leftover > 0f)
+            {
+                ReplacerInput input = new ReplacerInput();
+                input = i;
+                input.obj.pos = i.obj.pos + new Vector2((ratio) * h, 0f);
+                input.obj.size = new Vector2(leftover, h);
+                GetBlocks(list, input, baset, layert0, layert1, topt);
+            }
             return list.ToArray();
         }
 
