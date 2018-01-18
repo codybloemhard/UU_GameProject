@@ -12,7 +12,7 @@ namespace UU_GameProject
         public TestGame() : base() { }
 
         private UITextureElement healthbar, manabar, fitness, healing, lightning;
-        private GameObject player;
+        private GameObject player, playerWeapon;
         private CMagicness magicness;
         private CHealthPool healthpool;
         private CManaPool manapool;
@@ -55,6 +55,16 @@ namespace UU_GameProject
             stone3.Size = new Vector2(16, 1f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
+
+            playerWeapon = new GameObject("playerWeapon", this, 0);
+            CAnimatedSprite animWeapon = new CAnimatedSprite();
+            animWeapon.AddAnimation("weaponNormal", "playerWeapon");
+            animWeapon.AddAnimation("weaponFire", "playerWeaponLit");
+            animWeapon.AddAnimation("weaponLightning", "playerWeaponLightning");
+            animWeapon.PlayAnimation("weaponNormal", 2);
+            playerWeapon.AddComponent(animWeapon);
+            playerWeapon.Pos = new Vector2(1, 1);
+            playerWeapon.Size = new Vector2(0.25f, 1);
 
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
