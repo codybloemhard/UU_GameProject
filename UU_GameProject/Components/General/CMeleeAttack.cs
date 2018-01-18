@@ -10,10 +10,10 @@ namespace UU_GameProject
     {
         public CMeleeAttack() : base() { }
 
+        //creates an area in which objects from opposing factions recieve damage
         public void Melee(Vector2 dir, Vector2 dimensions, float duration, float damage, bool potionous, string caller, string Faction)
         {
             GameObject meleeDamageArea = new GameObject("meleeDamageArea" + GO.tag, GO.Context, 0);
-            meleeDamageArea.AddComponent(new CRender("block"));
             meleeDamageArea.AddComponent(new CDamageArea(dir, duration, caller, damage, potionous));
             meleeDamageArea.AddComponent(new CAABB());
             meleeDamageArea.AddComponent(new CFaction(Faction));

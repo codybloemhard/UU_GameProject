@@ -72,7 +72,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag == "stone")
+            if (other.tag == "solid")
                 Explode();
         }
 

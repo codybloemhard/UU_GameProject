@@ -28,9 +28,12 @@ namespace UU_GameProject
             Vector2 to = target;
             Vector2 from = campos;
             Vector2 move = Lerp(from, to, distx, disty);
-            Camera.SetCameraTopLeft(move - middle);
-            campos = move;
-            returnPos = move - middle;
+            if ((campos - move).Length() > 0.001f)
+            {
+                Camera.SetCameraTopLeft(move - middle);
+                campos = move;
+                returnPos = move - middle;
+            }
             if (shakeTime > 0)
                 shakeCamera(strength, time);
         }

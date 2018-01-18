@@ -86,14 +86,15 @@ namespace UU_GameProject
             if (grabbed)
             {
                 if (!axisAligned)
-                    GO.Pos = new Vector2(Math.Max(Math.Min(mousePos.X - grabPoint.X, 16), 0), Math.Max(Math.Min(mousePos.Y - grabPoint.Y, 16), 0));
+                    GO.Pos = new Vector2(Math.Max(Math.Min(mousePos.X - grabPoint.X, 16 - GO.Size.X), 0), Math.Max(Math.Min(mousePos.Y - grabPoint.Y, 16 - GO.Size.Y), 0));
                 else
-                    GO.Pos = new Vector2(Math.Max(Math.Min((int)(mousePos.X*precision) - (int)(grabPoint.X* precision), 16), 0), Math.Max(Math.Min((int)(mousePos.Y* precision) - (int)(grabPoint.Y* precision), 16), 0))/ precision;
+                    GO.Pos = new Vector2(Math.Max(Math.Min((int)(mousePos.X*precision) - (int)(grabPoint.X* precision), 16 - GO.Size.X), 0), Math.Max(Math.Min((int)(mousePos.Y* precision) - (int)(grabPoint.Y* precision), 16 - GO.Size.Y), 0))/ precision;
             }
         }
 
-        protected void Destroy()
+        public void Destroy()
         {
+            Console.WriteLine("destroyed");
             GO.Destroy();
             properties.Destroy();
         }

@@ -32,6 +32,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
             TextureManager.LoadTexture("menu", "menutile");
+            TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
+            TextureManager.LoadTexture("fireballMirrored", "Fireball_Mirror", 2, 1);
             TextureManager.LoadTexture("playerStandingRight", "Player_Standing_Right", 2, 1);
             TextureManager.LoadTexture("playerStandingLeft", "Player_Standing_Left", 2, 1);
             TextureManager.LoadTexture("playerRunningRight", "Player_Running_Right", 8, 1);
@@ -46,6 +48,9 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerWallSlidingRight", "Player_Wall_Sliding_Right", 2, 1);
             TextureManager.LoadTexture("playerWallSlidingLeft", "Player_Wall_Sliding_Left", 2, 1);
             TextureManager.LoadTexture("playerFallPanic", "playerFallPanicSimple", 4, 1);
+            TextureManager.LoadTexture("playerWeapon", "Player_Weapon", 2, 1);
+            TextureManager.LoadTexture("playerWeaponLit", "Player_Weapon_Lit", 2, 1);
+            TextureManager.LoadTexture("playerWeaponLightning", "Player_Weapon_Lightning", 2, 1);
             TextureManager.LoadTexture("robotBossWalking", "Spider_Boss_Walking", 2, 1);
             TextureManager.LoadTexture("robotBossFlying", "Spider_Boss_Flying", 2, 1);
             TextureManager.LoadTexture("robotBossFalling", "Spider_Boss_Falling", 2, 1);
@@ -76,7 +81,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("game");
+            game.states.SetStartingState("editor");
             DataManager.SetData<float>("mastervolume", 1f);
             DataManager.SetData<float>("trackvolume", 1f);
             DataManager.SetData<float>("effectvolume", 1f);
