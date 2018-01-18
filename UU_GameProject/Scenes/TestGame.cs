@@ -40,11 +40,11 @@ namespace UU_GameProject
             stone0.Size = new Vector2(16, 1);
             stone0.AddComponent(new CRender("block"));
             stone0.AddComponent(new CAABB());
-            GameObject stone1 = new GameObject("stone", this, 2, true);
+            /*GameObject stone1 = new GameObject("stone", this, 2, true);
             stone1.Pos = new Vector2(0);
             stone1.Size = new Vector2(1, 9);
             stone1.AddComponent(new CRender("block"));
-            stone1.AddComponent(new CAABB());
+            stone1.AddComponent(new CAABB());*/
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(15, 0);
             stone2.Size = new Vector2(1, 9);
@@ -179,7 +179,7 @@ namespace UU_GameProject
             testDoor.AddComponent(new CGrowingDoor());
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
         
         public override void Unload() { }
