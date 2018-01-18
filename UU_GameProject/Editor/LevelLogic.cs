@@ -209,7 +209,6 @@ namespace UU_GameProject
             for (int i = 0; i < chunk.source.Length; i++)
             {
                 string key = chunk.source[i].tag;
-                Console.WriteLine(key);
                 if (!decorators.ContainsKey(key)) continue;
                 Decorator dec = decorators[key];
                 if (dec.decorator != null)

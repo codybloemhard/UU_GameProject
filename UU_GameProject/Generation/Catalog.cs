@@ -77,8 +77,27 @@ namespace UU_GameProject
             ReplacerInput input = new ReplacerInput(0, true, obj, context);
             f(input);
         }
-        
+
         public static GameObject[] ReplacerBlock(ReplacerInput i,
+            BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
+        {
+            float w = i.obj.size.X;
+            float h = i.obj.size.Y;
+            int ratio = (int)(w / h);
+            float leftover = (w / h) - ratio;
+            List<GameObject> list = new List<GameObject>();
+            for(int j = 0; j < ratio; j++)
+            {
+                ReplacerInput input = new ReplacerInput();
+                input = i;
+                input.obj.pos = i.obj.pos + new Vector2(j * h, 0f);
+                input.obj.size = new Vector2(h);
+                GetBlocks(list, input, baset, layert0, layert1, topt);
+            }
+            return list.ToArray();
+        }
+
+        private static void GetBlocks(List<GameObject> list, ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -110,41 +129,34 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-            int size = 1;
-            if (layer0tex != "") size++;
-            if (layer1tex != "") size++;
-            if (toptex != "") size++;
-            GameObject[] objs = new GameObject[size];
-            int count = 1;
 
             GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, i.isStatic);
             basego.Pos = i.obj.pos;
             basego.Size = i.obj.size;
             basego.AddComponent(new CAABB());
-            objs[0] = basego;
+            list.Add(basego);
 
             if (layer0tex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer + 2, "", layer0tex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
             if (layer1tex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer + 1, "", layer1tex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
             if (toptex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer, "", toptex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
-            return objs;
         }
         
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)

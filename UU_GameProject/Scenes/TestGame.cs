@@ -90,11 +90,12 @@ namespace UU_GameProject
             
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            Debug.FullDebugMode();
+            //Debug.FullDebugMode();
         }
 
         private void AddSources(ChunkFactory builder)
         {
+            builder.AddSource("!player", 5, false, Dec_Player);
             builder.AddSource("solid", 10, true,
                 delegate (ReplacerInput i) {
                     return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
@@ -108,10 +109,9 @@ namespace UU_GameProject
             builder.AddSource("!tree", 50, true, Catalog.ReplacerTree0);
         }
 
-        private void dectest(GameObject o)
+        private void Dec_Player(GameObject o)
         {
-            o.Size = new Vector2(1f);
-            o.AddComponent(new CRender("_grassdot0"));
+            player.Pos = o.Pos - player.Size * new Vector2(0.5f, 1f);
         }
 
         private void Dec_Spawner(GameObject o)
