@@ -36,7 +36,7 @@ namespace UU_GameProject
             fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
             healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-<<<<<<< HEAD
+
             //Objects
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0);
@@ -58,18 +58,6 @@ namespace UU_GameProject
             stone3.Size = new Vector2(16, 1f);
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
-=======
-            //level
-            playerWeapon = new GameObject("playerWeapon", this, 0);
-            CAnimatedSprite animWeapon = new CAnimatedSprite();
-            animWeapon.AddAnimation("weaponNormal", "playerWeapon");
-            animWeapon.AddAnimation("weaponFire", "playerWeaponLit");
-            animWeapon.AddAnimation("weaponLightning", "playerWeaponLightning");
-            animWeapon.PlayAnimation("weaponNormal", 2);
-            playerWeapon.AddComponent(animWeapon);
-            playerWeapon.Pos = new Vector2(1, 1);
-            playerWeapon.Size = new Vector2(0.25f, 1);
->>>>>>> 580be5e0a2768cd0e84161b59088c6aac74c8cec
 
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
