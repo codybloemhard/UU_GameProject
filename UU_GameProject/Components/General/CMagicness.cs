@@ -32,25 +32,36 @@ namespace UU_GameProject
             if (!iniated) Init();
         }
 
+        //spawns a fireball in specified direction
         public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
-            if (!manaPool.ConsumeMana(5)) return;
+            if (!manaPool.ConsumeMana(10)) return;
             if (Input.GetMouseWorldPosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
             else dir = new Vector2(-1,0);
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
+            CAnimatedSprite animBall = new CAnimatedSprite();
+            animBall.AddAnimation("fireball", "fireball");
+            animBall.AddAnimation("fireballMirror", "fireballMirrored");
             if (dir.X > 0)
+            {
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
+                animBall.PlayAnimation("fireball", 8);
+            }
             else
+            {
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
+                animBall.PlayAnimation("fireballMirror", 8);
+            }
             fireball.Size = size;
-            fireball.AddComponent(new CRender("block"));
-            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir, 1f, false));
+            fireball.AddComponent(animBall);
+            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir, 20f, false));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");
         }
 
+        //spawns lightning at specified location
         public void Lightning(Vector2 dimensions, float duration, string caller, string Faction)
         {
             if (!unlockedLightning) return;

@@ -9,7 +9,7 @@ namespace UU_GameProject
     {
         private float speed;
         private float maxPlayerSpeed = 2.0f;
-        private float intendedDir;
+        public float intendedDir;
         private float jumpPower = 13f;
         private float acceleration = 50f, vertVelo = 0f;
         private float playerAccel = 8f;
@@ -31,8 +31,9 @@ namespace UU_GameProject
         private bool isDown = false;
         private bool initiated = false;
         private bool canMelee = true;
+        public Vector2 playerPosition;
         private Vector2 dir;
-        private Vector2 velocity = Vector2.Zero;
+        public Vector2 velocity = Vector2.Zero;
         private Vector2 checkPos = new Vector2(-1000, -1000);
         private CAnimatedSprite animation;
         private CHealthPool healthPool;
@@ -41,6 +42,7 @@ namespace UU_GameProject
         private CFaction faction;
         private CMeleeAttack melee;
         private CShoot shoot;
+        private CMopWeapon mopWeapon;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -60,12 +62,14 @@ namespace UU_GameProject
             faction = GO.GetComponent<CFaction>();
             melee = GO.GetComponent<CMeleeAttack>();
             shoot = GO.GetComponent<CShoot>();
+            mopWeapon = GO.GetComponent<CMopWeapon>();
         }
 
         public override void Update(float time)
         {
             if (!initiated) InitPlayer();
             float timeAccel = playerAccel * time;
+            playerPosition = GO.Pos;
 
             PickAnimation();
             CheckSideCollision(time);
@@ -311,7 +315,7 @@ namespace UU_GameProject
                 vertVelo = 0;
 
             //speed is in Units/Second
-            //also gravity
+            //updates player position based on velocity
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
         }
@@ -349,18 +353,27 @@ namespace UU_GameProject
         {
             //attacks
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
-                magicness.Fireball(new Vector2(.2f, .2f), velocity, faction.GetFaction());
+            {
+                mopWeapon.ChangeAnimationFire();
+                magicness.Fireball(new Vector2(.4f, .4f), velocity, faction.GetFaction());
+            }
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.RIGHT))
+            {
+                mopWeapon.ChangeAnimationLightning();
                 magicness.Lightning(new Vector2(1.5f, 1.5f), 0.2f, GO.tag, faction.GetFaction());
+            }
             if (Input.GetKey(PressAction.PRESSED, Keys.F))
                 magicness.Heal();
             if (Input.GetKey(PressAction.PRESSED, Keys.E))
                 DoMelee();
+
         }
         
+        //tries to melee
         private void DoMelee()
         {
             if (!canMelee) return;
+            mopWeapon.Melee();
             melee.Melee(dir, new Vector2(0.75f, 1), 0.2f, 15, false, GO.tag, faction.GetFaction());
             canMelee = false;
             Timers.Add("playermelee", 0.5f, () => canMelee = true);
@@ -377,6 +390,7 @@ namespace UU_GameProject
             return velocity;
         }
 
+        //reset
         public void Reset()
         {
             AudioManager.PlayEffect("dead");
