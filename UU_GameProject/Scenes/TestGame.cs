@@ -36,29 +36,7 @@ namespace UU_GameProject
             fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
             healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-
             //Objects
-            GameObject stone0 = new GameObject("stone", this, 2, true);
-            stone0.Pos = new Vector2(0);
-            stone0.Size = new Vector2(16, 1);
-            stone0.AddComponent(new CRender("block"));
-            stone0.AddComponent(new CAABB());
-            /*GameObject stone1 = new GameObject("stone", this, 2, true);
-            stone1.Pos = new Vector2(0);
-            stone1.Size = new Vector2(1, 9);
-            stone1.AddComponent(new CRender("block"));
-            stone1.AddComponent(new CAABB());*/
-            GameObject stone2 = new GameObject("stone", this, 2, true);
-            stone2.Pos = new Vector2(15, 0);
-            stone2.Size = new Vector2(1, 9);
-            stone2.AddComponent(new CRender("block"));
-            stone2.AddComponent(new CAABB());
-            GameObject stone3 = new GameObject("stone", this, 2, true);
-            stone3.Pos = new Vector2(0, 8);
-            stone3.Size = new Vector2(16, 1f);
-            stone3.AddComponent(new CRender("block"));
-            stone3.AddComponent(new CAABB());
-
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -105,9 +83,9 @@ namespace UU_GameProject
             
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
-
+        
         private void AddSources(ChunkFactory builder)
         {
             builder.AddSource("!player", 5, false, Dec_Player);

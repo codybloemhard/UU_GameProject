@@ -25,6 +25,8 @@ namespace UU_GameProject
         {
             CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Red;
+            double angle = Math.Atan2(fireballVelocity.Y, fireballVelocity.X);
+            GO.Renderer.SetRotation((float)angle * MathH.RAD_TO_DEG);
         }
 
         public override void Update(float time)
@@ -34,7 +36,7 @@ namespace UU_GameProject
             this.time += time;
             if (this.time > 10f) GO.Destroy();
         }
-
+        
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "solid")
