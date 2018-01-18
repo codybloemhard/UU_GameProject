@@ -12,10 +12,11 @@ namespace UU_GameProject
         public TestGame() : base() { }
 
         private UITextureElement healthbar, manabar, fitness, healing, lightning;
-        private GameObject player, playerWeapon;
+        private GameObject player;
         private CMagicness magicness;
         private CHealthPool healthpool;
         private CManaPool manapool;
+        private CMopWeapon mopweapon;
         private Color cGreen = new Color(0, 255, 0),
             cRed = new Color(255, 0, 0),
             cOrange = new Color(255, 255, 0);
@@ -56,16 +57,6 @@ namespace UU_GameProject
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
 
-            playerWeapon = new GameObject("playerWeapon", this, 0);
-            CAnimatedSprite animWeapon = new CAnimatedSprite();
-            animWeapon.AddAnimation("weaponNormal", "playerWeapon");
-            animWeapon.AddAnimation("weaponFire", "playerWeaponLit");
-            animWeapon.AddAnimation("weaponLightning", "playerWeaponLightning");
-            animWeapon.PlayAnimation("weaponNormal", 2);
-            playerWeapon.AddComponent(animWeapon);
-            playerWeapon.Pos = new Vector2(1, 1);
-            playerWeapon.Size = new Vector2(0.25f, 1);
-
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -87,6 +78,7 @@ namespace UU_GameProject
             magicness = new CMagicness();
             healthpool = new CHealthPool(100);
             manapool = new CManaPool(100, player);
+            mopweapon = new CMopWeapon();
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
@@ -95,6 +87,7 @@ namespace UU_GameProject
             player.AddComponent(healthpool);
             player.AddComponent(manapool);
             player.AddComponent(magicness);
+            player.AddComponent(mopweapon);
             player.AddComponent(new CFaction("friendly"));
             player.AddComponent(new CCamera());
             player.Pos = new Vector2(1, 1);
@@ -115,7 +108,7 @@ namespace UU_GameProject
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(50));
+            robotBoss.AddComponent(new CHealthPool(1500));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));

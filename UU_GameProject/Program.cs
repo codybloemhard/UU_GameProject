@@ -32,6 +32,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
             TextureManager.LoadTexture("menu", "menutile");
+            TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
+            TextureManager.LoadTexture("fireballMirrored", "Fireball_Mirror", 2, 1);
             TextureManager.LoadTexture("playerStandingRight", "Player_Standing_Right", 2, 1);
             TextureManager.LoadTexture("playerStandingLeft", "Player_Standing_Left", 2, 1);
             TextureManager.LoadTexture("playerRunningRight", "Player_Running_Right", 8, 1);
@@ -79,7 +81,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("leveltest");
+            game.states.SetStartingState("game");
             DataManager.SetData<float>("mastervolume", 1f);
             DataManager.SetData<float>("trackvolume", 1f);
             DataManager.SetData<float>("effectvolume", 1f);

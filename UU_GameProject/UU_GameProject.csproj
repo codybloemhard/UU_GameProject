@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Components\Enemy\CCyborgBoss.cs" />
     <Compile Include="Components\Enemy\CHeatSeakingBullet.cs" />
+    <Compile Include="Components\Player\CMopWeapon.cs" />
     <Compile Include="Components\Enemy\CRobotBoss.cs" />
     <Compile Include="Components\General\CExplosionArea.cs" />
     <Compile Include="Components\General\CGrowingDoor.cs" />
