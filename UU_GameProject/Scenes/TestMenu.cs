@@ -53,7 +53,7 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             string msg = "Time: " + MathH.Float(Timers.FindWithTag("timer").TimeLeft, 2);
-            (ui.FindWithTag("timerText") as Text).text = msg;
+            //(ui.FindWithTag("timerText") as Text).text = msg;
             base.Update(time);
         }
 
