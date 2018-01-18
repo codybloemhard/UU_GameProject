@@ -81,7 +81,7 @@ namespace UU_GameProject
                 Console.WriteLine("Saving chunk with position (" + x + "," + y + ").");
                 LevelLogic.WriteChunk(CLevelEditorObject.objectList, baseurl + "chunk" + x + y + ".lvl", x, y);
             }
-            GameStateManager.RequestChange("leveltest", CHANGETYPE.LOAD);
+            GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
         }
         
         private void TestChunks()//write 441 random chunks

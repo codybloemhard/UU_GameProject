@@ -77,8 +77,35 @@ namespace UU_GameProject
             ReplacerInput input = new ReplacerInput(0, true, obj, context);
             f(input);
         }
-        
+
         public static GameObject[] ReplacerBlock(ReplacerInput i,
+            BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
+        {
+            float w = i.obj.size.X;
+            float h = i.obj.size.Y;
+            int ratio = (int)(w / h);
+            float leftover = (w / h) - ratio;
+            List<GameObject> list = new List<GameObject>();
+            for(int j = 0; j < ratio; j++)
+            {
+                ReplacerInput input = new ReplacerInput();
+                input = i;
+                input.obj.pos = i.obj.pos + new Vector2(j * h, 0f);
+                input.obj.size = new Vector2(h);
+                GetBlocks(list, input, baset, layert0, layert1, topt);
+            }
+            if(leftover > 0f)
+            {
+                ReplacerInput input = new ReplacerInput();
+                input = i;
+                input.obj.pos = i.obj.pos + new Vector2((ratio) * h, 0f);
+                input.obj.size = new Vector2(leftover, h);
+                GetBlocks(list, input, baset, layert0, layert1, topt);
+            }
+            return list.ToArray();
+        }
+
+        private static void GetBlocks(List<GameObject> list, ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -110,41 +137,34 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-            int size = 1;
-            if (layer0tex != "") size++;
-            if (layer1tex != "") size++;
-            if (toptex != "") size++;
-            GameObject[] objs = new GameObject[size];
-            int count = 1;
 
-            GameObject basego = CreateObject(i.context, i.layer + 3, "", basetex, i.isStatic);
+            GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, i.isStatic);
             basego.Pos = i.obj.pos;
             basego.Size = i.obj.size;
             basego.AddComponent(new CAABB());
-            objs[0] = basego;
+            list.Add(basego);
 
             if (layer0tex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer + 2, "", layer0tex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
             if (layer1tex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer + 1, "", layer1tex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
             if (toptex != "")
             {
                 GameObject layergo = CreateObject(i.context, i.layer, "", toptex, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
-                objs[count++] = layergo;
+                list.Add(layergo);
             }
-            return objs;
         }
         
         public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)
@@ -230,7 +250,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('#', new Vector2(0.95f, 0.6f), "F");
             turtle.Init(i.obj.pos, 180, new Vector2(0.15f));
             string lstring = lsys.Generate(4);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree1(ReplacerInput i)
@@ -249,7 +269,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.9f, 0.5f), "F");
             turtle.Init(i.obj.pos, 180, new Vector2(0.6f));
             string lstring = lsys.Generate(4);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
         
         public static GameObject[] ReplacerTree2(ReplacerInput i)
@@ -273,7 +293,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.99f, 0.7f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.4f));
             string lstring = lsys.Generate(5);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree3(ReplacerInput i)
@@ -296,7 +316,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.99f, 0.7f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.6f));
             string lstring = lsys.Generate(6);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree4(ReplacerInput i)
@@ -319,7 +339,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.99f, 0.7f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.4f));
             string lstring = lsys.Generate(5);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree5(ReplacerInput i)
@@ -343,7 +363,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(1.3f, 0.8f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.3f));
             string lstring = lsys.Generate(5);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree6(ReplacerInput i)
@@ -366,7 +386,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.8f, 0.7f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.5f));
             string lstring = lsys.Generate(8);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree7(ReplacerInput i)
@@ -392,7 +412,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('#', new Vector2(1f, 0.85f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.8f));
             string lstring = lsys.Generate(9);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree8(ReplacerInput i)
@@ -418,7 +438,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(1f, 0.9f), "X");
             turtle.Init(i.obj.pos, 180, new Vector2(0.2f));
             string lstring = lsys.Generate(15);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
 
         public static GameObject[] ReplacerTree9(ReplacerInput i)
@@ -442,7 +462,7 @@ namespace UU_GameProject
             turtle.AddResizeToken('*', new Vector2(0.97f, 0.97f), "XA");
             turtle.Init(i.obj.pos, 180-0, new Vector2(0.2f));
             string lstring = lsys.Generate(50);
-            return turtle.CreateObject(lstring, 0, "_tree");
+            return turtle.CreateObject(lstring, i.layer, "_tree");
         }
         
         public static GameObject[] ReplacerFlower(ReplacerInput i)
