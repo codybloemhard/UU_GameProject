@@ -8,25 +8,25 @@ namespace UU_GameProject
 {
     public enum BASETILES
     {
-        DIRT,
-        STONE,
-        SAND,
-        SANDSTONE
+        DIRT = 0,
+        STONE = 1,
+        SAND = 2,
+        SANDSTONE = 3
     }
 
     public enum LAYERTILES
     {
-        NONE,
-        CRACKS,
-        ICE,
-        ICETOP
+        NONE = 0,
+        CRACKS = 1,
+        ICE = 2,
+        ICETOP = 3
     }
 
     public enum TOPTILES
     {
-        NONE,
-        GRASS,
-        SNOW
+        NONE = 0,
+        GRASS = 1,
+        SNOW = 2
     }
     
     public static class Catalog
@@ -83,28 +83,38 @@ namespace UU_GameProject
         {
             float w = i.obj.size.X;
             float h = i.obj.size.Y;
-            int ratio = (int)(w / h);
-            float leftover = (w / h) - ratio;
+            int ratio = w > h ? (int)(w / h) : (int)(h / w);
+            float leftover = w > h ? (w / h) - ratio : (h / w) - ratio;
+            float xinv = w > h ? 1f : 0f;
+            float yinv = w > h ? 0f : 1f;
+            float size = w > h ? h : w;
             List<GameObject> list = new List<GameObject>();
             for(int j = 0; j < ratio; j++)
             {
                 ReplacerInput input = new ReplacerInput();
                 input = i;
-                input.obj.pos = i.obj.pos + new Vector2(j * h, 0f);
-                input.obj.size = new Vector2(h);
+                input.obj.pos = i.obj.pos + new Vector2(j * size * xinv, j * size * yinv);
+                input.obj.size = new Vector2(size);
                 GetBlocks(list, input, baset, layert0, layert1, topt);
             }
             if(leftover > 0f)
             {
                 ReplacerInput input = new ReplacerInput();
                 input = i;
-                input.obj.pos = i.obj.pos + new Vector2((ratio) * h, 0f);
-                input.obj.size = new Vector2(leftover, h);
+                input.obj.pos = i.obj.pos + new Vector2(ratio * size * xinv, ratio * size * yinv);
+                if (w > h) input.obj.size = new Vector2(leftover, size);
+                else input.obj.size = new Vector2(size, leftover);
                 GetBlocks(list, input, baset, layert0, layert1, topt);
             }
+            GameObject collider = new GameObject(i.context, 0, i.isStatic);
+            collider.Pos = i.obj.pos;
+            collider.Size = i.obj.size;
+            collider.AddComponent(new CAABB());
+            collider.tag = "solid";
+            list.Add(collider);
             return list.ToArray();
         }
-
+        
         private static void GetBlocks(List<GameObject> list, ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
@@ -141,7 +151,6 @@ namespace UU_GameProject
             GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, i.isStatic);
             basego.Pos = i.obj.pos;
             basego.Size = i.obj.size;
-            basego.AddComponent(new CAABB());
             list.Add(basego);
 
             if (layer0tex != "")
