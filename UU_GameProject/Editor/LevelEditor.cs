@@ -11,15 +11,9 @@ namespace UU_GameProject
     public class LevelEditor : GameState
     {
         private const string baseurl = "../../../../Content/Levels/";
-        ChunkManager chunks;
 
         public override void Load(SpriteBatch batch)
         {
-            lineRenderer.Add(new Line(new Vector2(0), new Vector2(16, 0), Color.Red));
-            lineRenderer.Add(new Line(new Vector2(0), new Vector2(0, 16)));
-            lineRenderer.Add(new Line(new Vector2(16), new Vector2(16, 0)));
-            lineRenderer.Add(new Line(new Vector2(16), new Vector2(0, 16)));
-
             Button button = new Button(this, "Finish", "block", () => Finish(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
             Button quit = new Button(this, "Cancel", "block", () => Finish(false),
@@ -71,6 +65,12 @@ namespace UU_GameProject
                 Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(0, -0.01f));
             else if (Input.GetKey(PressAction.DOWN, Keys.Down))
                 Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(0, +0.01f));
+
+            lineRenderer.Clear();
+            lineRenderer.Add(new Line(new Vector2(0) - Camera.TopLeft, new Vector2(16, 0) - Camera.TopLeft, Color.Red));
+            lineRenderer.Add(new Line(new Vector2(0) - Camera.TopLeft, new Vector2(0, 16) - Camera.TopLeft, Color.Red));
+            lineRenderer.Add(new Line(new Vector2(16) - Camera.TopLeft, new Vector2(16, 0) - Camera.TopLeft, Color.Red));
+            lineRenderer.Add(new Line(new Vector2(16) - Camera.TopLeft, new Vector2(0, 16) - Camera.TopLeft, Color.Red));
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
