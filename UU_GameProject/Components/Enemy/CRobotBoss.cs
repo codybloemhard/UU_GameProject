@@ -13,6 +13,7 @@ namespace UU_GameProject
     {
         private GameObject player;
         private CAnimatedSprite animationBoss;
+        private CAnimatedSprite animationExplosion;
         private CCamera camera;
         private CMeleeAttack melee;
         private CRaycasts cRaycasts;
@@ -219,29 +220,37 @@ namespace UU_GameProject
             GameObject bullet = new GameObject("explobullet", GO.Context, 0);
             CAnimatedSprite animBullet = new CAnimatedSprite();
             animBullet.AddAnimation("bullet", "bullet");
-            animBullet.PlayAnimation("bullet", 4);
-            bullet.AddComponent(animBullet);
+            animBullet.AddAnimation("bulletMirrored", "bulletMirrored");
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());
             bullet.AddComponent(new CDamageDealer(10, false));
             bullet.AddComponent(new CFaction("enemy"));
             if (dir.X > 0)
+            {
+                animBullet.PlayAnimation("bullet", 8);
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f + new Vector2(GO.Size.X / 2f + .2f, 0);
+            }
             else
+            {
+                animBullet.PlayAnimation("bulletMirrored", 8);
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f - new Vector2(GO.Size.X / 2f + .2f, 0);
+            }
+            bullet.AddComponent(animBullet);
             bullet.Size = new Vector2(.6f, 0.2f);
         }
 
         public void Explode()
         {
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);
-            explosion.AddComponent(new CRender("block"));
-            explosion.Renderer.colour = Color.Red;
+            animationBoss = new CAnimatedSprite();
+            animationBoss.AddAnimation("robotBossLaser", "robotBossLaser");
+            animationBoss.PlayAnimation("robotBossLaser", 12);
+            explosion.AddComponent(animationBoss);
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
             explosion.AddComponent(new CDamageDealer(50, false));
-            explosion.Size = new Vector2(1.8f);
-            explosion.Pos = GO.Pos + GO.Size / 2 - explosion.Size / 2;
+            explosion.Size = new Vector2(3f);
+            explosion.Pos = GO.Pos;
             ChangeFSM(true);
         }
 

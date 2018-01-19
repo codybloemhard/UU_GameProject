@@ -25,8 +25,6 @@ namespace UU_GameProject
             List<string> text = new List<string>();
             text.Add("XSize:");
             text.Add("YSize:");
-            text.Add("Texture:");
-            text.Add("Colour:");
             text.Add("Tag:");
             properties = new MultipleLinesText(GO.Context, text, new Vector2(10, 3), new Vector2(0, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
             properties.Pos = new Vector2(16, 9) - properties.Size;
@@ -140,12 +138,6 @@ namespace UU_GameProject
                 select = 1;
             else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad3))
                 select = 2;
-            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad4))
-                select = 3;
-            else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad5))
-                select = 4;
-            //else if (Input.GetKey(PressAction.PRESSED, Keys.NumPad6))
-                //select = 5;
             else select = -1;
 
             if (select != -1)
@@ -177,16 +169,23 @@ namespace UU_GameProject
                 if (backup == "XSize:")
                 {
                     if (float.TryParse(properties.text[properties.selected], out input))
+                    {
                         GO.Size = new Vector2(input, GO.Size.Y);
+                        Console.WriteLine("XSize set to: " + properties.text[properties.selected]);
+                    }
                     else
                         Console.WriteLine("'" + properties.text[properties.selected] + "'" + " is not a correct value");
                 }
                 if (backup == "YSize:")
                 {
                     if (float.TryParse(properties.text[properties.selected], out input))
+                    {
                         GO.Size = new Vector2(GO.Size.X, input);
+                        Console.WriteLine("YSize set to: " + properties.text[properties.selected]);
+                    }
                     else
                         Console.WriteLine("'" + properties.text[properties.selected] + "'" + " is not a correct value");
+
                 }
                 if (backup == "Tag:")
                 {
@@ -194,6 +193,7 @@ namespace UU_GameProject
                         GO.tag = properties.text[properties.selected];
                     else
                         GO.tag = "!" + properties.text[properties.selected];
+                    Console.WriteLine("Tag set to: " + properties.text[properties.selected]);
                 }
             }
         }

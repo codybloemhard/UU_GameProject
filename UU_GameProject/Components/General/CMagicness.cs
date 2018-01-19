@@ -42,20 +42,15 @@ namespace UU_GameProject
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
             CAnimatedSprite animBall = new CAnimatedSprite();
             animBall.AddAnimation("fireball", "fireball");
-            animBall.AddAnimation("fireballMirror", "fireballMirrored");
+            animBall.PlayAnimation("fireball", 8);
             if (dir.X > 0)
-            {
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
-                animBall.PlayAnimation("fireball", 8);
-            }
             else
-            {
                 fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
-                animBall.PlayAnimation("fireballMirror", 8);
-            }
             fireball.Size = size;
+            Vector2 path = (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size)));
             fireball.AddComponent(animBall);
-            fireball.AddComponent(new CFireballMovement(playerSpeed, (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size))), dir, 20f, false));
+            fireball.AddComponent(new CFireballMovement(playerSpeed, path, dir, 20f, false));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");

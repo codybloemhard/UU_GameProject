@@ -36,7 +36,6 @@ namespace UU_GameProject
             fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
             healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-
             //Objects
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0);
@@ -105,9 +104,9 @@ namespace UU_GameProject
             
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            //Debug.FullDebugMode();
+            Debug.FullDebugMode();
         }
-
+        
         private void AddSources(ChunkFactory builder)
         {
             builder.AddSource("!player", 5, false, Dec_Player);

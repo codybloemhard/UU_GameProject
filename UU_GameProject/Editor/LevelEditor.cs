@@ -15,10 +15,10 @@ namespace UU_GameProject
 
         public override void Load(SpriteBatch batch)
         {
-            //lineRenderer.Add(new Line(new Vector2(0), new Vector2(16, 16), Color.Red));
-            //lineRenderer.Add(new Line(new Vector2(0), new Vector2(0, 16)));
-            //lineRenderer.Add(new Line(new Vector2(16), new Vector2(16, 0)));
-            //lineRenderer.Add(new Line(new Vector2(16), new Vector2(0, 16)));
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(16, 0), Color.Red));
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(0, 16)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(16, 0)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(0, 16)));
 
             Button button = new Button(this, "Finish", "block", () => Finish(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
@@ -44,7 +44,6 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            Console.WriteLine(objects.StaticObjects.Count);
             base.Update(time);
             if(Input.GetKey(PressAction.PRESSED, Keys.W) && !CLevelEditorObject.Handling)
             {
