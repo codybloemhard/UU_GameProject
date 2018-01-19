@@ -64,13 +64,13 @@ namespace UU_GameProject
                 newObject.Size = new Vector2(1f, 1f);
             }
             if (Input.GetKey(PressAction.DOWN, Keys.Left))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(-0.01f, 0));
+                Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(-0.01f, 0));
             else if (Input.GetKey(PressAction.DOWN, Keys.Right))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(+0.01f, 0));
+                Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(+0.01f, 0));
             if (Input.GetKey(PressAction.DOWN, Keys.Up))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.01f));
+                Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(0, -0.01f));
             else if (Input.GetKey(PressAction.DOWN, Keys.Down))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, +0.01f));
+                Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(0, +0.01f));
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
