@@ -58,9 +58,9 @@ namespace UU_GameProject
             chasing = false;
             if (!initiated) InitRobot();
 
-            else if (fsm.CurrentState == "fly" && falling)
-                animationBoss.PlayAnimationIfDifferent("flying", 4);
             else if (fsm.CurrentState == "fly" && !falling)
+                animationBoss.PlayAnimationIfDifferent("flying", 4);
+            else if (fsm.CurrentState == "fly" && falling)
                 animationBoss.PlayAnimationIfDifferent("falling", 4);
             else
                 animationBoss.PlayAnimationIfDifferent("walking", 2);
@@ -78,6 +78,7 @@ namespace UU_GameProject
                 ChangeFSM(false);
                 fsm.SetCurrentState("chase");
             }
+            fsm.SetCurrentState("fly");
         }
 
         private void ChangeFSM(bool chase)
@@ -138,7 +139,8 @@ namespace UU_GameProject
                 if (cRaycasts.DistanceToFloor == 0)
                 {
                     crushing = false;
-                    camera.ShakeCamera(1f, Math.Min(velocity.Y * 2f, 0.3f));
+                    camera.ShakeCamera(.6f, Math.Min(velocity.Y * .1f, 1f));
+                    Console.WriteLine(velocity.Y * .1f);
                     melee.Melee(new Vector2(0, 1), new Vector2(0.75f, 1.5f), 0.2f, 50, false, GO.tag, faction.GetFaction());
                 }
             }
@@ -161,12 +163,12 @@ namespace UU_GameProject
 
                 if (cRaycasts.DistanceToFloor > 2f && velocity.Y < maxYSpeed)
                 {
-                    falling = false;
+                    falling = true;
                     velocity.Y += gravity * ctime;
                 }
                 else if (velocity.Y > -maxYSpeed)
                 {
-                    falling = true;
+                    falling = false;
                     velocity.Y -= jetpackPower * ctime;
                 }
 

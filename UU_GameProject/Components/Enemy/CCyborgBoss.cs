@@ -73,19 +73,18 @@ namespace UU_GameProject
 
             for (int i = -1; i < 2; i += 2)
             {
-                Console.WriteLine(stage + ", " + i);
-                GameObject cyborgBoss = new GameObject("CyborgBoss", GO.Context, 2);
+                GameObject cyborgBoss = new GameObject("cyborgboss", GO.Context, 2);
                 cyborgBoss.AddComponent(new CRender("block"));
-                cyborgBoss.AddComponent(new CCyborgBoss(stage, i));
-                cyborgBoss.AddComponent(new CRaycasts());
-                cyborgBoss.AddComponent(new CHealthPool(50));
                 cyborgBoss.AddComponent(new CAABB());
-                cyborgBoss.AddComponent(new CShoot());
-                cyborgBoss.Pos = GO.Pos + 0.5f * i * GO.Pos;
-                cyborgBoss.Size = new Vector2(stage, stage);
+                cyborgBoss.AddComponent(new CCyborgBoss(stage, i));
+                cyborgBoss.AddComponent(new CDamageDealer(10 * stage, false));
+                cyborgBoss.AddComponent(new CRaycasts());
+                cyborgBoss.AddComponent(new CHealthPool(10 * stage));
+                cyborgBoss.AddComponent(new CFaction("enemy"));
+                cyborgBoss.Pos = GO.Pos;
+                cyborgBoss.Size = new Vector2(stage);
             }
-
-            GO.active = false;
+            GO.Destroy();
         }
     }
 }

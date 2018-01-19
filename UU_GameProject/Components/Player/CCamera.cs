@@ -43,7 +43,7 @@ namespace UU_GameProject
             shakeTime -= time;
             float a = (float)MathH.random.NextDouble() * strength*2 - strength;
             float b = (float)MathH.random.NextDouble() * strength * 2 - strength;
-            Vector2 vec = new Vector2(a, b);
+            Vector2 vec = new Vector2(a, b) * shakeTime;
             Camera.SetCameraTopLeft(returnPos + vec);
         }
 

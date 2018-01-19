@@ -83,6 +83,52 @@ namespace UU_GameProject
             chunk.source = objs.ToArray();
             return chunk;
         }
+
+        public static void EditChunk(string xy, string baseurl, GameState context)
+        {
+            Chunk chunk = ReadChunk(baseurl + "chunk" + xy + ".lvl");
+            if (chunk == null)
+            {
+                Console.WriteLine("Chunk does not exist.");
+                return;
+            }
+
+            context.Unload();
+
+            for (int i = 0; i < chunk.source.Length; i++)
+            {
+                bool spawner = chunk.source[i].tag[0] == '!';
+                GameObject newObj = new GameObject(chunk.source[i].tag, context, 0, true);
+                if(spawner) newObj.AddComponent(new CRender("cross"));
+                else newObj.AddComponent(new CRender("block"));
+                newObj.AddComponent(new CAABB());
+                newObj.AddComponent(new CLevelEditorObject(newObj, spawner));
+                newObj.Pos = chunk.source[i].pos;
+                if(spawner) newObj.Size = new Vector2(1f, 1f);
+                else newObj.Size = chunk.source[i].size;
+            }
+
+            
+
+            //if (Input.GetKey(PressAction.PRESSED, Keys.W) && !CLevelEditorObject.Handling)
+            //{
+            //    GameObject newObject = new GameObject("spawner", this, 0, true);
+            //    newObject.AddComponent(new CRender("cross"));
+            //    newObject.AddComponent(new CAABB());
+            //    newObject.AddComponent(new CLevelEditorObject(newObject, true));
+            //    newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 15), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 15), 0));
+            //    newObject.Size = new Vector2(1f, 1f);
+            //}
+            //if (Input.GetKey(PressAction.PRESSED, Keys.Q) && !CLevelEditorObject.Handling)
+            //{
+            //    GameObject newObject = new GameObject("new", this, 0, true);
+            //    newObject.AddComponent(new CRender("block"));
+            //    newObject.AddComponent(new CAABB());
+            //    newObject.AddComponent(new CLevelEditorObject(newObject, false));
+            //    newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 15), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 15), 0));
+            //    newObject.Size = new Vector2(1f, 1f);
+            //}
+        }
     }
 
     public struct Decorator

@@ -11,20 +11,36 @@ namespace UU_GameProject
     public class LevelEditor : GameState
     {
         private const string baseurl = "../../../../Content/Levels/";
+        ChunkManager chunks;
 
         public override void Load(SpriteBatch batch)
         {
-            //lineRenderer.Add(new Line(Vector2.Zero, new Vector2(16, 0), Color.Red));
-            //lineRenderer.Add(new Line(Vector2.Zero, new Vector2(16, 16), Color.Red));
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(16, 0), Color.Red));
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(0, 16)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(16, 0)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(0, 16)));
+
             Button button = new Button(this, "Finish", "block", () => Finish(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
             Button quit = new Button(this, "Cancel", "block", () => Finish(false),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(12, 0), new Vector2(2, 1));
+            Button load = new Button(this, "Load", "block", () => LevelLogic.EditChunk(Console.ReadLine(), baseurl, this),
+                AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(10, 0), new Vector2(2, 1));
+            Button unload = new Button(this, "unload", "block", () => Unload(),
+                AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(8, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             quit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            load.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            unload.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
 
-        public override void Unload() { }
+        public override void Unload()
+        {
+            for (int i = objects.StaticObjects.Count -1; i>=0; i--)
+            {
+                objects.StaticObjects[i].GetComponent<CLevelEditorObject>().Destroy();
+            }
+        }
 
         public override void Update(float time)
         {
@@ -35,7 +51,7 @@ namespace UU_GameProject
                 newObject.AddComponent(new CRender("cross"));
                 newObject.AddComponent(new CAABB());
                 newObject.AddComponent(new CLevelEditorObject(newObject, true));
-                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 16), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 16), 0));
+                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 15), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 15), 0));
                 newObject.Size = new Vector2(1f, 1f);
             }
             if (Input.GetKey(PressAction.PRESSED, Keys.Q) && !CLevelEditorObject.Handling)
@@ -44,7 +60,7 @@ namespace UU_GameProject
                 newObject.AddComponent(new CRender("block"));
                 newObject.AddComponent(new CAABB());
                 newObject.AddComponent(new CLevelEditorObject(newObject, false));
-                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 16), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 16), 0));
+                newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 15), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 15), 0));
                 newObject.Size = new Vector2(1f, 1f);
             }
             if (Input.GetKey(PressAction.DOWN, Keys.Left))
@@ -60,6 +76,11 @@ namespace UU_GameProject
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             base.Draw(time, batch, device);
+
+        }
+
+        public void LoadNewFile(string path)
+        {
 
         }
         

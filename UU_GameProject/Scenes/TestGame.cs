@@ -36,7 +36,7 @@ namespace UU_GameProject
             fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
             healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-            //Objects
+
             player = new GameObject("player", this, 1);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -246,6 +246,10 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+
+            if (Input.GetKey(PressAction.PRESSED, Keys.V))
+                foreach(GameObject obj in objects.FindAllWithTag("cyborgboss"))
+                    obj.GetComponent<CCyborgBoss>().Split();
 
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
