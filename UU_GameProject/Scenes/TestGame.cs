@@ -247,15 +247,6 @@ namespace UU_GameProject
                 else Debug.ProfilingMode();
             }
 
-            if(Input.GetKey(PressAction.PRESSED, Keys.X))
-            {
-                GameObject o = objects.FindWithTag("bossdoor");
-                if(o != null)
-                {
-                    o.GetComponent<CGrowingDoor>().Close();
-                }
-            }
-
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
             else Debug.showAtlas = false;
