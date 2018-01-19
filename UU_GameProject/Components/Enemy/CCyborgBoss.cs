@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    class CCyborgBoss : Component
+    public class CCyborgBoss : Component
     {
         private bool initiated;
         private FSM fsm = new FSM();
@@ -41,8 +41,6 @@ namespace UU_GameProject
             ctime = time;
 
             fsm.Update();
-
-
         }
 
         private void Bounce()

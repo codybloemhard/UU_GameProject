@@ -83,23 +83,42 @@ namespace UU_GameProject
             
             AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            Debug.FullDebugMode();
+            //Debug.FullDebugMode();
         }
         
         private void AddSources(ChunkFactory builder)
         {
             builder.AddSource("!player", 5, false, Dec_Player);
-            builder.AddSource("solid", 10, true,
-                delegate (ReplacerInput i) {
-                    return Catalog.ReplacerBlock(i, BASETILES.STONE, LAYERTILES.CRACKS, LAYERTILES.ICE, TOPTILES.SNOW);
-                });
+            for(int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    for (int k = 0; k < 4; k++)
+                        for (int l = 0; l < 3; l++)
+                        {
+                            BASETILES baset = (BASETILES)i;
+                            LAYERTILES layert0 = (LAYERTILES)j;
+                            LAYERTILES layert1 = (LAYERTILES)k;
+                            TOPTILES topt = (TOPTILES)l;
+                            builder.AddSource("solid" + i + j + k + l, 10, true, delegate (ReplacerInput inp) {
+                                return Catalog.ReplacerBlock(inp, baset, layert0, layert1, topt);
+                            });
+                        }
             builder.AddSource("spawn", 10, false, Dec_Spawner);
             builder.AddSource("door", 10, true, Dec_Door);
+            builder.AddSource("bosstrigger", 10, false, Dec_Bosstrigger);
             builder.AddSource("!renemy", 5, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 5, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 5, false, Rep_ArmourEnemy);
             builder.AddSource("!rboss", 5, false, Rep_RobotBoss);
-            builder.AddSource("!tree", 50, true, Catalog.ReplacerTree0);
+            builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
+            builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
+            builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
+            builder.AddSource("!tree3", 50, true, Catalog.ReplacerTree3);
+            builder.AddSource("!tree4", 50, true, Catalog.ReplacerTree4);
+            builder.AddSource("!tree5", 50, true, Catalog.ReplacerTree5);
+            builder.AddSource("!tree6", 50, true, Catalog.ReplacerTree6);
+            builder.AddSource("!tree7", 50, true, Catalog.ReplacerTree7);
+            builder.AddSource("!tree8", 50, true, Catalog.ReplacerTree8);
+            builder.AddSource("!tree9", 50, true, Catalog.ReplacerTree9);
         }
 
         private void Dec_Player(GameObject o)
@@ -112,6 +131,12 @@ namespace UU_GameProject
             o.AddComponent(new CAABB());
             o.AddComponent(new CRender("suprise"));
             o.tag = "checkpoint";
+        }
+
+        private void Dec_Bosstrigger(GameObject o)
+        {
+            o.AddComponent(new CBossTrigger());
+            o.AddComponent(new CAABB());
         }
 
         private void Dec_Door(GameObject o)
@@ -164,11 +189,11 @@ namespace UU_GameProject
 
         private GameObject[] Rep_RobotBoss(ReplacerInput i)
         {
-            GameObject robotBoss = new GameObject("RobotBoss", this, 2);
+            GameObject robotBoss = new GameObject("boss", this, 2);
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(1500));
+            robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));

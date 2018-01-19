@@ -39,6 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\Enemy\CBossTrigger.cs" />
     <Compile Include="Components\Enemy\CCyborgBoss.cs" />
     <Compile Include="Components\Enemy\CHeatSeakingBullet.cs" />
     <Compile Include="Components\Player\CMopWeapon.cs" />

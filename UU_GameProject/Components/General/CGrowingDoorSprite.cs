@@ -8,7 +8,7 @@ namespace UU_GameProject
     public class CGrowingDoorSprite : Component
     {
         private int growing;
-        private float speed = 2f;
+        private float speed = 10f;
         private float height = 1f;
         private float width = 1f;
         private Vector2 startpos;

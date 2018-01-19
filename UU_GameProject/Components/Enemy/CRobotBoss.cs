@@ -25,6 +25,7 @@ namespace UU_GameProject
         private float speed, gravity = 10f, jetpackPower = 10, acceleration = 5f, maxYSpeed = 3,crushSpeed = 20f, turningSpeed = 3;
         private float ctime, shootDelay = 1f, shootTime, crushDelay = 5, crushTime, changeDelay = 5, changeTime, chaseTime, chaseMax = 5, chaseSpeedIncrease;
         private bool grounded, falling;
+        public bool started = false;
 
         public CRobotBoss(float speed)
         {
@@ -52,6 +53,7 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
+            if (!started) return;
             chasing = false;
             if (!initiated) InitRobot();
 
@@ -218,21 +220,15 @@ namespace UU_GameProject
             GameObject bullet = new GameObject("explobullet", GO.Context, 0);
             CAnimatedSprite animBullet = new CAnimatedSprite();
             animBullet.AddAnimation("bullet", "bullet");
-            animBullet.AddAnimation("bulletMirrored", "bulletMirrored");
+            animBullet.PlayAnimation("bullet", 8);
             bullet.AddComponent(new CHeatSeakingBullet(player, 4, dir, 1.5f, GO.tag));
             bullet.AddComponent(new CAABB());
             bullet.AddComponent(new CDamageDealer(10, false));
             bullet.AddComponent(new CFaction("enemy"));
             if (dir.X > 0)
-            {
-                animBullet.PlayAnimation("bullet", 8);
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f + new Vector2(GO.Size.X / 2f + .2f, 0);
-            }
             else
-            {
-                animBullet.PlayAnimation("bulletMirrored", 8);
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f - new Vector2(GO.Size.X / 2f + .2f, 0);
-            }
             bullet.AddComponent(animBullet);
             bullet.Size = new Vector2(.6f, 0.2f);
         }
