@@ -38,7 +38,6 @@ namespace UU_GameProject
             base.Update(time);
             if (!initiated) InitBullet();
 
-
             Vector2 difference = player.Pos + player.Size / 2 - (GO.Pos + GO.Size / 2);
 
             float dirRads = (float)Math.Atan2(dir.Y, dir.X);
@@ -60,10 +59,10 @@ namespace UU_GameProject
             }
 
             dir = new Vector2((float)Math.Cos(dirRads), (float)Math.Sin(dirRads));
-
             GO.Pos += dir * speed * time;
-
             life -= time;
+            double angle = Math.Atan2(dir.Y, dir.X);
+            GO.Renderer.SetRotation((float)angle * MathH.RAD_TO_DEG);
 
             if (GO.Pos.X < 0 || GO.Pos.X > 16 || GO.Pos.Y < 0 || GO.Pos.Y > 9 || life < 0)
                 GO.Destroy();

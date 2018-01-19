@@ -37,6 +37,7 @@ namespace UU_GameProject
                 {
                     GO.Size = new Vector2(width, height);
                     growing = 2;
+                    GO.Renderer.active = true;
                 }
                 GO.Pos = startpos - new Vector2(0, GO.Size.Y);
             }
@@ -47,6 +48,7 @@ namespace UU_GameProject
                 {
                     GO.Size = new Vector2(width, 0);
                     growing = -2;
+                    GO.Renderer.active = false;
                 }
                 GO.Pos = startpos - new Vector2(0, GO.Size.Y);
             }

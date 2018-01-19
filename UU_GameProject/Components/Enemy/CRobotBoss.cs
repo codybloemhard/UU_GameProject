@@ -53,6 +53,7 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
+            animationBoss = GO.Renderer as CAnimatedSprite;
             if (!started) return;
             chasing = false;
             if (!initiated) InitRobot();
@@ -237,8 +238,8 @@ namespace UU_GameProject
         {
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);
             animationBoss = new CAnimatedSprite();
-            animationBoss.AddAnimation("robotBossLaser", "robotBossLaser");
-            animationBoss.PlayAnimation("robotBossLaser", 12);
+            animationBoss.AddAnimation("robotBossLasers", "robotBossLasers");
+            animationBoss.PlayAnimation("robotBossLasers", 12);
             explosion.AddComponent(animationBoss);
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
