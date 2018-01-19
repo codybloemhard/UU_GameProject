@@ -92,9 +92,7 @@ namespace UU_GameProject
                 Console.WriteLine("Chunk does not exist.");
                 return;
             }
-
             context.Unload();
-
             for (int i = 0; i < chunk.source.Length; i++)
             {
                 bool spawner = chunk.source[i].tag[0] == '!';
@@ -103,13 +101,12 @@ namespace UU_GameProject
                 else newObj.AddComponent(new CRender("block"));
                 newObj.AddComponent(new CAABB());
                 newObj.AddComponent(new CLevelEditorObject(newObj, spawner));
-                newObj.Pos = chunk.source[i].pos;
-                if(spawner) newObj.Size = new Vector2(1f, 1f);
+                if (!spawner) newObj.Pos = chunk.source[i].pos;
+                else newObj.Pos = chunk.source[i].pos - new Vector2(0.5f);
+                if (spawner) newObj.Size = new Vector2(1f, 1f);
                 else newObj.Size = chunk.source[i].size;
             }
-
             
-
             //if (Input.GetKey(PressAction.PRESSED, Keys.W) && !CLevelEditorObject.Handling)
             //{
             //    GameObject newObject = new GameObject("spawner", this, 0, true);
