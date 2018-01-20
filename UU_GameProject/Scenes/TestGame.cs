@@ -109,6 +109,8 @@ namespace UU_GameProject
             builder.AddSource("!nenemy", 5, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 5, false, Rep_ArmourEnemy);
             builder.AddSource("!rboss", 5, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 5, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 5, false, Rep_CyborgBoss);
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -206,6 +208,33 @@ namespace UU_GameProject
             robotBoss.Size = new Vector2(3f, 3f);
             robotBoss.Pos = i.obj.pos - robotBoss.Size / 2f;
             return new GameObject[] { robotBoss };
+        }
+
+        private GameObject[] Rep_MageBoss(ReplacerInput i)
+        {
+            GameObject mageBoss = new GameObject("mageboss", this, 2);
+            mageBoss.AddComponent(new CRender("block"));
+            mageBoss.AddComponent(new CHealthPool(1500));
+            mageBoss.AddComponent(new CAABB());
+            mageBoss.AddComponent(new CFaction("enemy"));
+            mageBoss.AddComponent(new CMageBoss());
+            mageBoss.Size = new Vector2(2);
+            mageBoss.Pos = i.obj.pos - mageBoss.Size / 2;
+            return new GameObject[] { mageBoss };
+        }
+
+        private GameObject[] Rep_CyborgBoss(ReplacerInput i)
+        {
+            GameObject cyborgBoss = new GameObject("cyborgboss", this, 2);
+            cyborgBoss.AddComponent(new CRender("block"));
+            cyborgBoss.AddComponent(new CHealthPool(50));
+            cyborgBoss.AddComponent(new CAABB());
+            cyborgBoss.AddComponent(new CFaction("enemy"));
+            cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
+            cyborgBoss.AddComponent(new CRaycasts());
+            cyborgBoss.Size = new Vector2(4);
+            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;            
+            return new GameObject[] { cyborgBoss };
         }
 
         public override void Unload() { }

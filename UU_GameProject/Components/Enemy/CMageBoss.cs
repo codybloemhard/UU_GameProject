@@ -12,11 +12,13 @@ namespace UU_GameProject
     public class CMageBoss : Component
     {
         private float ctime;
-        private float maxYSpeed = 3, acceleration = 5;
+        private float maxYSpeed = 3, acceleration = 5, teleportSpeed = 4f, actionTime, teleportDelay = 4, teleportTime;
         private bool initiated, disappearing, appearing;
         private CRaycasts cRaycasts;
         private FSM fsm = new FSM();
-        private Vector2 targetPosition, newTarget, targetSize, velocity;
+        private Vector2 targetPosition, newTarget, targetSize, velocity, origin;
+        private CHealthPool healthpool;
+        private GameObject player;
 
         public override void Update(float time)
         {
@@ -25,15 +27,20 @@ namespace UU_GameProject
             ctime = time;
 
             if (Input.GetKey(PressAction.PRESSED, Keys.T))
-                LightningBolt(new Vector2(8, 8));
+                LightningBolt();
 
-            if (Input.GetKey(PressAction.PRESSED, Keys.Y) && fsm.CurrentState != "teleport")
+            if (Input.GetKey(PressAction.PRESSED, Keys.R))
+                FireBall();
+
+            if (teleportTime <= 0)
             {
-                newTarget = new Vector2(MathH.random.Next(2, 12), MathH.random.Next(2, 7));
+                teleportTime = teleportDelay;
+                newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
                 targetPosition = newTarget;
                 disappearing = true;
                 fsm.SetCurrentState("teleport");
             }
+            teleportTime -= time;
 
             //fsm.SetCurrentState("stay");
             fsm.Update();
@@ -41,21 +48,53 @@ namespace UU_GameProject
 
         private void InitMage()
         {
+            origin = GO.Pos;
             initiated = true;
+            healthpool = GO.GetComponent<CHealthPool>();
             cRaycasts = GO.GetComponent<CRaycasts>();
+            player = GO.Context.objects.FindWithTag("player");
             targetPosition = new Vector2(MathH.random.Next(2, 12), MathH.random.Next(2, 7));
             fsm.Add("stay", StayInPlace);
             fsm.Add("teleport", Teleport);
             targetSize = GO.Size;
+            fsm.SetCurrentState("stay");
         }
 
-        private void LightningBolt(Vector2 target)
+        private void LightningBolt()
         {
+            Vector2 target = player.Pos;
             GameObject lightning = new GameObject("lightningbolt" + GO.tag, GO.Context);
             lightning.AddComponent(new CRender("block"));
             lightning.AddComponent(new CLightningBolt(target));
+            lightning.AddComponent(new CAABB());
             lightning.Size = new Vector2(.3f);
-            lightning.Pos = new Vector2(target.X - lightning.Size.X/2, GO.Pos.Y);
+            lightning.Pos = new Vector2(target.X - lightning.Size.X/2, GO.Pos.Y - 5);
+        }
+
+        private void FireBall()
+        {
+            Vector2 dir = player.Pos - GO.Pos;
+            Vector2 size = new Vector2(.3f, .5f);
+            GameObject fireball = new GameObject("fireball", GO.Context, 0);
+            CAnimatedSprite animBall = new CAnimatedSprite();
+            animBall.AddAnimation("fireball", "fireball");
+            animBall.PlayAnimation("fireball", 8);
+            if (dir.X > 0)
+            {
+                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
+                dir -= GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
+            }
+            else
+            {
+                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
+                dir -= GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
+            }
+            fireball.Size = size;
+            fireball.AddComponent(animBall);
+            fireball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20f, false));
+            fireball.AddComponent(new CAABB());
+            fireball.AddComponent(new CFaction("enemy"));
+            AudioManager.PlayEffect("shoot");
         }
 
         private void StayInPlace()
@@ -65,28 +104,46 @@ namespace UU_GameProject
 
             float velocitySign = Math.Sign(velocity.Y);
             velocity.Y = sign * Math.Min(sign * velocity.Y, maxYSpeed);
-            GO.Pos += velocity * ctime;
+            GO.Pos += velocity * ctime /(healthpool.HealhPercent + .5f);
+
+            if(actionTime <= 0)
+            {
+                actionTime = .4f + (float)MathH.random.NextDouble() * healthpool.HealhPercent * 2;
+                Console.WriteLine(healthpool.HealhPercent);
+                int action = MathH.random.Next(2);
+                if (action == 0)
+                    FireBall();
+                else if (action == 1)
+                    LightningBolt();
+            }
+            actionTime -= ctime;
         }
 
         private void Teleport()
         {
             if(disappearing)
             {
-                if (GO.Size.X - targetSize.X * 0.5f * ctime < 0 || GO.Size.Y - targetSize.Y * 0.5f * ctime < 0)
+                if (GO.Size.X - targetSize.X * teleportSpeed * ctime < 0 || GO.Size.Y - targetSize.Y * teleportSpeed * ctime < 0)
                 {
                     disappearing = false;
                     appearing = true;
                     GO.Pos = newTarget;
                 }
-                else GO.Size -= targetSize * 0.5f * ctime;
+                else
+                {
+                    GO.Size -= targetSize * teleportSpeed * ctime;
+                    GO.Pos += 0.5F * targetSize * teleportSpeed * ctime;
+                }
             }
 
             if (appearing)
             {
-                GO.Size = new Vector2(Math.Min(GO.Size.X + targetSize.X * 0.5f * ctime, targetSize.X), Math.Min(GO.Size.Y + targetSize.Y * 0.5f * ctime, targetSize.Y));
+                GO.Size = new Vector2(Math.Min(GO.Size.X + targetSize.X * teleportSpeed * ctime, targetSize.X), Math.Min(GO.Size.Y + targetSize.Y * teleportSpeed * ctime, targetSize.Y));
+                GO.Pos -= 0.5f * targetSize * teleportSpeed * ctime;
                 if (GO.Size == targetSize)
                 {
                     appearing = false;
+                    targetPosition.Y -= 1f;
                     fsm.SetCurrentState("stay");
                 }
             }

@@ -21,23 +21,31 @@ namespace UU_GameProject
         {
             base.Update(time);
             GO.Pos += new Vector2(0, 3) * time;
-            if (GO.Pos.Y + GO.Size.Y >= target.Y)
-            {
-                LightningStrike(target);
-                GO.Destroy();
-            }
         }
 
         private void LightningStrike(Vector2 target)
         {
             GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);
-            lightningStrike.AddComponent(new CRender("block"));
+            CAnimatedSprite animLight = new CAnimatedSprite();
+            animLight.AddAnimation("lightningStrike", "lightningStrike");
+            animLight.PlayAnimation("lightningStrike", 40);
+            lightningStrike.AddComponent(animLight);
             lightningStrike.AddComponent(new CLightningStrike(0.1f, GO.tag, 50, false));
             lightningStrike.AddComponent(new CAABB());
             lightningStrike.AddComponent(new CFaction("enemy"));
             lightningStrike.Size = new Vector2(1);
             lightningStrike.Pos = target - lightningStrike.Size/2;
             AudioManager.PlayEffect("lightning");
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            base.OnCollision(other);
+            if(other.tag != "mageboss")
+            {
+                LightningStrike(GO.Pos + GO.Size/2);
+                GO.Destroy();
+            }
         }
     }
 }
