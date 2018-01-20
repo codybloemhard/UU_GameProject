@@ -87,7 +87,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("menu");
+            game.states.SetStartingState("editor");
             DataManager.SetData<float>("mastervolume", 1f);
             DataManager.SetData<float>("trackvolume", 1f);
             DataManager.SetData<float>("effectvolume", 1f);

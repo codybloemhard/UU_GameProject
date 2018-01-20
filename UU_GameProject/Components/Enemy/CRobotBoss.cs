@@ -76,9 +76,7 @@ namespace UU_GameProject
             {
                 changeTime = changeDelay;
                 ChangeFSM(false);
-                fsm.SetCurrentState("chase");
             }
-            fsm.SetCurrentState("fly");
         }
 
         private void ChangeFSM(bool chase)
