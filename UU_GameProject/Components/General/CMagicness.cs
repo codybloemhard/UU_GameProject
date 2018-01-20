@@ -62,7 +62,10 @@ namespace UU_GameProject
             if (!unlockedLightning) return;
             if (!manaPool.ConsumeMana(lightningCost)) return;
             GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);
-            lightningStrike.AddComponent(new CRender("block"));
+            CAnimatedSprite animLight = new CAnimatedSprite();
+            animLight.AddAnimation("lightningStrike", "lightningStrike");
+            animLight.PlayAnimation("lightningStrike", 40);
+            lightningStrike.AddComponent(animLight);
             lightningStrike.AddComponent(new CLightningStrike(duration, caller, 50, false));
             lightningStrike.AddComponent(new CAABB());
             lightningStrike.AddComponent(new CFaction(Faction));

@@ -250,8 +250,8 @@ namespace UU_GameProject
         private void CheckSideCollision(float time)
         {
             //player side collision
-            Vector2 leftDownCastOffset = GO.Pos + new Vector2(-0.5f, 0);
-            Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X + 0.5f, 0);
+            Vector2 leftDownCastOffset = GO.Pos + new Vector2(0, 0);
+            Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X, 0);
             Vector2 headLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
             Vector2 headRightCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
             Vector2 feetLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, GO.Size.Y);
