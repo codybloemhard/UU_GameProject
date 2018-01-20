@@ -71,7 +71,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag == "solid")
+            if (other.tag.Contains("solid"))
                 Explode();
         }
 

@@ -37,7 +37,7 @@ namespace UU_GameProject
             healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
 
-            player = new GameObject("player", this, 1);
+            player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
             anim.AddAnimation("standingRight", "playerStandingRight");
@@ -88,7 +88,7 @@ namespace UU_GameProject
         
         private void AddSources(ChunkFactory builder)
         {
-            builder.AddSource("!player", 5, false, Dec_Player);
+            builder.AddSource("!player", 15, false, Dec_Player);
             for(int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
                     for (int k = 0; k < 4; k++)
@@ -102,15 +102,14 @@ namespace UU_GameProject
                                 return Catalog.ReplacerBlock(inp, baset, layert0, layert1, topt);
                             });
                         }
-            builder.AddSource("spawn", 10, false, Dec_Spawner);
-            builder.AddSource("door", 10, true, Dec_Door);
+            builder.AddSource("spawn", 15, false, Dec_Spawner);
+            builder.AddSource("door", 15, true, Dec_Door);
             builder.AddSource("bosstrigger", 10, false, Dec_Bosstrigger);
-            builder.AddSource("!renemy", 5, false, Rep_RangedEnemy);
-            builder.AddSource("!nenemy", 5, false, Rep_NormalEnemy);
-            builder.AddSource("!aenemy", 5, false, Rep_ArmourEnemy);
-            builder.AddSource("!rboss", 5, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 5, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 5, false, Rep_CyborgBoss);
+            builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
+            builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
+            builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
+            builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
+
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -121,6 +120,18 @@ namespace UU_GameProject
             builder.AddSource("!tree7", 50, true, Catalog.ReplacerTree7);
             builder.AddSource("!tree8", 50, true, Catalog.ReplacerTree8);
             builder.AddSource("!tree9", 50, true, Catalog.ReplacerTree9);
+            builder.AddSource("!flower", 5, true, Catalog.ReplacerFlower);
+            builder.AddSource("!grass", 5, true, Catalog.ReplacerGrassPlant);
+            builder.AddSource("!grassdot", 5, true, Catalog.ReplacerGrassDot);
+            builder.AddSource("!grasshigh", 5, true, Catalog.ReplacerGrassHigh);
+            builder.AddSource("!snowman", 15, true, Catalog.ReplacerSnowman);
+            builder.AddSource("!boulder", 20, true, Catalog.ReplacerBoulder);
+            builder.AddSource("!stone", 20, true, Catalog.ReplacerStone);
+            builder.AddSource("!snowystone", 20, true, Catalog.ReplacerSnowyStone);
+            builder.AddSource("!stonefrosty", 20, true, Catalog.ReplacerFrostyStone);
+            builder.AddSource("!stoneshard", 20, true, Catalog.ReplacerStoneShard);
+            builder.AddSource("!cloud", 60, true, Catalog.ReplacerCloud);
+            builder.AddSource("!bush", 20, true, Catalog.ReplacerBush);
         }
 
         private void Dec_Player(GameObject o)
@@ -143,7 +154,7 @@ namespace UU_GameProject
 
         private void Dec_Door(GameObject o)
         {
-            o.tag = "bossdoor";
+            o.tag = "bossdoorsolid";
             o.AddComponent(new CGrowingDoor());
         }
 
@@ -195,7 +206,7 @@ namespace UU_GameProject
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(500));
+            robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -208,33 +219,6 @@ namespace UU_GameProject
             robotBoss.Size = new Vector2(3f, 3f);
             robotBoss.Pos = i.obj.pos - robotBoss.Size / 2f;
             return new GameObject[] { robotBoss };
-        }
-
-        private GameObject[] Rep_MageBoss(ReplacerInput i)
-        {
-            GameObject mageBoss = new GameObject("mageboss", this, 2);
-            mageBoss.AddComponent(new CRender("block"));
-            mageBoss.AddComponent(new CHealthPool(1500));
-            mageBoss.AddComponent(new CAABB());
-            mageBoss.AddComponent(new CFaction("enemy"));
-            mageBoss.AddComponent(new CMageBoss());
-            mageBoss.Size = new Vector2(2);
-            mageBoss.Pos = i.obj.pos - mageBoss.Size / 2;
-            return new GameObject[] { mageBoss };
-        }
-
-        private GameObject[] Rep_CyborgBoss(ReplacerInput i)
-        {
-            GameObject cyborgBoss = new GameObject("cyborgboss", this, 2);
-            cyborgBoss.AddComponent(new CRender("block"));
-            cyborgBoss.AddComponent(new CHealthPool(50));
-            cyborgBoss.AddComponent(new CAABB());
-            cyborgBoss.AddComponent(new CFaction("enemy"));
-            cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
-            cyborgBoss.AddComponent(new CRaycasts());
-            cyborgBoss.Size = new Vector2(4);
-            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;            
-            return new GameObject[] { cyborgBoss };
         }
 
         public override void Unload() { }
