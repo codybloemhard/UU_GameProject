@@ -13,7 +13,7 @@ namespace UU_GameProject
 
         private ChunkManager chunks;
         private UITextureElement healthbar, manabar, fitness, healing, lightning;
-        private GameObject player;
+        private GameObject player, sky;
         private CMagicness magicness;
         private CHealthPool healthpool;
         private CManaPool manapool;
@@ -29,14 +29,18 @@ namespace UU_GameProject
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-            healthbar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
+            healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
             healthbar.colour = new Color(0, 255, 0);
-            manabar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
-            manabar.colour = new Color(0, 0, 255);
-            fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
-            healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
-            lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-
+            manabar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
+            manabar.colour = new Color(255, 0, 255);
+            fitness = new UITextureElement(this, "sky", new Vector2(2.6f, 8f), new Vector2(1f));
+            healing = new UITextureElement(this, "sky", new Vector2(3.8f, 8f), new Vector2(1f));
+            lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
+            //objects
+            sky = new GameObject(this, 100);
+            sky.AddComponent(new CRender("sky"));
+            sky.Size = new Vector2(16, 9);
+            sky.Renderer.colour = new Color(50, 100, 255);
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -81,8 +85,8 @@ namespace UU_GameProject
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
             
-            AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(0f);
+            //AudioManager.PlayTrack("moonlightsonata");
+            AudioManager.SetMasterVolume(1f);
             //Debug.FullDebugMode();
         }
         
@@ -191,7 +195,7 @@ namespace UU_GameProject
             GameObject enemy = new GameObject("Aenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
-            enemy.AddComponent(new CHealthPool(1));
+            enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
@@ -206,7 +210,7 @@ namespace UU_GameProject
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(50));
+            robotBoss.AddComponent(new CHealthPool(500));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -252,6 +256,7 @@ namespace UU_GameProject
             else if (magicness.CanDash)
                 fitness.colour = cOrange;
             else fitness.colour = cRed;
+            sky.Pos = Camera.TopLeft;
 
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
             {

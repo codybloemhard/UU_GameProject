@@ -35,7 +35,7 @@ namespace UU_GameProject
         //spawns a fireball in specified direction
         public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
-            if (!manaPool.ConsumeMana(10)) return;
+            if (!manaPool.ConsumeMana(20)) return;
             if (Input.GetMouseWorldPosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
             else dir = new Vector2(-1,0);
@@ -50,7 +50,7 @@ namespace UU_GameProject
             fireball.Size = size;
             Vector2 path = (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size)));
             fireball.AddComponent(animBall);
-            fireball.AddComponent(new CFireballMovement(playerSpeed, path, dir, 20f, false));
+            fireball.AddComponent(new CFireballMovement(playerSpeed, path, dir, 10f, false));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");

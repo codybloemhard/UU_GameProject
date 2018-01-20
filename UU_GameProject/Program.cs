@@ -18,7 +18,7 @@ namespace UU_GameProject
         
         public Run()
         {
-            game = new GameWindow(1600);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
@@ -62,6 +62,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("robotBossLasers", "Spider_Boss_Lasers", 2, 1);
             TextureManager.LoadTexture("bullet", "Bullet", 2, 1);
             TextureManager.LoadTexture("repeat", "block", 0, 0);
+            TextureManager.LoadTexture("sky", "sky");
             AudioManager.LoadTrack("moonlightsonata", "beethoven");
             AudioManager.LoadEffect("jump", "jump");
             AudioManager.LoadEffect("dead", "dead");
@@ -70,7 +71,7 @@ namespace UU_GameProject
             AudioManager.LoadEffect("kill", "kill");
             AudioManager.LoadEffect("lightning", "lightning");
             AudioManager.LoadEffect("melee", "melee");
-            AudioManager.LoadEffect("shoot", "shoot"); 
+            AudioManager.LoadEffect("shoot", "shoot");
             TestMenu testMenu = new TestMenu();
             TestOptions testOptions = new TestOptions();
             Select select = new Select();
