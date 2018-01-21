@@ -119,6 +119,66 @@ namespace UU_GameProject
             possible[11] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2, 3 }, new int[] { 2 } });
             return possible;
         }
+
+        private static bool[] PossibleTree(int[] ids)
+        {
+            bool[] possible = new bool[9];
+            for (int i = 0; i < possible.Length; i++)
+                possible[i] = false;
+            possible[00] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2 }, new int[] { 1 } });
+            possible[01] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1, 2 }, new int[] { 0, 1 } });
+            possible[02] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2, 3 }, new int[] { 0, 2 } });
+            possible[03] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2 }, new int[] { 1 } });
+            possible[04] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1, 2 }, new int[] { 0 } });
+            possible[05] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2 }, new int[] { 1 } });
+            possible[06] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1, 2 }, new int[] { 0, 1 } });
+            possible[07] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1, 2 }, new int[] { 0, 1 } });
+            possible[08] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 1 } });
+            return possible;
+        }
+
+        public static GameObject[] ChooseTree(int n, ReplacerInput newi)
+        {
+            switch (n)
+            {
+                case 00: return Catalog.ReplacerTree0(newi);
+                case 01: return Catalog.ReplacerTree1(newi);
+                case 02: return Catalog.ReplacerTree2(newi);
+                case 03: return Catalog.ReplacerTree3(newi);
+                case 04: return Catalog.ReplacerTree4(newi);
+                case 05: return Catalog.ReplacerTree5(newi);
+                case 06: return Catalog.ReplacerTree6(newi);
+                case 07: return Catalog.ReplacerTree7(newi);
+                case 08: return Catalog.ReplacerTree9(newi);
+                default: return null;
+            }
+        }
+
+        public static GameObject[] ChooseObject(int n, ReplacerInput newi)
+        {
+            switch (n)
+            {
+                case 00: return Catalog.ReplacerBoulder(newi);
+                case 01: return Catalog.ReplacerStone(newi);
+                case 02: return Catalog.ReplacerSnowyStone(newi);
+                case 03: return Catalog.ReplacerFrostyStone(newi);
+                case 04: return Catalog.ReplacerStoneShard(newi);
+                case 05: return Catalog.ReplacerBush(newi);
+                case 06: return Catalog.ReplacerTree8(newi);
+                case 07: return Catalog.ReplacerFlower(newi);
+                case 08: return Catalog.ReplacerGrassPlant(newi);
+                case 09: return Catalog.ReplacerGrassDot(newi);
+                case 10: return Catalog.ReplacerGrassHigh(newi);
+                case 11: return Catalog.ReplacerSnowman(newi);
+                
+                default: return null;
+            }
+        }
+
+        private static bool IsPlant(int n)
+        {
+            return n >= 7 && n <= 10;
+        }
         
         public static void AddObjectsOnBlock(List<GameObject> list, ReplacerInput i, int[] ids)
         {
@@ -126,34 +186,44 @@ namespace UU_GameProject
             newi.obj.pos += newi.obj.size * new Vector2(0.5f, 0f);
             newi.obj.size = Vector2.Zero;
             bool[] possible = PossibleObject(ids);
-            List<int> goodones = new List<int>();
+            List<int> pieces = new List<int>();
+            List<int> plants = new List<int>();
             for (int j = 0; j < possible.Length; j++)
-                if (possible[j]) goodones.Add(j);
-            int number = (int)(MathH.random.NextDouble() * goodones.Count);
-            int chosen = 12;
-            if (goodones.Count > 0) chosen = goodones[number];
-            GameObject[] res;
-            if (chosen >= 6 && chosen <= 10)
-                newi.layer = 5;
-            else newi.layer = 20;
-            switch (chosen)
+                if (possible[j])
+                {
+                    if (IsPlant(j)) plants.Add(j);
+                    else pieces.Add(j);
+                }
+            int nPlant = (int)(MathH.random.NextDouble() * plants.Count);
+            int nPieces = (int)(MathH.random.NextDouble() * pieces.Count);
+            int chosenPlant = 12;
+            int chosenPiece = 12;
+            if (plants.Count > 0) chosenPlant = plants[nPlant];
+            if (pieces.Count > 0 && MathH.random.NextDouble() < 0.35f)
+                chosenPiece = pieces[nPieces];
+            else if(MathH.random.NextDouble() < 0.15f)
             {
-                case 00: res = Catalog.ReplacerBoulder(newi); break;
-                case 01: res = Catalog.ReplacerStone(newi); break;
-                case 02: res = Catalog.ReplacerSnowyStone(newi); break;
-                case 03: res = Catalog.ReplacerFrostyStone(newi); break;
-                case 04: res = Catalog.ReplacerStoneShard(newi); break;
-                case 05: res = Catalog.ReplacerBush(newi); break;
-                case 06: res = Catalog.ReplacerTree8(newi); break;
-                case 07: res = Catalog.ReplacerFlower(newi); break;
-                case 08: res = Catalog.ReplacerGrassPlant(newi); break;
-                case 09: res = Catalog.ReplacerGrassDot(newi); break;
-                case 10: res = Catalog.ReplacerGrassHigh(newi); break;
-                case 11: res = Catalog.ReplacerSnowman(newi); break;
-                default: res = null; break;
+                newi.layer = 50;
+                bool[] possibleTrees = PossibleTree(ids);
+                List<int> trees = new List<int>();
+                for (int j = 0; j < possibleTrees.Length; j++)
+                    if (possibleTrees[j])
+                        trees.Add(j);
+                int nTree = (int)(MathH.random.NextDouble() * trees.Count);
+                int chosenTree = 90;
+                if(trees.Count > 0) chosenTree = trees[nTree];
+                GameObject[] resTree = ChooseTree(chosenTree, newi);
+                if (resTree != null)
+                    list.Add(resTree);
             }
-            if (res != null)
-                list.Add(res);
+            newi.layer = 5;
+            GameObject[] resPlant = ChooseObject(chosenPlant, newi);
+            if (resPlant != null)
+                list.Add(resPlant);
+            newi.layer = 20;
+            GameObject[] resPieces = ChooseObject(chosenPiece, newi);
+            if (resPieces != null)
+                list.Add(resPieces);
         }
 
         public static GameObject[] ReplacerBlock(ReplacerInput i,
@@ -173,7 +243,7 @@ namespace UU_GameProject
                 input = i;
                 input.obj.pos = i.obj.pos + new Vector2(j * size * xinv, j * size * yinv);
                 input.obj.size = new Vector2(size);
-                GetBlocks(list, input, baset, layert0, layert1, topt);
+                GetBlocks(list, input, w > h, baset, layert0, layert1, topt);
             }
             if(leftover > 0f)
             {
@@ -182,7 +252,7 @@ namespace UU_GameProject
                 input.obj.pos = i.obj.pos + new Vector2(ratio * size * xinv, ratio * size * yinv);
                 if (w > h) input.obj.size = new Vector2(leftover, size);
                 else input.obj.size = new Vector2(size, leftover);
-                GetBlocks(list, input, baset, layert0, layert1, topt);
+                GetBlocks(list, input, w > h, baset, layert0, layert1, topt);
             }
             GameObject collider = new GameObject(i.context, 0, i.isStatic);
             collider.Pos = i.obj.pos;
@@ -193,7 +263,7 @@ namespace UU_GameProject
             return list.ToArray();
         }
         
-        private static void GetBlocks(List<GameObject> list, ReplacerInput i,
+        private static void GetBlocks(List<GameObject> list, ReplacerInput i, bool horizontal,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -257,7 +327,7 @@ namespace UU_GameProject
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
                 list.Add(layergo);
             }
-            AddObjectsOnBlock(list, i, ids);
+            if(horizontal)AddObjectsOnBlock(list, i, ids);
         }
         
         public static GameObject[] ReplacerBoulder(ReplacerInput i)
