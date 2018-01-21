@@ -7,7 +7,6 @@ namespace UU_GameProject
 {
     public class TestMenu : GameState
     {
-
         public TestMenu() : base() { }
 
         public override void Load(SpriteBatch batch)
@@ -20,7 +19,7 @@ namespace UU_GameProject
             testTimer.colour = new Color(0, 255, 0);
             testTimer.tag = "timerText";
 
-            //UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
+            UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
 
             //buttons
             Button buttonStart = new Button(this, "New game", "Menu_Button_1", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
