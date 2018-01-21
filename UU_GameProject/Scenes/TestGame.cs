@@ -214,17 +214,21 @@ namespace UU_GameProject
         private GameObject[] Rep_ArmourEnemy(ReplacerInput i)
         {
             GameObject enemy = new GameObject("Aenemy", this, i.layer);
+<<<<<<< HEAD
             CAnimatedSprite animArmourEnemy = new CAnimatedSprite();
             animArmourEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
             animArmourEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
             animArmourEnemy.PlayAnimation("robotSlimeMovingRight", 4);
             enemy.AddComponent(animArmourEnemy);
+=======
+            enemy.AddComponent(new CRender("player"));
+>>>>>>> bcdb069d19b5be78eea2b8cae8f97cd6874800ed
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.75f, 0.75f);
+            enemy.Size = new Vector2(0.5f, 1.0f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -272,7 +276,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_CyborgBoss(ReplacerInput i)
         {
-            GameObject cyborgBoss = new GameObject("cyborgboss", this, 2);
+            GameObject cyborgBoss = new GameObject("boss", this, 2);
             cyborgBoss.AddComponent(new CRender("block"));
             cyborgBoss.AddComponent(new CHealthPool(50));
             cyborgBoss.AddComponent(new CAABB());
@@ -280,7 +284,8 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.Size = new Vector2(4);
-            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;            
+            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
+            cyborgBoss.active = false;          
             return new GameObject[] { cyborgBoss };
         }
 
