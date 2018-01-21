@@ -268,7 +268,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_CyborgBoss(ReplacerInput i)
         {
-            GameObject cyborgBoss = new GameObject("cyborgboss", this, 2);
+            GameObject cyborgBoss = new GameObject("boss", this, 2);
             cyborgBoss.AddComponent(new CRender("block"));
             cyborgBoss.AddComponent(new CHealthPool(50));
             cyborgBoss.AddComponent(new CAABB());
@@ -276,7 +276,8 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.Size = new Vector2(4);
-            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;            
+            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
+            cyborgBoss.active = false;          
             return new GameObject[] { cyborgBoss };
         }
 
