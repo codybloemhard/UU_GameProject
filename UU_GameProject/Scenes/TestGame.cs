@@ -62,6 +62,7 @@ namespace UU_GameProject
             healthpool = new CHealthPool(100);
             manapool = new CManaPool(100, player);
             mopweapon = new CMopWeapon();
+            player.AddComponent(new CRaycasts());
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());

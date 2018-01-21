@@ -79,7 +79,7 @@ namespace UU_GameProject
                 cyborgBoss.AddComponent(new CCyborgBoss(stage, i));
                 cyborgBoss.AddComponent(new CDamageDealer(10 * stage, false));
                 cyborgBoss.AddComponent(new CRaycasts());
-                cyborgBoss.AddComponent(new CHealthPool(100 * stage));
+                cyborgBoss.AddComponent(new CHealthPool(10 * stage));
                 cyborgBoss.AddComponent(new CFaction("enemy"));
                 cyborgBoss.Pos = GO.Pos;
                 cyborgBoss.Size = new Vector2(stage);

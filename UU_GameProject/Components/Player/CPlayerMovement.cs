@@ -20,9 +20,6 @@ namespace UU_GameProject
         private float maxDashSpeed = 4;
         private bool isDashing = false;
         private bool fallPanic = false;
-        private bool grounded = false;
-        private bool leftSideAgainstWall = false;
-        private bool rightSideAgainstWall = false;
         private bool leftIsSlidingOnWall = false;
         private bool rightIsSlidingOnWall = false;
         private bool isCrawling = false;
@@ -44,6 +41,7 @@ namespace UU_GameProject
         private CMeleeAttack melee;
         private CShoot shoot;
         private CMopWeapon mopWeapon;
+        private CRaycasts cRaycasts;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -64,6 +62,7 @@ namespace UU_GameProject
             melee = GO.GetComponent<CMeleeAttack>();
             shoot = GO.GetComponent<CShoot>();
             mopWeapon = GO.GetComponent<CMopWeapon>();
+            cRaycasts = GO.GetComponent<CRaycasts>();
         }
 
         public override void Update(float time)
@@ -73,8 +72,6 @@ namespace UU_GameProject
             playerPosition = GO.Pos;
 
             PickAnimation();
-            CheckSideCollision(time);
-            CheckTopAndBottomCollision(time);
             BasicMovement(time, timeAccel);
             Gravity(time);
             AdvancedMovement(timeAccel);
@@ -84,24 +81,26 @@ namespace UU_GameProject
             FallPanic();
             Dashing(time);
             WallSliding();
+
+            GO.Pos += cRaycasts.Move((velocity * speed + new Vector2(0, vertVelo)) * time);
         }
 
         private void BasicMovement(float time, float timeAccel)
         {
             //basic movement: slowly accelerates the player
             if (Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X + timeAccel <= maxPlayerSpeed)
-                velocity += new Vector2(timeAccel, 0);
+                velocity.X += timeAccel;
             if (Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X - timeAccel >= -maxPlayerSpeed)
-                velocity += new Vector2(-timeAccel, 0);
+                velocity.X -= timeAccel;
             //stops the player when they hit a wall
-            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A))
+            if (cRaycasts.WallLeftHit && Input.GetKey(PressAction.DOWN, Keys.A))
                 velocity.X = 0;
-            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D))
+            if (cRaycasts.WallRightHit && Input.GetKey(PressAction.DOWN, Keys.D))
                 velocity.X = 0;
             //stops the player if no buttons are pressed
-            if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && grounded)
+            if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && cRaycasts.Grounded)
                 velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
-            if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && grounded)
+            if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && cRaycasts.Grounded)
                 velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
             if (GO.Pos.Y > 200) Reset();
             if (velocity != Vector2.Zero)
@@ -118,7 +117,7 @@ namespace UU_GameProject
         private void Gravity(float time)
         {
             //gravity
-            if (!grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
+            if (!cRaycasts.Grounded && !leftIsSlidingOnWall && !rightIsSlidingOnWall)
             {
                 vertVelo += acceleration * time;
                 jumpDelayTime += time;
@@ -128,7 +127,7 @@ namespace UU_GameProject
         private void AdvancedMovement(float timeAccel)
         {
             //down
-            if (Input.GetKey(PressAction.DOWN, Keys.S) && grounded)
+            if (Input.GetKey(PressAction.DOWN, Keys.S) && cRaycasts.Grounded)
             {
                 maxPlayerSpeed = 0.5f;
                 isDown = true;
@@ -164,8 +163,8 @@ namespace UU_GameProject
         private void Jump()
         {
             //jump
-            if (grounded && vertVelo > 0) vertVelo = 0;
-            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            if (cRaycasts.Grounded && vertVelo > 0) vertVelo = 0;
+            if (cRaycasts.Grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || cRaycasts.Grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 vertVelo = -jumpPower;
                 jumpDelayTime = 0;
@@ -176,7 +175,7 @@ namespace UU_GameProject
         private void DoubleJump()
         {
             //double jump
-            if (!grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
+            if (!cRaycasts.Grounded && Input.GetKey(PressAction.PRESSED, Keys.W) || !cRaycasts.Grounded && Input.GetKey(PressAction.PRESSED, Keys.Space))
             {
                 if (fallPanic == false && jumpDelayTime >= 0.166666f)
                 {
@@ -196,7 +195,7 @@ namespace UU_GameProject
             if (vertVelo > 25 || lastVertVelo > 25)
             {
                 fallPanic = true;
-                if (grounded)
+                if (cRaycasts.Grounded)
                     healthPool.ChangeHealth((int)lastVertVelo - 25, false);
                 lastVertVelo = vertVelo;
             }
@@ -236,11 +235,11 @@ namespace UU_GameProject
         private void WallSliding()
         {
             //Wall sliding
-            if (leftSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
+            if (cRaycasts.WallLeftHit && Input.GetKey(PressAction.DOWN, Keys.A) && vertVelo > 0)
                 leftIsSlidingOnWall = true;
             else leftIsSlidingOnWall = false;
 
-            if (rightSideAgainstWall && Input.GetKey(PressAction.DOWN, Keys.D) && vertVelo > 0)
+            if (cRaycasts.WallRightHit && Input.GetKey(PressAction.DOWN, Keys.D) && vertVelo > 0)
                 rightIsSlidingOnWall = true;
             else rightIsSlidingOnWall = false;
 
@@ -248,78 +247,6 @@ namespace UU_GameProject
                 vertVelo = 1;
         }
 
-        private void CheckSideCollision(float time)
-        {
-            //player side collision
-            Vector2 leftDownCastOffset = GO.Pos + new Vector2(0, 0);
-            Vector2 rightDownCastOffset = GO.Pos + new Vector2(GO.Size.X, 0);
-            Vector2 headLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
-            Vector2 headRightCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, 0);
-            Vector2 feetLeftCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, GO.Size.Y);
-            Vector2 feetRightCastOffset = GO.Pos + new Vector2(GO.Size.X / 2, GO.Size.Y);
-            RaycastResult LeftBoundary = GO.Raycast(leftDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult RightBoundary = GO.Raycast(rightDownCastOffset, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult LeftDefaultTop = GO.Raycast(headLeftCastOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult RightDefaultTop = GO.Raycast(headRightCastOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult LeftDefaultBottom = GO.Raycast(feetLeftCastOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            RaycastResult RightDefaultBottom = GO.Raycast(feetRightCastOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-
-            if (LeftDefaultTop.hit && LeftDefaultTop.distance < GO.Size.X / 2 || LeftDefaultBottom.hit && LeftDefaultBottom.distance < GO.Size.X / 2)
-                leftSideAgainstWall = true;
-            else if (LeftBoundary.distance <= GO.Size.Y)
-            {
-                Vector2 hitLeftOffset = GO.Pos + new Vector2(GO.Size.X / 2, LeftBoundary.distance + 0.01f);
-                RaycastResult hitLeft = GO.Raycast(hitLeftOffset, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-                if (hitLeft.hit && hitLeft.distance < GO.Size.X / 2)
-                    leftSideAgainstWall = true;
-            }
-            else leftSideAgainstWall = false;
-
-            if (RightDefaultTop.hit && RightDefaultTop.distance < GO.Size.X / 2 || RightDefaultBottom.hit && RightDefaultBottom.distance < GO.Size.X / 2)
-                rightSideAgainstWall = true;
-            else if (RightBoundary.distance <= GO.Size.Y)
-            {
-                Vector2 hitRightOffset = GO.Pos + new Vector2(GO.Size.X / 2, RightBoundary.distance + 0.01f);
-                RaycastResult hitRight = GO.Raycast(hitRightOffset, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-                if (hitRight.hit && hitRight.distance < GO.Size.X / 2)
-                    rightSideAgainstWall = true;
-            }
-            else rightSideAgainstWall = false;
-        }
-
-        private void CheckTopAndBottomCollision(float time)
-        {
-            //player head and bottom collision
-            Vector2 BottomLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
-            Vector2 BottomRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            Vector2 TopLeft = GO.Pos + new Vector2(0, -0.01f);
-            Vector2 TopRight = GO.Pos + new Vector2(GO.Size.X, -0.01f);
-            RaycastResult hitBottomLeft = GO.Raycast(BottomLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitBottomRight = GO.Raycast(BottomRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitTopLeft = GO.Raycast(TopLeft, new Vector2(0, -1), RAYCASTTYPE.STATIC);
-            RaycastResult hitTopRight = GO.Raycast(TopRight, new Vector2(0, -1), RAYCASTTYPE.STATIC);
-            RaycastResult hitBottom;
-            RaycastResult hitTop;
-            if (hitBottomLeft.distance > hitBottomRight.distance)
-                hitBottom = hitBottomRight;
-            else hitBottom = hitBottomLeft;
-
-            if (hitTopLeft.distance > hitTopRight.distance)
-                hitTop = hitTopRight;
-            else hitTop = hitTopLeft;
-
-            if (hitBottom.hit && hitBottom.distance < 0.001f)
-                grounded = true;
-            else grounded = false;
-
-            if (hitTop.hit && hitTop.distance < 0.03f && vertVelo <= 0)
-                vertVelo = 0;
-
-            //speed is in Units/Second
-            //updates player position based on velocity
-            GO.Pos += velocity * speed * time;
-            GO.Pos += new Vector2(0, Math.Min(hitBottom.distance, vertVelo * time));
-        }
 
         private void PickAnimation()
         {
@@ -334,9 +261,9 @@ namespace UU_GameProject
                 animation.PlayAnimationIfDifferent("wallSlidingRight", 2);
             else if (rightIsSlidingOnWall)
                 animation.PlayAnimationIfDifferent("wallSlidingLeft", 2);
-            else if (!grounded && intendedDir > 0)
+            else if (!cRaycasts.Grounded && intendedDir > 0)
                 animation.PlayAnimationIfDifferent("airborneRight", 2);
-            else if (!grounded && intendedDir < 0)
+            else if (!cRaycasts.Grounded && intendedDir < 0)
                 animation.PlayAnimationIfDifferent("airborneLeft", 2);
             else if (fallPanic)
                 animation.PlayAnimationIfDifferent("fallPanic", 2);
@@ -397,6 +324,7 @@ namespace UU_GameProject
         //reset
         public void Reset()
         {
+            Console.WriteLine("yeah");
             AudioManager.PlayEffect("dead");
             if (checkPos != new Vector2(-1000, -1000))
                 GO.Pos = checkPos;
