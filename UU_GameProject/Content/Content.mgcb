@@ -619,18 +619,6 @@
 /processorParam:TextureFormat=Color
 /build:Arch_Mage_Lightning.png
 
-#begin Lightning_Strike.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Lightning_Strike.png
-
 #begin Green_Mage_Casting_Left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -822,4 +810,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Robot_Slime_Moving_Right.png
+
+#begin Lightning_Strike.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lightning_Strike.png
 

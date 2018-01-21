@@ -85,7 +85,7 @@ namespace UU_GameProject
         private void FireBall()
         {
             Vector2 dir = player.Pos - GO.Pos;
-            Vector2 size = new Vector2(.3f, .5f);
+            Vector2 size = new Vector2(1f, 1f);
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
             CAnimatedSprite animBall = new CAnimatedSprite();
             animBall.AddAnimation("fireball", "fireball");
