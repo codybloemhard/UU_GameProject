@@ -108,7 +108,7 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 15, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
-            builder.AddSource("bosstrigger", 10, false, Dec_Bosstrigger);
+            builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
             builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
@@ -164,7 +164,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_RangedEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Renemy", this, 2);
+            GameObject enemy = new GameObject("Renemy", this, i.layer);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(25));
@@ -178,7 +178,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_NormalEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Nenemy", this, 2);
+            GameObject enemy = new GameObject("Nenemy", this, i.layer);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(50));
@@ -192,7 +192,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_ArmourEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Aenemy", this, 2);
+            GameObject enemy = new GameObject("Aenemy", this, i.layer);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(100));
@@ -206,7 +206,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_RobotBoss(ReplacerInput i)
         {
-            GameObject robotBoss = new GameObject("boss", this, 2);
+            GameObject robotBoss = new GameObject("boss", this, i.layer);
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
