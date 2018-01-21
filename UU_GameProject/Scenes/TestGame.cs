@@ -150,7 +150,11 @@ namespace UU_GameProject
         private GameObject[] Rep_RangedEnemy(ReplacerInput i)
         {
             GameObject enemy = new GameObject("Renemy", this, 2);
-            enemy.AddComponent(new CRender("player"));
+            CAnimatedSprite animRangedEnemy = new CAnimatedSprite();
+            animRangedEnemy.AddAnimation("standing", "redMageStanding");
+            animRangedEnemy.AddAnimation("casting", "redMageCasting");
+            animRangedEnemy.PlayAnimation("standing", 2);
+            enemy.AddComponent(animRangedEnemy);
             enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
@@ -164,7 +168,10 @@ namespace UU_GameProject
         private GameObject[] Rep_NormalEnemy(ReplacerInput i)
         {
             GameObject enemy = new GameObject("Nenemy", this, 2);
-            enemy.AddComponent(new CRender("player"));
+            CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
+            animNormalEnemy.AddAnimation("moving", "redSlimeMoving");
+            animNormalEnemy.PlayAnimation("moving", 4);
+            enemy.AddComponent(animNormalEnemy);
             enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(50));
             enemy.AddComponent(new CAABB());
@@ -213,7 +220,11 @@ namespace UU_GameProject
         private GameObject[] Rep_MageBoss(ReplacerInput i)
         {
             GameObject mageBoss = new GameObject("mageboss", this, 2);
-            mageBoss.AddComponent(new CRender("block"));
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("hovering", "mageBossHovering");
+            animBoss.AddAnimation("fireball", "mageBossFireball");
+            animBoss.AddAnimation("lightning", "mageBossLightning");
+            animBoss.PlayAnimation("hovering", 2);
             mageBoss.AddComponent(new CHealthPool(1500));
             mageBoss.AddComponent(new CAABB());
             mageBoss.AddComponent(new CFaction("enemy"));

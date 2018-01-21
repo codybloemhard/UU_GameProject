@@ -60,6 +60,17 @@ namespace UU_GameProject
             TextureManager.LoadTexture("robotBossFlying", "Spider_Boss_Flying", 2, 1);
             TextureManager.LoadTexture("robotBossFalling", "Spider_Boss_Falling", 2, 1);
             TextureManager.LoadTexture("robotBossLasers", "Spider_Boss_Lasers", 2, 1);
+            TextureManager.LoadTexture("mageBossHovering", "Arch_Mage_Hovering", 8, 1);
+            TextureManager.LoadTexture("mageBossFireball", "Arch_Mage_Fireball", 8, 1);
+            TextureManager.LoadTexture("mageBossLightning", "Arch_Mage_Lightning", 8, 1);
+            TextureManager.LoadTexture("redMageStanding", "Red_Mage_Standing", 4, 1);
+            TextureManager.LoadTexture("redMageCasting", "Red_Mage_Casting", 4, 1);
+            TextureManager.LoadTexture("purpleMageStanding", "Purple_Mage_Standing", 4, 1);
+            TextureManager.LoadTexture("purpleMageCasting", "Purple_Mage_Casting", 4, 1);
+            TextureManager.LoadTexture("greenMageStanding", "Green_Mage_Standing", 4, 1);
+            TextureManager.LoadTexture("greenMageCasting", "Green_Mage_Casting", 4, 1);
+            TextureManager.LoadTexture("redSlimeMoving", "Red_Slime_Moving", 8, 1);
+            TextureManager.LoadTexture("robotSlimeMoving", "Robot_Slime_Moving", 8, 1);
             TextureManager.LoadTexture("bullet", "Bullet", 2, 1);
             TextureManager.LoadTexture("repeat", "block", 0, 0);
             AudioManager.LoadTrack("moonlightsonata", "beethoven");
@@ -87,7 +98,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("editor");
+            game.states.SetStartingState("select");
             DataManager.SetData<float>("mastervolume", 1f);
             DataManager.SetData<float>("trackvolume", 1f);
             DataManager.SetData<float>("effectvolume", 1f);
