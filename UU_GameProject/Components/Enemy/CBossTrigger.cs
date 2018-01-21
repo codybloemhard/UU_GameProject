@@ -52,8 +52,7 @@ namespace UU_GameProject
                 beaten = true;
                 return;
             }
-            CRobotBoss comp = boss.GetComponent<CRobotBoss>();
-            comp.started = true;
+            boss.active = true;
         }
 
         public override void OnCollision(GameObject other)

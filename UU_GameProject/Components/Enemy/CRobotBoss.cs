@@ -25,7 +25,6 @@ namespace UU_GameProject
         private float speed, gravity = 10f, jetpackPower = 10, acceleration = 5f, maxYSpeed = 3,crushSpeed = 20f, turningSpeed = 3;
         private float ctime, shootDelay = 1f, shootTime, crushDelay = 5, crushTime, changeDelay = 5, changeTime, chaseTime, chaseMax = 5, chaseSpeedIncrease;
         private bool grounded, falling;
-        public bool started = false;
 
         public CRobotBoss(float speed)
         {
@@ -54,7 +53,6 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             animationBoss = GO.Renderer as CAnimatedSprite;
-            if (!started) return;
             chasing = false;
             if (!initiated) InitRobot();
 
