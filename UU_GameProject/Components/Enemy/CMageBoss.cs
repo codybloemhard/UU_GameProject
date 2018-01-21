@@ -68,10 +68,13 @@ namespace UU_GameProject
         {
             Vector2 target = player.Pos;
             GameObject lightning = new GameObject("lightningbolt" + GO.tag, GO.Context);
-            lightning.AddComponent(new CRender("block"));
+            CAnimatedSprite animLight = new CAnimatedSprite();
+            animLight.AddAnimation("lightningSpawner", "lightningSpawner");
+            animLight.PlayAnimation("lightningSpawner", 4);
+            lightning.AddComponent(animLight);
             lightning.AddComponent(new CLightningBolt(target));
             lightning.AddComponent(new CAABB());
-            lightning.Size = new Vector2(.3f);
+            lightning.Size = new Vector2(.3f, .6f);
             lightning.Pos = new Vector2(target.X - lightning.Size.X/2, GO.Pos.Y - 5);
             firingLightning = false;
         }

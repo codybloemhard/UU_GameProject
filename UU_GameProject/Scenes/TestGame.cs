@@ -213,17 +213,12 @@ namespace UU_GameProject
 
         private GameObject[] Rep_ArmourEnemy(ReplacerInput i)
         {
-<<<<<<< HEAD
-            GameObject enemy = new GameObject("Aenemy", this, 2);
+            GameObject enemy = new GameObject("Aenemy", this, i.layer);
             CAnimatedSprite animArmourEnemy = new CAnimatedSprite();
             animArmourEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
             animArmourEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
             animArmourEnemy.PlayAnimation("robotSlimeMovingRight", 4);
             enemy.AddComponent(animArmourEnemy);
-=======
-            GameObject enemy = new GameObject("Aenemy", this, i.layer);
-            enemy.AddComponent(new CRender("player"));
->>>>>>> 675d1c139fb7c2276b3d9a2ef740e1efe73a1c53
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
