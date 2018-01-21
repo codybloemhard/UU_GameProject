@@ -243,12 +243,13 @@ namespace UU_GameProject
             robotBoss.AddComponent(animBoss);
             robotBoss.Size = new Vector2(3f, 3f);
             robotBoss.Pos = i.obj.pos - robotBoss.Size / 2f;
+            robotBoss.active = false;
             return new GameObject[] { robotBoss };
         }
 
         private GameObject[] Rep_MageBoss(ReplacerInput i)
         {
-            GameObject mageBoss = new GameObject("mageboss", this, 2);
+            GameObject mageBoss = new GameObject("boss", this, 2);
             CAnimatedSprite animBoss = new CAnimatedSprite();
             animBoss.AddAnimation("hovering", "mageBossHovering");
             animBoss.AddAnimation("fireball", "mageBossFireball");
@@ -261,6 +262,7 @@ namespace UU_GameProject
             mageBoss.AddComponent(new CMageBoss());
             mageBoss.Size = new Vector2(2);
             mageBoss.Pos = i.obj.pos - mageBoss.Size / 2;
+            mageBoss.active = false;
             return new GameObject[] { mageBoss };
         }
 
