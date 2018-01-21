@@ -60,7 +60,6 @@ namespace UU_GameProject
             }
             teleportTime -= time;
 
-            fsm.SetCurrentState("stay");
             fsm.Update();
         }
 
@@ -129,9 +128,10 @@ namespace UU_GameProject
 
         private void Teleport()
         {
-            if(disappearing)
+            Console.WriteLine("teleporting");
+            if (disappearing)
             {
-                Console.WriteLine("teleporting");
+                
                 if (GO.Size.X - targetSize.X * teleportSpeed * ctime < 0 || GO.Size.Y - targetSize.Y * teleportSpeed * ctime < 0)
                 {
                     disappearing = false;
