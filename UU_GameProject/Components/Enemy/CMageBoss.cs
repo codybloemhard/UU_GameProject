@@ -60,7 +60,7 @@ namespace UU_GameProject
             }
             teleportTime -= time;
 
-            //fsm.SetCurrentState("stay");
+            fsm.SetCurrentState("stay");
             fsm.Update();
         }
 
@@ -82,22 +82,15 @@ namespace UU_GameProject
         //shoots a fireball at the player
         private void FireBall()
         {
-            Vector2 dir = player.Pos - GO.Pos;
+            Vector2 dir = player.Pos + player.Size/2 - (GO.Pos + GO.Size/2);
             Vector2 size = new Vector2(1f, 1f);
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
             CAnimatedSprite animBall = new CAnimatedSprite();
             animBall.AddAnimation("fireball", "fireball");
             animBall.PlayAnimation("fireball", 8);
-            if (dir.X > 0)
-            {
-                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
-                dir -= GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
-            }
-            else
-            {
-                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
-                dir -= GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
-            }
+
+            fireball.Pos = GO.Pos + new Vector2(GO.Size.X/2, .4f) - size / 2f;
+
             fireball.Size = size;
             fireball.AddComponent(animBall);
             fireball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20f, false));
@@ -119,7 +112,6 @@ namespace UU_GameProject
             if(actionTime <= 0)
             {
                 actionTime = .4f + (float)MathH.random.NextDouble() * healthpool.HealhPercent * 2;
-                Console.WriteLine(healthpool.HealhPercent);
                 int action = MathH.random.Next(2);
                 if (action == 0)
                 {
@@ -139,6 +131,7 @@ namespace UU_GameProject
         {
             if(disappearing)
             {
+                Console.WriteLine("teleporting");
                 if (GO.Size.X - targetSize.X * teleportSpeed * ctime < 0 || GO.Size.Y - targetSize.Y * teleportSpeed * ctime < 0)
                 {
                     disappearing = false;
@@ -168,11 +161,11 @@ namespace UU_GameProject
         private void animation()
         {
             if (firingFireball)
-                animationBoss.PlayAnimationIfDifferent("fireball", 6);
+                animationBoss.PlayAnimationIfDifferent("fireball", 12 - healthpool.HealhPercent * 6);
             else if (firingLightning)
-                animationBoss.PlayAnimationIfDifferent("lightning", 6);
+                animationBoss.PlayAnimationIfDifferent("lightning", 12 - healthpool.HealhPercent * 6);
             else
-                animationBoss.PlayAnimationIfDifferent("hovering", 6);
+                animationBoss.PlayAnimationIfDifferent("hovering", 12 - healthpool.HealhPercent * 6);
         }
     }
 }
