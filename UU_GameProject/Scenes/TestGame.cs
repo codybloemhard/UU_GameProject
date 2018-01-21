@@ -85,7 +85,7 @@ namespace UU_GameProject
             chunks.Discover(baseurl, builder, player);
             
             //AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(1f);
+            AudioManager.SetMasterVolume(0f);
             //Debug.FullDebugMode();
         }
         
