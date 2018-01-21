@@ -20,7 +20,7 @@ namespace UU_GameProject
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(12, 0), new Vector2(2, 1));
             Button load = new Button(this, "Load", "block", () => LevelLogic.EditChunk(Console.ReadLine(), baseurl, this),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(10, 0), new Vector2(2, 1));
-            Button unload = new Button(this, "unload", "block", () => Unload(),
+            Button unload = new Button(this, "Unload", "block", () => Unload(),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(8, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             quit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
