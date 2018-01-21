@@ -14,16 +14,16 @@ namespace UU_GameProject
 
         public override void Load(SpriteBatch batch)
         {
-            Button button = new Button(this, "Finish", "block", () => Finish(true),
+            Button test = new Button(this, "Test", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
-            Button quit = new Button(this, "Cancel", "block", () => Finish(false),
+            Button save = new Button(this, "Save", "block", () => Save(true),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(12, 0), new Vector2(2, 1));
             Button load = new Button(this, "Load", "block", () => LevelLogic.EditChunk(Console.ReadLine(), baseurl, this),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(10, 0), new Vector2(2, 1));
             Button unload = new Button(this, "Unload", "block", () => Unload(),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(8, 0), new Vector2(2, 1));
-            button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-            quit.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            test.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            save.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             load.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             unload.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
@@ -84,7 +84,7 @@ namespace UU_GameProject
 
         }
         
-        public void Finish(bool save)
+        public void Save(bool save)
         {
             //if (!save) TestChunks();
             if (save)
@@ -102,7 +102,6 @@ namespace UU_GameProject
                 Console.WriteLine("Saving chunk with position (" + x + "," + y + ").");
                 LevelLogic.WriteChunk(CLevelEditorObject.objectList, baseurl + "chunk" + x + y + ".lvl", x, y);
             }
-            GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
         }
         
         private void TestChunks()//write 441 random chunks

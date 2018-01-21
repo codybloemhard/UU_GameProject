@@ -31,6 +31,7 @@ namespace UU_GameProject
         private bool isDown = false;
         private bool initiated = false;
         private bool canMelee = true;
+        public bool spawned = false;
         public Vector2 playerPosition;
         private Vector2 dir;
         public Vector2 velocity = Vector2.Zero;
@@ -381,8 +382,11 @@ namespace UU_GameProject
 
         public override void OnCollision(GameObject other)
         {
-            if(other.tag == "checkpoint")
+            if (other.tag == "checkpoint")
+            {
                 checkPos = GO.Pos;
+                Console.WriteLine("checkpoint set");
+            }
         }
         
         public Vector2 Velocity()

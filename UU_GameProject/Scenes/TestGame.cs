@@ -142,13 +142,17 @@ namespace UU_GameProject
 
         private void Dec_Player(GameObject o)
         {
-            player.Pos = o.Pos - player.Size * new Vector2(0.5f, 1f);
+            if (player.GetComponent<CPlayerMovement>().spawned == false)
+            {
+                player.Pos = o.Pos - player.Size * new Vector2(0.5f, 1f);
+                player.GetComponent<CPlayerMovement>().spawned = true;
+            }
         }
 
         private void Dec_Spawner(GameObject o)
         {
             o.AddComponent(new CAABB());
-            o.AddComponent(new CRender("suprise"));
+            o.AddComponent(new CRender("block"));
             o.tag = "checkpoint";
         }
 
@@ -219,7 +223,7 @@ namespace UU_GameProject
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(500));
+            robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -242,7 +246,7 @@ namespace UU_GameProject
             animBoss.AddAnimation("fireball", "mageBossFireball");
             animBoss.AddAnimation("lightning", "mageBossLightning");
             animBoss.PlayAnimation("hovering", 2);
-            mageBoss.AddComponent(new CHealthPool(1500));
+            mageBoss.AddComponent(new CHealthPool(100));
             mageBoss.AddComponent(new CAABB());
             mageBoss.AddComponent(new CFaction("enemy"));
             mageBoss.AddComponent(new CMageBoss());
@@ -304,10 +308,6 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
-
-            if (Input.GetKey(PressAction.PRESSED, Keys.V))
-                foreach(GameObject obj in objects.FindAllWithTag("cyborgboss"))
-                    obj.GetComponent<CCyborgBoss>().Split();
 
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
