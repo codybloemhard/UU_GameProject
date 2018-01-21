@@ -50,9 +50,9 @@ namespace UU_GameProject
             return textures[name];
         }
 
-        public static string RandomTexture(string name)
+        public static string RandomTexture(string name, int seed)
         {
-            return name + (uint)(MathH.random.Next() % TextureAmount(name));
+            return name + (uint)((Seed.Random(seed)* TextureAmount(name)) % TextureAmount(name));
         }
 
         public static List<string> GetAllTextures(string name)
@@ -63,10 +63,10 @@ namespace UU_GameProject
             return alltex;
         }
 
-        public static GameObject CreateObject(GameState context, uint layer, string tag, string tex, bool isStatic = false)
+        public static GameObject CreateObject(GameState context, uint layer, string tag, string tex, int seed, bool isStatic = false)
         {
             GameObject go = new GameObject(tag, context, layer, isStatic);
-            go.AddComponent(new CRender(RandomTexture(tex)));
+            go.AddComponent(new CRender(RandomTexture(tex, seed)));
             return go;
         }
 
@@ -182,6 +182,7 @@ namespace UU_GameProject
         
         public static void AddObjectsOnBlock(List<GameObject> list, ReplacerInput i, int[] ids)
         {
+            Seed.Set(i.obj.pos);
             ReplacerInput newi = i;
             newi.obj.pos += newi.obj.size * new Vector2(0.5f, 0f);
             newi.obj.size = Vector2.Zero;
@@ -194,14 +195,14 @@ namespace UU_GameProject
                     if (IsPlant(j)) plants.Add(j);
                     else pieces.Add(j);
                 }
-            int nPlant = (int)(MathH.random.NextDouble() * plants.Count);
-            int nPieces = (int)(MathH.random.NextDouble() * pieces.Count);
+            int nPlant = (int)(Seed.Random(i.obj.pos) * plants.Count);
+            int nPieces = (int)(Seed.Random(i.obj.pos) * pieces.Count);
             int chosenPlant = 12;
             int chosenPiece = 12;
             if (plants.Count > 0) chosenPlant = plants[nPlant];
-            if (pieces.Count > 0 && MathH.random.NextDouble() < 0.35f)
+            if (pieces.Count > 0 && Seed.Random(i.obj.pos) < 0.35f)
                 chosenPiece = pieces[nPieces];
-            else if(MathH.random.NextDouble() < 0.15f)
+            else if(Seed.Random(i.obj.pos) < 0.1f)
             {
                 newi.layer = 50;
                 bool[] possibleTrees = PossibleTree(ids);
@@ -209,7 +210,7 @@ namespace UU_GameProject
                 for (int j = 0; j < possibleTrees.Length; j++)
                     if (possibleTrees[j])
                         trees.Add(j);
-                int nTree = (int)(MathH.random.NextDouble() * trees.Count);
+                int nTree = (int)(Seed.Random(i.obj.pos) * trees.Count);
                 int chosenTree = 90;
                 if(trees.Count > 0) chosenTree = trees[nTree];
                 GameObject[] resTree = ChooseTree(chosenTree, newi);
@@ -229,6 +230,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerBlock(ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
+            int seed = Seed.GetSeed(i.obj.pos);
+            Seed.Set(seed);
             float w = i.obj.size.X;
             float h = i.obj.size.Y;
             int ratio = w > h ? (int)(w / h) : (int)(h / w);
@@ -243,7 +246,7 @@ namespace UU_GameProject
                 input = i;
                 input.obj.pos = i.obj.pos + new Vector2(j * size * xinv, j * size * yinv);
                 input.obj.size = new Vector2(size);
-                GetBlocks(list, input, w > h, baset, layert0, layert1, topt);
+                GetBlocks(list, input, w > h, seed, baset, layert0, layert1, topt);
             }
             if(leftover > 0f)
             {
@@ -252,7 +255,7 @@ namespace UU_GameProject
                 input.obj.pos = i.obj.pos + new Vector2(ratio * size * xinv, ratio * size * yinv);
                 if (w > h) input.obj.size = new Vector2(leftover, size);
                 else input.obj.size = new Vector2(size, leftover);
-                GetBlocks(list, input, w > h, baset, layert0, layert1, topt);
+                GetBlocks(list, input, w > h, seed, baset, layert0, layert1, topt);
             }
             GameObject collider = new GameObject(i.context, 0, i.isStatic);
             collider.Pos = i.obj.pos;
@@ -263,7 +266,7 @@ namespace UU_GameProject
             return list.ToArray();
         }
         
-        private static void GetBlocks(List<GameObject> list, ReplacerInput i, bool horizontal,
+        private static void GetBlocks(List<GameObject> list, ReplacerInput i, bool horizontal, int seed,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
             string basetex, layer0tex, layer1tex, toptex;
@@ -301,28 +304,28 @@ namespace UU_GameProject
             ids[2] = (int)layert1;
             ids[3] = (int)topt;
             
-            GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, i.isStatic);
+            GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, seed, i.isStatic);
             basego.Pos = i.obj.pos;
             basego.Size = i.obj.size;
             list.Add(basego);
 
             if (layer0tex != "")
             {
-                GameObject layergo = CreateObject(i.context, i.layer + 2, "", layer0tex, i.isStatic);
+                GameObject layergo = CreateObject(i.context, i.layer + 2, "", layer0tex, seed, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
                 list.Add(layergo);
             }
             if (layer1tex != "")
             {
-                GameObject layergo = CreateObject(i.context, i.layer + 1, "", layer1tex, i.isStatic);
+                GameObject layergo = CreateObject(i.context, i.layer + 1, "", layer1tex, seed, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size;
                 list.Add(layergo);
             }
             if (toptex != "")
             {
-                GameObject layergo = CreateObject(i.context, i.layer, "", toptex, i.isStatic);
+                GameObject layergo = CreateObject(i.context, i.layer, "", toptex, seed, i.isStatic);
                 layergo.Pos = i.obj.pos;
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
                 list.Add(layergo);
@@ -333,9 +336,10 @@ namespace UU_GameProject
         public static GameObject[] ReplacerBoulder(ReplacerInput i)
         {
             const string tex = "_boulder";
-            GameObject go = CreateObject(i.context, i.layer, "boulder", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "boulder", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             const float sizeMin = 2f, sizeMax = 4f;
-            float size = Image.RandomRange(sizeMin, sizeMax);
+            float size = Seed.RandomRange(sizeMin, sizeMax, i.obj.pos);
             go.Size = new Vector2(size);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
@@ -344,7 +348,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerStone(ReplacerInput i)
         {
             const string tex = "_stone";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 1f);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
@@ -353,7 +358,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerSnowyStone(ReplacerInput i)
         {
             const string tex = "_snowystone";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 1f);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
@@ -362,7 +368,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerFrostyStone(ReplacerInput i)
         {
             const string tex = "_frostystone";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 1f);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
@@ -371,7 +378,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerStoneShard(ReplacerInput i)
         {
             const string tex = "_stoneshard";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 1f);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.7f);
             return new GameObject[] { go };
@@ -380,7 +388,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerCloud(ReplacerInput i)
         {
             const string tex = "_cloud";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(2f, 2f);
             go.Pos = i.obj.pos - go.Size/2f;
             return new GameObject[] { go };
@@ -389,7 +398,8 @@ namespace UU_GameProject
         public static GameObject[] ReplacerBush(ReplacerInput i)
         {
             const string tex = "_bush";
-            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 1f);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
@@ -631,76 +641,81 @@ namespace UU_GameProject
         public static GameObject[] ReplacerFlower(ReplacerInput i)
         {
             const string tex = "_flower";
-            GameObject go = CreateObject(i.context, i.layer, "", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(0.5f);
             go.Pos = i.obj.pos - (go.Size * new Vector2(0.5f, 1f));
-            go.AddComponent(new CRender(RandomTexture(tex)));
+            //go.AddComponent(new CRender(RandomTexture(tex)));
             return new GameObject[] { go };
         }
 
         public static GameObject[] ReplacerGrassPlant(ReplacerInput i)
         {
             const string tex = "_grassplant";
-            GameObject go = CreateObject(i.context, i.layer, "", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f);
             go.Pos = i.obj.pos - (go.Size * new Vector2(0.5f, 1f));
-            go.AddComponent(new CRender(RandomTexture(tex)));
+            //go.AddComponent(new CRender(RandomTexture(tex)));
             return new GameObject[] { go };
         }
 
         public static GameObject[] ReplacerGrassDot(ReplacerInput i)
         {
             const string tex = "_grassdot";
-            GameObject go = CreateObject(i.context, i.layer, "", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f);
             go.Pos = i.obj.pos - (go.Size * new Vector2(0.5f, 1f));
-            go.AddComponent(new CRender(RandomTexture(tex)));
+            //go.AddComponent(new CRender(RandomTexture(tex)));
             return new GameObject[] { go };
         }
 
         public static GameObject[] ReplacerGrassHigh(ReplacerInput i)
         {
             const string tex = "_grasshigh";
-            GameObject go = CreateObject(i.context, i.layer, "", tex, i.isStatic);
+            Seed.Set(i.obj.pos);
+            GameObject go = CreateObject(i.context, i.layer, "", tex, Seed.GetSeed(i.obj.pos), i.isStatic);
             go.Size = new Vector2(1f, 2f);
             go.Pos = i.obj.pos - (go.Size * new Vector2(0.5f, 1f));
-            go.AddComponent(new CRender(RandomTexture(tex)));
+            //go.AddComponent(new CRender(RandomTexture(tex)));
             return new GameObject[] { go };
         }
 
         public static GameObject[] ReplacerSnowman(ReplacerInput i)
         {
+            Seed.Set(i.obj.pos);
             float scale = 1.0f;
             const string texBody = "_snowmanbody", texEye = "_snowmaneye",
                 texHat = "_snowmanhat", texMouth = "_snowmanmouth",
                 texNose = "_snowmannose", texArmL = "_snowmanarmleft", texArmR = "_snowmanarmright";
-            GameObject go = CreateObject(i.context, i.layer + 1, "", texBody);
+            GameObject go = CreateObject(i.context, i.layer + 1, "", texBody, Seed.GetSeed(i.obj.pos));
             go.Size = new Vector2(1.0f, 2.0f) * scale;
             go.Pos = i.obj.pos - (go.Size * new Vector2(0.5f, 1f));
-            GameObject eye0 = CreateObject(i.context, i.layer, "__child", texEye);
-            GameObject eye1 = CreateObject(i.context, i.layer, "__child", texEye);
+            GameObject eye0 = CreateObject(i.context, i.layer, "__child", texEye, Seed.GetSeed(i.obj.pos));
+            GameObject eye1 = CreateObject(i.context, i.layer, "__child", texEye, Seed.GetSeed(i.obj.pos));
             eye0.SetParent(go);
             eye1.SetParent(go);
             eye0.LocalSize = eye1.LocalSize = new Vector2(0.1f, 0.05f);
             eye0.LocalPos = new Vector2(0.35f, 0.25f) * go.Size;
             eye1.LocalPos = new Vector2(0.55f, 0.25f) * go.Size;
-            GameObject hat = CreateObject(i.context, i.layer, "__child", texHat);
+            GameObject hat = CreateObject(i.context, i.layer, "__child", texHat, Seed.GetSeed(i.obj.pos));
             hat.SetParent(go);
-            hat.LocalSize = new Vector2(Image.RandomDeviation(0.45f, 0.05f), Image.RandomDeviation(0.4f, 0.05f) * 0.5f);
+            hat.LocalSize = new Vector2(Seed.RandomDeviation(0.45f, 0.05f, i.obj.pos), Seed.RandomDeviation(0.4f, 0.05f, i.obj.pos) * 0.5f);
             hat.LocalPos = new Vector2(0.5f, 0.13f) * go.Size - hat.Size / 2f;
-            GameObject mouth = CreateObject(i.context, i.layer, "__child", texMouth);
+            GameObject mouth = CreateObject(i.context, i.layer, "__child", texMouth, Seed.GetSeed(i.obj.pos));
             mouth.SetParent(go);
-            mouth.LocalSize = new Vector2(Image.RandomRange(0.3f, 0.45f), Image.RandomDeviation(0.125f, 0.04f));
+            mouth.LocalSize = new Vector2(Seed.RandomRange(0.3f, 0.45f, i.obj.pos), Seed.RandomDeviation(0.125f, 0.04f, i.obj.pos));
             mouth.LocalPos = new Vector2(0.5f, 0.33f) * go.Size - mouth.Size/2f;
-            GameObject nose = CreateObject(i.context, i.layer, "__child", texNose);
+            GameObject nose = CreateObject(i.context, i.layer, "__child", texNose, Seed.GetSeed(i.obj.pos));
             nose.SetParent(go);
             nose.LocalSize = new Vector2(0.1f, 0.05f);
             nose.LocalPos = new Vector2(0.5f, 0.31f) * go.Size - nose.Size/2f;
-            GameObject arm0 = CreateObject(i.context, i.layer, "__child", texArmL);
+            GameObject arm0 = CreateObject(i.context, i.layer, "__child", texArmL, Seed.GetSeed(i.obj.pos));
             arm0.SetParent(go);
             arm0.LocalSize = new Vector2(1f, 0.5f);
             arm0.LocalPos = new Vector2(-0.2f, 0.3f) * go.Size - arm0.Size/2f;
-            GameObject arm1 = CreateObject(i.context, i.layer, "__child", texArmR);
+            GameObject arm1 = CreateObject(i.context, i.layer, "__child", texArmR, Seed.GetSeed(i.obj.pos));
             arm1.SetParent(go);
             arm1.LocalSize = new Vector2(1f, 0.5f);
             arm1.LocalPos = new Vector2(1.2f, 0.3f) * go.Size - arm0.Size / 2f;

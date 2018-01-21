@@ -83,10 +83,9 @@ namespace UU_GameProject
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            
             //AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(0f);
-            //Debug.FullDebugMode();
+            Debug.ProfilingMode();
         }
         
         private void AddSources(ChunkFactory builder)
