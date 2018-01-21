@@ -78,6 +78,84 @@ namespace UU_GameProject
             f(input);
         }
 
+        private static bool presentID(int[] ids, int[][] must)
+        {
+            bool[] res = new bool[4];
+            for (int i = 0; i < res.Length; i++)
+                res[i] = false;
+            for (int i = 0; i < ids.Length; i++) {
+                int first = i;
+                if (i == 2) first = 1;
+                else if (first == 3) first = 2;
+                for (int j = 0; j < must[first].Length; j++)
+                {
+                    if (must[first][j] == ids[i])
+                    {
+                        res[i] = true;
+                        break;
+                    }
+                }
+            }
+            return res[0] && (res[1] || res[2]) && res[3];
+        }
+        //boulder, stone, snowystone, frostystone, stoneshard, bush
+        //,palm,flower,grassplant,grassdot,grasshigh,snowman
+        private static bool[] PossibleObject(int[] ids)
+        {
+            bool[] possible = new bool[12];
+            for (int i = 0; i < possible.Length; i++)
+                possible[i] = false;
+            possible[00] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2 }, new int[] { 0, 1 } });
+            possible[01] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2 }, new int[] { 0, 1 } });
+            possible[02] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 2, 3 }, new int[] { 0, 2 } });
+            possible[03] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 2, 3 }, new int[] { 0, 2 } });
+            possible[04] = presentID(ids, new int[][] { new int[] { 2, 3 }, new int[] { 0, 1 }, new int[] { 0 } });
+            possible[05] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[06] = presentID(ids, new int[][] { new int[] { 2, 3 }, new int[] { 0, 1 }, new int[] { 0 } });
+            possible[07] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[08] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[09] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[10] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 1 } });
+            possible[11] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2, 3 }, new int[] { 2 } });
+            return possible;
+        }
+        
+        public static void AddObjectsOnBlock(List<GameObject> list, ReplacerInput i, int[] ids)
+        {
+            ReplacerInput newi = i;
+            newi.obj.pos += newi.obj.size * new Vector2(0.5f, 0f);
+            newi.obj.size = Vector2.Zero;
+            bool[] possible = PossibleObject(ids);
+            List<int> goodones = new List<int>();
+            for (int j = 0; j < possible.Length; j++)
+                if (possible[j]) goodones.Add(j);
+            int number = (int)(MathH.random.NextDouble() * goodones.Count);
+            int chosen = 12;
+            if (goodones.Count > 0) chosen = goodones[number];
+            GameObject[] res;
+            if (chosen >= 6 && chosen <= 10)
+                newi.layer = 5;
+            else newi.layer = 20;
+            switch (chosen)
+            {
+                case 00: res = Catalog.ReplacerBoulder(newi); break;
+                case 01: res = Catalog.ReplacerStone(newi); break;
+                case 02: res = Catalog.ReplacerSnowyStone(newi); break;
+                case 03: res = Catalog.ReplacerFrostyStone(newi); break;
+                case 04: res = Catalog.ReplacerStoneShard(newi); break;
+                case 05: res = Catalog.ReplacerBush(newi); break;
+                case 06: res = Catalog.ReplacerTree8(newi); break;
+                case 07: res = Catalog.ReplacerFlower(newi); break;
+                case 08: res = Catalog.ReplacerGrassPlant(newi); break;
+                case 09: res = Catalog.ReplacerGrassDot(newi); break;
+                case 10: res = Catalog.ReplacerGrassHigh(newi); break;
+                case 11: res = Catalog.ReplacerSnowman(newi); break;
+                default: res = null; break;
+            }
+            if (res != null)
+                list.Add(res);
+        }
+
         public static GameObject[] ReplacerBlock(ReplacerInput i,
             BASETILES baset, LAYERTILES layert0 = LAYERTILES.NONE, LAYERTILES layert1 = LAYERTILES.NONE, TOPTILES topt = TOPTILES.NONE)
         {
@@ -147,7 +225,12 @@ namespace UU_GameProject
                 case TOPTILES.SNOW: toptex = "_snowytop"; break;
                 default: toptex = ""; break;
             }
-
+            int[] ids = new int[4];
+            ids[0] = (int)baset;
+            ids[1] = (int)layert0;
+            ids[2] = (int)layert1;
+            ids[3] = (int)topt;
+            
             GameObject basego = CreateObject(i.context, i.layer + 3, "solid", basetex, i.isStatic);
             basego.Pos = i.obj.pos;
             basego.Size = i.obj.size;
@@ -174,6 +257,7 @@ namespace UU_GameProject
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
                 list.Add(layergo);
             }
+            AddObjectsOnBlock(list, i, ids);
         }
         
         public static GameObject[] ReplacerBoulder(ReplacerInput i)
@@ -182,7 +266,7 @@ namespace UU_GameProject
             GameObject go = CreateObject(i.context, i.layer, "boulder", tex, i.isStatic);
             const float sizeMin = 2f, sizeMax = 4f;
             float size = Image.RandomRange(sizeMin, sizeMax);
-            go.Size = new Vector2(2f, 2f);
+            go.Size = new Vector2(size);
             go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
             return new GameObject[] { go };
         }

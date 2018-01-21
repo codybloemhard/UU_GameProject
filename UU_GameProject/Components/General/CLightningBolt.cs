@@ -41,7 +41,7 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if(other.tag != "mageboss")
+            if(other.tag != "boss")
             {
                 LightningStrike(GO.Pos + GO.Size/2);
                 GO.Destroy();

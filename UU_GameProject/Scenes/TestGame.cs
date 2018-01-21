@@ -26,8 +26,8 @@ namespace UU_GameProject
         {
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
-                font, new Vector2(14, 0), new Vector2(2, 1));
+            Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
+                font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
             healthbar.colour = new Color(0, 255, 0);
@@ -85,7 +85,7 @@ namespace UU_GameProject
             chunks.Discover(baseurl, builder, player);
             
             //AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(1f);
+            AudioManager.SetMasterVolume(0f);
             //Debug.FullDebugMode();
         }
         
@@ -107,6 +107,9 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 15, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
+            builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
+            builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
+            builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
             builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
@@ -141,14 +144,34 @@ namespace UU_GameProject
 
         private void Dec_Player(GameObject o)
         {
-            player.Pos = o.Pos - player.Size * new Vector2(0.5f, 1f);
+            if (player.GetComponent<CPlayerMovement>().spawned == false)
+            {
+                player.Pos = o.Pos - player.Size * new Vector2(0.5f, 1f);
+                player.GetComponent<CPlayerMovement>().spawned = true;
+            }
         }
 
         private void Dec_Spawner(GameObject o)
         {
             o.AddComponent(new CAABB());
-            o.AddComponent(new CRender("suprise"));
+            o.AddComponent(new CRender("block"));
             o.tag = "checkpoint";
+        }
+
+        private void Dec_TutorialSign(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_BossSignRight(GameObject o)
+        {
+            o.AddComponent(new CRender("bossSignRight"));
+        }
+
+        private void Dec_BossSignLeft(GameObject o)
+        {
+            o.AddComponent(new CRender("bossSignLeft"));
         }
 
         private void Dec_Bosstrigger(GameObject o)
@@ -235,7 +258,7 @@ namespace UU_GameProject
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
-            robotBoss.AddComponent(new CHealthPool(500));
+            robotBoss.AddComponent(new CHealthPool(50));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -274,14 +297,14 @@ namespace UU_GameProject
         {
             GameObject cyborgBoss = new GameObject("boss", this, 2);
             cyborgBoss.AddComponent(new CRender("block"));
-            cyborgBoss.AddComponent(new CHealthPool(50));
+            cyborgBoss.AddComponent(new CHealthPool(500));
             cyborgBoss.AddComponent(new CAABB());
             cyborgBoss.AddComponent(new CFaction("enemy"));
             cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.Size = new Vector2(4);
             cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
-            cyborgBoss.active = false;          
+            cyborgBoss.active = false;
             return new GameObject[] { cyborgBoss };
         }
 
@@ -324,10 +347,6 @@ namespace UU_GameProject
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
-
-            if (Input.GetKey(PressAction.PRESSED, Keys.V))
-                foreach(GameObject obj in objects.FindAllWithTag("cyborgboss"))
-                    obj.GetComponent<CCyborgBoss>().Split();
 
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
