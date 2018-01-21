@@ -8,17 +8,16 @@ namespace UU_GameProject
     public class CFireballMovement : CDamageDealer
     {
         private Vector2 playerSpeed;
-        private Vector2 dir;
         private Vector2 fireballVelocity;
         private float fireballTotalSpeed = 6f;
         private float time;
 
         public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
         {
-            this.dir = dir;
             this.playerSpeed = playerSpeed;
-            fireballVelocity.X = (fireballTotalSpeed * (path.X / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.X;
-            fireballVelocity.Y = (fireballTotalSpeed * (path.Y / (Math.Abs(path.X) + Math.Abs(path.Y)))) + playerSpeed.Y;
+            path.Normalize();
+
+            fireballVelocity = path * fireballTotalSpeed;
         }
 
         public override void Init()
