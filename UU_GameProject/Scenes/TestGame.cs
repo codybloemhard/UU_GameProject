@@ -26,8 +26,8 @@ namespace UU_GameProject
         {
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
-                font, new Vector2(14, 0), new Vector2(2, 1));
+            Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
+                font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
             healthbar.colour = new Color(0, 255, 0);
@@ -83,10 +83,9 @@ namespace UU_GameProject
             string baseurl = "../../../../Content/Levels/";
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
-            
             //AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(1f);
-            //Debug.FullDebugMode();
+            AudioManager.SetMasterVolume(0f);
+            Debug.ProfilingMode();
         }
         
         private void AddSources(ChunkFactory builder)
@@ -111,9 +110,13 @@ namespace UU_GameProject
             builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
-            builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 15, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 15, false, Rep_CyborgBoss);
+            builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 16, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
+
+            builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
+            builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
+            builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
 
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
@@ -153,6 +156,22 @@ namespace UU_GameProject
             o.AddComponent(new CAABB());
             o.AddComponent(new CRender("block"));
             o.tag = "checkpoint";
+        }
+
+        private void Dec_TutorialSign(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_BossSignRight(GameObject o)
+        {
+            o.AddComponent(new CRender("bossSignRight"));
+        }
+
+        private void Dec_BossSignLeft(GameObject o)
+        {
+            o.AddComponent(new CRender("bossSignLeft"));
         }
 
         private void Dec_Bosstrigger(GameObject o)
