@@ -38,9 +38,8 @@ namespace UU_GameProject
             lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
             //objects
             sky = new GameObject(this, 100);
-            sky.AddComponent(new CRender("sky"));
-            sky.Size = new Vector2(16, 9);
-            sky.Renderer.colour = new Color(50, 100, 255);
+            sky.AddComponent(new CRender("background"));
+            sky.Size = new Vector2(16, 16);
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -113,6 +112,8 @@ namespace UU_GameProject
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
             builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 15, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 15, false, Rep_CyborgBoss);
 
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
@@ -164,8 +165,22 @@ namespace UU_GameProject
 
         private GameObject[] Rep_RangedEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Renemy", this, i.layer);
-            enemy.AddComponent(new CRender("player"));
+            GameObject enemy = new GameObject("Renemy", this, 2);
+            CAnimatedSprite animRangedEnemy = new CAnimatedSprite();
+            animRangedEnemy.AddAnimation("redMageStandingRight", "redMageStandingRight");
+            animRangedEnemy.AddAnimation("redMageStandingLeft", "redMageStandingLeft");
+            animRangedEnemy.AddAnimation("redMageCastingRight", "redMageCastingRight");
+            animRangedEnemy.AddAnimation("redMageCastingLeft", "redMageCastingLeft");
+            animRangedEnemy.AddAnimation("greenMageStandingRight", "greenMageStandingRight");
+            animRangedEnemy.AddAnimation("greenMageStandingLeft", "greenMageStandingLeft");
+            animRangedEnemy.AddAnimation("greenMageCastingRight", "greenMageCastingRight");
+            animRangedEnemy.AddAnimation("greenMageCastingLeft", "greenMageCastingLeft");
+            animRangedEnemy.AddAnimation("purpleMageStandingRight", "purpleMageStandingRight");
+            animRangedEnemy.AddAnimation("purpleMageStandingLeft", "purpleMageStandingLeft");
+            animRangedEnemy.AddAnimation("purpleMageCastingRight", "purpleMageCastingRight");
+            animRangedEnemy.AddAnimation("purpleMageCastingLeft", "purpleMageCastingLeft");
+            animRangedEnemy.PlayAnimation("redMageStandingRight", 6);
+            enemy.AddComponent(animRangedEnemy);
             enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
@@ -178,14 +193,20 @@ namespace UU_GameProject
 
         private GameObject[] Rep_NormalEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Nenemy", this, i.layer);
-            enemy.AddComponent(new CRender("player"));
+            GameObject enemy = new GameObject("Nenemy", this, 2);
+            CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
+            animNormalEnemy.AddAnimation("redSlimeMovingRight", "redSlimeMovingRight");
+            animNormalEnemy.AddAnimation("redSlimeMovingLeft", "redSlimeMovingLeft");
+            animNormalEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
+            animNormalEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
+            animNormalEnemy.PlayAnimation("redSlimeMovingRight", 4);
+            enemy.AddComponent(animNormalEnemy);
             enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(50));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(0.5f, 0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -223,6 +244,38 @@ namespace UU_GameProject
             robotBoss.Size = new Vector2(3f, 3f);
             robotBoss.Pos = i.obj.pos - robotBoss.Size / 2f;
             return new GameObject[] { robotBoss };
+        }
+
+        private GameObject[] Rep_MageBoss(ReplacerInput i)
+        {
+            GameObject mageBoss = new GameObject("mageboss", this, 2);
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("hovering", "mageBossHovering");
+            animBoss.AddAnimation("fireball", "mageBossFireball");
+            animBoss.AddAnimation("lightning", "mageBossLightning");
+            animBoss.PlayAnimation("hovering", 6);
+            mageBoss.AddComponent(animBoss);
+            mageBoss.AddComponent(new CHealthPool(1500));
+            mageBoss.AddComponent(new CAABB());
+            mageBoss.AddComponent(new CFaction("enemy"));
+            mageBoss.AddComponent(new CMageBoss());
+            mageBoss.Size = new Vector2(2);
+            mageBoss.Pos = i.obj.pos - mageBoss.Size / 2;
+            return new GameObject[] { mageBoss };
+        }
+
+        private GameObject[] Rep_CyborgBoss(ReplacerInput i)
+        {
+            GameObject cyborgBoss = new GameObject("cyborgboss", this, 2);
+            cyborgBoss.AddComponent(new CRender("block"));
+            cyborgBoss.AddComponent(new CHealthPool(50));
+            cyborgBoss.AddComponent(new CAABB());
+            cyborgBoss.AddComponent(new CFaction("enemy"));
+            cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
+            cyborgBoss.AddComponent(new CRaycasts());
+            cyborgBoss.Size = new Vector2(4);
+            cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;            
+            return new GameObject[] { cyborgBoss };
         }
 
         public override void Unload() { }

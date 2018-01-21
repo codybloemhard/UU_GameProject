@@ -20,10 +20,10 @@ namespace UU_GameProject
             testTimer.colour = new Color(0, 255, 0);
             testTimer.tag = "timerText";
 
-            UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
+            //UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
 
             //buttons
-            Button buttonStart = new Button(this, "New game", "Menu_Button_1", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+            Button buttonStart = new Button(this, "New game", "Menu_Button_1", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
                 font, new Vector2(5, 3), new Vector2(6, 1f));
             buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
