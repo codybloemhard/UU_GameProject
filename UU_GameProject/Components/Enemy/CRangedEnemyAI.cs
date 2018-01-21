@@ -7,6 +7,9 @@ namespace UU_GameProject
 {
     public class CRangedEnemyAI : CBasicEnemyAI
     {
+        private CAnimatedSprite animationRangedEnemy;
+        private bool firingFireball = false;
+
         public CRangedEnemyAI(ENEMY type) : base(type)
         {
             damage = 10f;
@@ -18,8 +21,8 @@ namespace UU_GameProject
         public override void Init()
         {
             base.Init();
-            CRender render = GO.Renderer as CRender;
-            if (render != null) render.colour = Color.DarkSeaGreen;
+            animationRangedEnemy = GO.Renderer as CAnimatedSprite;
+            
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);
             fsm.SetCurrentState("idle");
@@ -28,10 +31,12 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
+            animationRangedEnemy = GO.Renderer as CAnimatedSprite;
             if (length <= 5.25f && fsm.CurrentState == "idle")
                 fsm.SetCurrentState("active");
             else if (length > 5.25f && fsm.CurrentState != "idle")
                 fsm.SetCurrentState("idle");
+            animation();
         }
 
         private void ActiveBehaviour()
@@ -67,10 +72,9 @@ namespace UU_GameProject
                 run = false;
             if (length < range && wait == 0)
             {
-                Vector2 thing = shootdir(GO.Pos.X - player.Pos.X);
-                GO.GetComponent<CShoot>().Shoot(thing, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), damage, DoPotion());
-                AudioManager.PlayEffect("shoot");
+                firingFireball = true;
                 wait = 1.75f;
+                Timers.Add("fireball", 0.5f, () => fireball());
             }
             if (!grounded)
             {
@@ -97,6 +101,26 @@ namespace UU_GameProject
                 return new Vector2(0, 1);
             else
                 return new Vector2(0, -1);
+        }
+
+        private void fireball()
+        {
+            Vector2 direction = shootdir(GO.Pos.X - player.Pos.X);
+            GO.GetComponent<CShoot>().Shoot(direction, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), damage, DoPotion());
+            AudioManager.PlayEffect("shoot");
+            firingFireball = false;
+        }
+
+        private void animation()
+        {
+            if (dir.X > 0 && firingFireball)
+                animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingRight", 8);
+            else if (dir.X < 0 && firingFireball)
+                animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingLeft", 8);
+            else if (dir.X > 0)
+                animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingRight", 8);
+            else
+                animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingLeft", 8);
         }
     }
 }

@@ -42,13 +42,7 @@ namespace UU_GameProject
             base.Update(time);
             ctime = time;
             if (!initiated) InitMage();
-
-            else if (firingFireball)
-                animationBoss.PlayAnimationIfDifferent("fireball", 6);
-            else if (firingLightning)
-                animationBoss.PlayAnimationIfDifferent("lightning", 6);
-            else
-                animationBoss.PlayAnimationIfDifferent("hovering", 6);
+            animation();
             
             if (Input.GetKey(PressAction.PRESSED, Keys.T))
                 LightningBolt();
@@ -165,6 +159,16 @@ namespace UU_GameProject
                     fsm.SetCurrentState("stay");
                 }
             }
+        }
+
+        private void animation()
+        {
+            if (firingFireball)
+                animationBoss.PlayAnimationIfDifferent("fireball", 6);
+            else if (firingLightning)
+                animationBoss.PlayAnimationIfDifferent("lightning", 6);
+            else
+                animationBoss.PlayAnimationIfDifferent("hovering", 6);
         }
     }
 }

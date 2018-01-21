@@ -7,6 +7,8 @@ namespace UU_GameProject
 {
     public class CNormalEnemyAI : CBasicEnemyAI
     {
+        private CAnimatedSprite animationNormalEnemy;
+
         public CNormalEnemyAI(ENEMY type) : base(type)
         {
             damage = 20f;
@@ -18,8 +20,7 @@ namespace UU_GameProject
         public override void Init()
         {
             base.Init();
-            CRender render = GO.Renderer as CRender;
-            if (render != null) render.colour = Color.OrangeRed;
+            animationNormalEnemy = GO.Renderer as CAnimatedSprite;
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);
             fsm.SetCurrentState("idle");
@@ -27,11 +28,15 @@ namespace UU_GameProject
         
         public override void Update(float time)
         {
-            base.Update(time);          
+            animationNormalEnemy = GO.Renderer as CAnimatedSprite;
+
+            base.Update(time);
+            animation(); 
             if (length <= 4.5f && fsm.CurrentState == "idle")
                 fsm.SetCurrentState("active");
             else if (length > 4.5f && fsm.CurrentState != "idle")
                 fsm.SetCurrentState("idle");
+
         }
 
         private void ActiveBehaviour()
@@ -74,6 +79,14 @@ namespace UU_GameProject
             }
             else if (run)
                 GO.Pos += new Vector2(speed * ctime, 0f);
+        }
+
+        private void animation()
+        {
+            if (base.dir.X > 0)
+                animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingRight", 6);
+            else
+                animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingLeft", 6);
         }
     }
 }

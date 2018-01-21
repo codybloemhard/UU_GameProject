@@ -168,9 +168,19 @@ namespace UU_GameProject
         {
             GameObject enemy = new GameObject("Renemy", this, 2);
             CAnimatedSprite animRangedEnemy = new CAnimatedSprite();
-            animRangedEnemy.AddAnimation("standing", "redMageStanding");
-            animRangedEnemy.AddAnimation("casting", "redMageCasting");
-            animRangedEnemy.PlayAnimation("standing", 2);
+            animRangedEnemy.AddAnimation("redMageStandingRight", "redMageStandingRight");
+            animRangedEnemy.AddAnimation("redMageStandingLeft", "redMageStandingLeft");
+            animRangedEnemy.AddAnimation("redMageCastingRight", "redMageCastingRight");
+            animRangedEnemy.AddAnimation("redMageCastingLeft", "redMageCastingLeft");
+            animRangedEnemy.AddAnimation("greenMageStandingRight", "greenMageStandingRight");
+            animRangedEnemy.AddAnimation("greenMageStandingLeft", "greenMageStandingLeft");
+            animRangedEnemy.AddAnimation("greenMageCastingRight", "greenMageCastingRight");
+            animRangedEnemy.AddAnimation("greenMageCastingLeft", "greenMageCastingLeft");
+            animRangedEnemy.AddAnimation("purpleMageStandingRight", "purpleMageStandingRight");
+            animRangedEnemy.AddAnimation("purpleMageStandingLeft", "purpleMageStandingLeft");
+            animRangedEnemy.AddAnimation("purpleMageCastingRight", "purpleMageCastingRight");
+            animRangedEnemy.AddAnimation("purpleMageCastingLeft", "purpleMageCastingLeft");
+            animRangedEnemy.PlayAnimation("redMageStandingRight", 6);
             enemy.AddComponent(animRangedEnemy);
             enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(25));
@@ -186,15 +196,18 @@ namespace UU_GameProject
         {
             GameObject enemy = new GameObject("Nenemy", this, 2);
             CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
-            animNormalEnemy.AddAnimation("moving", "redSlimeMoving");
-            animNormalEnemy.PlayAnimation("moving", 4);
+            animNormalEnemy.AddAnimation("redSlimeMovingRight", "redSlimeMovingRight");
+            animNormalEnemy.AddAnimation("redSlimeMovingLeft", "redSlimeMovingLeft");
+            animNormalEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
+            animNormalEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
+            animNormalEnemy.PlayAnimation("redSlimeMovingRight", 4);
             enemy.AddComponent(animNormalEnemy);
             enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(50));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(0.5f, 0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
