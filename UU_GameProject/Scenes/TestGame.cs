@@ -241,7 +241,8 @@ namespace UU_GameProject
             animBoss.AddAnimation("hovering", "mageBossHovering");
             animBoss.AddAnimation("fireball", "mageBossFireball");
             animBoss.AddAnimation("lightning", "mageBossLightning");
-            animBoss.PlayAnimation("hovering", 2);
+            animBoss.PlayAnimation("hovering", 6);
+            mageBoss.AddComponent(animBoss);
             mageBoss.AddComponent(new CHealthPool(1500));
             mageBoss.AddComponent(new CAABB());
             mageBoss.AddComponent(new CFaction("enemy"));
