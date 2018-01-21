@@ -13,18 +13,26 @@ namespace UU_GameProject
     {
         private float ctime;
         private float maxYSpeed = 3, acceleration = 5, teleportSpeed = 4f, actionTime, teleportDelay = 4, teleportTime;
-        private bool initiated, disappearing, appearing;
+        private bool initiated, disappearing, appearing, firingFireball = false, firingLightning = false;
         private CRaycasts cRaycasts;
         private FSM fsm = new FSM();
         private Vector2 targetPosition, newTarget, targetSize, velocity, origin;
         private CHealthPool healthpool;
         private GameObject player;
+        private CAnimatedSprite animationBoss;
 
         public override void Update(float time)
         {
             if (!initiated) InitMage();
             base.Update(time);
             ctime = time;
+
+            if (firingFireball)
+                animationBoss.PlayAnimationIfDifferent("fireball", 4);
+            else if (firingLightning)
+                animationBoss.PlayAnimationIfDifferent("lightning", 4);
+            else
+                animationBoss.PlayAnimationIfDifferent("hovering", 2);
 
             if (Input.GetKey(PressAction.PRESSED, Keys.T))
                 LightningBolt();
@@ -48,6 +56,7 @@ namespace UU_GameProject
 
         private void InitMage()
         {
+            animationBoss = GO.Renderer as CAnimatedSprite;
             origin = GO.Pos;
             initiated = true;
             healthpool = GO.GetComponent<CHealthPool>();
@@ -69,6 +78,7 @@ namespace UU_GameProject
             lightning.AddComponent(new CAABB());
             lightning.Size = new Vector2(.3f);
             lightning.Pos = new Vector2(target.X - lightning.Size.X/2, GO.Pos.Y - 5);
+            firingLightning = false;
         }
 
         private void FireBall()
@@ -95,6 +105,7 @@ namespace UU_GameProject
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction("enemy"));
             AudioManager.PlayEffect("shoot");
+            firingFireball = false;
         }
 
         private void StayInPlace()
@@ -112,9 +123,15 @@ namespace UU_GameProject
                 Console.WriteLine(healthpool.HealhPercent);
                 int action = MathH.random.Next(2);
                 if (action == 0)
-                    FireBall();
+                {
+                    firingFireball = true;
+                    Timers.Add("fireball", 0.5f, () => FireBall());
+                }
                 else if (action == 1)
-                    LightningBolt();
+                {
+                    firingLightning = true;
+                    Timers.Add("lightning", 0.5f, () => LightningBolt());
+                }
             }
             actionTime -= ctime;
         }

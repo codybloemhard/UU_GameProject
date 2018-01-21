@@ -7,8 +7,9 @@ namespace UU_GameProject
 {
     public class TestMenu : GameState
     {
+
         public TestMenu() : base() { }
-        
+
         public override void Load(SpriteBatch batch)
         {
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
@@ -19,21 +20,23 @@ namespace UU_GameProject
             testTimer.colour = new Color(0, 255, 0);
             testTimer.tag = "timerText";
 
+            UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
+
             //buttons
-            Button buttonStart = new Button(this, "New game", "menutile2", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
-                font, new Vector2(6, 3), new Vector2(4, 1f));
+            Button buttonStart = new Button(this, "New game", "Menu_Button_1", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
+                font, new Vector2(5, 3), new Vector2(6, 1f));
             buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            Button buttonContinue = new Button(this, "Continue. Most certainly implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
-                font, new Vector2(6, 4.2f), new Vector2(4, 1f));
+            Button buttonContinue = new Button(this, "Continue", "Menu_Button_2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                font, new Vector2(5, 4.2f), new Vector2(6, 1f));
             buttonContinue.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            Button buttonOptions = new Button(this, "Options", "menutile2", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
-                font, new Vector2(6, 5.4f), new Vector2(4, 1f));
+            Button buttonOptions = new Button(this, "Options", "Menu_Button_3", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
+                font, new Vector2(5, 5.4f), new Vector2(6, 1f));
             buttonOptions.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
 
-            Button buttonQuit = new Button(this, "Exit. Also definetly implemented", "menutile2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
-                font, new Vector2(6, 6.6f), new Vector2(4, 1f));
+            Button buttonQuit = new Button(this, "Exit", "Menu_Button_1", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                font, new Vector2(5, 6.6f), new Vector2(6, 1f));
             buttonQuit.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
             //others
             Timers.Add("timer", 10, changeTextColour);

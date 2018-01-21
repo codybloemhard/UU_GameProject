@@ -176,71 +176,71 @@ namespace UU_GameProject
             }
         }
         
-        public static GameObject CreateBoulder(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerBoulder(ReplacerInput i)
         {
             const string tex = "_boulder";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "boulder", tex, i.isStatic);
             const float sizeMin = 2f, sizeMax = 4f;
             float size = Image.RandomRange(sizeMin, sizeMax);
             go.Size = new Vector2(2f, 2f);
-            return go;
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateStone(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerStone(ReplacerInput i)
         {
             const string tex = "_stone";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
             go.Size = new Vector2(1f, 1f);
-            return go;
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateSnowyStone(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerSnowyStone(ReplacerInput i)
         {
             const string tex = "_snowystone";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
             go.Size = new Vector2(1f, 1f);
-            return go;
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateFrostyStone(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerFrostyStone(ReplacerInput i)
         {
             const string tex = "_frostystone";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
             go.Size = new Vector2(1f, 1f);
-            return go;
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateStoneShard(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerStoneShard(ReplacerInput i)
         {
             const string tex = "_stoneshard";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
             go.Size = new Vector2(1f, 1f);
-            return go;
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.7f);
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateCloud(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerCloud(ReplacerInput i)
         {
             const string tex = "_cloud";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
             go.Size = new Vector2(2f, 2f);
-            return go;
+            go.Pos = i.obj.pos - go.Size/2f;
+            return new GameObject[] { go };
         }
 
-        public static GameObject CreateBush(GameState context, float x, float y, uint layer, string tag)
+        public static GameObject[] ReplacerBush(ReplacerInput i)
         {
             const string tex = "_bush";
-            GameObject go = CreateObject(context, layer, tag, tex);
-            go.Pos = new Vector2(x, y);
-            go.Size = new Vector2(1f, 1f); 
-            return go;
+            GameObject go = CreateObject(i.context, i.layer, "stone", tex, i.isStatic);
+            go.Size = new Vector2(1f, 1f);
+            go.Pos = i.obj.pos - go.Size * new Vector2(0.5f, 0.8f);
+            return new GameObject[] { go };
         }
-        
+
         public static GameObject[] ReplacerTree0(ReplacerInput i)
         {
             LSystem lsys = new LSystem("X");

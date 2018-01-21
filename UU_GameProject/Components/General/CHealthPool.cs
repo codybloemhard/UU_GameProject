@@ -92,7 +92,7 @@ namespace UU_GameProject
         public void HealOverTime(float rate, float time)
         {
             if ((healRate < 0f && rate > 0f)
-                || (healRate > 0f && rate < 0f))//cancel potion or healing
+                || (healRate > 0f && rate < 0f))//cancel poison or simply heals
             {
                 healRate = 0f;
                 healTime = 0f;
