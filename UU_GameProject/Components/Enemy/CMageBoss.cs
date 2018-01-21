@@ -27,13 +27,13 @@ namespace UU_GameProject
             base.Update(time);
             ctime = time;
 
-            if (firingFireball)
-                animationBoss.PlayAnimationIfDifferent("fireball", 4);
-            else if (firingLightning)
-                animationBoss.PlayAnimationIfDifferent("lightning", 4);
-            else
-                animationBoss.PlayAnimationIfDifferent("hovering", 2);
-
+            //if (firingFireball)
+            //    animationBoss.PlayAnimationIfDifferent("fireball", 4);
+            //else if (firingLightning)
+            //    animationBoss.PlayAnimationIfDifferent("lightning", 4);
+            //else
+            //    animationBoss.PlayAnimationIfDifferent("hovering", 2);
+            
             if (Input.GetKey(PressAction.PRESSED, Keys.T))
                 LightningBolt();
 

@@ -113,6 +113,8 @@ namespace UU_GameProject
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
             builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 15, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 15, false, Rep_CyborgBoss);
 
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);

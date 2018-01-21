@@ -94,6 +94,7 @@ namespace UU_GameProject
         {
             Console.WriteLine("destroyed");
             GO.Destroy();
+            objectList.Remove(GO);
             properties.Destroy();
         }
 
