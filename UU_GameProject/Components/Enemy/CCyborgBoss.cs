@@ -36,8 +36,8 @@ namespace UU_GameProject
 
         public override void Update(float time)
         {
-            base.Update(time);
             if (!initiated) InitRobot();
+            base.Update(time);
             ctime = time;
 
             fsm.Update();
@@ -83,6 +83,7 @@ namespace UU_GameProject
                 cyborgBoss.AddComponent(new CFaction("enemy"));
                 cyborgBoss.Pos = GO.Pos;
                 cyborgBoss.Size = new Vector2(stage);
+                Console.WriteLine("yeah");
             }
             GO.Destroy();
         }

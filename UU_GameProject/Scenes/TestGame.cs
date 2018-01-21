@@ -278,10 +278,10 @@ namespace UU_GameProject
         {
             GameObject cyborgBoss = new GameObject("boss", this, 2);
             cyborgBoss.AddComponent(new CRender("block"));
-            cyborgBoss.AddComponent(new CHealthPool(500));
+            cyborgBoss.AddComponent(new CHealthPool(50));
             cyborgBoss.AddComponent(new CAABB());
             cyborgBoss.AddComponent(new CFaction("enemy"));
-            cyborgBoss.AddComponent(new CCyborgBoss(4, 1));
+            cyborgBoss.AddComponent(new CCyborgBoss(5, 1));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.Size = new Vector2(4);
             cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
