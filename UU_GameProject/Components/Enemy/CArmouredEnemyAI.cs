@@ -7,6 +7,8 @@ namespace UU_GameProject
 {
     public class CArmouredEnemyAI : CBasicEnemyAI
     {
+        private CAnimatedSprite animationArmouredEnemy;
+
         public CArmouredEnemyAI(ENEMY type) : base(type)
         {
             damage = 10f;
@@ -18,8 +20,7 @@ namespace UU_GameProject
         public override void Init()
         {
             base.Init();
-            CRender render = GO.Renderer as CRender;
-            if (render != null) render.colour = Color.Yellow;
+            animationArmouredEnemy = GO.Renderer as CAnimatedSprite;
             fsm.Add("idle", IdleBehaviour);
             fsm.Add("active", ActiveBehaviour);
             fsm.SetCurrentState("idle");
@@ -28,6 +29,8 @@ namespace UU_GameProject
         
         public override void Update(float time)
         {
+            animation();
+            animationArmouredEnemy = GO.Renderer as CAnimatedSprite;
             base.Update(time);
             if (length <= 4.5f && fsm.CurrentState == "idle")
                 fsm.SetCurrentState("active");
@@ -93,6 +96,14 @@ namespace UU_GameProject
             }
             else if (run)
                 GO.Pos += new Vector2(speed * ctime, 0f);
+        }
+
+        private void animation()
+        {
+            if (base.dir.X > 0)
+                animationArmouredEnemy.PlayAnimationIfDifferent("robotSlimeMovingRight", 6);
+            else
+                animationArmouredEnemy.PlayAnimationIfDifferent("robotSlimeMovingLeft", 6);
         }
     }
 }
