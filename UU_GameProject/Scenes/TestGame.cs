@@ -13,7 +13,7 @@ namespace UU_GameProject
 
         private ChunkManager chunks;
         private UITextureElement healthbar, manabar, fitness, healing, lightning;
-        private GameObject player;
+        private GameObject player, sky;
         private CMagicness magicness;
         private CHealthPool healthpool;
         private CManaPool manapool;
@@ -29,15 +29,19 @@ namespace UU_GameProject
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-            healthbar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
+            healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
             healthbar.colour = new Color(0, 255, 0);
-            manabar = new UITextureElement(this, "block", Vector2.Zero, Vector2.Zero);
-            manabar.colour = new Color(0, 0, 255);
-            fitness = new UITextureElement(this, "block", new Vector2(2.6f, 8f), new Vector2(1f));
-            healing = new UITextureElement(this, "block", new Vector2(3.8f, 8f), new Vector2(1f));
-            lightning = new UITextureElement(this, "block", new Vector2(5f, 8f), new Vector2(1f));
-
-            player = new GameObject("player", this, 1);
+            manabar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
+            manabar.colour = new Color(255, 0, 255);
+            fitness = new UITextureElement(this, "sky", new Vector2(2.6f, 8f), new Vector2(1f));
+            healing = new UITextureElement(this, "sky", new Vector2(3.8f, 8f), new Vector2(1f));
+            lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
+            //objects
+            sky = new GameObject(this, 100);
+            sky.AddComponent(new CRender("sky"));
+            sky.Size = new Vector2(16, 9);
+            sky.Renderer.colour = new Color(50, 100, 255);
+            player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
             anim.AddAnimation("standingRight", "playerStandingRight");
@@ -81,14 +85,14 @@ namespace UU_GameProject
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
             
-            AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(0f);
+            //AudioManager.PlayTrack("moonlightsonata");
+            AudioManager.SetMasterVolume(1f);
             //Debug.FullDebugMode();
         }
         
         private void AddSources(ChunkFactory builder)
         {
-            builder.AddSource("!player", 5, false, Dec_Player);
+            builder.AddSource("!player", 15, false, Dec_Player);
             for(int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++)
                     for (int k = 0; k < 4; k++)
@@ -102,15 +106,14 @@ namespace UU_GameProject
                                 return Catalog.ReplacerBlock(inp, baset, layert0, layert1, topt);
                             });
                         }
-            builder.AddSource("spawn", 10, false, Dec_Spawner);
-            builder.AddSource("door", 10, true, Dec_Door);
+            builder.AddSource("spawn", 15, false, Dec_Spawner);
+            builder.AddSource("door", 15, true, Dec_Door);
             builder.AddSource("bosstrigger", 10, false, Dec_Bosstrigger);
-            builder.AddSource("!renemy", 5, false, Rep_RangedEnemy);
-            builder.AddSource("!nenemy", 5, false, Rep_NormalEnemy);
-            builder.AddSource("!aenemy", 5, false, Rep_ArmourEnemy);
-            builder.AddSource("!rboss", 5, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 5, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 5, false, Rep_CyborgBoss);
+            builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
+            builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
+            builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
+            builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
+
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -121,6 +124,18 @@ namespace UU_GameProject
             builder.AddSource("!tree7", 50, true, Catalog.ReplacerTree7);
             builder.AddSource("!tree8", 50, true, Catalog.ReplacerTree8);
             builder.AddSource("!tree9", 50, true, Catalog.ReplacerTree9);
+            builder.AddSource("!flower", 5, true, Catalog.ReplacerFlower);
+            builder.AddSource("!grass", 5, true, Catalog.ReplacerGrassPlant);
+            builder.AddSource("!grassdot", 5, true, Catalog.ReplacerGrassDot);
+            builder.AddSource("!grasshigh", 5, true, Catalog.ReplacerGrassHigh);
+            builder.AddSource("!snowman", 15, true, Catalog.ReplacerSnowman);
+            builder.AddSource("!boulder", 20, true, Catalog.ReplacerBoulder);
+            builder.AddSource("!stone", 20, true, Catalog.ReplacerStone);
+            builder.AddSource("!snowystone", 20, true, Catalog.ReplacerSnowyStone);
+            builder.AddSource("!stonefrosty", 20, true, Catalog.ReplacerFrostyStone);
+            builder.AddSource("!stoneshard", 20, true, Catalog.ReplacerStoneShard);
+            builder.AddSource("!cloud", 60, true, Catalog.ReplacerCloud);
+            builder.AddSource("!bush", 20, true, Catalog.ReplacerBush);
         }
 
         private void Dec_Player(GameObject o)
@@ -143,7 +158,7 @@ namespace UU_GameProject
 
         private void Dec_Door(GameObject o)
         {
-            o.tag = "bossdoor";
+            o.tag = "bossdoorsolid";
             o.AddComponent(new CGrowingDoor());
         }
 
@@ -187,7 +202,7 @@ namespace UU_GameProject
             GameObject enemy = new GameObject("Aenemy", this, 2);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
-            enemy.AddComponent(new CHealthPool(1));
+            enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
@@ -217,6 +232,7 @@ namespace UU_GameProject
             return new GameObject[] { robotBoss };
         }
 
+<<<<<<< HEAD
         private GameObject[] Rep_MageBoss(ReplacerInput i)
         {
             GameObject mageBoss = new GameObject("mageboss", this, 2);
@@ -248,6 +264,8 @@ namespace UU_GameProject
             return new GameObject[] { cyborgBoss };
         }
 
+=======
+>>>>>>> 7f00018a1017e7726ec553cef2a5e0fca80983df
         public override void Unload() { }
 
         public override void Update(float time)
@@ -279,6 +297,7 @@ namespace UU_GameProject
             else if (magicness.CanDash)
                 fitness.colour = cOrange;
             else fitness.colour = cRed;
+            sky.Pos = Camera.TopLeft;
 
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
             {
