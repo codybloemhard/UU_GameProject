@@ -571,11 +571,7 @@
 /processorParam:TextureFormat=Color
 /build:Menu_Background.png
 
-<<<<<<< HEAD
 #begin Background.png
-=======
-#begin sky.png
->>>>>>> 7f00018a1017e7726ec553cef2a5e0fca80983df
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -585,8 +581,29 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-<<<<<<< HEAD
 /build:Background.png
+
+#begin sky.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sky.png
+
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 
 #begin Arch_Mage_Fireball.png
 /importer:TextureImporter
@@ -719,7 +736,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Robot_Slime_Moving.png
-=======
-/build:sky.png
->>>>>>> 7f00018a1017e7726ec553cef2a5e0fca80983df
 
