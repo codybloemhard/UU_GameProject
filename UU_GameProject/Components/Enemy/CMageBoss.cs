@@ -79,6 +79,7 @@ namespace UU_GameProject
             firingLightning = false;
         }
 
+        //shoots a fireball at the player
         private void FireBall()
         {
             Vector2 dir = player.Pos - GO.Pos;
