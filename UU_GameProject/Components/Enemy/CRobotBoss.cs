@@ -138,8 +138,8 @@ namespace UU_GameProject
                 {
                     crushing = false;
                     camera.ShakeCamera(.6f, Math.Min(velocity.Y * .1f, 1f));
+                    Console.WriteLine(velocity.Y * .1f);
                     melee.Melee(new Vector2(0, 1), new Vector2(0.75f, 1.5f), 0.2f, 50, false, GO.tag, faction.GetFaction());
-                    AudioManager.PlayEffect("dead");
                 }
             }
             else
@@ -232,7 +232,6 @@ namespace UU_GameProject
                 bullet.Pos = GO.Pos + GO.Size / 2f - new Vector2(.2f) / 2f - new Vector2(GO.Size.X / 2f + .2f, 0);
             bullet.AddComponent(animBullet);
             bullet.Size = new Vector2(.6f, 0.2f);
-            AudioManager.PlayEffect("shoot");
         }
 
         public void Explode()

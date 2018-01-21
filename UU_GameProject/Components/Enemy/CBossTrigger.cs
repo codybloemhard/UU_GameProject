@@ -27,7 +27,7 @@ namespace UU_GameProject
 
         private void Close()
         {
-            GameObject[] d = GO.FindAllWithTag("bossdoorsolid");
+            GameObject[] d = GO.FindAllWithTag("bossdoor");
             GameObject closest = null;
             float min = float.MaxValue;
             Vector2 mid = GO.Pos + GO.Size / 2f;

@@ -71,18 +71,15 @@ namespace UU_GameProject
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
-            if (other.tag.Contains("solid"))
-            {
+            if (other.tag == "solid")
                 Explode();
-                AudioManager.PlayEffect("hit");
-            }
         }
 
         public void Explode()
         {
             GameObject explosion = new GameObject(spawnerTag + "explosion", GO.Context);
-            //explosion.AddComponent(new CRender("block"));
-            //explosion.Renderer.colour = Color.Red;
+            explosion.AddComponent(new CRender("block"));
+            explosion.Renderer.colour = Color.Red;
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
             explosion.AddComponent(new CDamageDealer(20, false));
