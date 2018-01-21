@@ -13,7 +13,7 @@ namespace UU_GameProject
     {
         private float ctime;
         private float maxYSpeed = 3, acceleration = 5, teleportSpeed = 4f, actionTime, teleportDelay = 4, teleportTime;
-        private bool initiated, disappearing, appearing, firingFireball = false, firingLightning = false;
+        private bool initiated = false, disappearing, appearing, firingFireball = false, firingLightning = false;
         private CRaycasts cRaycasts;
         private FSM fsm = new FSM();
         private Vector2 targetPosition, newTarget, targetSize, velocity, origin;
@@ -21,42 +21,8 @@ namespace UU_GameProject
         private GameObject player;
         private CAnimatedSprite animationBoss;
 
-        public override void Update(float time)
-        {
-            if (!initiated) InitMage();
-            base.Update(time);
-            ctime = time;
-
-            //if (firingFireball)
-            //    animationBoss.PlayAnimationIfDifferent("fireball", 4);
-            //else if (firingLightning)
-            //    animationBoss.PlayAnimationIfDifferent("lightning", 4);
-            //else
-            //    animationBoss.PlayAnimationIfDifferent("hovering", 2);
-            
-            if (Input.GetKey(PressAction.PRESSED, Keys.T))
-                LightningBolt();
-
-            if (Input.GetKey(PressAction.PRESSED, Keys.R))
-                FireBall();
-
-            if (teleportTime <= 0)
-            {
-                teleportTime = teleportDelay;
-                newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
-                targetPosition = newTarget;
-                disappearing = true;
-                fsm.SetCurrentState("teleport");
-            }
-            teleportTime -= time;
-
-            //fsm.SetCurrentState("stay");
-            fsm.Update();
-        }
-
         private void InitMage()
         {
-            animationBoss = GO.Renderer as CAnimatedSprite;
             origin = GO.Pos;
             initiated = true;
             healthpool = GO.GetComponent<CHealthPool>();
@@ -67,6 +33,35 @@ namespace UU_GameProject
             fsm.Add("teleport", Teleport);
             targetSize = GO.Size;
             fsm.SetCurrentState("stay");
+            animationBoss = GO.Renderer as CAnimatedSprite;
+        }
+
+        public override void Update(float time)
+        {
+            animationBoss = GO.Renderer as CAnimatedSprite;
+            base.Update(time);
+            ctime = time;
+            if (!initiated) InitMage();
+            animation();
+            
+            if (Input.GetKey(PressAction.PRESSED, Keys.T))
+                LightningBolt();
+
+            if (Input.GetKey(PressAction.PRESSED, Keys.R))
+                FireBall();
+
+            //if (teleportTime <= 0)
+            //{
+            //    teleportTime = teleportDelay;
+            //    newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
+            //    targetPosition = newTarget;
+            //    disappearing = true;
+            //    fsm.SetCurrentState("teleport");
+            //}
+            //teleportTime -= time;
+
+            //fsm.SetCurrentState("stay");
+            fsm.Update();
         }
 
         private void LightningBolt()
@@ -83,22 +78,15 @@ namespace UU_GameProject
 
         private void FireBall()
         {
-            Vector2 dir = player.Pos - GO.Pos;
-            Vector2 size = new Vector2(.3f, .5f);
+            Vector2 dir = player.Pos + player.Size/2 - (GO.Pos + GO.Size/2);
+            Vector2 size = new Vector2(1f, 1f);
             GameObject fireball = new GameObject("fireball", GO.Context, 0);
             CAnimatedSprite animBall = new CAnimatedSprite();
             animBall.AddAnimation("fireball", "fireball");
             animBall.PlayAnimation("fireball", 8);
-            if (dir.X > 0)
-            {
-                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
-                dir -= GO.Size / 2f - size / 2f + new Vector2(GO.Size.X / 2f + size.X, 0);
-            }
-            else
-            {
-                fireball.Pos = GO.Pos + GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
-                dir -= GO.Size / 2f - size / 2f - new Vector2(GO.Size.X / 2f + size.X, 0);
-            }
+
+            fireball.Pos = GO.Pos + new Vector2(GO.Size.X/2, .4f) - size / 2f;
+
             fireball.Size = size;
             fireball.AddComponent(animBall);
             fireball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20f, false));
@@ -115,22 +103,21 @@ namespace UU_GameProject
 
             float velocitySign = Math.Sign(velocity.Y);
             velocity.Y = sign * Math.Min(sign * velocity.Y, maxYSpeed);
-            GO.Pos += velocity * ctime /(healthpool.HealhPercent + .5f);
+            //GO.Pos += velocity * ctime /(healthpool.HealhPercent + .5f);
 
             if(actionTime <= 0)
             {
                 actionTime = .4f + (float)MathH.random.NextDouble() * healthpool.HealhPercent * 2;
-                Console.WriteLine(healthpool.HealhPercent);
                 int action = MathH.random.Next(2);
                 if (action == 0)
                 {
                     firingFireball = true;
-                    Timers.Add("fireball", 0.5f, () => FireBall());
+                    Timers.Add("fireball", 1f, () => FireBall());
                 }
                 else if (action == 1)
                 {
                     firingLightning = true;
-                    Timers.Add("lightning", 0.5f, () => LightningBolt());
+                    Timers.Add("lightning", 1f, () => LightningBolt());
                 }
             }
             actionTime -= ctime;
@@ -164,6 +151,16 @@ namespace UU_GameProject
                     fsm.SetCurrentState("stay");
                 }
             }
+        }
+
+        private void animation()
+        {
+            if (firingFireball)
+                animationBoss.PlayAnimationIfDifferent("fireball", 12 - healthpool.HealhPercent * 6);
+            else if (firingLightning)
+                animationBoss.PlayAnimationIfDifferent("lightning", 12 - healthpool.HealhPercent * 6);
+            else
+                animationBoss.PlayAnimationIfDifferent("hovering", 12 - healthpool.HealhPercent * 6);
         }
     }
 }

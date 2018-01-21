@@ -31,14 +31,14 @@ namespace UU_GameProject
             TextureManager.LoadTexture("suprise", "suprise");
             TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
-            TextureManager.LoadTexture("Menu_Background", "Menu_Background");
+            //TextureManager.LoadTexture("Menu_Background", "Menu_Background");
             TextureManager.LoadTexture("Menu_Button_1", "Menu_Button_1");
             TextureManager.LoadTexture("Menu_Button_2", "Menu_Button_2");
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
             TextureManager.LoadTexture("sky", "sky");
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
-            TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 20, 1);
+            TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 5, 4);
             TextureManager.LoadTexture("fireballMirrored", "Fireball_Mirror", 2, 1);
             TextureManager.LoadTexture("playerStandingRight", "Player_Standing_Right", 2, 1);
             TextureManager.LoadTexture("playerStandingLeft", "Player_Standing_Left", 2, 1);
