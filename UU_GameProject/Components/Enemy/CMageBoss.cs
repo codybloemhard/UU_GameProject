@@ -50,17 +50,17 @@ namespace UU_GameProject
             if (Input.GetKey(PressAction.PRESSED, Keys.R))
                 FireBall();
 
-            //if (teleportTime <= 0)
-            //{
-            //    teleportTime = teleportDelay;
-            //    newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
-            //    targetPosition = newTarget;
-            //    disappearing = true;
-            //    fsm.SetCurrentState("teleport");
-            //}
-            //teleportTime -= time;
+            if (teleportTime <= 0)
+            {
+                teleportTime = teleportDelay;
+                newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
+                targetPosition = newTarget;
+                disappearing = true;
+                fsm.SetCurrentState("teleport");
+            }
+            teleportTime -= time;
 
-            //fsm.SetCurrentState("stay");
+            fsm.SetCurrentState("stay");
             fsm.Update();
         }
 
@@ -103,7 +103,7 @@ namespace UU_GameProject
 
             float velocitySign = Math.Sign(velocity.Y);
             velocity.Y = sign * Math.Min(sign * velocity.Y, maxYSpeed);
-            //GO.Pos += velocity * ctime /(healthpool.HealhPercent + .5f);
+            GO.Pos += velocity * ctime /(healthpool.HealhPercent + .5f);
 
             if(actionTime <= 0)
             {
@@ -127,6 +127,7 @@ namespace UU_GameProject
         {
             if(disappearing)
             {
+                Console.WriteLine("teleporting");
                 if (GO.Size.X - targetSize.X * teleportSpeed * ctime < 0 || GO.Size.Y - targetSize.Y * teleportSpeed * ctime < 0)
                 {
                     disappearing = false;
