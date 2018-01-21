@@ -38,9 +38,8 @@ namespace UU_GameProject
             lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
             //objects
             sky = new GameObject(this, 100);
-            sky.AddComponent(new CRender("sky"));
-            sky.Size = new Vector2(16, 9);
-            sky.Renderer.colour = new Color(50, 100, 255);
+            sky.AddComponent(new CRender("background"));
+            sky.Size = new Vector2(16, 16);
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -108,7 +107,7 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 15, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
-            builder.AddSource("bosstrigger", 10, false, Dec_Bosstrigger);
+            builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
             builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
@@ -218,7 +217,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_ArmourEnemy(ReplacerInput i)
         {
-            GameObject enemy = new GameObject("Aenemy", this, 2);
+            GameObject enemy = new GameObject("Aenemy", this, i.layer);
             enemy.AddComponent(new CRender("player"));
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(100));
@@ -232,7 +231,7 @@ namespace UU_GameProject
 
         private GameObject[] Rep_RobotBoss(ReplacerInput i)
         {
-            GameObject robotBoss = new GameObject("boss", this, 2);
+            GameObject robotBoss = new GameObject("boss", this, i.layer);
             CAnimatedSprite animBoss = new CAnimatedSprite();
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
@@ -248,12 +247,13 @@ namespace UU_GameProject
             robotBoss.AddComponent(animBoss);
             robotBoss.Size = new Vector2(3f, 3f);
             robotBoss.Pos = i.obj.pos - robotBoss.Size / 2f;
+            robotBoss.active = false;
             return new GameObject[] { robotBoss };
         }
 
         private GameObject[] Rep_MageBoss(ReplacerInput i)
         {
-            GameObject mageBoss = new GameObject("mageboss", this, 2);
+            GameObject mageBoss = new GameObject("boss", this, 2);
             CAnimatedSprite animBoss = new CAnimatedSprite();
             animBoss.AddAnimation("hovering", "mageBossHovering");
             animBoss.AddAnimation("fireball", "mageBossFireball");
@@ -266,6 +266,7 @@ namespace UU_GameProject
             mageBoss.AddComponent(new CMageBoss());
             mageBoss.Size = new Vector2(2);
             mageBoss.Pos = i.obj.pos - mageBoss.Size / 2;
+            mageBoss.active = false;
             return new GameObject[] { mageBoss };
         }
 
