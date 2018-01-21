@@ -277,7 +277,7 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.Size = new Vector2(4);
             cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
-            cyborgBoss.active = false;          
+            cyborgBoss.active = false;    
             return new GameObject[] { cyborgBoss };
         }
 

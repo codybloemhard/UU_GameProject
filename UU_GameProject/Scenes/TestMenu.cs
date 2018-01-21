@@ -7,7 +7,6 @@ namespace UU_GameProject
 {
     public class TestMenu : GameState
     {
-
         public TestMenu() : base() { }
 
         public override void Load(SpriteBatch batch)
