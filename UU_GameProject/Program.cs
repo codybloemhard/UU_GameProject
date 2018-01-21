@@ -36,6 +36,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("Menu_Button_2", "Menu_Button_2");
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
+            TextureManager.LoadTexture("background", "Background");
             TextureManager.LoadTexture("sky", "sky");
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
             TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 5, 4);
