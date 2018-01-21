@@ -232,7 +232,6 @@ namespace UU_GameProject
             return new GameObject[] { robotBoss };
         }
 
-<<<<<<< HEAD
         private GameObject[] Rep_MageBoss(ReplacerInput i)
         {
             GameObject mageBoss = new GameObject("mageboss", this, 2);
@@ -264,8 +263,6 @@ namespace UU_GameProject
             return new GameObject[] { cyborgBoss };
         }
 
-=======
->>>>>>> 7f00018a1017e7726ec553cef2a5e0fca80983df
         public override void Unload() { }
 
         public override void Update(float time)
