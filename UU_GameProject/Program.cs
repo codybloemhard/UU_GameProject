@@ -36,7 +36,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("Menu_Button_2", "Menu_Button_2");
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
-            TextureManager.LoadTexture("background", "Background");
+            //TextureManager.LoadTexture("background", "Background");
             TextureManager.LoadTexture("tutorialSign", "Tutorial_Sign");
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
@@ -62,6 +62,10 @@ namespace UU_GameProject
             TextureManager.LoadTexture("playerWeapon", "Player_Weapon", 2, 1);
             TextureManager.LoadTexture("playerWeaponLit", "Player_Weapon_Lit", 2, 1);
             TextureManager.LoadTexture("playerWeaponLightning", "Player_Weapon_Lightning", 2, 1);
+            TextureManager.LoadTexture("cyborgBossBouncing1", "Cyborg_Boss_Slime_Bouncing_1", 8, 1);
+            TextureManager.LoadTexture("cyborgBossBouncing2", "Cyborg_Boss_Slime_Bouncing_2", 8, 1);
+            TextureManager.LoadTexture("cyborgBossBouncing3", "Cyborg_Boss_Slime_Bouncing_3", 8, 1);
+            TextureManager.LoadTexture("cyborgBossBouncing4", "Cyborg_Boss_Slime_Bouncing_4", 8, 1);
             TextureManager.LoadTexture("robotBossWalking", "Spider_Boss_Walking", 2, 1);
             TextureManager.LoadTexture("robotBossFlying", "Spider_Boss_Flying", 2, 1);
             TextureManager.LoadTexture("robotBossFalling", "Spider_Boss_Falling", 2, 1);
@@ -85,6 +89,14 @@ namespace UU_GameProject
             TextureManager.LoadTexture("redSlimeMovingLeft", "Red_Slime_Moving_Left", 8, 1);
             TextureManager.LoadTexture("robotSlimeMovingRight", "Robot_Slime_Moving_Right", 8, 1);
             TextureManager.LoadTexture("robotSlimeMovingLeft", "Robot_Slime_Moving_Left", 8, 1);
+            TextureManager.LoadTexture("armoredCyborgRight", "Armored_Cyborg_Slime_Moving_Right", 8, 1);
+            TextureManager.LoadTexture("armoredCyborgLeft", "Armored_Cyborg_Slime_Moving_Left", 8, 1);
+            TextureManager.LoadTexture("armoredRobotRight", "Armored_Robot_Slime_Moving_Right", 8, 1);
+            TextureManager.LoadTexture("armoredRobotLeft", "Armored_Robot_Slime_Moving_Left", 8, 1);
+            TextureManager.LoadTexture("rangedCyborgRight", "Cyborg_Ranged_Right", 8, 1);
+            TextureManager.LoadTexture("rangedCyborgLeft", "Cyborg_Ranged_Left", 8, 1);
+            TextureManager.LoadTexture("normalCyborgRight", "Cyborg_Slime_Moving_Right", 8, 1);
+            TextureManager.LoadTexture("normalCyborgLeft", "Cyborg_Slime_Moving_Left", 8, 1);
             TextureManager.LoadTexture("bullet", "Bullet", 2, 1);
             TextureManager.LoadTexture("repeat", "block", 0, 0);
             AudioManager.LoadTrack("moonlightsonata", "beethoven");
