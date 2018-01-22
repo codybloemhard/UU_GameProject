@@ -113,11 +113,12 @@ namespace UU_GameProject
             firingFireball = false;
         }
 
+        //picks different animations, based on direction and enemy type
         private void animation()
         {
             switch (rangedType)
             {
-                case "red":
+                case "redMage":
                     if (dir.X > 0 && firingFireball)
                         animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingRight", 8);
                     else if (dir.X < 0 && firingFireball)
@@ -127,7 +128,7 @@ namespace UU_GameProject
                     else
                         animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingLeft", 8);
                     break;
-                case "green":
+                case "greenMage":
                     if (dir.X > 0 && firingFireball)
                         animationRangedEnemy.PlayAnimationIfDifferent("greenMageCastingRight", 8);
                     else if (dir.X < 0 && firingFireball)
@@ -137,7 +138,7 @@ namespace UU_GameProject
                     else
                         animationRangedEnemy.PlayAnimationIfDifferent("greenMageStandingLeft", 8);
                     break;
-                default:
+                case "purpleMage":
                     if (dir.X > 0 && firingFireball)
                         animationRangedEnemy.PlayAnimationIfDifferent("purpleMageCastingRight", 8);
                     else if (dir.X < 0 && firingFireball)
@@ -146,6 +147,12 @@ namespace UU_GameProject
                         animationRangedEnemy.PlayAnimationIfDifferent("purpleMageStandingRight", 8);
                     else
                         animationRangedEnemy.PlayAnimationIfDifferent("purpleMageStandingLeft", 8);
+                    break;
+                case "cyborg":
+                    if (dir.X > 0)
+                        animationRangedEnemy.PlayAnimationIfDifferent("rangedCyborgRight", 8);
+                    else
+                        animationRangedEnemy.PlayAnimationIfDifferent("rangedCyborgLeft", 8);
                     break;
             }
         }

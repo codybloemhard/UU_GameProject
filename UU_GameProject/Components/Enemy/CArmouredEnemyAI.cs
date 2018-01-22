@@ -8,9 +8,11 @@ namespace UU_GameProject
     public class CArmouredEnemyAI : CBasicEnemyAI
     {
         private CAnimatedSprite animationArmouredEnemy;
+        private string armouredType;
 
-        public CArmouredEnemyAI(ENEMY type) : base(type)
+        public CArmouredEnemyAI(ENEMY type, string armouredEnemyType) : base(type)
         {
+            armouredType = armouredEnemyType;
             damage = 10f;
             maxSpeed = 1.75f;
             maxHP = 100;
@@ -98,12 +100,24 @@ namespace UU_GameProject
                 GO.Pos += new Vector2(speed * ctime, 0f);
         }
 
+        //picks different animations, based on direction and enemy type
         private void animation()
         {
-            if (base.dir.X > 0)
-                animationArmouredEnemy.PlayAnimationIfDifferent("robotSlimeMovingRight", 6);
-            else
-                animationArmouredEnemy.PlayAnimationIfDifferent("robotSlimeMovingLeft", 6);
+            switch (armouredType)
+            {
+                case "robot":
+                    if (base.dir.X > 0)
+                        animationArmouredEnemy.PlayAnimationIfDifferent("armoredRobotRight", 8);
+                    else
+                        animationArmouredEnemy.PlayAnimationIfDifferent("armoredRobotLeft", 8);
+                    break;
+                case "cyborg":
+                    if (base.dir.X > 0)
+                        animationArmouredEnemy.PlayAnimationIfDifferent("armoredCyborgRight", 8);
+                    else
+                        animationArmouredEnemy.PlayAnimationIfDifferent("armoredCyborgLeft", 8);
+                    break;
+            }
         }
     }
 }

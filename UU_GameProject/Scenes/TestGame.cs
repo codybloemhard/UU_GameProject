@@ -110,8 +110,12 @@ namespace UU_GameProject
             builder.AddSource("!rmrenemy", 15, false, Rep_RedMagicRangedEnemy);
             builder.AddSource("!gmrenemy", 15, false, Rep_GreenMagicRangedEnemy);
             builder.AddSource("!pmrenemy", 15, false, Rep_PurpleMagicRangedEnemy);
-            builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
-            builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
+            builder.AddSource("!crenemy", 15, false, Rep_CyborgRangedEnemy);
+            builder.AddSource("!mnenemy", 15, false, Rep_MagicNormalEnemy);
+            builder.AddSource("!rnenemy", 15, false, Rep_RobotNormalEnemy);
+            builder.AddSource("!cnenemy", 15, false, Rep_CyborgNormalEnemy);
+            builder.AddSource("!caenemy", 15, false, Rep_CyborgArmourEnemy);
+            builder.AddSource("!raenemy", 15, false, Rep_RobotArmourEnemy);
             builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
             builder.AddSource("!mboss", 16, false, Rep_MageBoss);
             builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
@@ -198,7 +202,7 @@ namespace UU_GameProject
             animRangedEnemy.AddAnimation("redMageCastingLeft", "redMageCastingLeft");
             animRangedEnemy.PlayAnimation("redMageStandingRight", 6);
             enemy.AddComponent(animRangedEnemy);
-            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
+            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC, "redMage"));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CShoot());
@@ -218,7 +222,7 @@ namespace UU_GameProject
             animRangedEnemy.AddAnimation("greenMageCastingLeft", "greenMageCastingLeft");
             animRangedEnemy.PlayAnimation("greenMageStandingRight", 6);
             enemy.AddComponent(animRangedEnemy);
-            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
+            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC, "greenMage"));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CShoot());
@@ -238,7 +242,7 @@ namespace UU_GameProject
             animRangedEnemy.AddAnimation("purpleMageCastingLeft", "purpleMageCastingLeft");
             animRangedEnemy.PlayAnimation("purpleMageStandingRight", 6);
             enemy.AddComponent(animRangedEnemy);
-            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
+            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC, "purpleMage"));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CShoot());
@@ -248,17 +252,33 @@ namespace UU_GameProject
             return new GameObject[] { enemy };
         }
 
-        private GameObject[] Rep_NormalEnemy(ReplacerInput i)
+        private GameObject[] Rep_CyborgRangedEnemy(ReplacerInput i)
+        {
+            GameObject enemy = new GameObject("Renemy", this, 2);
+            CAnimatedSprite animRangedEnemy = new CAnimatedSprite();
+            animRangedEnemy.AddAnimation("rangedCyborgRight", "rangedCyborgRight");
+            animRangedEnemy.AddAnimation("rangedCyborgLeft", "rangedCyborgLeft");
+            animRangedEnemy.PlayAnimation("rangedCyborgRight", 6);
+            enemy.AddComponent(animRangedEnemy);
+            enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC, "cyborg"));
+            enemy.AddComponent(new CHealthPool(25));
+            enemy.AddComponent(new CAABB());
+            enemy.AddComponent(new CShoot());
+            enemy.AddComponent(new CFaction("enemy"));
+            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
+            return new GameObject[] { enemy };
+        }
+
+        private GameObject[] Rep_MagicNormalEnemy(ReplacerInput i)
         {
             GameObject enemy = new GameObject("Nenemy", this, 2);
             CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
             animNormalEnemy.AddAnimation("redSlimeMovingRight", "redSlimeMovingRight");
             animNormalEnemy.AddAnimation("redSlimeMovingLeft", "redSlimeMovingLeft");
-            animNormalEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
-            animNormalEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
             animNormalEnemy.PlayAnimation("redSlimeMovingRight", 4);
             enemy.AddComponent(animNormalEnemy);
-            enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
+            enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC, "magic"));
             enemy.AddComponent(new CHealthPool(50));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
@@ -268,15 +288,69 @@ namespace UU_GameProject
             return new GameObject[] { enemy };
         }
 
-        private GameObject[] Rep_ArmourEnemy(ReplacerInput i)
+        private GameObject[] Rep_RobotNormalEnemy(ReplacerInput i)
+        {
+            GameObject enemy = new GameObject("Nenemy", this, 2);
+            CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
+            animNormalEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
+            animNormalEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
+            animNormalEnemy.PlayAnimation("robotSlimeMovingRight", 4);
+            enemy.AddComponent(animNormalEnemy);
+            enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC, "robot"));
+            enemy.AddComponent(new CHealthPool(50));
+            enemy.AddComponent(new CAABB());
+            enemy.AddComponent(new CMeleeAttack());
+            enemy.AddComponent(new CFaction("enemy"));
+            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
+            return new GameObject[] { enemy };
+        }
+
+        private GameObject[] Rep_CyborgNormalEnemy(ReplacerInput i)
+        {
+            GameObject enemy = new GameObject("Nenemy", this, 2);
+            CAnimatedSprite animNormalEnemy = new CAnimatedSprite();
+            animNormalEnemy.AddAnimation("normalCyborgRight", "normalCyborgRight");
+            animNormalEnemy.AddAnimation("normalCyborgLeft", "normalCyborgLeft");
+            animNormalEnemy.PlayAnimation("normalCyborgRight", 4);
+            enemy.AddComponent(animNormalEnemy);
+            enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC, "cyborg"));
+            enemy.AddComponent(new CHealthPool(50));
+            enemy.AddComponent(new CAABB());
+            enemy.AddComponent(new CMeleeAttack());
+            enemy.AddComponent(new CFaction("enemy"));
+            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
+            return new GameObject[] { enemy };
+        }
+
+        private GameObject[] Rep_CyborgArmourEnemy(ReplacerInput i)
         {
             GameObject enemy = new GameObject("Aenemy", this, i.layer);
             CAnimatedSprite animArmourEnemy = new CAnimatedSprite();
-            animArmourEnemy.AddAnimation("robotSlimeMovingRight", "robotSlimeMovingRight");
-            animArmourEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
-            animArmourEnemy.PlayAnimation("robotSlimeMovingRight", 4);
+            animArmourEnemy.AddAnimation("armoredCyborgRight", "armoredCyborgRight");
+            animArmourEnemy.AddAnimation("armoredCyborgLeft", "armoredCyborgLeft");
+            animArmourEnemy.PlayAnimation("armoredCyborgRight", 8);
             enemy.AddComponent(animArmourEnemy);
-            enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
+            enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC, "cyborg"));
+            enemy.AddComponent(new CHealthPool(100));
+            enemy.AddComponent(new CAABB());
+            enemy.AddComponent(new CMeleeAttack());
+            enemy.AddComponent(new CFaction("enemy"));
+            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
+            return new GameObject[] { enemy };
+        }
+
+        private GameObject[] Rep_RobotArmourEnemy(ReplacerInput i)
+        {
+            GameObject enemy = new GameObject("Aenemy", this, i.layer);
+            CAnimatedSprite animArmourEnemy = new CAnimatedSprite();
+            animArmourEnemy.AddAnimation("armoredRobotRight", "armoredRobotRight");
+            animArmourEnemy.AddAnimation("armoredRobotLeft", "armoredRobotLeft");
+            animArmourEnemy.PlayAnimation("armoredRobotRight", 8);
+            enemy.AddComponent(animArmourEnemy);
+            enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC, "robot"));
             enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());

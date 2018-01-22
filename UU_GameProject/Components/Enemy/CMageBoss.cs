@@ -158,6 +158,7 @@ namespace UU_GameProject
             }
         }
 
+        //picks different animations, based on current behaviour
         private void animation()
         {
             if (firingFireball)
