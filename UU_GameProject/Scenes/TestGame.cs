@@ -106,17 +106,16 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 15, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
+            builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
+            builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
+            builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
             builder.AddSource("!renemy", 15, false, Rep_RangedEnemy);
             builder.AddSource("!nenemy", 15, false, Rep_NormalEnemy);
             builder.AddSource("!aenemy", 15, false, Rep_ArmourEnemy);
-            builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 16, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
-
-            builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
-            builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
-            builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
+            builder.AddSource("!rboss", 15, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 15, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 15, false, Rep_CyborgBoss);
 
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);

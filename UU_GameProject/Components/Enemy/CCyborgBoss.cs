@@ -45,6 +45,7 @@ namespace UU_GameProject
 
         private void Bounce()
         {
+            if (cRaycasts == null) return;//soms
             if (cRaycasts.WallLeftHit)
                 speed = Math.Abs(speed);
             else if (cRaycasts.WallRightHit)
