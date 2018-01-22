@@ -283,7 +283,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Size = new Vector2(0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -301,7 +301,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Size = new Vector2(0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -319,7 +319,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 0.5f);
+            enemy.Size = new Vector2(0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -337,7 +337,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -355,7 +355,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(0.5f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -404,7 +404,10 @@ namespace UU_GameProject
         private GameObject[] Rep_CyborgBoss(ReplacerInput i)
         {
             GameObject cyborgBoss = new GameObject("boss", this, 2);
-            cyborgBoss.AddComponent(new CRender("block"));
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("cyborgBossBouncing4", "cyborgBossBouncing4");
+            animBoss.PlayAnimation("cyborgBossBouncing4", 8);
+            cyborgBoss.AddComponent(animBoss);
             cyborgBoss.AddComponent(new CHealthPool(500));
             cyborgBoss.AddComponent(new CAABB());
             cyborgBoss.AddComponent(new CFaction("enemy"));

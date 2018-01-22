@@ -74,7 +74,10 @@ namespace UU_GameProject
             for (int i = -1; i < 2; i += 2)
             {
                 GameObject cyborgBoss = new GameObject("cyborgboss", GO.Context, 2);
-                cyborgBoss.AddComponent(new CRender("block"));
+                CAnimatedSprite animBoss = new CAnimatedSprite();
+                animBoss.AddAnimation("cyborgBossBouncing" + stage, "cyborgBossBouncing" + stage);
+                animBoss.PlayAnimation("cyborgBossBouncing" + stage, 8);
+                cyborgBoss.AddComponent(animBoss);
                 cyborgBoss.AddComponent(new CAABB());
                 cyborgBoss.AddComponent(new CCyborgBoss(stage, i));
                 cyborgBoss.AddComponent(new CDamageDealer(10 * stage, false));
