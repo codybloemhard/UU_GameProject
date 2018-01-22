@@ -63,9 +63,9 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            else if (other.tag == "cyborgboss")
+            else if (other.tag == "boss" && other.GetComponent<CCyborgBoss>() != null)
                 ChangeHealth(comp.Damage, true);
-            else if (other.tag == "robotboss" && other.GetComponent<CRobotBoss>().Chasing)
+            else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Chasing)
                 other.GetComponent<CRobotBoss>().Explode();
             else if (other.tag.Contains("explobullet"))
             {
