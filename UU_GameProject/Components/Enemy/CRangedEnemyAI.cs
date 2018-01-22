@@ -108,7 +108,18 @@ namespace UU_GameProject
         private void fireball()
         {
             Vector2 direction = shootdir(GO.Pos.X - player.Pos.X);
-            GO.GetComponent<CShoot>().Shoot(direction, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), damage, DoPotion());
+            Vector2 size = new Vector2(0.4f);
+            GameObject fireball = new GameObject("fireball", GO.Context, 0);
+            CAnimatedSprite animBall = new CAnimatedSprite();
+            animBall.AddAnimation("fireball", "fireball");
+            animBall.PlayAnimation("fireball", 8);
+            animBall.colour = Color.Cyan;
+            fireball.Pos = GO.Pos + new Vector2(GO.Size.X / 2, .4f) - size / 2f;
+            fireball.Size = size;
+            fireball.AddComponent(animBall);
+            fireball.AddComponent(new CFireballMovement(Vector2.Zero, direction, direction, damage, DoPoison()));
+            fireball.AddComponent(new CAABB());
+            fireball.AddComponent(new CFaction("enemy"));
             AudioManager.PlayEffect("shoot");
             firingFireball = false;
         }

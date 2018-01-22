@@ -87,9 +87,7 @@ namespace UU_GameProject
             CAnimatedSprite animBall = new CAnimatedSprite();
             animBall.AddAnimation("fireball", "fireball");
             animBall.PlayAnimation("fireball", 8);
-
             fireball.Pos = GO.Pos + new Vector2(GO.Size.X/2, .4f) - size / 2f;
-
             fireball.Size = size;
             fireball.AddComponent(animBall);
             fireball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20f, false));

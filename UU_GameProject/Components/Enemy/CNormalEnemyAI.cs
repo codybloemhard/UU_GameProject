@@ -71,7 +71,7 @@ namespace UU_GameProject
                 run = false;
             if (length < range && wait == 0)
             {
-                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPotion(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
+                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPoison(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
                 wait = 1f;
             }
             if (!grounded)
