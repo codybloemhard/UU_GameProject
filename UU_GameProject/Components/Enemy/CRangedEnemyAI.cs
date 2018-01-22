@@ -9,9 +9,11 @@ namespace UU_GameProject
     {
         private CAnimatedSprite animationRangedEnemy;
         private bool firingFireball = false;
+        private string rangedType;
 
-        public CRangedEnemyAI(ENEMY type) : base(type)
+        public CRangedEnemyAI(ENEMY type, string rangedEnemyType) : base(type)
         {
+            rangedType = rangedEnemyType;
             damage = 10f;
             maxSpeed = 2.5f;
             maxHP = 25;
@@ -106,21 +108,64 @@ namespace UU_GameProject
         private void fireball()
         {
             Vector2 direction = shootdir(GO.Pos.X - player.Pos.X);
-            GO.GetComponent<CShoot>().Shoot(direction, new Vector2(0.2f, 0.2f), Vector2.Zero, GO.GetComponent<CFaction>().GetFaction(), damage, DoPotion());
+            Vector2 size = new Vector2(0.4f);
+            GameObject fireball = new GameObject("fireball", GO.Context, 0);
+            CAnimatedSprite animBall = new CAnimatedSprite();
+            animBall.AddAnimation("fireball", "fireball");
+            animBall.PlayAnimation("fireball", 8);
+            animBall.colour = Color.Cyan;
+            fireball.Pos = GO.Pos + new Vector2(GO.Size.X / 2, .4f) - size / 2f;
+            fireball.Size = size;
+            fireball.AddComponent(animBall);
+            fireball.AddComponent(new CFireballMovement(Vector2.Zero, direction, direction, damage, DoPoison()));
+            fireball.AddComponent(new CAABB());
+            fireball.AddComponent(new CFaction("enemy"));
             AudioManager.PlayEffect("shoot");
             firingFireball = false;
         }
 
+        //picks different animations, based on direction and enemy type
         private void animation()
         {
-            if (dir.X > 0 && firingFireball)
-                animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingRight", 8);
-            else if (dir.X < 0 && firingFireball)
-                animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingLeft", 8);
-            else if (dir.X > 0)
-                animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingRight", 8);
-            else
-                animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingLeft", 8);
+            switch (rangedType)
+            {
+                case "redMage":
+                    if (dir.X > 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingRight", 8);
+                    else if (dir.X < 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("redMageCastingLeft", 8);
+                    else if (dir.X > 0)
+                        animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingRight", 8);
+                    else
+                        animationRangedEnemy.PlayAnimationIfDifferent("redMageStandingLeft", 8);
+                    break;
+                case "greenMage":
+                    if (dir.X > 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("greenMageCastingRight", 8);
+                    else if (dir.X < 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("greenMageCastingLeft", 8);
+                    else if (dir.X > 0)
+                        animationRangedEnemy.PlayAnimationIfDifferent("greenMageStandingRight", 8);
+                    else
+                        animationRangedEnemy.PlayAnimationIfDifferent("greenMageStandingLeft", 8);
+                    break;
+                case "purpleMage":
+                    if (dir.X > 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("purpleMageCastingRight", 8);
+                    else if (dir.X < 0 && firingFireball)
+                        animationRangedEnemy.PlayAnimationIfDifferent("purpleMageCastingLeft", 8);
+                    else if (dir.X > 0)
+                        animationRangedEnemy.PlayAnimationIfDifferent("purpleMageStandingRight", 8);
+                    else
+                        animationRangedEnemy.PlayAnimationIfDifferent("purpleMageStandingLeft", 8);
+                    break;
+                case "cyborg":
+                    if (dir.X > 0)
+                        animationRangedEnemy.PlayAnimationIfDifferent("rangedCyborgRight", 8);
+                    else
+                        animationRangedEnemy.PlayAnimationIfDifferent("rangedCyborgLeft", 8);
+                    break;
+            }
         }
     }
 }

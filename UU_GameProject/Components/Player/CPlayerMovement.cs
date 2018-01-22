@@ -316,7 +316,7 @@ namespace UU_GameProject
                 Console.WriteLine("checkpoint set");
             }
 
-            else if (other.tag.Contains("solid"))
+            else if (other.tag.Contains("solid") && other.tag != "bossdoorsolid")
             {
                 Console.WriteLine("collision with " + other.Pos);
                 float up, down, left, right;

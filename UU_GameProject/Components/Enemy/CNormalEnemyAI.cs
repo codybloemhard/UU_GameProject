@@ -8,9 +8,11 @@ namespace UU_GameProject
     public class CNormalEnemyAI : CBasicEnemyAI
     {
         private CAnimatedSprite animationNormalEnemy;
+        private string normalType;
 
-        public CNormalEnemyAI(ENEMY type) : base(type)
+        public CNormalEnemyAI(ENEMY type, string normalEnemyType) : base(type)
         {
+            normalType = normalEnemyType;
             damage = 20f;
             maxSpeed = 2f;
             maxHP = 50;
@@ -69,7 +71,7 @@ namespace UU_GameProject
                 run = false;
             if (length < range && wait == 0)
             {
-                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPotion(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
+                GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPoison(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
                 wait = 1f;
             }
             if (!grounded)
@@ -81,12 +83,30 @@ namespace UU_GameProject
                 GO.Pos += new Vector2(speed * ctime, 0f);
         }
 
+        //picks different animations, based on direction and enemy type
         private void animation()
         {
-            if (base.dir.X > 0)
-                animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingRight", 6);
-            else
-                animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingLeft", 6);
+            switch (normalType)
+            {
+                case "magic":
+                    if (base.dir.X > 0)
+                        animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingRight", 6);
+                    else
+                        animationNormalEnemy.PlayAnimationIfDifferent("redSlimeMovingLeft", 6);
+                    break;
+                case "robot":
+                    if (base.dir.X > 0)
+                        animationNormalEnemy.PlayAnimationIfDifferent("robotSlimeMovingRight", 6);
+                    else
+                        animationNormalEnemy.PlayAnimationIfDifferent("robotSlimeMovingLeft", 6);
+                    break;
+                case "cyborg":
+                    if (base.dir.X > 0)
+                        animationNormalEnemy.PlayAnimationIfDifferent("normalCyborgRight", 6);
+                    else
+                        animationNormalEnemy.PlayAnimationIfDifferent("normalCyborgLeft", 6);
+                    break;
+            }
         }
     }
 }
