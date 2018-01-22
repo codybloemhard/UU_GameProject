@@ -18,7 +18,7 @@ namespace UU_GameProject
         
         public Run()
         {
-            game = new GameWindow(1000, false, 4096);
+            game = new GameWindow(1600, false, 4096);
             game.SetLoad(Load);
             game.Run();
         }
