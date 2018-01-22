@@ -38,7 +38,7 @@ namespace UU_GameProject
             lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
             //objects
             sky = new GameObject(this, 100);
-            sky.AddComponent(new CRender("sky"));
+            sky.AddComponent(new CRender("background"));
             sky.Size = new Vector2(16, 16);
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
@@ -107,6 +107,9 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 15, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
+            builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
+            builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
+            builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
             builder.AddSource("!rmrenemy", 15, false, Rep_RedMagicRangedEnemy);
             builder.AddSource("!gmrenemy", 15, false, Rep_GreenMagicRangedEnemy);
@@ -120,11 +123,9 @@ namespace UU_GameProject
             builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
             builder.AddSource("!mboss", 16, false, Rep_MageBoss);
             builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
-
             builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
             builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
             builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
-
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -266,7 +267,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CShoot());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(1.0f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -338,7 +339,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f);
+            enemy.Size = new Vector2(0.8f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -356,7 +357,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f);
+            enemy.Size = new Vector2(0.7f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }

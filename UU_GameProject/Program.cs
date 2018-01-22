@@ -18,7 +18,7 @@ namespace UU_GameProject
         
         public Run()
         {
-            game = new GameWindow(1000);
+            game = new GameWindow(1600, false, 4096);
             game.SetLoad(Load);
             game.Run();
         }
@@ -36,7 +36,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("Menu_Button_2", "Menu_Button_2");
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
-            //TextureManager.LoadTexture("background", "Background");
+            TextureManager.LoadTexture("background", "Background");
             TextureManager.LoadTexture("tutorialSign", "Tutorial_Sign");
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
