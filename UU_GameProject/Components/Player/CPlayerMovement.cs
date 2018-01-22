@@ -52,6 +52,7 @@ namespace UU_GameProject
         {
             initiated = true;
             dir = new Vector2(1, 0);
+            checkPos = GO.Pos;
             Renderer render = GO.Renderer;
             if (render != null) render.colour = Color.White;
             animation = GO.Renderer as CAnimatedSprite;
@@ -314,6 +315,24 @@ namespace UU_GameProject
                 checkPos = GO.Pos;
                 Console.WriteLine("checkpoint set");
             }
+
+            else if (other.tag.Contains("solid"))
+            {
+                Console.WriteLine("collision with " + other.Pos);
+                float up, down, left, right;
+                up = GO.Pos.Y + GO.Size.Y - other.Pos.Y;
+                down = other.Pos.Y + other.Size.Y - GO.Pos.Y;
+                left = GO.Pos.X + GO.Size.X - other.Pos.X;
+                right = other.Pos.X + other.Size.X - GO.Pos.X;
+                if (Math.Abs(up) < 0.5f && up < down && up < left && up < right)
+                    GO.Pos -= new Vector2(0, up);
+                else if (Math.Abs(down) < 0.5f && down < left && down < right)
+                    GO.Pos += new Vector2(0, down);
+                else if (Math.Abs(left) < 0.5f && left < right)
+                    GO.Pos -= new Vector2(left, 0);
+                else if (Math.Abs(right) < 0.5f)
+                    GO.Pos += new Vector2(right, 0);
+            }
         }
         
         public Vector2 Velocity()
@@ -324,7 +343,7 @@ namespace UU_GameProject
         //reset
         public void Reset()
         {
-            Console.WriteLine("yeah");
+            Console.WriteLine("reset");
             AudioManager.PlayEffect("dead");
             if (checkPos != new Vector2(-1000, -1000))
                 GO.Pos = checkPos;

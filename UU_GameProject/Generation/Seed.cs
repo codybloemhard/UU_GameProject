@@ -10,7 +10,7 @@ namespace UU_GameProject
 {
     public static class Seed
     {
-        private static Dictionary<string, Random> randoms;
+        private static Dictionary<string, Random> randoms = new Dictionary<string, Random>();
 
         static Seed()
         {

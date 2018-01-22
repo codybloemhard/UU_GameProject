@@ -205,6 +205,7 @@ namespace UU_GameProject
             animRangedEnemy.AddAnimation("purpleMageCastingLeft", "purpleMageCastingLeft");
             animRangedEnemy.PlayAnimation("redMageStandingRight", 6);
             enemy.AddComponent(animRangedEnemy);
+            enemy.AddComponent(new CRaycasts());
             enemy.AddComponent(new CRangedEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(25));
             enemy.AddComponent(new CAABB());
@@ -225,6 +226,7 @@ namespace UU_GameProject
             animNormalEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
             animNormalEnemy.PlayAnimation("redSlimeMovingRight", 4);
             enemy.AddComponent(animNormalEnemy);
+            enemy.AddComponent(new CRaycasts());
             enemy.AddComponent(new CNormalEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(50));
             enemy.AddComponent(new CAABB());
@@ -243,6 +245,7 @@ namespace UU_GameProject
             animArmourEnemy.AddAnimation("robotSlimeMovingLeft", "robotSlimeMovingLeft");
             animArmourEnemy.PlayAnimation("robotSlimeMovingRight", 4);
             enemy.AddComponent(animArmourEnemy);
+            enemy.AddComponent(new CRaycasts());
             enemy.AddComponent(new CArmouredEnemyAI(ENEMY.MAGIC));
             enemy.AddComponent(new CHealthPool(100));
             enemy.AddComponent(new CAABB());
