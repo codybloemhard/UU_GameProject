@@ -71,7 +71,7 @@ namespace UU_GameProject
             }
         }
 
-        private void ChangeFSM(bool chase)
+        public void ChangeFSM(bool chase)
         {
             int random = MathH.random.Next(3);
             if (random == 0)
@@ -85,6 +85,7 @@ namespace UU_GameProject
                 chaseSpeedIncrease = 1;
             }
             else ChangeFSM(chase);
+            fsm.SetCurrentState("fly");
         }
 
         private void IdleBehaviour()
@@ -166,7 +167,7 @@ namespace UU_GameProject
                     shootTime -= ctime;
                 if (shootTime <= 0)
                 {
-                    ShootAtPlayer(difference);
+                    //ShootAtPlayer(difference);
                     shootTime = shootDelay;
                 }
             }
@@ -237,8 +238,8 @@ namespace UU_GameProject
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
             explosion.AddComponent(new CDamageDealer(50, false));
-            explosion.Size = new Vector2(3f);
-            explosion.Pos = GO.Pos;
+            explosion.Size = GO.Size + new Vector2(2);
+            explosion.Pos = GO.Pos - new Vector2(1);
             ChangeFSM(true);
         }
 

@@ -369,6 +369,7 @@ namespace UU_GameProject
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
             robotBoss.AddComponent(new CHealthPool(50));
+            robotBoss.AddComponent(new CDamageDealer(50, false));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -413,6 +414,7 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CAABB());
             cyborgBoss.AddComponent(new CFaction("enemy"));
             cyborgBoss.AddComponent(new CCyborgBoss(5, 1));
+            cyborgBoss.AddComponent(new CDamageDealer(20, false));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.AddComponent(new CHealthPool(100));
             cyborgBoss.Size = new Vector2(4);
