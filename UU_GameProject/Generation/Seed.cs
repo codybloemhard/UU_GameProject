@@ -26,39 +26,51 @@ namespace UU_GameProject
 
         public static void Set(Vector2 pos)
         {
-            int seed = GetSeed(pos);
-            string key = "" + seed;
-            if (randoms.ContainsKey(key))
-                randoms[key] = new Random(seed);
-            else
-                randoms.Add(key, new Random(seed));
+            lock (randoms)
+            {
+                int seed = GetSeed(pos);
+                string key = "" + seed;
+                if (randoms.ContainsKey(key))
+                    randoms[key] = new Random(seed);
+                else
+                    randoms.Add(key, new Random(seed));
+            }
         }
 
         public static void Set(int seed)
         {
-            string key = "" + seed;
-            if (randoms.ContainsKey(key))
-                randoms[key] = new Random(seed);
-            else
-                randoms.Add(key, new Random(seed));
+            lock (randoms)
+            {
+                string key = "" + seed;
+                if (randoms.ContainsKey(key))
+                    randoms[key] = new Random(seed);
+                else
+                    randoms.Add(key, new Random(seed));
+            }
         }
 
         public static float Random(Vector2 pos)
         {
-            string key = "" + GetSeed(pos);
-            if (!randoms.ContainsKey(key))
+            lock (randoms)
             {
-                Set(pos);
-                return (float)randoms["" + GetSeed(pos)].NextDouble();
+                string key = "" + GetSeed(pos);
+                if (!randoms.ContainsKey(key))
+                {
+                    Set(pos);
+                    return (float)randoms["" + GetSeed(pos)].NextDouble();
+                }
+                return (float)randoms[key].NextDouble();
             }
-            return (float)randoms[key].NextDouble();
         }
 
         public static float Random(int seed)
         {
-            string key = "" + seed;
-            if (!randoms.ContainsKey(key)) return 0f;
-            return (float)randoms[key].NextDouble();
+            lock (randoms)
+            {
+                string key = "" + seed;
+                if (!randoms.ContainsKey(key)) return 0f;
+                return (float)randoms[key].NextDouble();
+            }
         }
 
         public static float RandomRange(float a, float b, Vector2 pos)
