@@ -38,7 +38,7 @@ namespace UU_GameProject
             lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
             //objects
             sky = new GameObject(this, 100);
-            sky.AddComponent(new CRender("sky"));
+            sky.AddComponent(new CRender("background"));
             sky.Size = new Vector2(16, 16);
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
