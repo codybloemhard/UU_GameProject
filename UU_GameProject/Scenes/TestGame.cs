@@ -267,7 +267,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CShoot());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f, 1.0f);
+            enemy.Size = new Vector2(1.0f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -339,7 +339,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f);
+            enemy.Size = new Vector2(0.8f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
@@ -357,7 +357,7 @@ namespace UU_GameProject
             enemy.AddComponent(new CAABB());
             enemy.AddComponent(new CMeleeAttack());
             enemy.AddComponent(new CFaction("enemy"));
-            enemy.Size = new Vector2(0.5f);
+            enemy.Size = new Vector2(0.7f);
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
