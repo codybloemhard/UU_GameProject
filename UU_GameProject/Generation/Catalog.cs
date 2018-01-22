@@ -174,7 +174,7 @@ namespace UU_GameProject
                 default: return null;
             }
         }
-
+        
         private static bool IsPlant(int n)
         {
             return n >= 7 && n <= 10;
@@ -200,7 +200,7 @@ namespace UU_GameProject
             int chosenPlant = 12;
             int chosenPiece = 12;
             if (plants.Count > 0) chosenPlant = plants[nPlant];
-            if (pieces.Count > 0 && Seed.Random(i.obj.pos) < 0.35f)
+            if (pieces.Count > 0 && Seed.Random(i.obj.pos) < 0.3f)
                 chosenPiece = pieces[nPieces];
             else if(Seed.Random(i.obj.pos) < 0.1f)
             {
@@ -210,7 +210,8 @@ namespace UU_GameProject
                 for (int j = 0; j < possibleTrees.Length; j++)
                     if (possibleTrees[j])
                         trees.Add(j);
-                int nTree = (int)(Seed.Random(i.obj.pos) * trees.Count);
+                int nTree = (int)(i.obj.pos.X * 1.345f) % trees.Count;
+                
                 int chosenTree = 90;
                 if(trees.Count > 0) chosenTree = trees[nTree];
                 GameObject[] resTree = ChooseTree(chosenTree, newi);
@@ -330,7 +331,7 @@ namespace UU_GameProject
                 layergo.Size = i.obj.size * new Vector2(1f, 0.5f);
                 list.Add(layergo);
             }
-            if(horizontal)AddObjectsOnBlock(list, i, ids);
+            if (horizontal)AddObjectsOnBlock(list, i, ids);
         }
         
         public static GameObject[] ReplacerBoulder(ReplacerInput i)
