@@ -128,7 +128,7 @@ namespace UU_GameProject
         {
             if (GO.tag.Contains("player"))
                 GO.GetComponent<CPlayerMovement>().Reset();
-            else if (GO.tag.Contains("cyborgboss"))
+            else if (GO.tag.Contains("boss") && GO.GetComponent<CCyborgBoss>() != null)
                 GO.GetComponent<CCyborgBoss>().Split();
             else
             {

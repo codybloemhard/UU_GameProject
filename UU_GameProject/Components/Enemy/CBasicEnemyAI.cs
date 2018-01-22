@@ -96,7 +96,7 @@ namespace UU_GameProject
                 vertVelo = 0f;
             }
             else vertVelo += gravity * ctime;
-            if (ctime > 0.25f) //fix voor window draggen bug
+            if (ctime > 0.25f) //fix for window drag bug
             {
                 hordisplace = 0f;
                 verdisplace = 0f;
@@ -105,7 +105,7 @@ namespace UU_GameProject
             GO.Pos += new Vector2(hordisplace, verdisplace);
         }
 
-        protected bool DoPotion()
+        protected bool DoPoison()
         {
             if (magicChange > 0)
             {

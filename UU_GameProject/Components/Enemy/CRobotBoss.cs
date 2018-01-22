@@ -56,13 +56,7 @@ namespace UU_GameProject
             chasing = false;
             if (!initiated) InitRobot();
 
-            else if (fsm.CurrentState == "fly" && !falling)
-                animationBoss.PlayAnimationIfDifferent("flying", 4);
-            else if (fsm.CurrentState == "fly" && falling)
-                animationBoss.PlayAnimationIfDifferent("falling", 4);
-            else
-                animationBoss.PlayAnimationIfDifferent("walking", 2);
-
+            animation();
             difference = player.Pos + player.Size / 2 - (GO.Pos + GO.Size / 2);
             fsm.Update();
             ctime = time;
@@ -246,6 +240,17 @@ namespace UU_GameProject
             explosion.Size = new Vector2(3f);
             explosion.Pos = GO.Pos;
             ChangeFSM(true);
+        }
+
+        //picks different animations, based on current behaviour
+        private void animation()
+        {
+            if (fsm.CurrentState == "fly" && !falling)
+                animationBoss.PlayAnimationIfDifferent("flying", 4);
+            else if (fsm.CurrentState == "fly" && falling)
+                animationBoss.PlayAnimationIfDifferent("falling", 4);
+            else
+                animationBoss.PlayAnimationIfDifferent("walking", 2);
         }
 
         public bool Crushing { get { return crushing; } set { crushing = value; } }

@@ -12,7 +12,7 @@ namespace UU_GameProject
         private Vector2 dir;
         private bool iniated = false;
 
-        public CDamageArea(Vector2 dir, float duration, string caller, float damage, bool potionous) : base(damage, potionous)
+        public CDamageArea(Vector2 dir, float duration, string caller, float damage, bool poisonous) : base(damage, poisonous)
         {
             this.duration = duration;
             this.caller = caller;

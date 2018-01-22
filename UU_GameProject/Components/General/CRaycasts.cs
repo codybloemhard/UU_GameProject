@@ -12,7 +12,6 @@ namespace UU_GameProject
     {
         private bool initiated;
         private Vector2[] leftOrigins, topOrigins, rightOrigins, botOrigins;
-        private Vector2 topRight, botLeft, botRight;
         private RaycastResult[] leftCast, topCast, rightCast, botCast;
         private Vector2 left = new Vector2(-1, 0), right = new Vector2(1, 0), up = new Vector2(0, -1), down = new Vector2(0, 1);
 
@@ -61,6 +60,7 @@ namespace UU_GameProject
                 for (int i = 0; i < botCast.Length; i++)
                     realMovement.Y = Math.Min(realMovement.Y, botCast[i].distance);
             }
+
             return realMovement;
         }
 
@@ -87,10 +87,6 @@ namespace UU_GameProject
                 topOrigins[i] = new Vector2(i * (GO.Size.X / (topOrigins.Length - 1)), 0);
                 botOrigins[i] = new Vector2(i * (GO.Size.X / (botOrigins.Length - 1)), GO.Size.Y);
             }
-
-            topRight = new Vector2(GO.Size.X, 0);
-            botLeft = new Vector2(0, GO.Size.Y);
-            botRight = new Vector2(GO.Size.X, GO.Size.Y);
         }
 
         public bool LeftGrounded
