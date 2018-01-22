@@ -11,10 +11,13 @@ namespace UU_GameProject
     public static class Seed
     {
         private static Dictionary<string, Random> randoms = new Dictionary<string, Random>();
+        private static int baseseed;
 
         static Seed()
         {
             randoms = new Dictionary<string, Random>();
+            System.Random r = new System.Random();
+            baseseed = r.Next() / 1000;
         }
 
         public static int GetSeed(Vector2 pos)
@@ -31,36 +34,27 @@ namespace UU_GameProject
                 int seed = GetSeed(pos);
                 string key = "" + seed;
                 if (randoms.ContainsKey(key))
-                    randoms[key] = new Random(seed);
+                    randoms[key] = new Random(seed + baseseed);
                 else
-                    randoms.Add(key, new Random(seed));
+                    randoms.Add(key, new Random(seed + baseseed));
             }
         }
-
+        
         public static void Set(int seed)
         {
             lock (randoms)
             {
                 string key = "" + seed;
                 if (randoms.ContainsKey(key))
-                    randoms[key] = new Random(seed);
+                    randoms[key] = new Random(seed + baseseed);
                 else
-                    randoms.Add(key, new Random(seed));
+                    randoms.Add(key, new Random(seed + baseseed));
             }
         }
 
         public static float Random(Vector2 pos)
         {
-            lock (randoms)
-            {
-                string key = "" + GetSeed(pos);
-                if (!randoms.ContainsKey(key))
-                {
-                    Set(pos);
-                    return (float)randoms["" + GetSeed(pos)].NextDouble();
-                }
-                return (float)randoms[key].NextDouble();
-            }
+            return Random(GetSeed(pos));
         }
 
         public static float Random(int seed)
@@ -68,7 +62,11 @@ namespace UU_GameProject
             lock (randoms)
             {
                 string key = "" + seed;
-                if (!randoms.ContainsKey(key)) return 0f;
+                if (!randoms.ContainsKey(key))
+                {
+                    Set(seed);
+                    return (float)randoms[key].NextDouble();
+                }
                 return (float)randoms[key].NextDouble();
             }
         }

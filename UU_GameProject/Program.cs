@@ -31,7 +31,6 @@ namespace UU_GameProject
             TextureManager.LoadTexture("suprise", "suprise");
             TextureManager.LoadTexture("cross", "cross");
             TextureManager.LoadTexture("player", "playerConcept");
-            //TextureManager.LoadTexture("Menu_Background", "Menu_Background");
             TextureManager.LoadTexture("Menu_Button_1", "Menu_Button_1");
             TextureManager.LoadTexture("Menu_Button_2", "Menu_Button_2");
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
