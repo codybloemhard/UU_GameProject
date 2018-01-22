@@ -43,12 +43,6 @@ namespace UU_GameProject
             ctime = time;
             if (!initiated) InitMage();
             animation();
-            
-            if (Input.GetKey(PressAction.PRESSED, Keys.T))
-                LightningBolt();
-
-            if (Input.GetKey(PressAction.PRESSED, Keys.R))
-                FireBall();
 
             if (teleportTime <= 0)
             {

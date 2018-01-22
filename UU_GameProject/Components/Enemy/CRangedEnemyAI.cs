@@ -68,11 +68,11 @@ namespace UU_GameProject
                 if (diff < 0 && speed < 0)
                     speed *= -1;
             }
-            if (hitLeft.distance > 0.1f || hitRight.distance > 0.1f)
+            if ((hitLeft.distance > 0.1f && dir.X < 0) || (hitRight.distance > 0.1f && dir.X > 0))
                 run = false;
-            if (leftBlocked || rightBlocked)
+            if ((leftBlocked && dir.X < 0) || (rightBlocked && dir.X > 0))
                 run = false;
-            if (length < range && wait == 0)
+            if (length - 1 < range && wait == 0)
             {
                 firingFireball = true;
                 wait = 1.75f;

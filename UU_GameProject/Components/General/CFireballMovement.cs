@@ -38,7 +38,7 @@ namespace UU_GameProject
         
         public override void OnCollision(GameObject other)
         {
-            if (other.tag.Contains("solid"))
+            if (other.tag.Contains("solid") && other.tag != "bossdoorsolid")
                 GO.Destroy();
         }
     }

@@ -414,6 +414,7 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CFaction("enemy"));
             cyborgBoss.AddComponent(new CCyborgBoss(5, 1));
             cyborgBoss.AddComponent(new CRaycasts());
+            cyborgBoss.AddComponent(new CHealthPool(100));
             cyborgBoss.Size = new Vector2(4);
             cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
             cyborgBoss.active = false;

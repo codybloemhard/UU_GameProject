@@ -82,27 +82,28 @@ namespace UU_GameProject
             else hit = hitLeft;
             if (hit.hit && hit.distance < 0.05f) grounded = true;
             else grounded = false;
-            if (grounded && (hitLeft.distance > 0.1f || hitRight.distance > 0.1f))
-            {
-                speed *= -1;
-                GO.Pos += Vector2.UnitX * speed * 0.05f;
-            }
+            if (grounded && hitLeft.distance > 0.1)
+                speed = maxSpeed;
+            else if (grounded && hitRight.distance > 0.1)
+                speed = -maxSpeed;
+
             if (leftBlocked || rightBlocked)
-                speed *= -1;
-            float hordisplace = 0f, verdisplace = 0f;
+            speed *= -1;
+
+            Vector2 velocity = Vector2.Zero;
+            
             if (grounded)
             {
-                hordisplace = speed * ctime;
+                velocity.X = speed * ctime;
                 vertVelo = 0f;
             }
             else vertVelo += gravity * ctime;
             if (ctime > 0.25f) //fix for window drag bug
             {
-                hordisplace = 0f;
-                verdisplace = 0f;
+                velocity = Vector2.Zero;
             }
-            verdisplace = Math.Min(hit.distance, vertVelo * ctime);
-            GO.Pos += new Vector2(hordisplace, verdisplace);
+            velocity.Y = Math.Min(hit.distance, vertVelo * ctime);
+            GO.Pos += velocity;
         }
 
         protected bool DoPoison()
@@ -128,6 +129,27 @@ namespace UU_GameProject
                 leftBlocked = true;
             if (hitToRight.hit && hitToRight.distance < marge)
                 rightBlocked = true;
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            base.OnCollision(other);
+            if (other.tag.Contains("solid") && other.tag != "bossdoorsolid")
+            {
+                float up, down, left, right;
+                up = GO.Pos.Y + GO.Size.Y - other.Pos.Y;
+                down = other.Pos.Y + other.Size.Y - GO.Pos.Y;
+                left = GO.Pos.X + GO.Size.X - other.Pos.X;
+                right = other.Pos.X + other.Size.X - GO.Pos.X;
+                if (Math.Abs(up) < 0.5f && up < down && up < left && up < right)
+                    GO.Pos -= new Vector2(0, up);
+                else if (Math.Abs(down) < 0.5f && down < left && down < right)
+                    GO.Pos += new Vector2(0, down);
+                else if (Math.Abs(left) < 0.5f && left < right)
+                    GO.Pos -= new Vector2(left, 0);
+                else if (Math.Abs(right) < 0.5f)
+                    GO.Pos += new Vector2(right, 0);
+            }
         }
     }
 }

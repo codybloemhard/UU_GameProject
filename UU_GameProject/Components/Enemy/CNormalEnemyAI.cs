@@ -65,15 +65,16 @@ namespace UU_GameProject
                 if (diff < 0 && speed > 0) speed *= -1;
                 if (diff > 0 && speed < 0) speed *= -1;
             }
-            if (hitLeft.distance > 0.1f || hitRight.distance > 0.1f)
+            if ((hitLeft.distance > 0.1f && dir.X < 0) || (hitRight.distance > 0.1f && dir.X > 0))
                 run = false;
-            if (leftBlocked || rightBlocked)
+            if ((leftBlocked && dir.X < 0 ) || (rightBlocked && dir.X > 0))
                 run = false;
             if (length < range && wait == 0)
             {
                 GO.GetComponent<CMeleeAttack>().Melee(dir, new Vector2(0.75f, 1), 0.2f, damage, DoPoison(), GO.tag, GO.GetComponent<CFaction>().GetFaction());
                 wait = 1f;
             }
+
             if (!grounded)
             {
                 vertVelo += gravity * ctime;
