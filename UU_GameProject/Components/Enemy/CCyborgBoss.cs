@@ -45,7 +45,7 @@ namespace UU_GameProject
 
         private void Bounce()
         {
-            if (cRaycasts == null) return;//soms
+            if (cRaycasts == null) return;
             if (cRaycasts.WallLeftHit)
                 speed = Math.Abs(speed);
             else if (cRaycasts.WallRightHit)
@@ -87,7 +87,6 @@ namespace UU_GameProject
                 cyborgBoss.AddComponent(new CFaction("enemy"));
                 cyborgBoss.Pos = GO.Pos;
                 cyborgBoss.Size = new Vector2(stage);
-                Console.WriteLine("yeah");
             }
             GO.Destroy();
         }

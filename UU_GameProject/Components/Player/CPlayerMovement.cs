@@ -308,17 +308,16 @@ namespace UU_GameProject
             Timers.Add("playermelee", 0.5f, () => canMelee = true);
         }
 
+        //hardfix for bad collision detection, if you end up inside a solid block you get moved out of it
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "checkpoint")
             {
                 checkPos = GO.Pos;
-                Console.WriteLine("checkpoint set");
             }
 
             else if (other.tag.Contains("solid") && other.tag != "bossdoorsolid")
             {
-                Console.WriteLine("collision with " + other.Pos);
                 float up, down, left, right;
                 up = GO.Pos.Y + GO.Size.Y - other.Pos.Y;
                 down = other.Pos.Y + other.Size.Y - GO.Pos.Y;
@@ -343,7 +342,6 @@ namespace UU_GameProject
         //reset
         public void Reset()
         {
-            Console.WriteLine("reset");
             AudioManager.PlayEffect("dead");
             if (checkPos != new Vector2(-1000, -1000))
                 GO.Pos = checkPos;

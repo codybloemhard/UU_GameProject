@@ -120,7 +120,6 @@ namespace UU_GameProject
 
         private void Teleport()
         {
-            Console.WriteLine("teleporting");
             if (disappearing)
             {
                 

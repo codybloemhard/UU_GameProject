@@ -47,11 +47,7 @@ namespace UU_GameProject
             if (!faction.ClashingFactions(GO, other)) return;
             CDamageDealer comp = other.GetComponent<CDamageDealer>();
             if (comp == null) return;
-            Console.WriteLine(other.tag);
             bool applPotion = comp.Potionous;
-
-            Console.WriteLine(other.tag);
-
             if (other.tag == "bullet")
             {
                 ChangeHealth(comp.Damage, false);
