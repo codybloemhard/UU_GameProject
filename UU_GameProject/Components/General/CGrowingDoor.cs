@@ -33,12 +33,14 @@ namespace UU_GameProject
             if (!done) Set();
         }
 
+        //turns off collision with the door
         public void Open()
         {
             collider.active = false;
             sprite.Shrink();
         }
 
+        //turns on collision with the door
         public void Close()
         {
             collider.active = true;

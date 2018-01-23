@@ -31,6 +31,7 @@ namespace UU_GameProject
             if (this.time > 10f) GO.Destroy();
         }
 
+        //checks for despawning the bullets as soon as they hit solid surface
         public override void OnCollision(GameObject other)
         {
             if (other.tag.Contains("solid"))

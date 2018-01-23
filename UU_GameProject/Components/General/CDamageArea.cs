@@ -25,6 +25,7 @@ namespace UU_GameProject
             if (render != null) render.colour = Color.Red;
         }
 
+        //creates the damage area
         public void Set()
         {
             iniated = true;

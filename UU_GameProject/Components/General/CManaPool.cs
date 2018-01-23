@@ -41,6 +41,7 @@ namespace UU_GameProject
             return false;
         }
 
+        //returns whether a certain amount of mana is available
         public bool PeekMana(int amount)
         {
             if (mana >= amount)
@@ -48,6 +49,7 @@ namespace UU_GameProject
             return false;
         }
 
+        //mana regeneration
         public void RegenerateMana(float time)
         {
             if (mana < maxMana && shouldManaRegen)

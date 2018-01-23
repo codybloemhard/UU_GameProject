@@ -37,6 +37,7 @@ namespace UU_GameProject
             }
         }
         
+        //checks whether an object that one collides with is a damagedealer, what faction they are, and recieve damage to the healthpool
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
@@ -86,6 +87,7 @@ namespace UU_GameProject
             if (applPotion) HealOverTime(4f, 10f);
         }
 
+        //reset one's healthpool
         public void Reset()
         {
             hp = maxHP;
@@ -95,6 +97,7 @@ namespace UU_GameProject
             healRate = 0f;
         }
         
+        //health regeneration spell
         public void HealOverTime(float rate, float time)
         {
             if ((healRate < 0f && rate > 0f)
@@ -108,6 +111,7 @@ namespace UU_GameProject
             healRate = rate;
         }
         
+        //make changes to one's health
         //amount > 0, take dmg | amount < 0, heal
         public void ChangeHealth(float amount, bool useInvincible)
         {
@@ -121,6 +125,7 @@ namespace UU_GameProject
                 ModifyHP(amount);
         }
 
+        //deal damage, dies if hp reaches 0
         private void ModifyHP(float amount, bool fromPotion = false)
         {
             hp = Math.Max(0f, hp - amount);
@@ -130,6 +135,7 @@ namespace UU_GameProject
                 AudioManager.PlayEffect("hit");
         }
 
+        //deals with dying
         private void Die()
         {
             if (GO.tag.Contains("player"))

@@ -54,12 +54,14 @@ namespace UU_GameProject
             }
         }
 
+        //increases the size of the door sprite
         public void Grow()
         {
             if (growing > 0) return;
             growing = 1;
         }
 
+        //decreases the size of the door sprite
         public void Shrink()
         {
             if (growing < 0) return;
