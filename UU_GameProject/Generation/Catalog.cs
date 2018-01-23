@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 //<author:cody>
+//in this file are all decorators and replacers for the generation
 namespace UU_GameProject
 {
     public enum BASETILES

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace UU_GameProject
 {
+    //this class is to make sure the same blocks etc are loaded on the same position everytime
     public static class Seed
     {
         private static Dictionary<string, Random> randoms = new Dictionary<string, Random>();

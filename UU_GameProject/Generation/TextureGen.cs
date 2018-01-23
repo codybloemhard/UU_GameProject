@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 //<author:cody>
+//here all textures are being generated using functions from Image and colour and float helper classes
 namespace UU_GameProject
 {
     public static class TextureGen

@@ -22,6 +22,7 @@ namespace UU_GameProject
 
     public static class LevelLogic
     {
+        //reading and writing binary level files
         public static void WriteChunk(List<GameObject> objects, string file, int x, int y)
         {
             using (BinaryWriter w = new BinaryWriter(File.Open(file, FileMode.OpenOrCreate)))
@@ -108,7 +109,8 @@ namespace UU_GameProject
             }
         }
     }
-
+    //used to specify what needs to be done when a object of a certain tag is found in he level
+    //it either decorates it or replaces it with 1 or more objects
     public struct Decorator
     {
         public Action<GameObject> decorator;
@@ -156,7 +158,7 @@ namespace UU_GameProject
         DESTROY,
         NULL
     }
-
+    //this is used to manage all chunks that are active and loaded
     public class LoadedChunk
     {
         public GameObject[] objects;
@@ -186,7 +188,7 @@ namespace UU_GameProject
             return false;
         }
     }
-
+    
     public class ChunkFactory
     {
         private Dictionary<string, Decorator> decorators;
@@ -208,7 +210,7 @@ namespace UU_GameProject
             counters = new Dictionary<string, uint>();
             chunks = new Dictionary<string, LoadedChunk>();
         }
-        
+        //add a action to do for a certain tag
         public void AddSource(string kind, uint layer, bool isStatic, Action<GameObject> action)
         {
             if (decorators.ContainsKey(kind)) return;
@@ -220,7 +222,7 @@ namespace UU_GameProject
             if (decorators.ContainsKey(kind)) return;
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
-
+        //construct all objects in paralel
         public void BuildChunk(Chunk chunk, LoadedChunk lc)
         {
             if (chunk == null) return;
@@ -253,7 +255,8 @@ namespace UU_GameProject
             }
             chunkcounter++;
         }
-
+        //this is called when a replacer is done
+        //it will finish the chunk when the last replacer is done
         private void Callback(Returner<GameObject[]> returner)
         {
             lists[returner.msg].Add(returner.result);
@@ -287,7 +290,7 @@ namespace UU_GameProject
 
         public Vector2 ChunkSize { get { return chunkSize; } }
     }
-
+    
     public class ChunkManager
     {
         private Dictionary<Vector2, Chunk> chunks;
@@ -305,7 +308,7 @@ namespace UU_GameProject
             newloaded = new List<LoadedChunk>();
             middle = new Vector2(float.MaxValue, float.MinValue);
         }
-
+        //find all .lvl files
         public void Discover(string path, ChunkFactory factory, GameObject player)
         {
             string[] files = Files.AllFilesOfExtension(path, "lvl");
@@ -319,7 +322,7 @@ namespace UU_GameProject
             Console.WriteLine("files found: ");
             Files.PrintFiles(path, files);
         }
-
+        //see if chunks need to be loaded or unloaded
         public void Update()
         {
             if(factory == null)
@@ -351,7 +354,7 @@ namespace UU_GameProject
             middle = newmid;//switch
             loaded = Misc.Copy(newloaded);//switch
         }
-
+        //used by update
         private void SetActions()
         {
             for (int i = 0; i < newloaded.Count; i++)
@@ -382,7 +385,7 @@ namespace UU_GameProject
                 if (!found) loaded[i].action = ChunkAction.DESTROY;
             }
         }
-        
+        //start off actions to load or unload
         private void LoadChunks()
         {
             for(int i = 0; i < loaded.Count; i++)
