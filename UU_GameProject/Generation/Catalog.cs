@@ -211,8 +211,10 @@ namespace UU_GameProject
                 for (int j = 0; j < possibleTrees.Length; j++)
                     if (possibleTrees[j])
                         trees.Add(j);
-                int nTree = (int)(i.obj.pos.X * 1.345f) % trees.Count;
-                
+
+                int nTree = 0;
+                if(trees.Count > 0)
+                    nTree = (int)(i.obj.pos.X * 1.345f) % trees.Count;
                 int chosenTree = 90;
                 if(trees.Count > 0) chosenTree = trees[nTree];
                 GameObject[] resTree = ChooseTree(chosenTree, newi);

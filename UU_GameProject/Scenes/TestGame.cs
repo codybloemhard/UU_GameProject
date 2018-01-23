@@ -369,7 +369,7 @@ namespace UU_GameProject
             enemy.Pos = i.obj.pos - enemy.Size * new Vector2(0.5f, 1f);
             return new GameObject[] { enemy };
         }
-
+        
         private GameObject[] Rep_RobotBoss(ReplacerInput i)
         {
             GameObject robotBoss = new GameObject("boss", this, i.layer);
