@@ -40,6 +40,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");
+            TextureManager.LoadTexture("spike", "Spikey_Bois");
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
             TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 5, 4);
             TextureManager.LoadTexture("lightningSpawner", "Lightning_Spawner", 2, 1);
