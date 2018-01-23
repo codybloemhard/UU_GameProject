@@ -50,7 +50,7 @@ namespace UU_GameProject
             Console.WriteLine(other.tag);
             bool applPotion = comp.Potionous;
 
-
+            Console.WriteLine(other.tag);
 
             if (other.tag == "bullet")
             {
