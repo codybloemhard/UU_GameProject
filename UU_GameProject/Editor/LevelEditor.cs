@@ -34,6 +34,10 @@ namespace UU_GameProject
             {
                 objects.StaticObjects[i].GetComponent<CLevelEditorObject>().Destroy();
             }
+            for (int i = objects.Objects.Count - 1; i >= 0; i--)
+            {
+                objects.Objects[i].GetComponent<CLevelEditorObject>().Destroy();
+            }
         }
 
         public override void Update(float time)

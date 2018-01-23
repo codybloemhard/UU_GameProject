@@ -15,7 +15,7 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            if (destroy == 100)
+            if (destroy == 1)
                 GO.Destroy();
             else destroy += 1;
         }

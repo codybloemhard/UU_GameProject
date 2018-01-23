@@ -59,7 +59,7 @@ namespace UU_GameProject
             anim.PlayAnimation("runningRight", 12);
             player.AddComponent(anim);
             magicness = new CMagicness();
-            healthpool = new CHealthPool(100);
+            healthpool = new CHealthPool(300);
             manapool = new CManaPool(100, player);
             mopweapon = new CMopWeapon();
             player.AddComponent(new CRaycasts());
@@ -111,6 +111,7 @@ namespace UU_GameProject
             builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
             builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
+            builder.AddSource("spike", 5, false, Dec_Spike);
             builder.AddSource("!rmrenemy", 15, false, Rep_RedMagicRangedEnemy);
             builder.AddSource("!gmrenemy", 15, false, Rep_GreenMagicRangedEnemy);
             builder.AddSource("!pmrenemy", 15, false, Rep_PurpleMagicRangedEnemy);
@@ -186,6 +187,13 @@ namespace UU_GameProject
         {
             o.AddComponent(new CBossTrigger());
             o.AddComponent(new CAABB());
+        }
+
+        private void Dec_Spike(GameObject o)
+        {
+            o.AddComponent(new CAABB());
+            o.AddComponent(new CRender("block"));
+            o.AddComponent(new CSpike());
         }
 
         private void Dec_Door(GameObject o)
@@ -369,6 +377,7 @@ namespace UU_GameProject
             robotBoss.AddComponent(new CRobotBoss(3));
             robotBoss.AddComponent(new CRaycasts());
             robotBoss.AddComponent(new CHealthPool(50));
+            robotBoss.AddComponent(new CDamageDealer(50, false));
             robotBoss.AddComponent(new CAABB());
             robotBoss.AddComponent(new CShoot());
             robotBoss.AddComponent(new CFaction("enemy"));
@@ -413,6 +422,7 @@ namespace UU_GameProject
             cyborgBoss.AddComponent(new CAABB());
             cyborgBoss.AddComponent(new CFaction("enemy"));
             cyborgBoss.AddComponent(new CCyborgBoss(5, 1));
+            cyborgBoss.AddComponent(new CDamageDealer(20, false));
             cyborgBoss.AddComponent(new CRaycasts());
             cyborgBoss.AddComponent(new CHealthPool(100));
             cyborgBoss.Size = new Vector2(4);

@@ -47,18 +47,21 @@ namespace UU_GameProject
             if (!faction.ClashingFactions(GO, other)) return;
             CDamageDealer comp = other.GetComponent<CDamageDealer>();
             if (comp == null) return;
+            Console.WriteLine(other.tag);
             bool applPotion = comp.Potionous;
-            
+
+            Console.WriteLine(other.tag);
+
             if (other.tag == "bullet")
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            else if(other.tag.Contains("meleeDamageArea"))
+            else if (other.tag.Contains("meleeDamageArea"))
                 ChangeHealth(comp.Damage, true);
-            else if(other.tag.Contains("lightningStrike"))
+            else if (other.tag.Contains("lightningStrike"))
                 ChangeHealth(comp.Damage, true);
-            else if(other.tag.Contains("fireball"))
+            else if (other.tag.Contains("fireball"))
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
@@ -66,7 +69,12 @@ namespace UU_GameProject
             else if (other.tag == "boss" && other.GetComponent<CCyborgBoss>() != null)
                 ChangeHealth(comp.Damage, true);
             else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Chasing)
-                other.GetComponent<CRobotBoss>().Explode();
+            {
+                ChangeHealth(comp.Damage, true);
+                other.GetComponent<CRobotBoss>().ChangeFSM(true);
+            }
+            else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Crushing)
+                ChangeHealth(comp.Damage, true);
             else if (other.tag.Contains("explobullet"))
             {
                 ChangeHealth(comp.Damage, false);
@@ -74,8 +82,6 @@ namespace UU_GameProject
             }
             else if (other.tag.Contains("explosion"))
                 ChangeHealth(comp.Damage, false);
-            else if (other.tag.Contains("chase"))
-                ChangeHealth(comp.Damage, true);
 
             if (applPotion) HealOverTime(4f, 10f);
         }

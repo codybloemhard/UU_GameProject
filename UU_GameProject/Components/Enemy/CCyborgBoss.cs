@@ -74,7 +74,7 @@ namespace UU_GameProject
 
             for (int i = -1; i < 2; i += 2)
             {
-                GameObject cyborgBoss = new GameObject("cyborgboss", GO.Context, 2);
+                GameObject cyborgBoss = new GameObject("boss", GO.Context, 2);
                 CAnimatedSprite animBoss = new CAnimatedSprite();
                 animBoss.AddAnimation("cyborgBossBouncing" + stage, "cyborgBossBouncing" + stage);
                 animBoss.PlayAnimation("cyborgBossBouncing" + stage, 8);
