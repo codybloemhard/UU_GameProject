@@ -227,6 +227,7 @@ namespace UU_GameProject
             AudioManager.PlayEffect("shoot");
         }
 
+        //when at the players position, shoot lasers on his own surface
         public void Explode()
         {
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);

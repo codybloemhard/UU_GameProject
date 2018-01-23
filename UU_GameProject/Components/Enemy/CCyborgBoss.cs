@@ -43,6 +43,7 @@ namespace UU_GameProject
             fsm.Update();
         }
 
+        //basic movement, bouncing around
         private void Bounce()
         {
             if (cRaycasts == null) return;
@@ -63,6 +64,7 @@ namespace UU_GameProject
             GO.Pos += cRaycasts.Move(velocity * ctime);
         }
 
+        //when hp reaches 0, split into 2 smaller versions of itself
         public void Split()
         {
             stage -= 1;

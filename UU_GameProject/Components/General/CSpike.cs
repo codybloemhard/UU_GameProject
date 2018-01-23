@@ -9,6 +9,7 @@ namespace UU_GameProject
 {
     class CSpike : Component
     {
+        //damaging spikes
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);

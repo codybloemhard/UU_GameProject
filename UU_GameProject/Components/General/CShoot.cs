@@ -9,6 +9,7 @@ namespace UU_GameProject
     {   
         public CShoot() : base() { }
 
+        //shooting a projectile
         public void Shoot(Vector2 dir, Vector2 size, Vector2 speed, string Faction, float damage, bool potionous)
         {
             GameObject bullet = new GameObject("bullet", GO.Context, 0);

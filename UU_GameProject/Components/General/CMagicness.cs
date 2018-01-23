@@ -74,6 +74,7 @@ namespace UU_GameProject
             AudioManager.PlayEffect("lightning");
         }
 
+        //healing
         public void Heal()
         {
             if (!unlockedHealing) return;
@@ -82,6 +83,7 @@ namespace UU_GameProject
             AudioManager.PlayEffect("healing");
         }
 
+        //dashing
         public bool Dash()
         {
             if (!unlockedFitness) return false;
@@ -89,6 +91,7 @@ namespace UU_GameProject
             return false;
         }
 
+        //doublejump
         public bool DoubleJump()
         {
             if (!unlockedFitness) return false;
@@ -96,6 +99,7 @@ namespace UU_GameProject
             return false;
         }
 
+        //checks whether one can use lightning, healing, double jump and dash
         public bool CanLightning { get
         {
             if (manaPool == null) return false;
