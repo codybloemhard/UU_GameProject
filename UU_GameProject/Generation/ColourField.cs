@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
-
+//<author:cody>
+//helper classes to edit images
 namespace UU_GameProject
 {
     public struct Colour

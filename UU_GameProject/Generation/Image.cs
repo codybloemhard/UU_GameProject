@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 //<author:cody>
+//helper class for algorithms used in the generation
 namespace UU_GameProject
 {
     public static class Image

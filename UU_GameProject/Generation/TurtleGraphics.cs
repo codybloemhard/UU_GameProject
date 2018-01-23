@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Core;
 //<author:cody>
+//this is used to draw the trees based on a string
 namespace UU_GameProject
 {
     public struct RotationAct

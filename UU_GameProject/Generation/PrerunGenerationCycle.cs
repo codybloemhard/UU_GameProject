@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Core;
 using System.Threading;
 //<author:cody>
+//this runs before the game starts
 namespace UU_GameProject
 {
     public class PrerunGenerationCycle
@@ -25,10 +26,6 @@ namespace UU_GameProject
             b.Join();
             c.Join();
             d.Join();
-            /*A();
-            B();
-            C();
-            D();*/
             double elap = timer.GetElapsedTime();
             Console.WriteLine("Generation: " + elap + " Seconds.");
             GC.Collect();

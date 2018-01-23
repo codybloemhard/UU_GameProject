@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Core;
 //<author:cody>
+//in this file are all decorators and replacers for the generation
 namespace UU_GameProject
 {
     public enum BASETILES
@@ -112,10 +113,10 @@ namespace UU_GameProject
             possible[04] = presentID(ids, new int[][] { new int[] { 2, 3 }, new int[] { 0, 1 }, new int[] { 0 } });
             possible[05] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
             possible[06] = presentID(ids, new int[][] { new int[] { 2, 3 }, new int[] { 0, 1 }, new int[] { 0 } });
-            possible[07] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
-            possible[08] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[07] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
+            possible[08] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
             possible[09] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 0, 1 } });
-            possible[10] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1 }, new int[] { 1 } });
+            possible[10] = presentID(ids, new int[][] { new int[] { 0 }, new int[] { 0, 1 }, new int[] { 1 } });
             possible[11] = presentID(ids, new int[][] { new int[] { 0, 1 }, new int[] { 0, 1, 2, 3 }, new int[] { 2 } });
             return possible;
         }
