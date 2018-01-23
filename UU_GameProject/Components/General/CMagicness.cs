@@ -35,7 +35,7 @@ namespace UU_GameProject
         //spawns a fireball in specified direction
         public void Fireball(Vector2 size, Vector2 playerSpeed, string Faction)
         {
-            if (!manaPool.ConsumeMana(10)) return;
+            if (!manaPool.ConsumeMana(0)) return;
             if (Input.GetMouseWorldPosition().X >= GO.Pos.X)
                 dir = new Vector2(1, 0);
             else dir = new Vector2(-1,0);

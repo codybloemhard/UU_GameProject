@@ -83,6 +83,8 @@ namespace UU_GameProject
             catch (OverflowException e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine("source: " + e.Source);
+                Console.WriteLine(GO.Size.Y);
             }
 
             for (int i = 0; i < leftOrigins.Length; i++)
