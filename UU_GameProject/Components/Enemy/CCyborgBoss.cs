@@ -68,7 +68,7 @@ namespace UU_GameProject
         public void Split()
         {
             stage -= 1;
-            if (stage == 0)
+            if (stage <= 0)
             {
                 GO.Destroy();
                 return;
@@ -81,14 +81,15 @@ namespace UU_GameProject
                 animBoss.AddAnimation("cyborgBossBouncing" + stage, "cyborgBossBouncing" + stage);
                 animBoss.PlayAnimation("cyborgBossBouncing" + stage, 8);
                 cyborgBoss.AddComponent(animBoss);
+                cyborgBoss.Pos = GO.Pos;
+                cyborgBoss.Size = new Vector2(stage);
                 cyborgBoss.AddComponent(new CAABB());
                 cyborgBoss.AddComponent(new CCyborgBoss(stage, i));
                 cyborgBoss.AddComponent(new CDamageDealer(10 * stage, false));
                 cyborgBoss.AddComponent(new CRaycasts());
                 cyborgBoss.AddComponent(new CHealthPool(10 * stage));
                 cyborgBoss.AddComponent(new CFaction("enemy"));
-                cyborgBoss.Pos = GO.Pos;
-                cyborgBoss.Size = new Vector2(stage);
+                
             }
             GO.Destroy();
         }
