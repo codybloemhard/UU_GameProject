@@ -192,7 +192,7 @@ namespace UU_GameProject
         private void Dec_Spike(GameObject o)
         {
             o.AddComponent(new CAABB());
-            o.AddComponent(new CRender("block"));
+            o.AddComponent(new CRender("spike"));
             o.AddComponent(new CSpike());
         }
 
