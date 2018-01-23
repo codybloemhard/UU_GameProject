@@ -13,7 +13,6 @@ namespace UU_GameProject
     {
         private GameObject player;
         private CAnimatedSprite animationBoss;
-        private CAnimatedSprite animationExplosion;
         private CCamera camera;
         private CMeleeAttack melee;
         private CRaycasts cRaycasts;
@@ -167,7 +166,7 @@ namespace UU_GameProject
                     shootTime -= ctime;
                 if (shootTime <= 0)
                 {
-                    //ShootAtPlayer(difference);
+                    ShootAtPlayer(difference);
                     shootTime = shootDelay;
                 }
             }
