@@ -20,6 +20,7 @@ namespace UU_GameProject
             return faction;
         }
 
+        //deals with factions
         public bool ClashingFactions(GameObject collisionee, GameObject collider)
         {
             CFaction fac0 = collisionee.GetComponent<CFaction>();

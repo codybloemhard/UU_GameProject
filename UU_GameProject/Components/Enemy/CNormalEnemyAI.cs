@@ -41,6 +41,7 @@ namespace UU_GameProject
 
         }
 
+        //deals with movement
         private void ActiveBehaviour()
         { 
             float range = 4.5f;

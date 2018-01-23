@@ -18,9 +18,9 @@ namespace UU_GameProject
         public override void Init()
         {
             base.Init();
-            CalculateOrigins();
         }
 
+        //shoots all raycasts
         public override void Update(float time)
         {
             base.Update(time);
@@ -36,6 +36,7 @@ namespace UU_GameProject
                 botCast[i] = GO.Raycast(GO.Pos + botOrigins[i], down, RAYCASTTYPE.STATIC);
         }
 
+        //moves the gameobject in the called direction, but not into blocks
         public Vector2 Move(Vector2 movement)
         {
             if (!initiated) return Vector2.Zero;
@@ -64,17 +65,25 @@ namespace UU_GameProject
             return realMovement;
         }
 
-
+        //calculates where the raycasts are shot from from every side
         private void CalculateOrigins()
         {
-            leftOrigins = new Vector2[(int)(GO.Size.Y / 0.25f) + 2];
-            rightOrigins = new Vector2[(int)(GO.Size.Y / 0.25f) + 2];
-            botOrigins = new Vector2[(int)(GO.Size.X / 0.25f) + 2];
-            topOrigins = new Vector2[(int)(GO.Size.X / 0.25f) + 2];
-            leftCast = new RaycastResult[leftOrigins.Length];
-            rightCast = new RaycastResult[leftOrigins.Length];
-            topCast = new RaycastResult[botOrigins.Length];
-            botCast = new RaycastResult[botOrigins.Length];
+            //sometimes throws an overflow exception!
+            try
+            {
+                leftOrigins = new Vector2[(int)(GO.Size.Y / 0.25f) + 2];
+                rightOrigins = new Vector2[(int)(GO.Size.Y / 0.25f) + 2];
+                botOrigins = new Vector2[(int)(GO.Size.X / 0.25f) + 2];
+                topOrigins = new Vector2[(int)(GO.Size.X / 0.25f) + 2];
+                leftCast = new RaycastResult[leftOrigins.Length];
+                rightCast = new RaycastResult[leftOrigins.Length];
+                topCast = new RaycastResult[botOrigins.Length];
+                botCast = new RaycastResult[botOrigins.Length];
+            }
+            catch (OverflowException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             for (int i = 0; i < leftOrigins.Length; i++)
             {
@@ -89,6 +98,7 @@ namespace UU_GameProject
             }
         }
 
+        //all kinds of properties
         public bool LeftGrounded
         {
             get

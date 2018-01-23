@@ -13,7 +13,6 @@ namespace UU_GameProject
     {
         private GameObject player;
         private CAnimatedSprite animationBoss;
-        private CAnimatedSprite animationExplosion;
         private CCamera camera;
         private CMeleeAttack melee;
         private CRaycasts cRaycasts;
@@ -71,7 +70,7 @@ namespace UU_GameProject
             }
         }
 
-        private void ChangeFSM(bool chase)
+        public void ChangeFSM(bool chase)
         {
             int random = MathH.random.Next(3);
             if (random == 0)
@@ -85,6 +84,7 @@ namespace UU_GameProject
                 chaseSpeedIncrease = 1;
             }
             else ChangeFSM(chase);
+            fsm.SetCurrentState("fly");
         }
 
         private void IdleBehaviour()
@@ -227,6 +227,7 @@ namespace UU_GameProject
             AudioManager.PlayEffect("shoot");
         }
 
+        //when at the players position, shoot lasers on his own surface
         public void Explode()
         {
             GameObject explosion = new GameObject(GO.tag + "chase", GO.Context);
@@ -237,8 +238,8 @@ namespace UU_GameProject
             explosion.AddComponent(new CAABB());
             explosion.AddComponent(new CExplosionArea());
             explosion.AddComponent(new CDamageDealer(50, false));
-            explosion.Size = new Vector2(3f);
-            explosion.Pos = GO.Pos;
+            explosion.Size = GO.Size + new Vector2(2);
+            explosion.Pos = GO.Pos - new Vector2(1);
             ChangeFSM(true);
         }
 

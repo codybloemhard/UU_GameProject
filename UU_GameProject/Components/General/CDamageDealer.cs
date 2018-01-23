@@ -10,10 +10,11 @@ namespace UU_GameProject
         public float Damage { get; private set; }
         public bool Potionous { get; private set; }
 
-        public CDamageDealer(float damage, bool potionous) : base()
+        //deals with damage dealers
+        public CDamageDealer(float damage, bool poisonous) : base()
         {
             Damage = damage;
-            Potionous = potionous;
+            Potionous = poisonous;
         }
     }
 }

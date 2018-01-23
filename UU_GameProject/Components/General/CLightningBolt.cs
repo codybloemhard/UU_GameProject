@@ -23,6 +23,7 @@ namespace UU_GameProject
             GO.Pos += new Vector2(0, 3) * time;
         }
 
+        //lightningstrike
         private void LightningStrike(Vector2 target)
         {
             GameObject lightningStrike = new GameObject("lightningStrike" + GO.tag, GO.Context, 0);

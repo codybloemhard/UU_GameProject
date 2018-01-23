@@ -38,6 +38,7 @@ namespace UU_GameProject
                 shakeCamera(strength, time);
         }
 
+        //Makes camera shake in an earthquake-like fashion
         private void shakeCamera(float strength, float time)
         {
             shakeTime -= time;
@@ -47,6 +48,7 @@ namespace UU_GameProject
             Camera.SetCameraTopLeft(returnPos + vec);
         }
 
+        //used to start shaking
         public void ShakeCamera(float shakeTime, float strength)
         {
             if (this.shakeTime > 0 && strength < this.strength)

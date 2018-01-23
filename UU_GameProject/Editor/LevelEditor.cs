@@ -28,17 +28,23 @@ namespace UU_GameProject
             unload.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
 
+        //emptying editor
         public override void Unload()
         {
             for (int i = objects.StaticObjects.Count -1; i>=0; i--)
             {
                 objects.StaticObjects[i].GetComponent<CLevelEditorObject>().Destroy();
             }
+            for (int i = objects.Objects.Count - 1; i >= 0; i--)
+            {
+                objects.Objects[i].GetComponent<CLevelEditorObject>().Destroy();
+            }
         }
 
         public override void Update(float time)
         {
             base.Update(time);
+            //creating new blocks
             if(Input.GetKey(PressAction.PRESSED, Keys.W) && !CLevelEditorObject.Handling)
             {
                 GameObject newObject = new GameObject("spawner", this, 0, true);
@@ -57,6 +63,8 @@ namespace UU_GameProject
                 newObject.Pos = new Vector2(Math.Max(Math.Min(Input.GetMouseWorldPosition().X, 15), 0), Math.Max(Math.Min(Input.GetMouseWorldPosition().Y, 15), 0));
                 newObject.Size = new Vector2(1f, 1f);
             }
+
+            //moving camera
             if (Input.GetKey(PressAction.DOWN, Keys.Left))
                 Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(-0.01f, 0));
             else if (Input.GetKey(PressAction.DOWN, Keys.Right))
@@ -66,6 +74,7 @@ namespace UU_GameProject
             else if (Input.GetKey(PressAction.DOWN, Keys.Down))
                 Camera.SetCameraTopLeft(Camera.TopLeft + new Vector2(0, +0.01f));
 
+            //adding clarity lines
             lineRenderer.Clear();
             lineRenderer.Add(new Line(new Vector2(0) - Camera.TopLeft, new Vector2(16, 0) - Camera.TopLeft, Color.Red));
             lineRenderer.Add(new Line(new Vector2(0) - Camera.TopLeft, new Vector2(0, 16) - Camera.TopLeft, Color.Red));
@@ -84,9 +93,9 @@ namespace UU_GameProject
 
         }
         
+        //saves the current chunk
         public void Save(bool save)
         {
-            //if (!save) TestChunks();
             if (save)
             {
                 int x = 0, y = 0;

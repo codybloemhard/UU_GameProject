@@ -41,6 +41,7 @@ namespace UU_GameProject
             animation();
         }
 
+        //deals with movement
         private void ActiveBehaviour()
         {
             float range = 4.5f;
@@ -105,6 +106,7 @@ namespace UU_GameProject
                 return new Vector2(0, -1);
         }
 
+        //shoots a fireball
         private void fireball()
         {
             Vector2 direction = shootdir(GO.Pos.X - player.Pos.X);

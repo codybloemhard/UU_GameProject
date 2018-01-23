@@ -37,12 +37,15 @@ namespace UU_GameProject
         {
             base.Update(time);
 
+            //moving around properties
             if (!(GO.Pos.X + GO.Size.X < 16 - properties.Size.X || GO.Pos.Y + GO.Size.Y < properties.Pos.Y))
                 properties.Pos = new Vector2(0, 9) - new Vector2(0, properties.Size.Y);
             else 
                 properties.Pos = new Vector2(16, 9) - properties.Size;
 
             Vector2 mousePos = Input.GetMouseWorldPosition();
+
+            //selecging and grabbing objects
             if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
             {
                 if (GO.GetAABB().Inside(mousePos))
@@ -62,6 +65,8 @@ namespace UU_GameProject
                 grabbed = staticGrabbed = false;
                 grabPoint = Vector2.Zero;
             }
+
+            //selected objects are grey, not destroying object while typing properties
             if (selected == GO)
             {
                 HandleProperties(out handling);
@@ -74,9 +79,10 @@ namespace UU_GameProject
             else
             {
                 (GO.Renderer as CRender).colour = Color.White;
-                //if (properties.Hover == -1 && properties.selected == -1)
-                    properties.active = false;
+                properties.active = false;
             }
+
+            //moving around, axis aligned or not
             if (Input.GetKey(PressAction.DOWN, Keys.LeftShift))
                 axisAligned = true;
             else axisAligned = false;
@@ -90,14 +96,15 @@ namespace UU_GameProject
             }
         }
 
+        //destroy object
         public void Destroy()
         {
-            Console.WriteLine("destroyed");
             GO.Destroy();
             objectList.Remove(GO);
             properties.Destroy();
         }
 
+        //selecting lines in the properties
         public void HandleProperties(out bool handling)
         {
             if(Input.GetKey(PressAction.PRESSED, Keys.Enter))
@@ -163,6 +170,7 @@ namespace UU_GameProject
             else handling = true;
         }
 
+        //handling the properties input
         public void HandleInput()
         {
             if (properties.text[properties.selected] != "")

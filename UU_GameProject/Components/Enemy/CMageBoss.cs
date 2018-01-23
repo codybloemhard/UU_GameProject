@@ -91,6 +91,7 @@ namespace UU_GameProject
             firingFireball = false;
         }
 
+        //hovering, picking whether to attack or teleport
         private void StayInPlace()
         {
             float sign = Math.Sign(targetPosition.Y - (GO.Pos.Y + GO.Size.Y/2));
@@ -120,7 +121,6 @@ namespace UU_GameProject
 
         private void Teleport()
         {
-            Console.WriteLine("teleporting");
             if (disappearing)
             {
                 
