@@ -69,6 +69,7 @@ namespace UU_GameProject
             CheckSides();
             fsm.Update();
         }
+
         //patrolling a platform.
         protected void IdleBehaviour()
         {
@@ -106,6 +107,7 @@ namespace UU_GameProject
             GO.Pos += velocity;
         }
 
+        //randomly picks whether an attack should apply poison
         protected bool DoPoison()
         {
             if (magicChange > 0)
@@ -116,6 +118,7 @@ namespace UU_GameProject
             return false;
         }
 
+        //checks for walls near the enemy
         private void CheckSides()
         {
             leftBlocked = false;
@@ -131,6 +134,7 @@ namespace UU_GameProject
                 rightBlocked = true;
         }
 
+        //checks for objects
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);

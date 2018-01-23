@@ -25,6 +25,7 @@ namespace UU_GameProject
             }
         }
 
+        //closes the bossdoor
         private void Close()
         {
             GameObject[] d = GO.FindAllWithTag("bossdoorsolid");

@@ -18,7 +18,7 @@ namespace UU_GameProject
             maxHP = 100;
             magicChange = 6;
         }
-        
+     
         public override void Init()
         {
             base.Init();
@@ -40,6 +40,7 @@ namespace UU_GameProject
                 fsm.SetCurrentState("idle");
         }
 
+        //controls the movement of the armoured enemy
         private void ActiveBehaviour()
         {
             float range = 4.5f;
