@@ -63,9 +63,6 @@ namespace UU_GameProject
             life -= time;
             double angle = Math.Atan2(dir.Y, dir.X);
             GO.Renderer.SetRotation((float)angle * MathH.RAD_TO_DEG);
-
-            if (GO.Pos.X < 0 || GO.Pos.X > 16 || GO.Pos.Y < 0 || GO.Pos.Y > 9 || life < 0)
-                GO.Destroy();
         }
 
         public override void OnCollision(GameObject other)
