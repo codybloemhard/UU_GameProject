@@ -12,7 +12,7 @@ namespace UU_GameProject
         public TestGame() : base() { }
 
         private ChunkManager chunks;
-        private UITextureElement healthbar, manabar, fitness, healing, lightning;
+        private UITextureElement healthbar, manabar, fitness, healing, lightning, healthBarOverlay, manaBarOverlay;
         private GameObject player, sky;
         private CMagicness magicness;
         private CHealthPool healthpool;
@@ -29,10 +29,10 @@ namespace UU_GameProject
             Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-            healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
-            healthbar.colour = new Color(0, 255, 0);
-            manabar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
-            manabar.colour = new Color(255, 0, 255);
+            healthbar = new UITextureElement(this, "Healthpool_Bar", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
+            healthBarOverlay = new UITextureElement(this, "Health_Bar_Overlay", new Vector2(0, 6.4f), new Vector2(0.65f, 2.6f));
+            manabar = new UITextureElement(this, "Manapool_Bar", new Vector2(0.65f, 6.53f), new Vector2(0.65f, 2.47f));
+            manaBarOverlay = new UITextureElement(this, "Mana_Bar_Overlay", new Vector2(0.65f, 6.4f), new Vector2(0.65f, 2.6f));
             fitness = new UITextureElement(this, "sky", new Vector2(2.6f, 8f), new Vector2(1f));
             healing = new UITextureElement(this, "sky", new Vector2(3.8f, 8f), new Vector2(1f));
             lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
@@ -40,6 +40,7 @@ namespace UU_GameProject
             sky = new GameObject(this, 100);
             sky.AddComponent(new CRender("background"));
             sky.Size = new Vector2(16, 16);
+
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -437,11 +438,10 @@ namespace UU_GameProject
         {
             base.Update(time);
             float health = healthpool.HealhPercent;
+            healthbar.Pos = new Vector2(0f, 9f - 2.47f * health);
             float mana = manapool.ManaPercentage;
-            healthbar.Size = new Vector2(1f, 3f * health);
-            healthbar.Pos = new Vector2(0.2f, 9f - healthbar.Size.Y);
-            manabar.Size = new Vector2(1f, 3f * mana);
-            manabar.Pos = new Vector2(1.4f, 9f - manabar.Size.Y);
+            manabar.Pos = new Vector2(0.65f, 9f - 2.47f * mana);
+
             if (magicness.UnlockedFitness)
                 fitness.Size = new Vector2(1f);
             else fitness.Size = new Vector2(0f);
