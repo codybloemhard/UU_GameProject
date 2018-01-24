@@ -402,7 +402,7 @@ namespace UU_GameProject
             animBoss.AddAnimation("lightning", "mageBossLightning");
             animBoss.PlayAnimation("hovering", 6);
             mageBoss.AddComponent(animBoss);
-            mageBoss.AddComponent(new CHealthPool(1500));
+            mageBoss.AddComponent(new CHealthPool(500));
             mageBoss.AddComponent(new CAABB());
             mageBoss.AddComponent(new CFaction("enemy"));
             mageBoss.AddComponent(new CMageBoss());
