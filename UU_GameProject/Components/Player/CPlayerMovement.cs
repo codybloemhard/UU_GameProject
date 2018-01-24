@@ -206,7 +206,7 @@ namespace UU_GameProject
         private void Dashing(float time)
         {
             //Dashing, broken!
-            if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
+            if (false && Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
             {
                 if (magicness.Dash())
                 {
