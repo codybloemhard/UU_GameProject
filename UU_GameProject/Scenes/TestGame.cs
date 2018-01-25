@@ -130,6 +130,7 @@ namespace UU_GameProject
             builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
             builder.AddSource("!mboss", 16, false, Rep_MageBoss);
             builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
+            builder.AddSource("!sboss", 16, false, Rep_SnowmanBoss);
             builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
             builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
             builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
@@ -438,6 +439,18 @@ namespace UU_GameProject
             cyborgBoss.Pos = i.obj.pos - cyborgBoss.Size / 2;
             cyborgBoss.active = false;
             return new GameObject[] { cyborgBoss };
+        }
+
+        private GameObject[] Rep_SnowmanBoss(ReplacerInput i)
+        {
+            GameObject snowman = new GameObject("boss", this, 2);
+            snowman.AddComponent(new CRender("block"));
+            snowman.AddComponent(new CAABB());
+            snowman.AddComponent(new CFaction("enemy"));
+            snowman.AddComponent(new CSnowmanBoss());
+            snowman.Size = new Vector2(2, 5);
+            snowman.Pos = i.obj.pos - snowman.Size / 2;
+            return new GameObject[] { snowman };
         }
 
         public override void Unload() { }

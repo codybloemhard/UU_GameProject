@@ -63,6 +63,8 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
+            else if (other.tag == "snowball")
+                ChangeHealth(comp.Damage, true);
             else if (other.tag == "boss" && other.GetComponent<CCyborgBoss>() != null)
                 ChangeHealth(comp.Damage, true);
             else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Chasing)

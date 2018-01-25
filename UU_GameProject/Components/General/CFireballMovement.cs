@@ -9,14 +9,14 @@ namespace UU_GameProject
     {
         private Vector2 playerSpeed;
         private Vector2 fireballVelocity;
-        private float fireballTotalSpeed = 6f;
+        private float fireballTotalSpeed;
         private float time;
 
-        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage, bool potionous) : base(damage, potionous)
+        public CFireballMovement(Vector2 playerSpeed, Vector2 path, Vector2 dir, float damage, bool potionous, float speed = 6) : base(damage, potionous)
         {
             this.playerSpeed = playerSpeed;
             path.Normalize();
-
+            fireballTotalSpeed = speed;
             fireballVelocity = path * fireballTotalSpeed;
         }
 

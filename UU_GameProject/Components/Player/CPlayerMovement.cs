@@ -12,7 +12,7 @@ namespace UU_GameProject
         public float intendedDir;
         private float jumpPower = 13f;
         private float acceleration = 50f, vertVelo = 0f;
-        private float playerAccel = 8f;
+        private float playerAccel = 12f;
         private float jumpDelayTime = 0;
         private float dashToggleDelayTime = 0;
         private float dashSlowdownDelayTime = 0;
@@ -99,10 +99,18 @@ namespace UU_GameProject
             if (cRaycasts.WallRightHit && Input.GetKey(PressAction.DOWN, Keys.D))
                 velocity.X = 0;
             //stops the player if no buttons are pressed
-            if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0 && cRaycasts.Grounded)
-                velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
-            if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0 && cRaycasts.Grounded)
-                velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
+            if (!Input.GetKey(PressAction.DOWN, Keys.D) && velocity.X > 0)
+            {
+                if(cRaycasts.Grounded)
+                    velocity -= new Vector2(Math.Min(timeAccel, velocity.X), 0);
+                else velocity -= new Vector2(Math.Min(timeAccel /2, velocity.X), 0);
+            }
+            if (!Input.GetKey(PressAction.DOWN, Keys.A) && velocity.X < 0)
+            {
+                if (cRaycasts.Grounded)
+                    velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
+                else velocity -= new Vector2(Math.Max(-timeAccel / 2, velocity.X), 0);
+            }
             if (GO.Pos.Y > 200) Reset();
             if (velocity != Vector2.Zero)
             {
@@ -206,7 +214,7 @@ namespace UU_GameProject
         private void Dashing(float time)
         {
             //Dashing, broken!
-            if (Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
+            if (false && Input.GetKey(PressAction.PRESSED, Keys.LeftShift) && Math.Abs(velocity.X) <= maxDashSpeed && isDashing == false)
             {
                 if (magicness.Dash())
                 {
