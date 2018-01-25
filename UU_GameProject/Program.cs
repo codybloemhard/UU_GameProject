@@ -75,6 +75,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("mageBossHovering", "Arch_Mage_Hovering", 8, 1);
             TextureManager.LoadTexture("mageBossFireball", "Arch_Mage_Fireball", 8, 1);
             TextureManager.LoadTexture("mageBossLightning", "Arch_Mage_Lightning", 8, 1);
+            TextureManager.LoadTexture("snowmanBossIdle", "Snowman_Boss_Idle", 2, 1);
             TextureManager.LoadTexture("redMageStandingRight", "Red_Mage_Standing_Right", 4, 1);
             TextureManager.LoadTexture("redMageStandingLeft", "Red_Mage_Standing_Left", 4, 1);
             TextureManager.LoadTexture("redMageCastingRight", "Red_Mage_Casting_Right", 4, 1);

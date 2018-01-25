@@ -444,12 +444,15 @@ namespace UU_GameProject
         private GameObject[] Rep_SnowmanBoss(ReplacerInput i)
         {
             GameObject snowman = new GameObject("boss", this, 2);
-            snowman.AddComponent(new CRender("block"));
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("snowmanBossIdle", "snowmanBossIdle");
+            animBoss.PlayAnimation("snowmanBossIdle", 8);
+            snowman.AddComponent(animBoss);
             snowman.AddComponent(new CAABB());
             snowman.AddComponent(new CFaction("enemy"));
             snowman.AddComponent(new CSnowmanBoss());
-            snowman.Size = new Vector2(2, 5);
-            snowman.Pos = i.obj.pos - snowman.Size / 2;
+            snowman.Size = new Vector2(3, 6);
+            snowman.Pos = i.obj.pos - snowman.Size;
             return new GameObject[] { snowman };
         }
 
