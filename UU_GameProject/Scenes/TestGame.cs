@@ -439,7 +439,7 @@ namespace UU_GameProject
             snowman.AddComponent(new CAABB());
             snowman.AddComponent(new CFaction("enemy"));
             snowman.AddComponent(new CSnowmanBoss());
-            snowman.Size = new Vector2(2, 8);
+            snowman.Size = new Vector2(2, 5);
             snowman.Pos = i.obj.pos - snowman.Size / 2;
             return new GameObject[] { snowman };
         }

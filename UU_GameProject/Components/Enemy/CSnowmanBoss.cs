@@ -12,7 +12,7 @@ namespace UU_GameProject
     {
         private FSM fsm = new FSM();
         private bool initiated;
-        private float ctime, throwDelay = 5, throwTime, switchTime, switchDelay = 5;
+        private float ctime, throwDelay = 8, throwTime, switchTime, switchDelay = 5;
         private GameObject player;
         private int snowmanCount;
 
@@ -58,12 +58,14 @@ namespace UU_GameProject
 
         private void SnowStorm()
         {
-            int random = MathH.random.Next(10);
-            for (int i = 0; i < 10; i++)
+            int numberOfBalls = 6;
+            int random = MathH.random.Next(numberOfBalls - 2);
+            Console.WriteLine(random);
+            for (int i = 0; i < numberOfBalls; i++)
             {
-                ThrowSnowball(new Vector2(-1, 0), GO.Pos + i * new Vector2(0, GO.Size.Y / 9));
+                ThrowSnowball(new Vector2(-1, 0), GO.Pos + i * new Vector2(0, GO.Size.Y / (numberOfBalls)));
                 if (random == i)
-                    i += 3;
+                    i += 2;
             }
             fsm.SetCurrentState("idle");
         }
@@ -72,7 +74,7 @@ namespace UU_GameProject
         {
             GameObject snowball = new GameObject("snowball", GO.Context);
             snowball.AddComponent(new CRender("block"));
-            snowball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20, false));
+            snowball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20, false, 8));
             snowball.AddComponent(new CAABB());
             snowball.AddComponent(new CFaction("enemy"));
             snowball.Size = new Vector2(.4f);
@@ -87,6 +89,9 @@ namespace UU_GameProject
                 snowman.AddComponent(new CRender("block"));
                 snowman.AddComponent(new CFaction("enemy"));
                 snowman.AddComponent(new CSnowmanAI());
+                snowman.AddComponent(new CDamageDealer(20, false));
+                snowman.Size = new Vector2(1, 2);
+                snowman.Pos = GO.Pos + new Vector2(-snowman.Size.X, GO.Size.Y - snowman.Size.Y);
             }
         }
 
