@@ -58,13 +58,11 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, true);
             else if (other.tag.Contains("lightningStrike"))
                 ChangeHealth(comp.Damage, true);
-            else if (other.tag.Contains("fireball"))
+            else if (other.tag.Contains("fireball") || other.tag.Contains("snowball"))
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
             }
-            else if (other.tag == "snowball")
-                ChangeHealth(comp.Damage, true);
             else if (other.tag == "boss" && other.GetComponent<CCyborgBoss>() != null)
                 ChangeHealth(comp.Damage, true);
             else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Chasing)
@@ -81,7 +79,8 @@ namespace UU_GameProject
             }
             else if (other.tag.Contains("explosion"))
                 ChangeHealth(comp.Damage, false);
-
+            else if (other.tag.Contains("snowman"))
+                ChangeHealth(comp.Damage, false);
             if (applPotion) HealOverTime(4f, 10f);
         }
 

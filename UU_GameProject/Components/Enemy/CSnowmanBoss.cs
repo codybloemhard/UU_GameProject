@@ -22,6 +22,7 @@ namespace UU_GameProject
             player = GO.Context.objects.FindWithTag("player");
             fsm.Add("idle", Idle);
             fsm.Add("storm", SnowStorm);
+            fsm.Add("snowpocalypse", Snowpocalypse);
         }
         public override void Update(float time)
         {
@@ -43,7 +44,7 @@ namespace UU_GameProject
         {
             int random = MathH.random.Next(1);
             if (random == 0)
-                fsm.SetCurrentState("storm");
+                fsm.SetCurrentState("snowpocalypse");
         }
 
         private void Idle()
@@ -70,6 +71,27 @@ namespace UU_GameProject
             fsm.SetCurrentState("idle");
         }
 
+        private void Snowpocalypse()
+        {
+            if(snowmanCount < 5)
+            {
+                GameObject snowman = new GameObject(GO.tag + "snowman", GO.Context);
+                snowman.AddComponent(new CRender("block"));
+                snowman.AddComponent(new CFaction("enemy"));
+                snowman.AddComponent(new CSnowmanAI());
+                snowman.AddComponent(new CAABB());
+                snowman.AddComponent(new CDamageDealer(20, false));
+                snowman.Size = new Vector2(1, 2);
+                snowman.Pos = GO.Pos + new Vector2(-snowman.Size.X, GO.Size.Y - snowman.Size.Y);
+                snowmanCount += 1;
+            }
+            else
+            {
+                snowmanCount = 0;
+                fsm.SetCurrentState("idle");
+            }
+        }
+
         private void ThrowSnowball(Vector2 dir, Vector2 pos)
         {
             GameObject snowball = new GameObject("snowball", GO.Context);
@@ -80,21 +102,5 @@ namespace UU_GameProject
             snowball.Size = new Vector2(.4f);
             snowball.Pos = pos;
         }
-
-        private void Snowpocalypse()
-        {
-            if(snowmanCount < 10)
-            {
-                GameObject snowman = new GameObject("snowman", GO.Context);
-                snowman.AddComponent(new CRender("block"));
-                snowman.AddComponent(new CFaction("enemy"));
-                snowman.AddComponent(new CSnowmanAI());
-                snowman.AddComponent(new CDamageDealer(20, false));
-                snowman.Size = new Vector2(1, 2);
-                snowman.Pos = GO.Pos + new Vector2(-snowman.Size.X, GO.Size.Y - snowman.Size.Y);
-            }
-        }
-
-
     }
 }

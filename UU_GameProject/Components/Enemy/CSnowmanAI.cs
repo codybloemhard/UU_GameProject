@@ -28,7 +28,7 @@ namespace UU_GameProject
             if (BLdown.distance > 0.1f && BRdown.distance < 0.1f)
                 velocity = new Vector2(speed, 0);
 
-            GO.Pos += velocity;
+            GO.Pos += velocity * time;
         }
 
         private void Raycast()
