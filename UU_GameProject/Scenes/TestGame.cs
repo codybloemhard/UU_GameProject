@@ -12,7 +12,7 @@ namespace UU_GameProject
         public TestGame() : base() { }
 
         private ChunkManager chunks;
-        private UITextureElement healthbar, manabar, fitness, healing, lightning, healthBarOverlay, manaBarOverlay;
+        private UITextureElement healthbar, healthBarBackground, manabar, manaBarBackground, fitness, healing, lightning, healthBarOverlay, manaBarOverlay, healOverlay, fitnessOverlay, lightningBoltOverlay;
         private GameObject player, sky;
         private CMagicness magicness;
         private CHealthPool healthpool;
@@ -29,13 +29,18 @@ namespace UU_GameProject
             Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            healthBarBackground = new UITextureElement(this, "Bar_Background", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
             healthbar = new UITextureElement(this, "Healthpool_Bar", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
             healthBarOverlay = new UITextureElement(this, "Health_Bar_Overlay", new Vector2(0, 6.4f), new Vector2(0.65f, 2.6f));
+            manaBarBackground = new UITextureElement(this, "Bar_Background", new Vector2(0.65f, 6.53f), new Vector2(0.65f, 2.47f));
             manabar = new UITextureElement(this, "Manapool_Bar", new Vector2(0.65f, 6.53f), new Vector2(0.65f, 2.47f));
             manaBarOverlay = new UITextureElement(this, "Mana_Bar_Overlay", new Vector2(0.65f, 6.4f), new Vector2(0.65f, 2.6f));
-            fitness = new UITextureElement(this, "sky", new Vector2(2.6f, 8f), new Vector2(1f));
-            healing = new UITextureElement(this, "sky", new Vector2(3.8f, 8f), new Vector2(1f));
-            lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
+            fitness = new UITextureElement(this, "DJump_Bar_Filler", new Vector2(1.3f, 8.25f), new Vector2(0.8f, 0.7f));
+            fitnessOverlay = new UITextureElement(this, "DJump_Bar_Overlay", new Vector2(1.3f, 8.1f), new Vector2(0.8f, 0.9f));
+            healing = new UITextureElement(this, "Heal_Bar_Filler", new Vector2(2.1f, 8.25f), new Vector2(0.8f, 0.7f));
+            healOverlay = new UITextureElement(this, "Heal_Bar_Overlay", new Vector2(2.1f, 8.1f), new Vector2(0.8f, 0.9f));
+            lightning = new UITextureElement(this, "Bolt_Bar_Filler", new Vector2(2.9f, 8.25f), new Vector2(0.8f, 0.7f));
+            lightningBoltOverlay = new UITextureElement(this, "Bolt_Bar_Overlay", new Vector2(2.9f, 8.1f), new Vector2(0.8f, 0.9f));
             //objects
             sky = new GameObject(this, 100);
             sky.AddComponent(new CRender("background"));
@@ -443,13 +448,13 @@ namespace UU_GameProject
             manabar.Pos = new Vector2(0.65f, 9f - 2.47f * mana);
 
             if (magicness.UnlockedFitness)
-                fitness.Size = new Vector2(1f);
+                fitness.Size = new Vector2(0.8f);
             else fitness.Size = new Vector2(0f);
             if (magicness.UnlockedHealing)
-                healing.Size = new Vector2(1f);
+                healing.Size = new Vector2(0.8f);
             else healing.Size = new Vector2(0f);
             if (magicness.UnlockedLightning)
-                lightning.Size = new Vector2(1f);
+                lightning.Size = new Vector2(0.8f);
             else lightning.Size = new Vector2(0f);
             if (magicness.CanHeal)
                 healing.colour = cGreen;
