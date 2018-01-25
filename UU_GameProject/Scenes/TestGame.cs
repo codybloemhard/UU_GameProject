@@ -111,7 +111,7 @@ namespace UU_GameProject
                                 return Catalog.ReplacerBlock(inp, baset, layert0, layert1, topt);
                             });
                         }
-            builder.AddSource("spawn", 15, false, Dec_Spawner);
+            builder.AddSource("spawn", 1, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
             builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
             builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
@@ -146,8 +146,8 @@ namespace UU_GameProject
             builder.AddSource("!tree9", 50, true, Catalog.ReplacerTree9);
             builder.AddSource("!flower", 5, true, Catalog.ReplacerFlower);
             builder.AddSource("!grass", 5, true, Catalog.ReplacerGrassPlant);
-            builder.AddSource("!grassdot", 5, true, Catalog.ReplacerGrassDot);
-            builder.AddSource("!grasshigh", 5, true, Catalog.ReplacerGrassHigh);
+            builder.AddSource("!grassdot", 20, true, Catalog.ReplacerGrassDot);
+            builder.AddSource("!grasshigh", 20, true, Catalog.ReplacerGrassHigh);
             builder.AddSource("!snowman", 15, true, Catalog.ReplacerSnowman);
             builder.AddSource("!boulder", 20, true, Catalog.ReplacerBoulder);
             builder.AddSource("!stone", 20, true, Catalog.ReplacerStone);
@@ -169,8 +169,11 @@ namespace UU_GameProject
 
         private void Dec_Spawner(GameObject o)
         {
-            o.AddComponent(new CAABB());
-            o.AddComponent(new CRender("block"));
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("respawnpointOff", "respawnpointOff");
+            anim.AddAnimation("respawnpointOn", "respawnpointOn");
+            anim.PlayAnimation("respawnpointOff", 1);
+            o.AddComponent(anim);
             o.tag = "checkpoint";
         }
 
@@ -441,12 +444,15 @@ namespace UU_GameProject
         private GameObject[] Rep_SnowmanBoss(ReplacerInput i)
         {
             GameObject snowman = new GameObject("boss", this, 2);
-            snowman.AddComponent(new CRender("block"));
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("snowmanBossIdle", "snowmanBossIdle");
+            animBoss.PlayAnimation("snowmanBossIdle", 8);
+            snowman.AddComponent(animBoss);
             snowman.AddComponent(new CAABB());
             snowman.AddComponent(new CFaction("enemy"));
             snowman.AddComponent(new CSnowmanBoss());
-            snowman.Size = new Vector2(2, 5);
-            snowman.Pos = i.obj.pos - snowman.Size / 2;
+            snowman.Size = new Vector2(3, 6);
+            snowman.Pos = i.obj.pos - snowman.Size;
             return new GameObject[] { snowman };
         }
 

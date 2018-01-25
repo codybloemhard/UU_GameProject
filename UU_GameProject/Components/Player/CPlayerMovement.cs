@@ -32,7 +32,7 @@ namespace UU_GameProject
         public Vector2 playerPosition;
         private Vector2 dir;
         public Vector2 velocity = Vector2.Zero;
-        private Vector2 checkPos = new Vector2(-1000, -1000);
+        public Vector2 checkPos = new Vector2(-1000, -1000);
         private CAnimatedSprite animation;
         private CHealthPool healthPool;
         private CManaPool manaPool;

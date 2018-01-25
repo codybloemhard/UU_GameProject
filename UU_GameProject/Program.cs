@@ -41,6 +41,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");
             TextureManager.LoadTexture("spike", "Spikey_Bois");
+            TextureManager.LoadTexture("respawnpointOn", "Spawnpoint_Unlocked", 2, 1);
+            TextureManager.LoadTexture("respawnpointOff", "Spawnpoint_Locked", 2, 1);
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
             TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 5, 4);
             TextureManager.LoadTexture("lightningSpawner", "Lightning_Spawner", 2, 1);
@@ -73,6 +75,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("mageBossHovering", "Arch_Mage_Hovering", 8, 1);
             TextureManager.LoadTexture("mageBossFireball", "Arch_Mage_Fireball", 8, 1);
             TextureManager.LoadTexture("mageBossLightning", "Arch_Mage_Lightning", 8, 1);
+            TextureManager.LoadTexture("snowmanBossIdle", "Snowman_Boss_Idle", 2, 1);
             TextureManager.LoadTexture("redMageStandingRight", "Red_Mage_Standing_Right", 4, 1);
             TextureManager.LoadTexture("redMageStandingLeft", "Red_Mage_Standing_Left", 4, 1);
             TextureManager.LoadTexture("redMageCastingRight", "Red_Mage_Casting_Right", 4, 1);
