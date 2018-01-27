@@ -45,6 +45,7 @@
     <Compile Include="Components\Enemy\CMageBoss.cs" />
     <Compile Include="Components\Enemy\CSnowmanAI.cs" />
     <Compile Include="Components\Enemy\CSnowmanBoss.cs" />
+    <Compile Include="Components\General\CSnowFall.cs" />
     <Compile Include="Components\General\CSpike.cs" />
     <Compile Include="Components\Player\CMopWeapon.cs" />
     <Compile Include="Components\Enemy\CRobotBoss.cs" />

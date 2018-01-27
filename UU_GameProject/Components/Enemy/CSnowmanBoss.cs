@@ -12,31 +12,31 @@ namespace UU_GameProject
     {
         private FSM fsm = new FSM();
         private bool initiated;
-        private float ctime, throwDelay = 8, throwTime, switchTime, switchDelay = 5;
+        private float ctime, throwDelay = 2, throwTime, switchTime, switchDelay = 500, snowmanDelay = 1, snowmanTime, avalancheDelay = .5f, avalancheTime;
         private GameObject player;
-        private int snowmanCount;
+        private int snowmanCount, avalancheCount = 10, avalancheWaves = 5;
 
         private void InitSnowman()
         {
             initiated = true;
             player = GO.Context.objects.FindWithTag("player");
-            fsm.Add("idle", Idle);
+            fsm.Add("aim", AimedThrowing);
             fsm.Add("storm", SnowStorm);
-            fsm.Add("snowpocalypse", Snowpocalypse);
+            fsm.Add("snowballs", Snowballs);
+            fsm.Add("avalanche", Avalanche);
         }
         public override void Update(float time)
         {
             if (!initiated) InitSnowman(); 
             ctime = time;
 
+            
 
-            switchTime -= time;
             if (switchTime <= 0)
             {
                 ChangeFsm();
                 switchTime = switchDelay;
             }
-
             fsm.Update();
         }
 
@@ -44,10 +44,10 @@ namespace UU_GameProject
         {
             int random = MathH.random.Next(1);
             if (random == 0)
-                fsm.SetCurrentState("snowpocalypse");
+                fsm.SetCurrentState("avalanche");
         }
 
-        private void Idle()
+        private void AimedThrowing()
         {
             throwTime -= ctime;
             if (throwTime <= 0)
@@ -55,40 +55,73 @@ namespace UU_GameProject
                 ThrowSnowball(player.Pos - (GO.Pos + GO.Size/2), GO.Pos + GO.Size/2);
                 throwTime = throwDelay;
             }
+            switchTime -= ctime;
         }
 
         private void SnowStorm()
         {
             int numberOfBalls = 6;
             int random = MathH.random.Next(numberOfBalls - 2);
-            Console.WriteLine(random);
             for (int i = 0; i < numberOfBalls; i++)
             {
                 ThrowSnowball(new Vector2(-1, 0), GO.Pos + i * new Vector2(0, GO.Size.Y / (numberOfBalls)));
                 if (random == i)
                     i += 2;
             }
-            fsm.SetCurrentState("idle");
+            fsm.SetCurrentState("aim");
         }
 
-        private void Snowpocalypse()
+        private void Snowballs()
         {
-            if(snowmanCount < 5)
+            if (snowmanCount < 5 && snowmanTime <= 0)
             {
-                GameObject snowman = new GameObject(GO.tag + "snowman", GO.Context);
-                snowman.AddComponent(new CRender("block"));
-                snowman.AddComponent(new CFaction("enemy"));
-                snowman.AddComponent(new CSnowmanAI());
-                snowman.AddComponent(new CAABB());
-                snowman.AddComponent(new CDamageDealer(20, false));
-                snowman.Size = new Vector2(1, 2);
-                snowman.Pos = GO.Pos + new Vector2(-snowman.Size.X, GO.Size.Y - snowman.Size.Y);
+                snowmanTime = snowmanDelay;
+                GameObject snowball = new GameObject(GO.tag + "snowball", GO.Context);
+                snowball.AddComponent(new CRender("block"));
+                snowball.AddComponent(new CFaction("enemy"));
+                snowball.AddComponent(new CSnowmanAI());
+                snowball.AddComponent(new CAABB());
+                snowball.AddComponent(new CDamageDealer(20, false));
+                snowball.Size = new Vector2(1, 2);
+                snowball.Pos = GO.Pos + new Vector2(-snowball.Size.X, GO.Size.Y - snowball.Size.Y);
                 snowmanCount += 1;
+            }
+            else if (snowmanCount >= 5)
+            {
+                snowmanCount = 0;
+                fsm.SetCurrentState("aim");
+            }
+            else
+                snowmanTime -= ctime;
+        }
+
+        private void Avalanche()
+        {
+            if (avalancheWaves < 1)
+            {
+                if (avalancheTime <= 0)
+                {
+                    for (int i = 0; i < avalancheCount; i++)
+                    {
+                        GameObject snowfall = new GameObject(GO.tag + "snowfall", GO.Context);
+                        snowfall.AddComponent(new CAABB());
+                        snowfall.AddComponent(new CRender("block"));
+                        snowfall.AddComponent(new CSnowFall(GO.Pos));
+                        snowfall.AddComponent(new CFaction("enemy"));
+                        snowfall.AddComponent(new CDamageDealer(20, false));
+                        snowfall.Size = new Vector2(.3f);
+                        snowfall.Pos = GO.Pos + new Vector2(-10, -1) + new Vector2(1.5f * i, 0);
+                    }
+                    avalancheTime = avalancheDelay;
+                    avalancheWaves += 1;
+                }
+                else avalancheTime -= ctime;
+                
             }
             else
             {
-                snowmanCount = 0;
-                fsm.SetCurrentState("idle");
+                avalancheWaves = 0;
+                fsm.SetCurrentState("aim");
             }
         }
 

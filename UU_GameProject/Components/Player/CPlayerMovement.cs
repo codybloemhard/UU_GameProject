@@ -111,6 +111,12 @@ namespace UU_GameProject
                     velocity -= new Vector2(Math.Max(-timeAccel, velocity.X), 0);
                 else velocity -= new Vector2(Math.Max(-timeAccel / 2, velocity.X), 0);
             }
+
+            if (cRaycasts.CeilingHit)
+            {
+                vertVelo = 0;
+            }
+
             if (GO.Pos.Y > 200) Reset();
             if (velocity != Vector2.Zero)
             {
