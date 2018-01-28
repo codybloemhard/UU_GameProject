@@ -43,6 +43,8 @@ namespace UU_GameProject
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");
             TextureManager.LoadTexture("spike", "Spikey_Bois");
+            TextureManager.LoadTexture("radarDot", "Radar_Dot", 2, 2);
+            TextureManager.LoadTexture("radarBase", "Radar_Probe_Base", 4, 1);
             TextureManager.LoadTexture("respawnpointOn", "Spawnpoint_Unlocked", 2, 1);
             TextureManager.LoadTexture("respawnpointOff", "Spawnpoint_Locked", 2, 1);
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);

@@ -112,10 +112,8 @@ namespace UU_GameProject
                             });
                         }
             builder.AddSource("spawn", 1, false, Dec_Spawner);
+            builder.AddSource("radar", 21, false, Dec_Radar);
             builder.AddSource("door", 15, true, Dec_Door);
-            builder.AddSource("tutosign1", 5, false, Dec_TutorialSign);
-            builder.AddSource("tutosign2", 5, false, Dec_TutorialSign_2);
-            builder.AddSource("tutosign3", 5, false, Dec_TutorialSign_3);
             builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
             builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
@@ -129,15 +127,15 @@ namespace UU_GameProject
             builder.AddSource("!cnenemy", 15, false, Rep_CyborgNormalEnemy);
             builder.AddSource("!caenemy", 15, false, Rep_CyborgArmourEnemy);
             builder.AddSource("!raenemy", 15, false, Rep_RobotArmourEnemy);
-            builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 16, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
-            builder.AddSource("!sboss", 16, false, Rep_SnowmanBoss);
-            builder.AddSource("!tutosign1", 17, false, Dec_TutorialSign);
-            builder.AddSource("!tutosign2", 17, false, Dec_TutorialSign_2);
-            builder.AddSource("!tutosign3", 17, false, Dec_TutorialSign_3);
-            builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
-            builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
+            builder.AddSource("!rboss", 25, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 25, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 25, false, Rep_CyborgBoss);
+            builder.AddSource("!sboss", 25, false, Rep_SnowmanBoss);
+            builder.AddSource("!tutosign1", 17, true, Dec_TutorialSign);
+            builder.AddSource("!tutosign2", 17, true, Dec_TutorialSign_2);
+            builder.AddSource("!tutosign3", 17, true, Dec_TutorialSign_3);
+            builder.AddSource("!bosssignr", 17, true, Dec_BossSignRight);
+            builder.AddSource("!bosssignl", 17, true, Dec_BossSignLeft);
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -179,6 +177,14 @@ namespace UU_GameProject
             anim.PlayAnimation("respawnpointOff", 1);
             o.AddComponent(anim);
             o.tag = "checkpoint";
+        }
+
+        private void Dec_Radar(GameObject o)
+        {
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("radarBase", "radarBase");
+            anim.PlayAnimation("radarBase", 1);
+            o.AddComponent(anim);
         }
 
         private void Dec_TutorialSign(GameObject o)
