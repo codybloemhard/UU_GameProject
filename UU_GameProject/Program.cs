@@ -36,7 +36,9 @@ namespace UU_GameProject
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
             TextureManager.LoadTexture("background", "Background");
-            TextureManager.LoadTexture("tutorialSign", "Tutorial_Sign");
+            TextureManager.LoadTexture("tutorialSign1", "Tutorial_Sign");
+            TextureManager.LoadTexture("tutorialSign2", "Tutorial_Sign_2");
+            TextureManager.LoadTexture("tutorialSign3", "Tutorial_Sign_3");
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");

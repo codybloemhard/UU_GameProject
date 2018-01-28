@@ -113,7 +113,9 @@ namespace UU_GameProject
                         }
             builder.AddSource("spawn", 1, false, Dec_Spawner);
             builder.AddSource("door", 15, true, Dec_Door);
-            builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
+            builder.AddSource("tutosign1", 5, false, Dec_TutorialSign);
+            builder.AddSource("tutosign2", 5, false, Dec_TutorialSign_2);
+            builder.AddSource("tutosign3", 5, false, Dec_TutorialSign_3);
             builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
             builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
@@ -131,7 +133,9 @@ namespace UU_GameProject
             builder.AddSource("!mboss", 16, false, Rep_MageBoss);
             builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
             builder.AddSource("!sboss", 16, false, Rep_SnowmanBoss);
-            builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
+            builder.AddSource("!tutosign1", 17, false, Dec_TutorialSign);
+            builder.AddSource("!tutosign2", 17, false, Dec_TutorialSign_2);
+            builder.AddSource("!tutosign3", 17, false, Dec_TutorialSign_3);
             builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
             builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
@@ -179,7 +183,19 @@ namespace UU_GameProject
 
         private void Dec_TutorialSign(GameObject o)
         {
-            o.AddComponent(new CRender("tutorialSign"));
+            o.AddComponent(new CRender("tutorialSign1"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_TutorialSign_2(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign2"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_TutorialSign_3(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign3"));
             o.Size = new Vector2(2, 2);
         }
 
