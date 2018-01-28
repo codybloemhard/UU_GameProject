@@ -185,6 +185,7 @@ namespace UU_GameProject
             anim.AddAnimation("radarBase", "radarBase");
             anim.PlayAnimation("radarBase", 1);
             o.AddComponent(anim);
+            o.AddComponent(new CMap(new Vector2(-32), 5));
         }
 
         private void Dec_TutorialSign(GameObject o)
