@@ -47,7 +47,7 @@ namespace UU_GameProject
             if (teleportTime <= 0)
             {
                 teleportTime = teleportDelay;
-                newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-3, 3));
+                newTarget = origin + new Vector2(MathH.random.Next(-3, 3), MathH.random.Next(-2, 2));
                 targetPosition = newTarget;
                 disappearing = true;
                 fsm.SetCurrentState("teleport");

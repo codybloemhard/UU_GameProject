@@ -36,11 +36,17 @@ namespace UU_GameProject
             TextureManager.LoadTexture("Menu_Button_3", "Menu_Button_3");
             TextureManager.LoadTexture("menu", "menutile");
             TextureManager.LoadTexture("background", "Background");
-            TextureManager.LoadTexture("tutorialSign", "Tutorial_Sign");
+            TextureManager.LoadTexture("tutorialSign1", "Tutorial_Sign");
+            TextureManager.LoadTexture("tutorialSign2", "Tutorial_Sign_2");
+            TextureManager.LoadTexture("tutorialSign3", "Tutorial_Sign_3");
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");
             TextureManager.LoadTexture("spike", "Spikey_Bois");
+            TextureManager.LoadTexture("radarDot", "Radar_Dot", 2, 2);
+            TextureManager.LoadTexture("radarBase", "Radar_Probe_Base", 4, 1);
+            TextureManager.LoadTexture("respawnpointOn", "Spawnpoint_Unlocked", 2, 1);
+            TextureManager.LoadTexture("respawnpointOff", "Spawnpoint_Locked", 2, 1);
             TextureManager.LoadTexture("fireball", "Fireball", 2, 1);
             TextureManager.LoadTexture("lightningStrike", "Lightning_Strike", 5, 4);
             TextureManager.LoadTexture("lightningSpawner", "Lightning_Spawner", 2, 1);
@@ -73,6 +79,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("mageBossHovering", "Arch_Mage_Hovering", 8, 1);
             TextureManager.LoadTexture("mageBossFireball", "Arch_Mage_Fireball", 8, 1);
             TextureManager.LoadTexture("mageBossLightning", "Arch_Mage_Lightning", 8, 1);
+            TextureManager.LoadTexture("snowmanBossIdle", "Snowman_Boss_Idle", 2, 1);
             TextureManager.LoadTexture("redMageStandingRight", "Red_Mage_Standing_Right", 4, 1);
             TextureManager.LoadTexture("redMageStandingLeft", "Red_Mage_Standing_Left", 4, 1);
             TextureManager.LoadTexture("redMageCastingRight", "Red_Mage_Casting_Right", 4, 1);
@@ -124,7 +131,7 @@ namespace UU_GameProject
             game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
-            game.states.SetStartingState("editor");
+            game.states.SetStartingState("menu");
             DataManager.SetData<float>("mastervolume", 1f);
             DataManager.SetData<float>("trackvolume", 1f);
             DataManager.SetData<float>("effectvolume", 1f);

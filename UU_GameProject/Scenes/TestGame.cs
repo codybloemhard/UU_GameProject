@@ -12,7 +12,7 @@ namespace UU_GameProject
         public TestGame() : base() { }
 
         private ChunkManager chunks;
-        private UITextureElement healthbar, manabar, fitness, healing, lightning;
+        private UITextureElement healthbar, healthBarBackground, manabar, manaBarBackground, fitness, healing, lightning, healthBarOverlay, manaBarOverlay, healOverlay, fitnessOverlay, lightningBoltOverlay;
         private GameObject player, sky;
         private CMagicness magicness;
         private CHealthPool healthpool;
@@ -29,17 +29,23 @@ namespace UU_GameProject
             Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-            healthbar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
-            healthbar.colour = new Color(0, 255, 0);
-            manabar = new UITextureElement(this, "sky", Vector2.Zero, Vector2.Zero);
-            manabar.colour = new Color(255, 0, 255);
-            fitness = new UITextureElement(this, "sky", new Vector2(2.6f, 8f), new Vector2(1f));
-            healing = new UITextureElement(this, "sky", new Vector2(3.8f, 8f), new Vector2(1f));
-            lightning = new UITextureElement(this, "sky", new Vector2(5f, 8f), new Vector2(1f));
+            healthBarBackground = new UITextureElement(this, "Bar_Background", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
+            healthbar = new UITextureElement(this, "Healthpool_Bar", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
+            healthBarOverlay = new UITextureElement(this, "Health_Bar_Overlay", new Vector2(0, 6.4f), new Vector2(0.65f, 2.6f));
+            manaBarBackground = new UITextureElement(this, "Bar_Background", new Vector2(0.65f, 6.53f), new Vector2(0.65f, 2.47f));
+            manabar = new UITextureElement(this, "Manapool_Bar", new Vector2(0.65f, 6.53f), new Vector2(0.65f, 2.47f));
+            manaBarOverlay = new UITextureElement(this, "Mana_Bar_Overlay", new Vector2(0.65f, 6.4f), new Vector2(0.65f, 2.6f));
+            fitness = new UITextureElement(this, "DJump_Bar_Filler", new Vector2(1.3f, 8.25f), new Vector2(0.8f, 0.7f));
+            fitnessOverlay = new UITextureElement(this, "DJump_Bar_Overlay", new Vector2(1.3f, 8.1f), new Vector2(0.8f, 0.9f));
+            healing = new UITextureElement(this, "Heal_Bar_Filler", new Vector2(2.1f, 8.25f), new Vector2(0.8f, 0.7f));
+            healOverlay = new UITextureElement(this, "Heal_Bar_Overlay", new Vector2(2.1f, 8.1f), new Vector2(0.8f, 0.9f));
+            lightning = new UITextureElement(this, "Bolt_Bar_Filler", new Vector2(2.9f, 8.25f), new Vector2(0.8f, 0.7f));
+            lightningBoltOverlay = new UITextureElement(this, "Bolt_Bar_Overlay", new Vector2(2.9f, 8.1f), new Vector2(0.8f, 0.9f));
             //objects
             sky = new GameObject(this, 100);
             sky.AddComponent(new CRender("background"));
             sky.Size = new Vector2(16, 16);
+
             player = new GameObject("player", this, 10);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("fallPanic", "playerFallPanic");
@@ -105,9 +111,9 @@ namespace UU_GameProject
                                 return Catalog.ReplacerBlock(inp, baset, layert0, layert1, topt);
                             });
                         }
-            builder.AddSource("spawn", 15, false, Dec_Spawner);
+            builder.AddSource("spawn", 1, false, Dec_Spawner);
+            builder.AddSource("radar", 21, false, Dec_Radar);
             builder.AddSource("door", 15, true, Dec_Door);
-            builder.AddSource("tutosign", 5, false, Dec_TutorialSign);
             builder.AddSource("bosssignr", 5, false, Dec_BossSignRight);
             builder.AddSource("bosssignl", 5, false, Dec_BossSignLeft);
             builder.AddSource("bosstrigger", 15, false, Dec_Bosstrigger);
@@ -121,12 +127,15 @@ namespace UU_GameProject
             builder.AddSource("!cnenemy", 15, false, Rep_CyborgNormalEnemy);
             builder.AddSource("!caenemy", 15, false, Rep_CyborgArmourEnemy);
             builder.AddSource("!raenemy", 15, false, Rep_RobotArmourEnemy);
-            builder.AddSource("!rboss", 16, false, Rep_RobotBoss);
-            builder.AddSource("!mboss", 16, false, Rep_MageBoss);
-            builder.AddSource("!cboss", 16, false, Rep_CyborgBoss);
-            builder.AddSource("!tutosign", 17, false, Dec_TutorialSign);
-            builder.AddSource("!bosssignr", 17, false, Dec_BossSignRight);
-            builder.AddSource("!bosssignl", 17, false, Dec_BossSignLeft);
+            builder.AddSource("!rboss", 25, false, Rep_RobotBoss);
+            builder.AddSource("!mboss", 25, false, Rep_MageBoss);
+            builder.AddSource("!cboss", 25, false, Rep_CyborgBoss);
+            builder.AddSource("!sboss", 25, false, Rep_SnowmanBoss);
+            builder.AddSource("!tutosign1", 17, true, Dec_TutorialSign);
+            builder.AddSource("!tutosign2", 17, true, Dec_TutorialSign_2);
+            builder.AddSource("!tutosign3", 17, true, Dec_TutorialSign_3);
+            builder.AddSource("!bosssignr", 17, true, Dec_BossSignRight);
+            builder.AddSource("!bosssignl", 17, true, Dec_BossSignLeft);
             builder.AddSource("!tree0", 50, true, Catalog.ReplacerTree0);
             builder.AddSource("!tree1", 50, true, Catalog.ReplacerTree1);
             builder.AddSource("!tree2", 50, true, Catalog.ReplacerTree2);
@@ -139,8 +148,8 @@ namespace UU_GameProject
             builder.AddSource("!tree9", 50, true, Catalog.ReplacerTree9);
             builder.AddSource("!flower", 5, true, Catalog.ReplacerFlower);
             builder.AddSource("!grass", 5, true, Catalog.ReplacerGrassPlant);
-            builder.AddSource("!grassdot", 5, true, Catalog.ReplacerGrassDot);
-            builder.AddSource("!grasshigh", 5, true, Catalog.ReplacerGrassHigh);
+            builder.AddSource("!grassdot", 20, true, Catalog.ReplacerGrassDot);
+            builder.AddSource("!grasshigh", 20, true, Catalog.ReplacerGrassHigh);
             builder.AddSource("!snowman", 15, true, Catalog.ReplacerSnowman);
             builder.AddSource("!boulder", 20, true, Catalog.ReplacerBoulder);
             builder.AddSource("!stone", 20, true, Catalog.ReplacerStone);
@@ -162,14 +171,38 @@ namespace UU_GameProject
 
         private void Dec_Spawner(GameObject o)
         {
-            o.AddComponent(new CAABB());
-            o.AddComponent(new CRender("block"));
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("respawnpointOff", "respawnpointOff");
+            anim.AddAnimation("respawnpointOn", "respawnpointOn");
+            anim.PlayAnimation("respawnpointOff", 1);
+            o.AddComponent(anim);
             o.tag = "checkpoint";
+        }
+
+        private void Dec_Radar(GameObject o)
+        {
+            CAnimatedSprite anim = new CAnimatedSprite();
+            anim.AddAnimation("radarBase", "radarBase");
+            anim.PlayAnimation("radarBase", 1);
+            o.AddComponent(anim);
+            o.AddComponent(new CMap(new Vector2(-32), 5));
         }
 
         private void Dec_TutorialSign(GameObject o)
         {
-            o.AddComponent(new CRender("tutorialSign"));
+            o.AddComponent(new CRender("tutorialSign1"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_TutorialSign_2(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign2"));
+            o.Size = new Vector2(2, 2);
+        }
+
+        private void Dec_TutorialSign_3(GameObject o)
+        {
+            o.AddComponent(new CRender("tutorialSign3"));
             o.Size = new Vector2(2, 2);
         }
 
@@ -402,7 +435,7 @@ namespace UU_GameProject
             animBoss.AddAnimation("lightning", "mageBossLightning");
             animBoss.PlayAnimation("hovering", 6);
             mageBoss.AddComponent(animBoss);
-            mageBoss.AddComponent(new CHealthPool(1500));
+            mageBoss.AddComponent(new CHealthPool(500));
             mageBoss.AddComponent(new CAABB());
             mageBoss.AddComponent(new CFaction("enemy"));
             mageBoss.AddComponent(new CMageBoss());
@@ -431,25 +464,39 @@ namespace UU_GameProject
             return new GameObject[] { cyborgBoss };
         }
 
+        private GameObject[] Rep_SnowmanBoss(ReplacerInput i)
+        {
+            GameObject snowman = new GameObject("boss", this, 2);
+            CAnimatedSprite animBoss = new CAnimatedSprite();
+            animBoss.AddAnimation("snowmanBossIdle", "snowmanBossIdle");
+            animBoss.PlayAnimation("snowmanBossIdle", 8);
+            snowman.AddComponent(animBoss);
+            snowman.AddComponent(new CAABB());
+            snowman.AddComponent(new CFaction("enemy"));
+            snowman.AddComponent(new CSnowmanBoss());
+            snowman.Size = new Vector2(3, 6);
+            snowman.Pos = i.obj.pos - snowman.Size;
+            return new GameObject[] { snowman };
+        }
+
         public override void Unload() { }
 
         public override void Update(float time)
         {
             base.Update(time);
             float health = healthpool.HealhPercent;
+            healthbar.Pos = new Vector2(0f, 9f - 2.47f * health);
             float mana = manapool.ManaPercentage;
-            healthbar.Size = new Vector2(1f, 3f * health);
-            healthbar.Pos = new Vector2(0.2f, 9f - healthbar.Size.Y);
-            manabar.Size = new Vector2(1f, 3f * mana);
-            manabar.Pos = new Vector2(1.4f, 9f - manabar.Size.Y);
+            manabar.Pos = new Vector2(0.65f, 9f - 2.47f * mana);
+
             if (magicness.UnlockedFitness)
-                fitness.Size = new Vector2(1f);
+                fitness.Size = new Vector2(0.8f);
             else fitness.Size = new Vector2(0f);
             if (magicness.UnlockedHealing)
-                healing.Size = new Vector2(1f);
+                healing.Size = new Vector2(0.8f);
             else healing.Size = new Vector2(0f);
             if (magicness.UnlockedLightning)
-                lightning.Size = new Vector2(1f);
+                lightning.Size = new Vector2(0.8f);
             else lightning.Size = new Vector2(0f);
             if (magicness.CanHeal)
                 healing.colour = cGreen;

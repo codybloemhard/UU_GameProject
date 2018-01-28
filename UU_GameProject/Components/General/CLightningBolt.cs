@@ -20,7 +20,7 @@ namespace UU_GameProject
         public override void Update(float time)
         {
             base.Update(time);
-            GO.Pos += new Vector2(0, 3) * time;
+            GO.Pos += new Vector2(0, 5) * time;
         }
 
         //lightningstrike

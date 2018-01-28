@@ -58,7 +58,7 @@ namespace UU_GameProject
                 ChangeHealth(comp.Damage, true);
             else if (other.tag.Contains("lightningStrike"))
                 ChangeHealth(comp.Damage, true);
-            else if (other.tag.Contains("fireball"))
+            else if (other.tag.Contains("fireball") || other.tag.Contains("snowball") || other.tag.Contains("snowfall"))
             {
                 ChangeHealth(comp.Damage, false);
                 other.Destroy();
@@ -79,7 +79,6 @@ namespace UU_GameProject
             }
             else if (other.tag.Contains("explosion"))
                 ChangeHealth(comp.Damage, false);
-
             if (applPotion) HealOverTime(4f, 10f);
         }
 
