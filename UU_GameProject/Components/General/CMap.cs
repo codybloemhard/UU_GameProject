@@ -27,7 +27,7 @@ namespace UU_GameProject
             GameObject mapPlayer = new GameObject("mapPlayer", GO.Context, 0);
             CAnimatedSprite anim = new CAnimatedSprite();
             anim.AddAnimation("radarDot", "radarDot");
-            anim.PlayAnimation("radarDot", 1);
+            anim.PlayAnimation("radarDot", 10);
             mapPlayer.AddComponent(anim);
             mapPlayer.Size = new Vector2(.2f);
             this.mapPlayer = mapPlayer;
