@@ -12,7 +12,7 @@ namespace UU_GameProject
         private CManaPool manaPool;
         private CHealthPool healthPool;
         private const int lightningCost = 75, healingCost = 50,
-            dashCost = 25, jumpCost = 50;
+            dashCost = 25, jumpCost = 0;
 
         public CMagicness() : base() { }
 

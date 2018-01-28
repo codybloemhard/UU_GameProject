@@ -29,7 +29,7 @@ namespace UU_GameProject
             anim.AddAnimation("radarDot", "radarDot");
             anim.PlayAnimation("radarDot", 1);
             mapPlayer.AddComponent(anim);
-            mapPlayer.Size = new Vector2(.3f);
+            mapPlayer.Size = new Vector2(.2f);
             this.mapPlayer = mapPlayer;
             player = GO.Context.objects.FindWithTag("player");
         }
@@ -38,7 +38,8 @@ namespace UU_GameProject
         {
             base.Update(time);
             if (!initiated) InitMap();
-            mapPlayer.Pos = player.Pos/ (size * 16) * GO.Size.X + GO.Pos - mapPlayer.Size/2 + GO.Size/2;
+            GO.Pos = player.Pos + new Vector2(1, 0);
+            mapPlayer.Pos = (player.Pos - new Vector2(8))/ (size * 16) * (GO.Size.X * new Vector2(150) / new Vector2(256)) + (GO.Pos + new Vector2(53, 86) / new Vector2(256)) - mapPlayer.Size/2 + GO.Size/2;
             Console.WriteLine("Pos" + mapPlayer.Pos);
         }
     }
