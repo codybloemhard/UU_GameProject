@@ -21,7 +21,6 @@ namespace UU_GameProject
         {
             base.Update(time);
             GO.Pos += velocity * time;
-            Console.WriteLine(GO.Pos);
             if (Math.Abs((GO.Pos - spawn).Length()) > 50)
                 GO.Destroy();
         }
