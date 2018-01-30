@@ -203,7 +203,7 @@ namespace UU_GameProject
             if (plants.Count > 0) chosenPlant = plants[nPlant];
             if (pieces.Count > 0 && Seed.Random(i.obj.pos) < 0.3f)
                 chosenPiece = pieces[nPieces];
-            else if(Seed.Random(i.obj.pos) < 0.1f)
+            else if(Seed.Random(i.obj.pos) < 0.05f)
             {
                 newi.layer = 50;
                 bool[] possibleTrees = PossibleTree(ids);
