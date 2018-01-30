@@ -92,7 +92,12 @@ namespace UU_GameProject
             chunks.Discover(baseurl, builder, player);
             //AudioManager.PlayTrack("moonlightsonata");
             AudioManager.SetMasterVolume(1f);
+<<<<<<< HEAD
             Debug.FullDebugMode();
+=======
+            Debug.ProfilingMode();
+
+>>>>>>> b40037669b1153424cc45fe94386f43eb641e22d
         }
         
         private void AddSources(ChunkFactory builder)
@@ -472,6 +477,7 @@ namespace UU_GameProject
             animBoss.PlayAnimation("snowmanBossIdle", 8);
             snowman.AddComponent(animBoss);
             snowman.AddComponent(new CAABB());
+            snowman.AddComponent(new CDamageDealer(30, false));
             snowman.AddComponent(new CFaction("enemy"));
             snowman.AddComponent(new CSnowmanBoss());
             snowman.Size = new Vector2(3, 6);

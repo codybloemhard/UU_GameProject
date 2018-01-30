@@ -270,8 +270,10 @@ namespace UU_GameProject
                 animation.PlayAnimationIfDifferent("crawlingRight", 6);
             else if (isCrawling && intendedDir < 0)
                 animation.PlayAnimationIfDifferent("crawlingLeft", 6);
-            else if (isSliding)
-                animation.PlayAnimationIfDifferent("sliding", 2);
+            else if (isSliding && intendedDir > 0)
+                animation.PlayAnimationIfDifferent("crawlingRight", 6);
+            else if (isSliding && intendedDir < 0)
+                animation.PlayAnimationIfDifferent("crawlingLeft", 6);
             else if (leftIsSlidingOnWall)
                 animation.PlayAnimationIfDifferent("wallSlidingRight", 2);
             else if (rightIsSlidingOnWall)
@@ -281,7 +283,7 @@ namespace UU_GameProject
             else if (!cRaycasts.Grounded && intendedDir < 0)
                 animation.PlayAnimationIfDifferent("airborneLeft", 2);
             else if (fallPanic)
-                animation.PlayAnimationIfDifferent("fallPanic", 2);
+                animation.PlayAnimationIfDifferent("crawlingRight", 2);
             else if (velocity.X < 0)
                 animation.PlayAnimationIfDifferent("runningLeft", 8);
             else if (velocity.X > 0)

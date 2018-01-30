@@ -72,6 +72,8 @@ namespace UU_GameProject
             }
             else if (other.tag == "boss" && other.GetComponent<CRobotBoss>() != null && other.GetComponent<CRobotBoss>().Crushing)
                 ChangeHealth(comp.Damage, true);
+            else if (other.tag == "boss" && other.GetComponent<CSnowmanBoss>() != null)
+                ChangeHealth(comp.Damage, true);
             else if (other.tag.Contains("explobullet"))
             {
                 ChangeHealth(comp.Damage, false);
