@@ -18,7 +18,7 @@ namespace UU_GameProject
         
         public Run()
         {
-            game = new GameWindow(1500, false, 4096);
+            game = new GameWindow(1000, false, 4096);
             game.SetLoad(Load);
             game.Run();
         }
@@ -42,6 +42,7 @@ namespace UU_GameProject
             TextureManager.LoadTexture("bossSignRight", "Boss_Sign_Right");
             TextureManager.LoadTexture("bossSignLeft", "Boss_Sign_Left");
             TextureManager.LoadTexture("sky", "sky");
+            TextureManager.LoadTexture("snowball", "Snowball");
             TextureManager.LoadTexture("spike", "Spikey_Bois");
             TextureManager.LoadTexture("radarDot", "Radar_Dot", 2, 2);
             TextureManager.LoadTexture("radarBase", "Radar_Probe_Base", 4, 1);
