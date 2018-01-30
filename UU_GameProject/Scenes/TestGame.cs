@@ -472,6 +472,7 @@ namespace UU_GameProject
             animBoss.PlayAnimation("snowmanBossIdle", 8);
             snowman.AddComponent(animBoss);
             snowman.AddComponent(new CAABB());
+            snowman.AddComponent(new CDamageDealer(30, false));
             snowman.AddComponent(new CFaction("enemy"));
             snowman.AddComponent(new CSnowmanBoss());
             snowman.Size = new Vector2(3, 6);
