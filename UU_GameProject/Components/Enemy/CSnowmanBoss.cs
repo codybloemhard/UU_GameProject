@@ -143,7 +143,7 @@ namespace UU_GameProject
         {
             GameObject snowball = new GameObject("snowball", GO.Context);
             snowball.AddComponent(new CRender("block"));
-            snowball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20, false, 8));
+            snowball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 30, false, 8));
             snowball.AddComponent(new CAABB());
             snowball.AddComponent(new CFaction("enemy"));
             snowball.Size = new Vector2(.4f);

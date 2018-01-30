@@ -50,7 +50,7 @@ namespace UU_GameProject
             fireball.Size = size;
             Vector2 path = (Input.GetMouseWorldPosition() - (fireball.Pos + .5f * (fireball.Size)));
             fireball.AddComponent(animBall);
-            fireball.AddComponent(new CFireballMovement(playerSpeed, path, dir, 20f, false));
+            fireball.AddComponent(new CFireballMovement(playerSpeed, path, dir, 5f, false));
             fireball.AddComponent(new CAABB());
             fireball.AddComponent(new CFaction(Faction));
             AudioManager.PlayEffect("shoot");
