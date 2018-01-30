@@ -91,13 +91,8 @@ namespace UU_GameProject
             chunks = new ChunkManager();
             chunks.Discover(baseurl, builder, player);
             //AudioManager.PlayTrack("moonlightsonata");
-            AudioManager.SetMasterVolume(1f);
-<<<<<<< HEAD
+            AudioManager.SetMasterVolume(0f);
             Debug.FullDebugMode();
-=======
-            Debug.ProfilingMode();
-
->>>>>>> b40037669b1153424cc45fe94386f43eb641e22d
         }
         
         private void AddSources(ChunkFactory builder)
