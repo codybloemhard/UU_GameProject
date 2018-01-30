@@ -524,7 +524,6 @@ namespace UU_GameProject
             if (Input.GetKey(PressAction.DOWN, Keys.O))
                 Debug.showAtlas = true;
             else Debug.showAtlas = false;
-
             chunks.Update();
             TaskEngine.UpdateAll();
         }
@@ -535,14 +534,3 @@ namespace UU_GameProject
         }
     }
 }
-
-//GameObject cyborgBoss = new GameObject("robotboss", this, 2);
-//cyborgBoss.AddComponent(new CRender("player"));
-//cyborgBoss.AddComponent(new CRobotBoss(3));
-//cyborgBoss.AddComponent(new CRaycasts());
-//cyborgBoss.AddComponent(new CHealthPool(50));
-//cyborgBoss.AddComponent(new CDamageDealer(50, false));
-//cyborgBoss.AddComponent(new CAABB());
-//cyborgBoss.AddComponent(new CShoot());
-//cyborgBoss.Pos = new Vector2(12.5f, 2f);
-//cyborgBoss.Size = new Vector2(0.5f, 1f);
