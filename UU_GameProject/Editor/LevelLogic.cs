@@ -391,7 +391,7 @@ namespace UU_GameProject
             for(int i = 0; i < loaded.Count; i++)
             {
                 if (loaded[i].action != ChunkAction.DESTROY) continue;
-                loaded[i].Unload();
+                    loaded[i].Unload();
             }
             for(int i = 0; i < newloaded.Count; i++)
             {
