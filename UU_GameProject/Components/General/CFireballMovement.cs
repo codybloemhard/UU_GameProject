@@ -33,7 +33,7 @@ namespace UU_GameProject
             base.Update(time);
             GO.Pos += fireballVelocity * time;
             this.time += time;
-            if (this.time > 10f) GO.Destroy();
+            if (this.time > 5f) GO.Destroy();
         }
         
         public override void OnCollision(GameObject other)
