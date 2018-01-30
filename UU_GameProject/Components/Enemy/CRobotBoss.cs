@@ -246,6 +246,7 @@ namespace UU_GameProject
         //picks different animations, based on current behaviour
         private void animation()
         {
+            if (animationBoss == null) return;
             if (fsm.CurrentState == "fly" && !falling)
                 animationBoss.PlayAnimationIfDifferent("flying", 4);
             else if (fsm.CurrentState == "fly" && falling)
