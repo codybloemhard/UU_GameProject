@@ -11,7 +11,7 @@ namespace UU_GameProject
     class CSnowmanAI : Component
     {
         private bool initiated;
-        private RaycastResult BLdown, BRdown, BLleft, TLleft, BRright, TRright;
+        private RaycastResult BLdown, BRdown;
         private Vector2 velocity;
         private float speed = 4;
 
@@ -19,6 +19,7 @@ namespace UU_GameProject
         {
             initiated = true;
             velocity = new Vector2(-speed, 0);
+
         }
 
         public override void Update(float time)
@@ -35,10 +36,6 @@ namespace UU_GameProject
         {
             BLdown = GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y), new Vector2(0, 1), RAYCASTTYPE.STATIC);
             BRdown = GO.Raycast(GO.Pos + GO.Size, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            //BLleft = GO.Raycast(GO.Pos + new Vector2(0, GO.Size.Y), new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            //TLleft = GO.Raycast(GO.Pos, new Vector2(-1, 0), RAYCASTTYPE.STATIC);
-            //BRright = GO.Raycast(GO.Pos + GO.Size, new Vector2(1, 0), RAYCASTTYPE.STATIC);
-            //TRright = GO.Raycast(GO.Pos + new Vector2(GO.Size.X, 0), new Vector2(1, 0), RAYCASTTYPE.STATIC);
         }
 
         public override void OnCollision(GameObject other)

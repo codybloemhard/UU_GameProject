@@ -12,7 +12,7 @@ namespace UU_GameProject
     {
         private FSM fsm = new FSM();
         private bool initiated;
-        private float ctime, throwDelay = 2, throwTime, switchTime, switchDelay = 500, snowmanDelay = 1, snowmanTime, avalancheDelay = .5f, avalancheTime;
+        private float ctime, throwDelay = 2, throwTime, switchTime, switchDelay = 5, snowmanDelay = 1, snowmanTime, avalancheDelay = .5f, avalancheTime;
         private GameObject player;
         private int snowmanCount, avalancheCount = 10, avalancheWaves = 5;
 
@@ -44,9 +44,14 @@ namespace UU_GameProject
 
         private void ChangeFsm()
         {
-            int random = MathH.random.Next(1);
+            int random = MathH.random.Next(3);
             if (random == 0)
+                fsm.SetCurrentState("storm");
+            if (random == 1)
+                fsm.SetCurrentState("snowballs");
+            if (random == 2)
                 fsm.SetCurrentState("avalanche");
+
         }
 
         private void AimedThrowing()
@@ -79,13 +84,20 @@ namespace UU_GameProject
             {
                 snowmanTime = snowmanDelay;
                 GameObject snowball = new GameObject(GO.tag + "snowball", GO.Context);
-                snowball.AddComponent(new CRender("block"));
                 snowball.AddComponent(new CFaction("enemy"));
                 snowball.AddComponent(new CSnowmanAI());
                 snowball.AddComponent(new CAABB());
                 snowball.AddComponent(new CDamageDealer(20, false));
                 snowball.Size = new Vector2(1, 2);
                 snowball.Pos = GO.Pos + new Vector2(-snowball.Size.X, GO.Size.Y - snowball.Size.Y);
+                LvObj lvobj = new LvObj();
+                lvobj.pos = new Vector2((float)MathH.random.NextDouble()*1000, (float)MathH.random.NextDouble() * 1000);//dit hoort
+                ReplacerInput i = new ReplacerInput(10, false, lvobj, GO.Context);
+                GameObject[] objs = Catalog.ReplacerSnowman(i);
+                objs[0].Pos = snowball.Pos + new Vector2(-3, 0);
+                objs[0].SetParent(snowball);
+                objs[0].LocalPos = Vector2.Zero;
+                objs[0].LocalSize = new Vector2(1f);
                 snowmanCount += 1;
             }
             else if (snowmanCount >= 5)
