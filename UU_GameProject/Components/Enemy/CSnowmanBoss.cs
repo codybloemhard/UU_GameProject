@@ -119,7 +119,7 @@ namespace UU_GameProject
                     {
                         GameObject snowfall = new GameObject(GO.tag + "snowfall", GO.Context);
                         snowfall.AddComponent(new CAABB());
-                        snowfall.AddComponent(new CRender("block"));
+                        snowfall.AddComponent(new CRender("snowball"));
                         snowfall.AddComponent(new CSnowFall(GO.Pos));
                         snowfall.AddComponent(new CFaction("enemy"));
                         snowfall.AddComponent(new CDamageDealer(20, false));
@@ -142,7 +142,7 @@ namespace UU_GameProject
         private void ThrowSnowball(Vector2 dir, Vector2 pos)
         {
             GameObject snowball = new GameObject("snowball", GO.Context);
-            snowball.AddComponent(new CRender("block"));
+            snowball.AddComponent(new CRender("snowball"));
             snowball.AddComponent(new CFireballMovement(Vector2.Zero, dir, dir, 20, false, 8));
             snowball.AddComponent(new CAABB());
             snowball.AddComponent(new CFaction("enemy"));
