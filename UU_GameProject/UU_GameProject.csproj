@@ -74,7 +74,6 @@
     <Compile Include="Generation\Misc.cs" />
     <Compile Include="Generation\Seed.cs" />
     <Compile Include="Generation\TurtleGraphics.cs" />
-    <Compile Include="Scenes\Select.cs" />
     <Compile Include="Generation\ColourField.cs" />
     <Compile Include="Generation\Catalog.cs" />
     <Compile Include="Generation\ShowCase.cs" />

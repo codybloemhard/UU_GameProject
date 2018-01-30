@@ -22,20 +22,16 @@ namespace UU_GameProject
             UITextureElement background = new UITextureElement(this, "Menu_Background", Vector2.Zero, new Vector2(16, 9));
 
             //buttons
-            Button buttonStart = new Button(this, "New game", "Menu_Button_1", () => GameStateManager.RequestChange("select", CHANGETYPE.LOAD),
-                font, new Vector2(5, 3), new Vector2(6, 1f));
-            buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
-
-            Button buttonContinue = new Button(this, "Continue", "Menu_Button_2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
-                font, new Vector2(5, 4.2f), new Vector2(6, 1f));
-            buttonContinue.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Yellow);
+            Button buttonStart = new Button(this, "Start", "Menu_Button_2", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                font, new Vector2(5, 3.6f), new Vector2(6, 1f));
+            buttonStart.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Yellow);
 
             Button buttonOptions = new Button(this, "Options", "Menu_Button_3", () => GameStateManager.RequestChange("options", CHANGETYPE.LOAD), 
-                font, new Vector2(5, 5.4f), new Vector2(6, 1f));
+                font, new Vector2(5, 5.0f), new Vector2(6, 1f));
             buttonOptions.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Yellow);
 
             Button buttonQuit = new Button(this, "Exit", "Menu_Button_1", () => GameStateManager.RequestChange("editor", CHANGETYPE.LOAD),
-                font, new Vector2(5, 6.6f), new Vector2(6, 1f));
+                font, new Vector2(5, 6.4f), new Vector2(6, 1f));
             buttonQuit.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
             //others
             Timers.Add("timer", 10, changeTextColour);

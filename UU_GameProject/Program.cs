@@ -117,7 +117,6 @@ namespace UU_GameProject
             AudioManager.LoadEffect("shoot", "shoot"); 
             TestMenu testMenu = new TestMenu();
             TestOptions testOptions = new TestOptions();
-            Select select = new Select();
             TestGame testGame = new TestGame();
             ShowCaseScene showcase = new ShowCaseScene();
             TestGameOver testGameOver = new TestGameOver();
@@ -128,7 +127,6 @@ namespace UU_GameProject
             game.states.AddState("gameover", testGameOver);
             game.states.AddState("menu", testMenu);
             game.states.AddState("options", testOptions);
-            game.states.AddState("select", select);
             game.states.AddState("game", testGame);
             game.states.AddState("show", showcase);
             game.states.SetStartingState("menu");
