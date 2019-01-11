@@ -1,23 +1,21 @@
-# UU_GameProject
-UU game project
+#The Crashed Janitor
 
-This repository should contain the game we are making.
-Only do front-end work here.
+[NB fixing not complete yet!]
+Game build in C# with with monogame.
+It was a first year computer science school project.
+Project "MonogameCore" is a game-engine build on top of monogame.
+We made it alongside the game.
 
-Install:
-1. Pull this repo;
-2. Find MonogameCoreBuild.dll @ /root;
-3. Copy it to your building directory, either Debug or Release.
-4. Build and Run.
-5. If it fails to build, check if VisualStudio->Project->Properties->TargetFrameWork is set to .NET Framework 4.5.2
-6. If it still fails go cry :'( and notify me then i can go cry too.
+Made by:
+Cody Bloemhard (Design, Procedural generation, Level loading, Gameplay, Engine)
+Erwin Glazenburg (Design, Level editor, Gameplay, Engine)
+Max Reitsma (Design, Levels, Gameplay)
+Jorian Berkhout (Design, Art, Levels, Gameplay)
+Sam Vermeulen (Design, Art, Levels, Gameplay)
 
-Upload new version:
-1. Push your stuff on your own branch!
-2. Ask for a merge.
-
-Download new version:
-1. Pull the master branch.
-2. Find MonogameCoreBuild.dll @ /root;
-3. Copy it again to your building directory, either Debug or Release.
-4. Build and Run.
+Features:
+It is a sidescrolling platforming game.
+You play in a open world.
+There are many enemies, including 4 endbosses.
+There are many procedurally generated graphical elements such as:
+Trees, grass, flowers, rocks, stones, etc.
