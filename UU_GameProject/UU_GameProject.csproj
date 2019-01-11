@@ -71,7 +71,6 @@
     <Compile Include="Editor\LevelEditor.cs" />
     <Compile Include="Editor\LevelLogic.cs" />
     <Compile Include="Editor\LevelTest.cs" />
-    <Compile Include="Editor\TaskEngine.cs" />
     <Compile Include="Generation\LSystem.cs" />
     <Compile Include="Generation\Misc.cs" />
     <Compile Include="Generation\Seed.cs" />
@@ -102,11 +101,11 @@
     <Compile Include="Scenes\TestOptions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Builder">
+      <HintPath>..\Builder.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="MonogameCoreBuild">
-      <HintPath>..\MonogameCoreBuild.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

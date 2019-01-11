@@ -524,7 +524,6 @@ namespace UU_GameProject
                 Debug.showAtlas = true;
             else Debug.showAtlas = false;
             chunks.Update();
-            TaskEngine.UpdateAll();
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)

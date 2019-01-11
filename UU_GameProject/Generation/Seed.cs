@@ -13,6 +13,7 @@ namespace UU_GameProject
     {
         private static Dictionary<string, Random> randoms = new Dictionary<string, Random>();
         private static int baseseed;
+        private static object locker = new object();
 
         static Seed()
         {
@@ -30,7 +31,7 @@ namespace UU_GameProject
 
         public static void Set(Vector2 pos)
         {
-            lock (randoms)
+            lock (locker)
             {
                 int seed = GetSeed(pos);
                 string key = "" + seed;
@@ -43,7 +44,7 @@ namespace UU_GameProject
         
         public static void Set(int seed)
         {
-            lock (randoms)
+            lock (locker)
             {
                 string key = "" + seed;
                 if (randoms.ContainsKey(key))
@@ -60,7 +61,7 @@ namespace UU_GameProject
 
         public static float Random(int seed)
         {
-            lock (randoms)
+            lock (locker)
             {
                 string key = "" + seed;
                 if (!randoms.ContainsKey(key))

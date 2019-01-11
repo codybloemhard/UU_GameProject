@@ -31,14 +31,16 @@ namespace UU_GameProject
         //emptying editor
         public override void Unload()
         {
-            for (int i = objects.StaticObjects.Count -1; i>=0; i--)
+            throw new Exception("Disbled for fixing, needs rewrite");
+            //StaticObjects and Objects private now
+            /*for (int i = objects.StaticObjects.Count -1; i>=0; i--)
             {
                 objects.StaticObjects[i].GetComponent<CLevelEditorObject>().Destroy();
             }
             for (int i = objects.Objects.Count - 1; i >= 0; i--)
             {
                 objects.Objects[i].GetComponent<CLevelEditorObject>().Destroy();
-            }
+            }*/
         }
 
         public override void Update(float time)
