@@ -26,7 +26,7 @@ namespace UU_GameProject
         {
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
-            Button button = new Button(this, "Pause", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
+            Button button = new Button(this, "Exit", "Menu_Button_3", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(13, 0), new Vector2(3f, .6f));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             healthBarBackground = new UITextureElement(this, "Bar_Background", new Vector2(0, 6.53f), new Vector2(0.65f, 2.47f));
