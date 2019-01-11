@@ -47,7 +47,7 @@ namespace UU_GameProject
         {
             base.Update(time);
             chunks.Update();
-            TaskEngine.UpdateAll();
+            //TaskEngine.UpdateAll();
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)

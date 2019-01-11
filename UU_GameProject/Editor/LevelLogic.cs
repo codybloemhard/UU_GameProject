@@ -174,12 +174,9 @@ namespace UU_GameProject
         public void Unload()
         {
             if (objects == null) return;
-            Task.Run(() =>
-            {
-                for (int i = 0; i < objects.Length; i++)
-                    if (objects[i] != null)
-                        objects[i].Destroy();
-            });
+            for (int i = 0; i < objects.Length; i++)
+                if (objects[i] != null)
+                    objects[i].Destroy();
         }
 
         public bool IsChunk(int x, int y)
@@ -194,21 +191,12 @@ namespace UU_GameProject
         private Dictionary<string, Decorator> decorators;
         private GameState context;
         private Vector2 chunkSize;
-        private TaskEngine engine;
-        private uint chunkcounter = 0;
-        private Dictionary<string, List<GameObject>> lists;
-        private Dictionary<string, uint> counters;
-        private Dictionary<string, LoadedChunk> chunks;
 
         public ChunkFactory(GameState context, Vector2 chunkSize)
         {
             this.context = context;
             this.chunkSize = chunkSize;
             decorators = new Dictionary<string, Decorator>();
-            engine = new TaskEngine();
-            lists = new Dictionary<string, List<GameObject>>();
-            counters = new Dictionary<string, uint>();
-            chunks = new Dictionary<string, LoadedChunk>();
         }
         //add a action to do for a certain tag
         public void AddSource(string kind, uint layer, bool isStatic, Action<GameObject> action)
@@ -222,60 +210,32 @@ namespace UU_GameProject
             if (decorators.ContainsKey(kind)) return;
             decorators.Add(kind, new Decorator(action, layer, isStatic));
         }
-        //construct all objects in paralel
-        public void BuildChunk(Chunk chunk, LoadedChunk lc)
+        //construct all objects
+        public void BuildChunk(Chunk chunk, LoadedChunk lc) 
         {
             if (chunk == null) return;
             if (chunk.source == null) return;
             if (lc == null) return;
             Vector2 displace = chunkSize * new Vector2(chunk.x, chunk.y);
-            string cstring = chunkcounter.ToString();
-            lists.Add(cstring, new List<GameObject>());
-            chunks.Add(cstring, lc);
-            for (int i = 0; i < chunk.source.Length; i++)
-            {
+            List<GameObject> objects = new List<GameObject>();
+            for (int i = 0; i < chunk.source.Length; i++) {
                 string key = chunk.source[i].tag;
                 if (!decorators.ContainsKey(key)) continue;
                 Decorator dec = decorators[key];
-                if (dec.decorator != null)
-                {
+                if (dec.decorator != null) {
                     GameObject go = BuildObj(chunk.source[i]);
                     go.Pos += displace;
                     dec.decorator(go);
-                    lists[cstring].Add(go);
+                    objects.Add(go);
                 }
-                else
-                {
+                else {
                     ReplacerInput input = new ReplacerInput(dec.layer, dec.isStatic, chunk.source[i], context);
-                    engine.Add(delegate() { return Function(input, dec, displace, cstring); }, Callback);
-                    if (counters.ContainsKey(cstring))
-                        counters[cstring]++;
-                    else counters.Add(cstring, 1);
+                    GameObject[] objs = dec.replacer(input);
+                    foreach (GameObject o in objs) o.Pos += displace;
+                    objects.Add(objs);
                 }
             }
-            chunkcounter++;
-        }
-        //this is called when a replacer is done
-        //it will finish the chunk when the last replacer is done
-        private void Callback(Returner<GameObject[]> returner)
-        {
-            lists[returner.msg].Add(returner.result);
-            counters[returner.msg]--;
-            if (counters[returner.msg] == 0)
-            {
-                chunks[returner.msg].objects = lists[returner.msg].ToArray();
-                lists[returner.msg].Clear();
-                chunks.Remove(returner.msg);
-                lists.Remove(returner.msg);
-                counters.Remove(returner.msg);
-            }
-        }
-
-        private Returner<GameObject[]> Function(ReplacerInput input, Decorator dec, Vector2 displace, string msg)
-        {
-            GameObject[] objs = dec.replacer(input);
-            foreach (GameObject o in objs) o.Pos += displace;
-            return new Returner<GameObject[]>(objs, msg);
+            lc.objects = objects.ToArray();
         }
 
         private GameObject BuildObj(LvObj o)
