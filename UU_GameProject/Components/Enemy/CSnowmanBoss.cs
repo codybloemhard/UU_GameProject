@@ -25,14 +25,11 @@ namespace UU_GameProject
             fsm.Add("snowballs", Snowballs);
             fsm.Add("avalanche", Avalanche);
         }
+
         public override void Update(float time)
         {
             if (!initiated) InitSnowman(); 
             ctime = time;
-
-            
-
-
 
             if (switchTime <= 0)
             {
@@ -130,7 +127,6 @@ namespace UU_GameProject
                     avalancheWaves += 1;
                 }
                 else avalancheTime -= ctime;
-                
             }
             else
             {

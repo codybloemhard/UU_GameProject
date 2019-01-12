@@ -10,7 +10,7 @@ namespace UU_GameProject
 {
     class CSnowFall : Component
     {
-        private Vector2 velocity = new Vector2(0, 10), spawn;
+        private Vector2 velocity = new Vector2(0, 5f), spawn;
 
         public CSnowFall(Vector2 spawn)
         {
@@ -22,6 +22,11 @@ namespace UU_GameProject
             base.Update(time);
             GO.Pos += velocity * time;
             if (Math.Abs((GO.Pos - spawn).Length()) > 50)
+                GO.Destroy();
+        }
+
+        public override void OnCollision(GameObject other) {
+            if (other.tag.Contains("solid") && other.tag != "bossdoorsolid")
                 GO.Destroy();
         }
     }
