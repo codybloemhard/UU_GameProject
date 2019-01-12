@@ -30,7 +30,7 @@ namespace UU_GameProject
                 font, new Vector2(5, 5.0f), new Vector2(6, 1f));
             buttonOptions.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Yellow);
 
-            Button buttonQuit = new Button(this, "Exit", "Menu_Button_1", () => GameStateManager.RequestChange("editor", CHANGETYPE.LOAD),
+            Button buttonQuit = new Button(this, "Exit", "Menu_Button_1", () => Environment.Exit(0),
                 font, new Vector2(5, 6.4f), new Vector2(6, 1f));
             buttonQuit.SetupColours(Color.BlanchedAlmond, Color.BurlyWood, Color.DarkGray, Color.Red);
             //others

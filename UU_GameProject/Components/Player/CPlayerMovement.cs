@@ -358,6 +358,10 @@ namespace UU_GameProject
         //reset
         public void Reset()
         {
+            GameStateManager.RequestChange("gameover", CHANGETYPE.LOAD);
+        }
+
+        private void reset() {
             AudioManager.PlayEffect("dead");
             if (checkPos != new Vector2(-1000, -1000))
                 GO.Pos = checkPos;
