@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    public class TestOptions : GameState
+    public class OptionMenu : GameState
     {
         private Text text, text2, text3, text4;
         private Button buttonMainmenu, fullscreen;
@@ -13,7 +13,7 @@ namespace UU_GameProject
         private bool Fullscreen;
         private uint width, height;
 
-        public TestOptions() : base() { }
+        public OptionMenu() : base() { }
 
         public override void Load(SpriteBatch batch)
         {

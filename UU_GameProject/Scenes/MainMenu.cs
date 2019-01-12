@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace UU_GameProject
 {
-    public class TestMenu : GameState
+    public class MainMenu : GameState
     {
-        public TestMenu() : base() { }
+        public MainMenu() : base() { }
 
         public override void Load(SpriteBatch batch)
         {

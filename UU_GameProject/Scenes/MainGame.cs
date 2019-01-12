@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UU_GameProject
 {
-    public class TestGame : GameState
+    public class MainGame : GameState
     {
-        public TestGame() : base() { }
+        public MainGame() : base() { }
 
         private ChunkManager chunks;
         private UITextureElement healthbar, healthBarBackground, manabar, manaBarBackground, fitness, healing, lightning, healthBarOverlay, manaBarOverlay, healOverlay, fitnessOverlay, lightningBoltOverlay;
